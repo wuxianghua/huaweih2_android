@@ -34,8 +34,8 @@
     <!--地图模块-->
     <color name="map_floor_name_color">#696969</color>
     <color name="map_bg">#00000000</color>
-    <color name="foot_room">#ff0196d0</color>;
-    <color name="foot_road">#ff36bef0</color>
+    <integer name="foot_room">0xff0196d0</integer>;
+    <integer name="foot_road">0xff36bef0</integer>
     <color name="bg">#f2f7f9</color>;
     <!--<color name="foot_room">#b6d7a8</color>-->
 </resources>

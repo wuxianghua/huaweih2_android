@@ -17,6 +17,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
+import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
 
     private PullToRefreshRecyclerView recyclerView;
     private ImageAlbumAdapter imageAlbumAdapter;
+    private TitleBar titleBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,19 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
                         position);
 
                 startActivity(intent);
+            }
+        });
+        titleBar=(TitleBar)findViewById(R.id.title_bar);
+        titleBar.show(null,"图片浏览",null);
+        titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+            @Override
+            public void onLeft() {
+                finish();
+            }
+
+            @Override
+            public void onRight() {
+
             }
         });
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -26,7 +27,6 @@ import com.palmap.demo.huaweih2.util.IpUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
-import com.palmap.demo.huaweih2.view.FullScreenDialog;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
 import com.palmaplus.nagrand.data.Feature;
@@ -43,8 +43,11 @@ import static com.palmap.demo.huaweih2.other.Constant.ICS实验室;
 import static com.palmap.demo.huaweih2.other.Constant.isDebug;
 import static com.palmap.demo.huaweih2.other.Constant.会议室;
 
-public class MainActivity extends BaseActivity {
-  public FullScreenDialog dialog;
+public class MainActivity extends BaseActivity implements View.OnClickListener{
+//  public FullScreenDialog dialog;
+ public RelativeLayout dialog;
+  LinearLayout btn_map;
+  LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
   private RadioGroup tabMenu;
   RadioButton rout;
@@ -251,23 +254,26 @@ public class MainActivity extends BaseActivity {
       }
     });
 
-
-    dialog = new FullScreenDialog(this, new FullScreenDialog.OnDialogListener() {
-      @Override
-      public void btnMapClick() {//室内地图
-        //dialog.dismissDialog();
-        dialog.dismiss();
-        fragmentMap.initMapScale();
-      }
-
-      @Override
-      public void btnFootClick() {//行程
-        fragmentMap.setFootPrint();
-        dialog.dismiss();
-//        dialog.dismissDialog();
-        fragmentMap.initMapScale();
-      }
-    });
+    dialog = (RelativeLayout)findViewById(R.id.dialog);
+    btn_map = (LinearLayout) findViewById(R.id.btn_map);
+    btn_map.setOnClickListener(this);
+    btn_foot= (LinearLayout) findViewById(R.id.btn_foot);
+//    dialog = new FullScreenDialog(this, new FullScreenDialog.OnDialogListener() {
+//      @Override
+//      public void btnMapClick() {//室内地图
+//        //dialog.dismissDialog();
+//        dialog.dismiss();
+//        fragmentMap.initMapScale();
+//      }
+//
+//      @Override
+//      public void btnFootClick() {//行程
+//        fragmentMap.setFootPrint();
+//        dialog.dismiss();
+////        dialog.dismissDialog();
+//        fragmentMap.initMapScale();
+//      }
+//    });
 //    dialog.show();
   }
 
@@ -612,6 +618,23 @@ public class MainActivity extends BaseActivity {
     } else {
       finish();
       System.exit(0);
+    }
+  }
+
+  @Override
+  public void onClick(View v) {
+    switch (v.getId()){
+      case R.id.btn_map:
+        fragmentMap.initMapScale();
+        dialog.setVisibility(View.GONE);
+        break;
+      case R.id.btn_foot:
+        fragmentMap.setFootPrint();
+        fragmentMap.initMapScale();
+        dialog.setVisibility(View.GONE);
+        break;
+      default:
+        break;
     }
   }
 }

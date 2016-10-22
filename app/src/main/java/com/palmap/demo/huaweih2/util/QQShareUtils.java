@@ -19,7 +19,6 @@ import static com.tencent.connect.share.QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEX
 /**
  * Created by eric3 on 2016/10/18.
  */
-
 public class QQShareUtils {
   private static final String APP_ID = "1105764370";
   private static Tencent mTencent;

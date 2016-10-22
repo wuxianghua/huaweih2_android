@@ -7,6 +7,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.adapter.ViewPagerAdapter;
 
@@ -23,6 +24,7 @@ public class WelcomeActivity extends BaseActivity {
   private List<View> list = null;
   private ImageView[] img = null;
   Button btn_ok;
+  TextView jump;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,20 @@ public class WelcomeActivity extends BaseActivity {
     list.add(getLayoutInflater().inflate(R.layout.welcome_tab3, null));
 
     btn_ok = (Button)findViewById(R.id.btn_ok);
+    btn_ok.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        finish();
+      }
+    });
+    jump = (TextView) findViewById(R.id.jump);
+    jump.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        finish();
+      }
+    });
+
 
     img = new ImageView[list.size()];
     LinearLayout layout = (LinearLayout) findViewById(R.id.viewGroup);
@@ -90,6 +106,11 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     public void onPageSelected(int page) {
+      if (page == 2)
+        btn_ok.setVisibility(View.VISIBLE);
+      else
+        btn_ok.setVisibility(View.GONE);
+
       //更新图标
       for (int i = 0; i < list.size(); i++) {
         if (page == i) {

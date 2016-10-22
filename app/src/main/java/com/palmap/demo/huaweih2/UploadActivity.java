@@ -43,6 +43,12 @@ public class UploadActivity extends BaseActivity {
     Uri uri = Uri.fromFile(file);
     im_upload.setImageURI(uri);
     bitmap= BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD);
+    if (bitmap==null) {
+      finish();
+      return;
+    }
+
+
     bitmap = FileUtils.comp(bitmap);
 
     titleBar.show("取消","","保存");

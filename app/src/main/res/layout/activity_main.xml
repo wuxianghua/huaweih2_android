@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-android:clickable="true"
+                android:clickable="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
@@ -17,6 +17,66 @@ android:clickable="true"
 
     </RelativeLayout>
 
+    <!--选择对话框-->
+    <RelativeLayout
+        android:id="@+id/dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="#99000000">
+        <LinearLayout
+            android:id="@+id/btn_map"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:background="#3c78d8"
+            android:layout_above="@+id/btn_foot"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ico_tab_line"
+                android:layout_marginRight="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:text="室内地图"
+                android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_foot"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:background="#3c78d8"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ico_tab_line"
+                android:layout_marginRight="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:text="参观路线"
+                android:gravity="center"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.palmap.demo.huaweih2.view.PullToRefreshLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:orientation="vertical"
     android:background="@color/bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/refresh_head"/>
-    <!-- 支持所有实现Pullable接口的View -->
+
     <!--标题栏-->
     <com.palmap.demo.huaweih2.view.TitleBar
         android:id="@+id/title_bar"
@@ -19,8 +18,8 @@
         android:clickable="true">
     </com.palmap.demo.huaweih2.view.TitleBar>
 
-    <com.palmap.demo.huaweih2.view.PullableScrollView
-
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/refreshScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdge="vertical"
@@ -144,8 +143,7 @@
 
 
         </LinearLayout>
-    </com.palmap.demo.huaweih2.view.PullableScrollView>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
-    <include layout="@layout/load_more"/>
 
-</com.palmap.demo.huaweih2.view.PullToRefreshLayout>
+</LinearLayout>

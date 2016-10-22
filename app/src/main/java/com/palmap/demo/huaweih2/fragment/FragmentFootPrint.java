@@ -12,6 +12,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.ImageAlbumActivity;
 import com.palmap.demo.huaweih2.R;
+import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.HttpDataCallBack;
+import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.view.FootPrintItemView;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
@@ -26,6 +31,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     FootPrintItemView footprintView_h2;
     FootPrintItemView footprintView_meetingRoom;
     FootPrintItemView footprintView_h2_hall;
+    int start = 0;//开始加载
 
     private PullToRefreshScrollView refreshScrollView;
 
@@ -87,6 +93,23 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
                 //网络请求
+
+                String js = JsonUtils.getCommentsDown("",start,Constant.EACH_TIME_COMMENT_NUM);
+                DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
+                    @Override
+                    public void onError(int errorCode) {
+                        DialogUtils.showShortToast(errorCode+"");
+                    }
+
+                    @Override
+                    public void onComplete(Object content) {
+
+                    }
+                });
+
+
+
+
                 refreshView.onRefreshComplete();
             }
         });

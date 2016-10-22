@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.palmap.demo.huaweih2.view.CustomerViewPager;
 import com.palmap.demo.huaweih2.view.MyProgressDialog;
 import com.palmap.demo.huaweih2.view.RecyclableImageView;
+import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class ImageViewActivity extends Activity {
     private PagerAdapter mAdapter;
     Handler myHandler = new Handler();
     private MyProgressDialog progressDialog;
+    private TitleBar titleBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,19 @@ public class ImageViewActivity extends Activity {
         imgList = intent.getStringArrayListExtra("imgList");
         int itemIndex = intent.getIntExtra("itemIndex", 0);
 
+        titleBar=(TitleBar)findViewById(R.id.title_bar);
+        titleBar.show(null,"图片查看",null);
+        titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+            @Override
+            public void onLeft() {
+                finish();
+            }
+
+            @Override
+            public void onRight() {
+
+            }
+        });
         imgPager = (CustomerViewPager) findViewById(R.id.imgPager);
         mAdapter = new ImageAdapter();
         imgPager.setAdapter(mAdapter);

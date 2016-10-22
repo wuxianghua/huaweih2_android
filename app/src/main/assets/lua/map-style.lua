@@ -1123,6 +1123,26 @@ CONFIG = {
             }
           }
         },
+        poi = {--自定义
+          height_offset = 0,
+          renderer = {
+            type = 'simple',
+            ['2d'] = {
+              style = 'polygon',
+              face = {
+                color = '0xff0196d0', --路
+                enable_alpha = false,
+              },
+              outline = {
+                --                color = '0xff000000',
+                color = '0xfff1f0cf', --外部边框
+                width = 0.1,
+                enable_alpha = false,
+              },
+              left_side = {}
+            },
+          }
+        },
       }
     },
   }

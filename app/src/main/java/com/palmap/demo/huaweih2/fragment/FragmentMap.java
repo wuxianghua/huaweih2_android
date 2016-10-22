@@ -546,7 +546,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mContext.runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
-                    mContext.dialog.show();
+                    mContext.dialog.setVisibility(View.VISIBLE);
                     hasChoosenFootPrint = true;
                   }
                 });
@@ -632,10 +632,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     if (feature == null)
       return;
 
+
     endX = feature.getCentroid().getX();//可能
     endY = feature.getCentroid().getY();
     endName=MapParamUtils.getDisplay(feature);
     long poiID = MapParamUtils.getId(feature);
+    if (Constant.isDebug){
+      DialogUtils.showLongToast("poiID="+poiID);
+    }
     mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
       @Override
       public void onRequestDataEvent(DataSource.ResourceState resourceState, final LocationModel locationModel) {
@@ -741,8 +745,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   }
 
   public void addMark(double x, double y) {//wgs84坐标
-    if (Constant.isDebug)
-      DialogUtils.showLongToast("location:"+x+" "+y);
+//    if (Constant.isDebug)
+//      DialogUtils.showLongToast("location:"+x+" "+y);
 
     mMapView.removeAllOverlay();
     Mark mark = new Mark(mContext);
@@ -937,22 +941,27 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   public void setFootPrint(){
     isShowFootPrint = true;
+
+    Feature feature=mMapView.selectFeature(1284129);
+    featureLayer.addFeature(feature);
+
+
     //poiID  大厅1284129    办公区1284130  ics实验室1270043 1264378
     // 办公室1264100 1270042 1264420 1264107 路1270023
-    setFeatureColor(1284129,R.color.foot_room);
+//    setFeatureColor(1284129,R.color.foot_room);
 
-    setFeatureColor(1284130,R.color.foot_room);
+    setFeatureColor(1284130,R.integer.foot_room);
 
-    setFeatureColor(1270043,R.color.foot_room);
-    setFeatureColor(1264378,R.color.foot_room);
+    setFeatureColor(1270043,R.integer.foot_room);
+    setFeatureColor(1264378,R.integer.foot_room);
 
-    setFeatureColor(1264100,R.color.foot_room);
-    setFeatureColor(1270042,R.color.foot_room);
-    setFeatureColor(1264420,R.color.foot_room);
-    setFeatureColor(1264107,R.color.foot_room);
-    setFeatureColor(1264105,R.color.foot_room);
+    setFeatureColor(1264100,R.integer.foot_room);
+    setFeatureColor(1270042,R.integer.foot_room);
+    setFeatureColor(1264420,R.integer.foot_room);
+    setFeatureColor(1264107,R.integer.foot_room);
+    setFeatureColor(1264105,R.integer.foot_room);
 
-    setFeatureColor(1270023,R.color.foot_road);
+    setFeatureColor(1270023,R.integer.foot_road);
   }
 
   public void resetFootPrint(){

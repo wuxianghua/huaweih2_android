@@ -3,6 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <!--标题栏-->
+    <com.palmap.demo.huaweih2.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true">
+    </com.palmap.demo.huaweih2.view.TitleBar>
+
+
     <com.palmap.demo.huaweih2.view.CustomerViewPager
         android:id="@+id/imgPager"
         android:layout_width="match_parent"

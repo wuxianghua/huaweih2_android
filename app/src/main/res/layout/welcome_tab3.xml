@@ -5,31 +5,30 @@
               android:layout_height="match_parent"
     android:background="@drawable/welcome_tab3">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3">
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="3">-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1">-->
 
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_weight="1"
-            android:background="#ff1fafe7"
-            android:textColor="#ffffff"
-            android:textSize="19dp"
-            android:layout_gravity="center"
-            android:layout_width="133dp"
-            android:layout_height="44dp"
-            android:layout_marginBottom="20dp"
-            android:text="立 即 体 验"
-            android:onClick="onOKClick"/>
-    </FrameLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btn_ok"-->
+            <!--android:background="#ff1fafe7"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="19dp"-->
+            <!--android:layout_gravity="top|center_horizontal"-->
+            <!--android:layout_marginTop="110dp"-->
+            <!--android:layout_width="133dp"-->
+            <!--android:layout_height="44dp"-->
+            <!--android:onClick="onOKClick"-->
+            <!--android:text="立 即 体 验"/>-->
+    <!--</FrameLayout>-->
 
 
 </LinearLayout>
