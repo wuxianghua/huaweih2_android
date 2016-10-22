@@ -17,4 +17,17 @@
     </style>
 
     <color name="transparent_background">#77000000</color>
+
+
+    <style name="myprogressDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!--边框-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <!--输入法影响-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--背景透明-->
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

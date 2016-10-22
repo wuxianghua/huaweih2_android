@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
-    useLibrary 'org.apache.http.legacy'
+    //useLibrary 'org.apache.http.legacy'
     sourceSets.main.jniLibs.srcDirs = ['libs']
     defaultConfig {
         applicationId "com.palmap.demo.huaweih2"
@@ -27,13 +27,15 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:support-v4:22.1.1'
     compile files('libs/nagrand-jar-with-dependencies.jar')
     compile files('libs/fastjson-1.2.4.jar')
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile files('libs/libammsdk.jar')
     compile files('libs/open_sdk_r5756_lite.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
+    //compile 'com.android.support:recyclerview-v7:24.1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile project(':pullToRefresh')
+    compile 'com.android.support:appcompat-v7:22.1.1'
 }

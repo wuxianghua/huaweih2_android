@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,10 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.palmap.demo.huaweih2.fragment.FragmentAround;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.fragment.FragmentMap;
@@ -82,11 +77,6 @@ public class MainActivity extends BaseActivity {
   FragmentTransaction transaction;
 
   public boolean isShowPoiInfoBar = false;//是否显示poi详情栏
-  /**
-   * ATTENTION: This was auto-generated to implement the App Indexing API.
-   * See https://g.co/AppIndexing/AndroidStudio for more information.
-   */
-  private GoogleApiClient client;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +86,6 @@ public class MainActivity extends BaseActivity {
 
     WXShareUtils.regToWeChat(this);
     QQShareUtils.getInstance().regToQQ(this);
-
-    // ATTENTION: This was auto-generated to implement the App Indexing API.
-    // See https://g.co/AppIndexing/AndroidStudio for more information.
-    client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
     if (Constant.isDebug) {
       HuaWeiH2Application.firstRun = true;
@@ -554,7 +540,6 @@ public class MainActivity extends BaseActivity {
     tv_poi_address.setVisibility(View.VISIBLE);
     tabMenu.setVisibility(View.GONE);
 
-
     String name = MapParamUtils.getName(locationModel);
 
     tv_poi_name.setText(name == null ? "未知位置" : name);
@@ -579,23 +564,6 @@ public class MainActivity extends BaseActivity {
 
   }
 
-
-  /**
-   * ATTENTION: This was auto-generated to implement the App Indexing API.
-   * See https://g.co/AppIndexing/AndroidStudio for more information.
-   */
-  public Action getIndexApiAction() {
-    Thing object = new Thing.Builder()
-        .setName("Main Page") // TODO: Define a title for the content shown.
-        // TODO: Make sure this auto-generated URL is correct.
-        .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-        .build();
-    return new Action.Builder(Action.TYPE_VIEW)
-        .setObject(object)
-        .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-        .build();
-  }
-
   @Override
   public void onStart() {
     super.onStart();
@@ -604,21 +572,8 @@ public class MainActivity extends BaseActivity {
     if (isDebug)
       DialogUtils.showLongToast(HuaWeiH2Application.userIp);
 
-    // ATTENTION: This was auto-generated to implement the App Indexing API.
-    // See https://g.co/AppIndexing/AndroidStudio for more information.
-    client.connect();
-    AppIndex.AppIndexApi.start(client, getIndexApiAction());
   }
 
-  @Override
-  public void onStop() {
-    super.onStop();
-
-    // ATTENTION: This was auto-generated to implement the App Indexing API.
-    // See https://g.co/AppIndexing/AndroidStudio for more information.
-    AppIndex.AppIndexApi.end(client, getIndexApiAction());
-    client.disconnect();
-  }
 
 //  @Override
 //  public void onBackPressed() {

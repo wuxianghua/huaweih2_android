@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2;
 
 import android.app.Application;
 
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -34,6 +35,14 @@ public class HuaWeiH2Application extends Application {
     copyPalmapFile();
 
     initImageLoader();
+    if (BuildConfig.DEBUG) {
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          Glide.get(HuaWeiH2Application.this).clearDiskCache();
+        }
+      }).start();
+    }
 
 
   }
