@@ -1,14 +1,14 @@
 [
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\default_ptr_rotate.png",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\default_ptr_rotate.png"
+        "merged": "F:\\HuaweiH2\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\default_ptr_flip.png",
+        "source": "F:\\HuaweiH2\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\default_ptr_flip.png"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\indicator_arrow.png",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\indicator_arrow.png"
+        "merged": "F:\\HuaweiH2\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\indicator_arrow.png",
+        "source": "F:\\HuaweiH2\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\indicator_arrow.png"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\default_ptr_flip.png",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\default_ptr_flip.png"
+        "merged": "F:\\HuaweiH2\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\default_ptr_rotate.png",
+        "source": "F:\\HuaweiH2\\pullToRefresh\\src\\main\\res\\drawable-hdpi\\default_ptr_rotate.png"
     }
 ]

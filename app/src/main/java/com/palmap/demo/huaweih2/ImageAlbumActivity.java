@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
+import com.palmap.demo.huaweih2.json.PictureModel;
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
@@ -61,11 +62,20 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
-                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
-                intent.putExtra("itemIndex",
-                        position);
+//                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
+//                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
+//                intent.putExtra("itemIndex",
+//                        position);
 
+                Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
+
+                PictureModel pictureModel = new PictureModel();
+                pictureModel.setDetails("测试测试测试描述");
+                pictureModel.setTime(System.currentTimeMillis());
+                pictureModel.setLocationStr("ICS实验室");
+                pictureModel.setUrl("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
+
+                intent.putExtra(PictureModel.class.getSimpleName(),  pictureModel);
                 startActivity(intent);
             }
         });

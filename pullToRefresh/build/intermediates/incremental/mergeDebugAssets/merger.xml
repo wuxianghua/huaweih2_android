@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="D:\gitCode\huaweiH2\huaweih2_android\pullToRefresh\src\main\assets"/><source path="D:\gitCode\huaweiH2\huaweih2_android\pullToRefresh\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\gitCode\huaweiH2\huaweih2_android\pullToRefresh\src\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="F:\HuaweiH2\pullToRefresh\src\main\assets"/><source path="F:\HuaweiH2\pullToRefresh\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="F:\HuaweiH2\pullToRefresh\src\debug\assets"/></dataSet></merger>

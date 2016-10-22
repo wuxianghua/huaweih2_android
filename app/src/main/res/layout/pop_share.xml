@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:gravity="bottom"
+    android:clickable="true"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_shareTitle"
+        android:clickable="true"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:textColor="#565c60"
+        android:textSize="15sp"
+        android:text="分享到"
+        android:layout_width="match_parent"
+        android:layout_height="44dp" />
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="97dp">
+
+        <LinearLayout
+            android:id="@+id/layout_share_weChat"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/ico_s_wechat"
+                android:layout_width="44dp"
+                android:layout_height="44dp" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="微信好友"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_share_weiChat_friends"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/ico_s_friends"
+                android:layout_width="44dp"
+                android:layout_height="44dp" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="朋友圈"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_share_weibo"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/ico_s_weibo"
+                android:layout_width="44dp"
+                android:layout_height="44dp" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="微博"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_share_qq"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/ico_s_qq"
+                android:layout_width="44dp"
+                android:layout_height="44dp" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="QQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_share_cancel"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textColor="@android:color/white"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_centerInParent="true"
+            android:text="取消"
+            android:layout_width="74dp"
+            android:layout_height="28dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

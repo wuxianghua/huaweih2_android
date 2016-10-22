@@ -25,6 +25,8 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
   private boolean enableLeft =true;
   private boolean enableRight =true;
 
+  private ImageView ico_right;
+
 
   private void initView(){
     LayoutInflater.from(mContext).inflate(R.layout.layout_title_bar,this);
@@ -37,6 +39,9 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
     title.setOnClickListener(this);
     im_back = (ImageView)findViewById(R.id.title_bar_back);
     im_back.setOnClickListener(this);
+
+
+    ico_right = (ImageView) findViewById(R.id.ico_right);
   }
 
   public TitleBar(Context context, AttributeSet attrs) {
@@ -126,6 +131,16 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
         break;
     }
   }
+
+  public void setRightIcoClickListener(View.OnClickListener onClickListener){
+    ico_right.setOnClickListener(onClickListener);
+  }
+
+  public void setRightIcoImageRes(int res){
+    ico_right.setVisibility(VISIBLE);
+    ico_right.setImageResource(res);
+  }
+
 
   public interface OnTitleClickListener {
     void onLeft();
