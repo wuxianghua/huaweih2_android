@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ScrollView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.ImageAlbumActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.view.FootPrintItemView;
@@ -18,14 +20,14 @@ import com.palmap.demo.huaweih2.view.TitleBar;
  */
 
 public class FragmentFootPrint extends BaseFragment implements View.OnClickListener {
-    ImageView imageView;
-
 
     FootPrintItemView footprintView_office;
     FootPrintItemView footprintView_lab;
     FootPrintItemView footprintView_h2;
     FootPrintItemView footprintView_meetingRoom;
     FootPrintItemView footprintView_h2_hall;
+
+    private PullToRefreshScrollView refreshScrollView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,6 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         View fragmentView = inflater.inflate(R.layout.foot_print, container, false);
-//    imageView  = (ImageView)fragmentView.findViewById(R.id.image_foot_print);
-//    imageView.setOnClickListener(this);
 
         getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
@@ -73,6 +73,24 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
                 , footprintView_meetingRoom
                 , footprintView_h2_hall
         );
+
+        refreshScrollView = (PullToRefreshScrollView) view.findViewById(R.id.refreshScrollView);
+
+        refreshScrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+
+        refreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+                refreshView.onRefreshComplete();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+                //网络请求
+                refreshView.onRefreshComplete();
+            }
+        });
+
     }
 
     private void registerFootPrintItemViewClickEvent(FootPrintItemView... views) {
