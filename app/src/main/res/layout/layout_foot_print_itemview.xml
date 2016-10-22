@@ -18,10 +18,8 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:layout_below="@+id/image1"
-            android:background="@android:color/black"
+            android:background="@mipmap/bg_name"
             android:textColor="@android:color/white"
             android:textSize="5sp"
             android:maxLines="1"
@@ -33,9 +31,10 @@
         <TextView
             android:textColor="@android:color/white"
             android:id="@+id/tv_count"
-            android:layout_marginLeft="30dp"
-            android:background="#f00"
+            android:layout_marginLeft="26dp"
+            android:background="@mipmap/bg_number"
             android:textSize="10sp"
+            android:gravity="center"
             android:text="12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

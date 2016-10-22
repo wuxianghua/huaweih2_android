@@ -16,10 +16,10 @@ import com.palmap.demo.huaweih2.R;
 public class FootPrintItemView extends LinearLayout {
 
     private ImageView image1;
-    private TextView tvName,tvCount;
+    private TextView tvName, tvCount;
 
     public FootPrintItemView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public FootPrintItemView(Context context, AttributeSet attrs) {
@@ -33,4 +33,17 @@ public class FootPrintItemView extends LinearLayout {
         tvName = (TextView) findViewById(R.id.tv_name);
         tvCount = (TextView) findViewById(R.id.tv_count);
     }
+
+    public void setImageResource(int res) {
+        image1.setImageResource(res);
+    }
+
+    public void setName(String text) {
+        tvName.setText(text);
+    }
+
+    public void setCount(int count) {
+        tvCount.setText("" + count);
+    }
+
 }

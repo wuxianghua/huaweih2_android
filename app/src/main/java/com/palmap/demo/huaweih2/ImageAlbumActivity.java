@@ -1,17 +1,22 @@
 package com.palmap.demo.huaweih2;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
+import com.palmap.demo.huaweih2.util.SystemBarTintManager;
 
 import java.util.ArrayList;
 
@@ -28,6 +33,9 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_album);
+
+        initStatusBar(R.color.red);
+
         recyclerView = (PullToRefreshRecyclerView) findViewById(R.id.recyclerView);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -92,6 +100,48 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
             outRect.right = space;
             outRect.bottom = space;
         }
+    }
+
+
+    /**
+     * 设置状态栏颜色
+     * API >=19
+     *
+     * @param colorId
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    protected void initStatusBar(int colorId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19
+            Window window = getWindow();
+            WindowManager.LayoutParams winParams = window.getAttributes();
+            final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            winParams.flags |= bits;
+            window.setAttributes(winParams);
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setNavigationBarTintEnabled(true);
+            tintManager.getConfig().getNavigationBarHeight();
+            try {
+                tintManager.setTintResource(colorId);
+                int height = tintManager.getConfig().getStatusBarHeight();
+                getRootView().setPadding(
+                        getRootView().getLeft(),
+                        getRootView().getPaddingTop() + height,
+                        getRootView().getRight(),
+                        getRootView().getBottom());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 获取root节点
+     *
+     * @return
+     */
+    public View getRootView() {
+        return findViewById(android.R.id.content);
     }
 
 }

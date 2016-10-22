@@ -22,6 +22,10 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
 
 
     FootPrintItemView footprintView_office;
+    FootPrintItemView footprintView_lab;
+    FootPrintItemView footprintView_h2;
+    FootPrintItemView footprintView_meetingRoom;
+    FootPrintItemView footprintView_h2_hall;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,16 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
 
     private void bindView(View view) {
         footprintView_office = (FootPrintItemView) view.findViewById(R.id.footprintView_office);
-        registerFootPrintItemViewClickEvent(footprintView_office);
+        footprintView_lab = (FootPrintItemView) view.findViewById(R.id.footprintView_lab);
+        footprintView_h2 = (FootPrintItemView) view.findViewById(R.id.footprintView_h2);
+        footprintView_meetingRoom = (FootPrintItemView) view.findViewById(R.id.footprintView_meetingRoom);
+        footprintView_h2_hall = (FootPrintItemView) view.findViewById(R.id.footprintView_h2_hall);
+        registerFootPrintItemViewClickEvent(footprintView_office
+                , footprintView_lab
+                , footprintView_h2
+                , footprintView_meetingRoom
+                , footprintView_h2_hall
+        );
     }
 
     private void registerFootPrintItemViewClickEvent(FootPrintItemView... views) {
@@ -95,7 +108,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
         @Override
         public void onClick(View v) {
             if (v == null) return;
-            startActivity(new Intent(getActivity(),ImageAlbumActivity.class));
+            startActivity(new Intent(getActivity(), ImageAlbumActivity.class));
         }
     }
 
