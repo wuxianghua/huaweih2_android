@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/margin_large"
+                android:gravity="center"
+              android:layout_marginRight="@dimen/margin_large"
+              android:layout_marginTop="10dp">
+
+    <RelativeLayout
+        android:id="@+id/item_t"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+    <ImageView
+        android:id="@+id/iml"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ico_sea_marker"/>
+
+    <TextView
+        android:id="@+id/tv_location_name"
+        android:gravity="left|center_vertical"
+        android:textSize="19sp"
+        android:textColor="#565c60"
+        android:text="会议室"
+        android:layout_toLeftOf="@+id/floor"
+        android:layout_toRightOf="@+id/iml"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/floor"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:textSize="13sp"
+        android:textColor="#94999d"
+        android:text="F1"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"/>
+    </RelativeLayout>
+</LinearLayout>

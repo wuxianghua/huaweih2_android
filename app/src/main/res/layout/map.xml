@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <!--地图界面上控件-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+
+        <ImageView
+            android:id="@+id/compass"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:outlineProvider="bounds"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="@drawable/ico_compass"
+            android:gravity="center"/>
+
+        <!--搜索框-->
+
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:src="@drawable/btn_search"
+            android:gravity="center"/>
+
+        <com.palmap.demo.huaweih2.view.Scale
+            android:id="@+id/scale"
+            android:layout_width="130dp"
+            android:layout_height="28dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="50dp"/>
+        <!-- 定位、放大缩小、楼层切换 -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_normal">
+
+            <TextView
+                android:id="@+id/shoot"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="@drawable/btn_tab_camera"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/locate"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="@drawable/btn_tab_position"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/map_zoom_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_tab_zoomin"/>
+
+            <TextView
+                android:id="@+id/map_zoom_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_tab_zoomout"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal">
+
+
+            <TextView
+                android:id="@+id/elevator"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/select_elevator"/>
+
+            <TextView
+                android:id="@+id/wc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_wc"/>
+
+            <TextView
+                android:id="@+id/exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_exit"/>
+
+            <TextView
+                android:id="@+id/water"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="@drawable/select_water"/>
+
+            <TextView
+                android:id="@+id/f1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_tab_f1_sel"/>
+
+            <TextView
+                android:id="@+id/b1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="@drawable/btn_tab_b1"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <!--搜索页面-->
+    <LinearLayout
+        android:id="@+id/search_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/search_box"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="#ffffff"
+            >
+
+
+            <ImageView
+                android:id="@+id/btn_search"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_marginRight="@dimen/margin_large"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/ico_search"/>
+
+            <EditText
+                android:id="@+id/tv_keywords"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/tv_cancel"
+                android:layout_toRightOf="@+id/btn_search"
+                />
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_marginRight="@dimen/margin_large"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="#94999d"
+                android:textSize="14sp"/>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/search_default"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:layout_margin="@dimen/margin_large"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_sea_elevator"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电梯"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_sea_toilet"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="洗手间"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_sea_entrance"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="出入口"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_sea_water"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="茶水间"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/search_null_tv"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="没有搜索结果。"
+            android:layout_margin="@dimen/margin_large"
+            android:background="@color/white"/>
+
+        <ListView
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_alignBottom="@+id/search_box"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            >
+
+        </ListView>
+
+
+    </LinearLayout>
+
+</FrameLayout>
