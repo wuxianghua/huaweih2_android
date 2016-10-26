@@ -97,11 +97,11 @@ public class FragmentPark extends BaseFragment {
 //        fragmentPay.setArguments(args);
 //        getMainActivity().showFragment(fragmentPay);
 
-        Intent intent = new Intent(getMainActivity(), ActivityPay.class);
+        Intent intent = new Intent(getActivity(), ActivityPay.class);
         Bundle args = new Bundle();
         args.putParcelable("parkInfo", p);
         intent.putExtras(args);
-        startActivityForResult(intent, Constant.startPay);
+        getActivity().startActivityForResult(intent, Constant.startPay);
 
 //        getMainActivity().titleBar.show(null,"支付",null);
 //        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {

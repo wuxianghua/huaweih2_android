@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -16,8 +17,11 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class UploadActivity extends BaseActivity {
 
@@ -51,7 +55,7 @@ public class UploadActivity extends BaseActivity {
 
     bitmap = FileUtils.comp(bitmap);
 
-    titleBar.show("取消","","保存");
+    titleBar.show("取消","","上传");
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -60,10 +64,83 @@ public class UploadActivity extends BaseActivity {
 
       @Override
       public void onRight() {
-        uploadImage();
+//        uploadImage();
+        uploadImageFormData();
+
       }
     });
   }
+
+  private void uploadImageFormData(){
+    File img = new File(Constant.PATH_PICTURE_UPLOAD);
+    //若该文件存在
+    if (!img.exists()) {
+      DialogUtils.showShortToast(Constant.PATH_PICTURE_UPLOAD+"没有找到待上传的图片。");
+      return;
+    }
+
+//    bitmap = comp(bitmap);//压缩
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+    //输出压缩图片
+    byte[] inputByte = null;
+    int length = 0;
+    DataInputStream dis = null;
+    FileOutputStream fos = null;
+    try {
+      try {
+        dis = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+        fos = new FileOutputStream(new File(Constant.PATH_PICTURE_UPLOAD));
+        inputByte = new byte[1024];
+        System.out.println("开始接收数据...");
+        while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
+          System.out.println(length);
+          fos.write(inputByte, 0, length);
+          fos.flush();
+        }
+        System.out.println("完成接收");
+      } finally {
+        if (fos != null)
+          fos.close();
+        if (dis != null)
+          dis.close();
+      }
+    } catch (Exception e) {
+    }
+    File imgUp = new File(Constant.PATH_PICTURE_UPLOAD);
+    //若该文件存在
+    if (!imgUp.exists()) {
+      DialogUtils.showShortToast(Constant.PATH_PICTURE_UPLOAD+"没有找到待上传的图片。");
+      return;
+    }
+
+    PictureJson pictureJson = new PictureJson();
+    pictureJson.setAppendix(tv_message.getText().toString());
+    pictureJson.setLocation("H2大厅");
+    String picJson = JSON.toJSONString(pictureJson);
+
+//    MyAsyncTask myAsyncTask = new MyAsyncTask();
+//    myAsyncTask.execute();
+
+    showProgress("上传","正在上传图片。请稍后...");
+    DataProviderCenter.UploadImageUtils.uploadFile(imgUp, picJson, new HttpDataCallBack() {
+      @Override
+      public void onError(int errorCode) {
+//        DialogUtils.showShortToast(errorCode+"");
+        closeProgress();
+        Log.e("error",errorCode+"");
+      }
+
+      @Override
+      public void onComplete(Object content) {
+        DialogUtils.showShortToast("上传成功");
+        finish();
+        closeProgress();
+      }
+    });
+  }
+
 
   private void uploadImage(){
     File img = new File(Constant.PATH_PICTURE_UPLOAD);
@@ -111,7 +188,7 @@ public class UploadActivity extends BaseActivity {
     PictureJson pictureJson = new PictureJson();
     pictureJson.setAppendix(tv_message.getText().toString());
     pictureJson.setLocation("H2大厅");
-    pictureJson.setPhoto(baos.toByteArray());
+//    pictureJson.setPhoto(baos.toByteArray());
     String picJson = JSON.toJSONString(pictureJson);
 
     DataProviderCenter.getInstance().postImage(picJson, new HttpDataCallBack() {

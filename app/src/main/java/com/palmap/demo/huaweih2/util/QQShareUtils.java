@@ -3,16 +3,13 @@ package com.palmap.demo.huaweih2.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 
-import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.view.SharePopView;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-
-import java.io.File;
 
 import static com.tencent.connect.share.QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT;
 
@@ -32,33 +29,32 @@ public class QQShareUtils {
     mTencent = Tencent.createInstance(APP_ID, context);
   }
 
-  public void shareToQQ(Activity context)
+  public void shareToQQ(Activity context, SharePopView.ShareModel shareModel)
   {
-    String img = Environment.getExternalStorageDirectory() + File.separator + Constant.LUR_NAME+"/applogo.png";
+//    String imgUrl = Environment.getExternalStorageDirectory() + File.separator + Constant.LUR_NAME+"/applogo.png";
     final Bundle params = new Bundle();
     params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-    params.putString(QQShare.SHARE_TO_QQ_TITLE, "我的分享");
-    params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "我正在华为ICS实验室参观");
-    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  "https://www.pgyer.com/nkee");
-    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,img);
+    params.putString(QQShare.SHARE_TO_QQ_TITLE, shareModel.title);
+    params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");
+    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  shareModel.url);
+    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,shareModel.imgUrl);
     params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "ICS室内定位");
 //    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,"其他附加功能");
     mTencent.shareToQQ(context, params, new BaseUiListener());
   }
 
-  private void shareToQzone (Activity context) {
+  public void shareToQzone (Activity context,SharePopView.ShareModel shareModel) {
     //分享类型
     final Bundle params = new Bundle();
     params.putString(QzoneShare.SHARE_TO_QZONE_KEY_TYPE,SHARE_TO_QZONE_TYPE_IMAGE_TEXT+"");
     params.putString(QzoneShare.SHARE_TO_QQ_TITLE, "ICS室内定位");//必填
-    params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, "app下载链接");//选填
-    params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, "https://www.pgyer.com/nkee");//必填
+    params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");//选填
+    params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, shareModel.imgUrl);//必填
 //    params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, "图片链接ArrayList");
     mTencent.shareToQzone(context, params, new BaseUiListener());
   }
 
   private class BaseUiListener implements IUiListener {
-
     @Override
     public void onComplete(Object o) {
       DialogUtils.showShortToast("分享成功");

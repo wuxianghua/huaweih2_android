@@ -22,15 +22,15 @@ public class ShopList {
     Shop shop9 = new Shop("7-11便利店","便利店","龙岗区坂田街道（华为H2基地）","",180);
 
     shopList = new ArrayList<>();
-    shopList.add(shop1);
-    shopList.add(shop2);
-    shopList.add(shop3);
+    shopList.add(shop9);
+    shopList.add(shop8);
+    shopList.add(shop7);
     shopList.add(shop4);
     shopList.add(shop5);
     shopList.add(shop6);
-    shopList.add(shop7);
-    shopList.add(shop8);
-    shopList.add(shop9);
+    shopList.add(shop3);
+    shopList.add(shop2);
+    shopList.add(shop1);
 
   }
 

@@ -37,4 +37,80 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/center"
         android:background="@drawable/shakeit_down"/>
+
+
+    <LinearLayout
+        android:id="@+id/loca"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ico_y_marker"/>
+        <TextView
+            android:id="@+id/locName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:text="ICS"
+            android:textSize="15sp"
+            android:textColor="#565c60"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/big"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_alignParentBottom="true"
+        android:background="#1fafe7"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_margin="15dp">
+        
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="96dp"
+            android:layout_height="68dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/boardroom_min_1"/>
+        
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:text="title"/>
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="2"
+                android:lineSpacingExtra="6sp"
+                android:textSize="12sp"
+                android:textColor="#fefefe"
+                android:lines="2"
+                android:ellipsize="end"
+                android:text="title"/>
+
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

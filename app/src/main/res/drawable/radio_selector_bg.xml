@@ -5,7 +5,7 @@
     <!--<item android:drawable="@drawable/button_normal"></item>-->
 
 
-        <item android:state_checked="true" android:drawable="@drawable/button_pressed"/>
+        <item android:state_checked="true" android:drawable="@drawable/button_normal"/>
         <!-- not selected -->
         <item android:drawable="@drawable/button_normal"/>
 

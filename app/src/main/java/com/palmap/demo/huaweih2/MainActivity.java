@@ -21,6 +21,7 @@ import com.palmap.demo.huaweih2.fragment.FragmentMap;
 import com.palmap.demo.huaweih2.fragment.FragmentPark;
 import com.palmap.demo.huaweih2.fragment.FragmentShake;
 import com.palmap.demo.huaweih2.model.ParkInfo;
+import com.palmap.demo.huaweih2.model.PoiImg;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
@@ -33,6 +34,8 @@ import com.palmaplus.nagrand.data.Feature;
 import com.palmaplus.nagrand.data.LocationModel;
 import com.palmaplus.nagrand.view.MapView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,9 +46,9 @@ import static com.palmap.demo.huaweih2.other.Constant.ICS实验室;
 import static com.palmap.demo.huaweih2.other.Constant.isDebug;
 import static com.palmap.demo.huaweih2.other.Constant.会议室;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity {
 //  public FullScreenDialog dialog;
- public RelativeLayout dialog;
+//public RelativeLayout dialog;
   LinearLayout btn_map;
   LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
@@ -59,9 +62,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
   FragmentFootPrint fragmentFootPrint;
   FragmentShake fragmentShake;
 
-  TextView im_poi;
+  public TextView im_poi;
   ImageView im_go;
-  ImageView im_share;
+//  ImageView im_share;
   //  TextView tv_nav_len;
   ImageView im_nav_start;
   ImageView im_nav_end;
@@ -86,6 +89,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    initStatusBar(R.color.black);
+    //启动Android定时器，并且启动服务
+    if (Constant.openLocateService)
+      LocateTimerService.getLocation(this);
 
     WXShareUtils.regToWeChat(this);
     QQShareUtils.getInstance().regToQQ(this);
@@ -120,6 +127,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
       case Constant.startPay:
         if (requestCode == RESULT_OK)
         fragmentPark.setPayed();
+        break;
+      case Constant.startOffice:
+        String name = data.getStringExtra("peopleName");
+        fragmentMap.searchPeopleName(name);
         break;
       default:
         break;
@@ -156,6 +167,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         if (fragmentMap.isShowFootPrint) {
           fragmentMap.resetFootPrint();
         } else {
+          if (fragmentMap.mCurrentFloor==0) {//B1
+            DialogUtils.showShortToast("请切换至楼层F1后再点击行程");
+            return;
+          }
           fragmentMap.setFootPrint();
         }
       }
@@ -173,7 +188,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     });
     btn_set_start = (TextView) findViewById(R.id.btn_set_start);
     im_go = (ImageView) findViewById(R.id.go_im);
-    im_share = (ImageView) findViewById(R.id.share_im);
+//    im_share = (ImageView) findViewById(R.id.share_im);
     im_nav_end = (ImageView) findViewById(R.id.nav_end);
 //    tv_nav_len = (TextView)findViewById(R.id.nav_len);
     im_nav_start = (ImageView) findViewById(R.id.nav_start);
@@ -254,10 +269,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
       }
     });
 
-    dialog = (RelativeLayout)findViewById(R.id.dialog);
-    btn_map = (LinearLayout) findViewById(R.id.btn_map);
-    btn_map.setOnClickListener(this);
-    btn_foot= (LinearLayout) findViewById(R.id.btn_foot);
+
+
 //    dialog = new FullScreenDialog(this, new FullScreenDialog.OnDialogListener() {
 //      @Override
 //      public void btnMapClick() {//室内地图
@@ -303,9 +316,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     mMapContainer.setVisibility(View.GONE);
   }
 
-  public void hideTabMenu() {
-    tabMenu.setVisibility(View.GONE);
-  }
+
 
   public void showFragment(Fragment fragment) {
     hideAllFragments();
@@ -369,13 +380,62 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 //    }
   }
 
+
   //显示poi详情
   public void showPoiInfoBar(final Feature feature) {
     isShowPoiInfoBar = true;
     tv_tip.setVisibility(View.GONE);
     poiInfoBar.setVisibility(View.VISIBLE);
     im_poi.setVisibility(View.VISIBLE);
-    im_poi.setBackgroundResource(R.drawable.btn_tab_camera);
+    im_poi.setBackgroundResource(R.drawable.huaweilogo);
+
+
+    List<PoiImg> poiImgs= new ArrayList<>();
+
+    PoiImg img = new PoiImg(R.drawable.huaweilogo,23999000);
+    PoiImg img1 = new PoiImg(R.drawable.elevator,24091000);
+    PoiImg img2 = new PoiImg(R.drawable.stairs,24097000);
+    PoiImg img3= new PoiImg(R.drawable.toilet,23024000);
+    PoiImg img4 = new PoiImg(R.drawable.dtoilet,23059000);
+    PoiImg img5 = new PoiImg(R.drawable.mtoilet,23024000);
+    PoiImg img6 = new PoiImg(R.drawable.wtoilet,23025000);
+    PoiImg img7 = new PoiImg(R.drawable.service,23018000);
+    PoiImg img8 = new PoiImg(R.drawable.lifeservice,15000000);
+    PoiImg img9 = new PoiImg(R.drawable.park,17004000);
+    PoiImg img10 = new PoiImg(R.drawable.park,22001000);
+    PoiImg img11 = new PoiImg(R.drawable.laboratory,23027000);
+    PoiImg img12 = new PoiImg(R.drawable.meeting,23001000);
+    PoiImg img13 = new PoiImg(R.drawable.office,23027000);
+    PoiImg img14 = new PoiImg(R.drawable.office,24002000);
+    PoiImg img15 = new PoiImg(R.drawable.office,24005000);
+    PoiImg img16 = new PoiImg(R.drawable.office,24007000);
+    PoiImg img17 = new PoiImg(R.drawable.office,24008000);
+    poiImgs.add(img);
+    poiImgs.add(img1);
+    poiImgs.add(img2);
+    poiImgs.add(img3);
+    poiImgs.add(img4);
+    poiImgs.add(img5);
+    poiImgs.add(img6);
+    poiImgs.add(img7);
+    poiImgs.add(img8);
+    poiImgs.add(img9);
+    poiImgs.add(img10);
+    poiImgs.add(img11);
+    poiImgs.add(img12);
+    poiImgs.add(img13);
+    poiImgs.add(img14);
+    poiImgs.add(img15);
+    poiImgs.add(img16);
+    poiImgs.add(img17);
+    for (int i=0;i<poiImgs.size();i++){
+      if (MapParamUtils.getCategoryId(feature)==poiImgs.get(i).getCat())
+          im_poi.setBackgroundResource(poiImgs.get(i).getId());
+    }
+
+
+
+
     tv_poi_name.setVisibility(View.VISIBLE);
     tabMenu.setVisibility(View.GONE);
     tv_poi_address.setVisibility(View.VISIBLE);
@@ -458,24 +518,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
           tv_poi_name.setVisibility(View.GONE);
           im_poi.setVisibility(View.GONE);
           im_go.setVisibility(View.GONE);
-          im_share.setVisibility(View.GONE);
+//          im_share.setVisibility(View.GONE);
           tv_tip.setVisibility(View.VISIBLE);
         }
       }
     });
-    im_share.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-//        WXShareUtils.sendToWeChat("我正在华为ICS实验室参观");
-        QQShareUtils.getInstance().shareToQQ(MainActivity.this);
-      }
-    });
+//    im_share.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//
+//            SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
+//
+//            shareModel.imgUrl = pictureModel.getPhoto();
+//            shareModel.title = "图片分享";
+//            shareModel.url = pictureModel.getAppendix();
+//
+//            SharePopView.showSharePop(MainActivity.this,shareModel);
+//
+//      }
+//    });
+//    im_share.setVisibility(View.GONE);
   }
 
   //判断是否显示 查看详情
   private void checkShowMoreInfo(String name) {
     //若为4个节点，显示详情
     if (name.equals(H2大厅) || name.equals(ICS办公区) || name.contains(ICS实验室) || name.equals(会议室)) {
+      tv_poi_moreinfo.setVisibility(View.VISIBLE);
       tv_poi_moreinfo.setText("查看详情>>");
       morePoiInfoName = name;
       tv_poi_moreinfo.setClickable(true);
@@ -494,17 +563,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     } else if (会议室.equals(morePoiInfoName)) {
       startActivity(new Intent(this, ActivityMeeting.class));
     } else if (ICS办公区.equals(morePoiInfoName)) {
-      startActivity(new Intent(this, ActivityOffice.class));
+      startActivityForResult(new Intent(this, ActivityOffice.class),Constant.startOffice);
     } else if (morePoiInfoName.contains(ICS实验室)) {
       startActivity(new Intent(this, ActivityLab.class));
     }
   }
 
-  //显示导航栏
+  //隐藏导航栏，显示title
+  public void hideTabMenu() {
+    tabMenu.setVisibility(View.GONE);
+  }
+  //显示导航栏，隐藏title
   public void showTabMenu() {
     isShowPoiInfoBar = false;
     poiInfoBar.setVisibility(View.GONE);
-    im_share.setVisibility(View.VISIBLE);
+//    im_share.setVisibility(View.VISIBLE);
     im_go.setVisibility(View.VISIBLE);
     tabMenu.setVisibility(View.VISIBLE);
     im_nav_end.setVisibility(View.GONE);
@@ -557,7 +630,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 //          tv_poi_moreinfo.setText(MapParamUtils.getEnglishName(locationModel));
 
     im_go.setVisibility(View.GONE);
-    im_share.setVisibility(View.GONE);
+//    im_share.setVisibility(View.GONE);
     tv_tip.setVisibility(View.GONE);
     btn_set_start.setVisibility(View.VISIBLE);
     btn_set_start.setOnClickListener(new View.OnClickListener() {
@@ -580,8 +653,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
   }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
 
-//  @Override
+    //停止由AlarmManager启动的循环
+    LocateTimerService.stop(this);
+    //停止由服务启动的循环
+    Intent intent = new Intent(this, LocateTimerService.class);
+    stopService(intent);
+  }
+
+  //  @Override
 //  public void onBackPressed() {
 //    exitBy2Click(); //调用双击退出函数
 //    super.onBackPressed();
@@ -621,20 +704,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
   }
 
-  @Override
-  public void onClick(View v) {
-    switch (v.getId()){
-      case R.id.btn_map:
-        fragmentMap.initMapScale();
-        dialog.setVisibility(View.GONE);
-        break;
-      case R.id.btn_foot:
-        fragmentMap.setFootPrint();
-        fragmentMap.initMapScale();
-        dialog.setVisibility(View.GONE);
-        break;
-      default:
-        break;
-    }
-  }
+
 }

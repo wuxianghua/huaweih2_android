@@ -1,6 +1,7 @@
 package com.palmap.demo.huaweih2.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.palmap.demo.huaweih2.ActivityShopDetail;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.model.Shop;
 
@@ -69,6 +71,8 @@ public class ShopListAdapter extends BaseAdapter{
         viewHolder = (ShopListAdapter.ViewHolder) convertView.getTag();
       }
 
+      viewHolder.img.setBackgroundResource(R.drawable.image5_1);
+
       // 设置控件内容
       viewHolder.name.setText(mShopList.get(position).getName());
       viewHolder.distance.setText(mShopList.get(position).getDistance()+"m");
@@ -92,6 +96,9 @@ public class ShopListAdapter extends BaseAdapter{
 
           if (!mShopList.get(position).getName().equals("7-11便利店"))
             onItemClickListener.onClicked(mShopList.get(position));
+          else {
+            mContext.startActivity(new Intent(mContext, ActivityShopDetail.class));
+          }
         }
       });
 

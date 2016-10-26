@@ -58,7 +58,7 @@
 
             <TextView
                 android:layout_marginTop="10dp"
-                android:text="朋友圈"
+                android:text="QQ空间"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -70,6 +70,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:orientation="vertical"
             android:layout_height="match_parent">
 
@@ -124,11 +125,11 @@
             android:textColor="@android:color/white"
             android:background="@color/blue"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="17sp"
             android:layout_centerInParent="true"
-            android:text="取消"
-            android:layout_width="74dp"
-            android:layout_height="28dp" />
+            android:text="取      消"
+            android:layout_width="210dp"
+            android:layout_height="40dp" />
 
     </RelativeLayout>
 

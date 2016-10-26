@@ -103,7 +103,7 @@ local function Set2dColor(color, widthColor, width)
       },
       outline = {
         color = widthColor,
-        width = 0.25,
+        width = width,
         enable_alpha = false,
       },
       left_side = {}
@@ -147,6 +147,26 @@ local function DEFAULT_STYLE()
       outline = {
         color = '0xffffffff',
 --        color = '0xffebebeb',--默认颜色
+        width = 0.1,
+        enable_alpha = false,
+      },
+      left_side = {}
+    }
+  }
+end
+
+local function DEFAULT_STYLE_MY()
+  return {
+    ['2d'] = {
+      style = 'polygon',
+      face = {
+        color = '0xff0196d0', --默认颜色
+        enable_alpha = false,
+        texture = null,
+        automatic_scale = null
+      },
+      outline = {
+        color = '0xff0196d0',
         width = 0.1,
         enable_alpha = false,
       },
@@ -371,27 +391,27 @@ CONFIG = {
             },
             default = DEFAULT_STYLE(),
             styles = {
-              [23999000] = Set2dColor('0xebebeb','0xbababa',1);
-              [24091000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
-              [24097000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
-              [23024000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
-              [23059000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
+              [23999000] = Set2dColor('0xebebeb','0xbababa',0.15);
+              [24091000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
+              [24097000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
+              [23024000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
+              [23059000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
 
-              [23024000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
-              [23025000] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
-              [23018000] = Set2dColor('0xfbebee','0xf3bdc8',1);
-              [15000000] = Set2dColor('0xfbebee','0xf3bdc8',1);
-              [17004000] = Set2dColor('0xfffff8','0xaf967e',1);
+              [23024000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
+              [23025000] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
+              [23018000] = Set2dColor('0xfbebee','0xf3bdc8',0.15);
+              [15000000] = Set2dColor('0xfbebee','0xf3bdc8',0.15);
+              [17004000] = Set2dColor('0xfffff8','0xaf967e',0.15);
 
-              [22001000] = Set2dColor('0xe6edf6','0xb2c8e4',1);
+              [22001000] = Set2dColor('0xe6edf6','0xb2c8e4',0.15);
 --              [23027000] = Set2dColor('0xef1e8f6','0xd1b5e2',1);
-              [23001000] = Set2dColor('0xe6f2e7','0xb5d9b8',1);
+              [23001000] = Set2dColor('0xe6f2e7','0xb5d9b8',0.15);
 --              [23027000] = Set2dColor('0xe6edf6','0xb2c8e4',1);
-              [24002000] = Set2dColor('0xc8dedc','0xe6f0ef',1);
+              [24002000] = Set2dColor('0xc8dedc','0xe6f0ef',0.05);
 
-              [24005000] = Set2dColor('0xcce0de','0xcce0de',1);
-              [24007000] = Set2dColor('0xcce0de','0xcce0de',1);
-              [24008000] = Set2dColor('0xc7c7c7','0xc7c7c7',1);
+              [24005000] = Set2dColor('0xcce0de','0xcce0de',0);
+              [24007000] = Set2dColor('0xcce0de','0xcce0de',0.15);
+              [24008000] = Set2dColor('0xc7c7c7','0xc7c7c7',0.15);
 --              [37000000] = Set2dColor('0xfcf2b4','0xfcf2b4',0);
 --              [23026000] = Set2dColor('0xffffff','0xffffff',0);
 
@@ -399,14 +419,14 @@ CONFIG = {
               ['\\五和大道'] = Set2dColor('0xfcf2b4','0xfcf2b4',0);
               ['\\贝尔路'] = Set2dColor('0xfcf2b4','0xfcf2b4',0);
               ['\\隆平路'] = Set2dColor('0xfcf2b4','0xfcf2b4',0);
-              ['\\培训'] = Set2dColor('0xef1e8f6','0xd1b5e2',1);
-              ['\\实验'] = Set2dColor('0xef1e8f6','0xd1b5e2',1);
-              ['\\机房'] = Set2dColor('0xef1e8f6','0xd1b5e2',1);
-              ['\\办公室'] = Set2dColor('0xe6edf6','0xb2c8e4',1);
-              ['\\办公区'] = Set2dColor('0xe6edf6','0xb2c8e4',1);
-              ['\\办公楼'] = Set2dColor('0xfffff8','0xfffff8',1);
-              ['\\接待处'] = Set2dColor('0xfffff8','0xfffff8',1);
-              ['\\H2办公楼'] = Set2dColor('0xfcf2e2','0xf7d4a3',1);
+              ['\\培训'] = Set2dColor('0xef1e8f6','0xd1b5e2',0.15);
+              ['\\实验'] = Set2dColor('0xef1e8f6','0xd1b5e2',0.15);
+              ['\\机房'] = Set2dColor('0xef1e8f6','0xd1b5e2',0.15);
+              ['\\办公室'] = Set2dColor('0xe6edf6','0xb2c8e4',0.15);
+              ['\\办公区'] = Set2dColor('0xe6edf6','0xb2c8e4',0.15);
+              ['\\办公楼'] = Set2dColor('0xfffff8','0xfffff8',0.15);
+              ['\\接待处'] = Set2dColor('0xfffff8','0xfffff8',0.15);
+              ['\\H2办公楼'] = Set2dColor('0xfcf2e2','0xf7d4a3',0.15);
 --              ['\\H2办公楼'] = Set2dColor('0x00000000','0xf7d4a3',1);
 --              --商场
 --              [13032000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
@@ -928,6 +948,7 @@ CONFIG = {
               anchor_x = 0.5,
               anchor_y = 0.5,
               height = 5.0,
+              aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
             },
           }
         },
@@ -1080,7 +1101,7 @@ CONFIG = {
           }
         },
         positioning = {
-          height_offset = -0.4,
+          height_offset = 0,
           renderer = {
             type = 'simple',
             ['2d'] = {
@@ -1100,7 +1121,7 @@ CONFIG = {
           }
         },
         navigate = {
-          height_offset = -0.3,
+          height_offset = 0,
           renderer = {
             type = 'unique',
             key = {
@@ -1123,26 +1144,16 @@ CONFIG = {
             }
           }
         },
-        poi = {--自定义
+        poi = {
           height_offset = 0,
           renderer = {
-            type = 'simple',
-            ['2d'] = {
-              style = 'polygon',
-              face = {
-                color = '0xff0196d0', --路
-                enable_alpha = false,
-              },
-              outline = {
-                --                color = '0xff000000',
-                color = '0xfff1f0cf', --外部边框
-                width = 0.1,
-                enable_alpha = false,
-              },
-              left_side = {}
+            type = 'unique',
+            key = {
+              'id',
+              'name',
+              'category',
             },
-          }
-        },
+            default = DEFAULT_STYLE_MY()}},
       }
     },
   }

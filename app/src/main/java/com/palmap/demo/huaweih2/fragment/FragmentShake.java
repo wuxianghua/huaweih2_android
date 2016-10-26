@@ -1,10 +1,14 @@
 package com.palmap.demo.huaweih2.fragment;
 
 import android.app.Service;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +16,24 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.palmap.demo.huaweih2.LocateTimerService;
+import com.palmap.demo.huaweih2.PoiInfoActivity;
 import com.palmap.demo.huaweih2.R;
+import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.HttpDataCallBack;
+import com.palmap.demo.huaweih2.json.PoiInfo;
+import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.util.ShakeListenerUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
+
+import java.net.URL;
+
+import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea;
 
 
 /**
@@ -23,17 +41,26 @@ import com.palmap.demo.huaweih2.view.TitleBar;
  * 摇一摇
  */
 
-public class FragmentShake extends BaseFragment {
+public class
+FragmentShake extends BaseFragment {
   private ShakeListenerUtils shakeUtils;
   private SensorManager mSensorManager; //定义sensor管理器, 注册监听器用
+  LinearLayout shakeShow;
+  LinearLayout shakeShowloc;
+  TextView locName;
   ImageView mImgDn;
   ImageView mImgUp;
+
+  ImageView result;
+  TextView title;
+  TextView text;
+  PoiInfo poiInfo;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
-
     super.onCreate(savedInstanceState);
+
   }
 
   @Override
@@ -42,8 +69,33 @@ public class FragmentShake extends BaseFragment {
     // TODO Auto-generated method stub
     View fragmentView = inflater.inflate(R.layout.shake, container, false);
 
+    locName = (TextView)fragmentView.findViewById(R.id.locName);
+    shakeShowloc = (LinearLayout) fragmentView.findViewById(R.id.loca);
+    String l=LocateTimerService.getCurrentLocationArea();
+    if (Constant.ICS走廊.equals(l)){
+     locName.setText("ICS大楼");
+    }else if ("".equals(l)){
+      shakeShowloc.setVisibility(View.GONE);
+    }else {
+      locName.setText(l);
+    }
+    shakeShow = (LinearLayout) fragmentView.findViewById(R.id.big);
+    shakeShow.setVisibility(View.GONE);
+    shakeShow.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getMainActivity(), PoiInfoActivity.class);
+        intent.putExtra("poiinfo",poiInfo);
+        intent.putExtra("type",0);
+        shakeShow.setVisibility(View.GONE);
+        startActivity(intent);
+      }
+    });
     mImgDn = (ImageView)fragmentView.findViewById(R.id.img_up);
     mImgUp = (ImageView)fragmentView.findViewById(R.id.img_down);
+    text = (TextView)fragmentView.findViewById(R.id.content);
+    title= (TextView)fragmentView.findViewById(R.id.title);
+    result= (ImageView) fragmentView.findViewById(R.id.img);
 
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
@@ -131,10 +183,41 @@ public class FragmentShake extends BaseFragment {
 
   }
   private void initSensor(){
+    if (shakeUtils!=null)
+      return;
+
     shakeUtils = new ShakeListenerUtils(getActivity(), new ShakeListenerUtils.OnShakeListener() {
       @Override
       public void onShake() {
         startAnim();
+        String js= JsonUtils.getShakeString(getCurrentLocationArea());
+        DataProviderCenter.getInstance().getShake(js, new HttpDataCallBack() {
+          @Override
+          public void onError(int errorCode) {
+            Log.e("",errorCode+"");
+          }
+
+          @Override
+          public void onComplete(Object content) {
+
+            poiInfo = JsonUtils.getPoiInfo(content);
+            if (poiInfo==null)
+              return;
+
+            shakeShow.setVisibility(View.VISIBLE);
+            title.setText(poiInfo.getTitle());
+            text.setText(poiInfo.getText());
+            URL picUrl = null;
+            try {
+              picUrl = new URL(poiInfo.getImage());
+              Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+              result.setImageBitmap(pngBM);
+            } catch (Exception e) {
+              e.printStackTrace();
+              DialogUtils.showShortToast(e.getMessage());
+            }
+          }
+        });
       }
     });
     //获取传感器管理服务
@@ -156,6 +239,7 @@ public class FragmentShake extends BaseFragment {
 
   @Override
   public void onPause() {
+    shakeShow.setVisibility(View.GONE);
     if (mSensorManager!=null)
     mSensorManager.unregisterListener(shakeUtils);
     super.onPause();

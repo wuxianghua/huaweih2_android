@@ -1,7 +1,6 @@
 package com.palmap.demo.huaweih2;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
@@ -16,29 +15,41 @@ import android.widget.AdapterView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
+import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PictureModel;
+import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 图册activity
  *  Created by 王天明 on 2016/10/22
  */
-public class ImageAlbumActivity extends Activity implements PullToRefreshBase.OnRefreshListener2 {
+public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener2 {
 
     private PullToRefreshRecyclerView recyclerView;
     private ImageAlbumAdapter imageAlbumAdapter;
     private TitleBar titleBar;
+    List<PictureModel> pictureModelList;
+    ArrayList<String> urlData = new ArrayList<>();
+    String location;
+    int start = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_album);
 
-        initStatusBar(R.color.red);
+        initStatusBar(R.color.black);
 
+        location = getIntent().getStringExtra("location");
         recyclerView = (PullToRefreshRecyclerView) findViewById(R.id.recyclerView);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -49,36 +60,10 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
         recyclerView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         recyclerView.setOnRefreshListener(this);
         recyclerView.getRefreshableView().addItemDecoration(new SpacesItemDecoration(10));
-        ArrayList<String> urlData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            urlData.add("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
-            urlData.add("http://7xnnph.com1.z0.glb.clouddn.com/item1.jpg");
-            urlData.add("http://7xnnph.com1.z0.glb.clouddn.com/048d22df9ae1da23f60a6578b1af0080");
-        }
-        imageAlbumAdapter = new ImageAlbumAdapter(this,urlData);
-        recyclerView.getRefreshableView().setAdapter(imageAlbumAdapter);
 
-        imageAlbumAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+       loadPictureModels();
 
-//                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
-//                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
-//                intent.putExtra("itemIndex",
-//                        position);
 
-                Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
-
-                PictureModel pictureModel = new PictureModel();
-                pictureModel.setDetails("测试测试测试描述");
-                pictureModel.setTime(System.currentTimeMillis());
-                pictureModel.setLocationStr("ICS实验室");
-                pictureModel.setUrl("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
-
-                intent.putExtra(PictureModel.class.getSimpleName(),  pictureModel);
-                startActivity(intent);
-            }
-        });
         titleBar=(TitleBar)findViewById(R.id.title_bar);
         titleBar.show(null,"图片浏览",null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
@@ -102,10 +87,9 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
         ArrayList<String> urlData2 = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            urlData2.add("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
-            urlData2.add("http://7xnnph.com1.z0.glb.clouddn.com/item1.jpg");
-            urlData2.add("http://7xnnph.com1.z0.glb.clouddn.com/048d22df9ae1da23f60a6578b1af0080");
+        int current =start;
+        for (; start< (Constant.EACH_TIME_PICTURE_NUM+current)&&start<pictureModelList.size(); start++) {
+            urlData.add(pictureModelList.get(start).getPhoto());
         }
         imageAlbumAdapter.addAll(urlData2);
         refreshView.onRefreshComplete();
@@ -127,6 +111,57 @@ public class ImageAlbumActivity extends Activity implements PullToRefreshBase.On
         }
     }
 
+    private void loadPictureModels() {
+        //加载图片库url
+     String location = LocateTimerService.getCurrentLocationArea();
+        String js = JsonUtils.getDownloadImg(location);
+        DataProviderCenter.getInstance().getPictures(js, new HttpDataCallBack() {
+            @Override
+            public void onError(int errorCode) {
+                DialogUtils.showLongToast(errorCode + "");
+            }
+
+            @Override
+            public void onComplete(Object content) {
+
+                pictureModelList = JsonUtils.getPictureModel(content);
+                if (pictureModelList==null||pictureModelList.size()<=0)
+                    return;
+
+                int current =start;
+                for (; start< (Constant.EACH_TIME_PICTURE_NUM+current)&&start<pictureModelList.size(); start++) {
+                    urlData.add(pictureModelList.get(start).getPhoto());
+                }
+                if (start>=pictureModelList.size()-1)
+                    DialogUtils.showShortToast("没有更多");
+
+                imageAlbumAdapter = new ImageAlbumAdapter(ImageAlbumActivity.this,urlData);
+                recyclerView.getRefreshableView().setAdapter(imageAlbumAdapter);
+                imageAlbumAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+//                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
+//                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
+//                intent.putExtra("itemIndex",
+//                        position);
+
+                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
+
+                        PictureModel pictureModel = new PictureModel();
+                        pictureModel = pictureModelList.get(position);
+//                        pictureModel.setAppendix("测试测试测试描述");
+//                        pictureModel.setUpdtime(System.currentTimeMillis());
+//                        pictureModel.setLocation("ICS实验室");
+//                        pictureModel.setPhoto("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
+
+                        intent.putExtra(PictureModel.class.getSimpleName(),  pictureModel);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+    }
 
     /**
      * 设置状态栏颜色

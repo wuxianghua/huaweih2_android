@@ -1,137 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.palmap.demo.huaweih2.view.PullableScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/bg"
-    android:scrollbars="vertical"
-    android:fadingEdge="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
+    <!--标题栏-->
+    <com.palmap.demo.huaweih2.view.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true">
+    </com.palmap.demo.huaweih2.view.TitleBar>
 
-    <LinearLayout
-        android:id="@+id/activity_meeting"
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/refreshScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
 
-        <com.palmap.demo.huaweih2.view.TitleBar
-            android:id="@+id/title_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:clickable="true">
-        </com.palmap.demo.huaweih2.view.TitleBar>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/boardroo_max"/>
         <LinearLayout
+            android:id="@+id/activity_lab"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:src="@drawable/boardroom_min_1"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:src="@drawable/boardroom_min_3"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:src="@drawable/boardroom_min_2"
-                android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="7sp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:textSize="14sp"
-            android:textColor="#2f3336"
-            android:text="@string/meeting"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/boardroo_max"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_form_meeting"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/boardroom_min_2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/boardroom_min_1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/boardroom_min_3"/>
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="15dp"
-                android:textSize="20sp"
+                android:paddingLeft="10dp"
+                android:lineSpacingExtra="7sp"
+                android:paddingRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/meeting"
                 android:textColor="#2f3336"
-                android:text=" 评论"/>
-            <ImageView
-                android:id="@+id/btn_com"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ico_tab_message"
-                />
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/com_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp">
+                android:textSize="14sp"/>
 
             <RelativeLayout
-                android:id="@+id/com_item"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp">
 
+                <ImageView
+                    android:id="@+id/up"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/btn_like"/>
                 <TextView
-                    android:id="@+id/com_name"
+                    android:id="@+id/zanSum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="访客"/>
-                <TextView
-                    android:id="@+id/com_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/com_name"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="-2016.12.12"/>
-                <TextView
-                    android:id="@+id/com_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/com_name"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="评论评论评论"/>
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="45dp"
+                    android:text="0"/>
+
             </RelativeLayout>
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_form_meeting"/>
+
+            <RelativeLayout
+                android:id="@+id/btn_com"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"
+                    android:text="评论"
+                    android:textColor="#2f3336"
+                    android:textSize="20sp"/>
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ico_tab_message"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/com_list"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 
-
-
-    </LinearLayout>
-</com.palmap.demo.huaweih2.view.PullableScrollView>
+</LinearLayout>

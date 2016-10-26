@@ -29,7 +29,6 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:22.1.1'
-    compile files('libs/nagrand-jar-with-dependencies.jar')
     compile files('libs/fastjson-1.2.4.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/open_sdk_r5756_lite.jar')
@@ -38,4 +37,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile project(':pullToRefresh')
     compile 'com.android.support:appcompat-v7:22.1.1'
+    compile files('libs/httpmime-4.2.5.jar')
+    compile files('libs/nagrand-jar-with-dependencies27.jar')
 }

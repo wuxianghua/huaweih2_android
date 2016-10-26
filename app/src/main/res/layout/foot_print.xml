@@ -60,66 +60,41 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/btn_com"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp">
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:layout_margin="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
-                android:textSize="20sp"
+                android:text="评论"
                 android:textColor="#2f3336"
-                android:text=" 评论"/>
+                android:textSize="20sp"/>
+
             <ImageView
-                android:id="@+id/btn_com"
+
                 android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ico_tab_message"
                 />
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/com_list"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp">
 
-            <RelativeLayout
-                android:id="@+id/com_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/com_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="访客"/>
-                <TextView
-                    android:id="@+id/com_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/com_name"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="-2016.12.12"/>
-                <TextView
-                    android:id="@+id/com_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/com_name"
-                    android:textSize="14sp"
-                    android:textColor="#2f3336"
-                    android:text="评论评论评论"/>
-            </RelativeLayout>
 
         </LinearLayout>
-
 
 
 

@@ -11,10 +11,11 @@
 
 
 
+
         <ImageView
             android:id="@+id/compass"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:outlineProvider="bounds"
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_normal"
@@ -26,8 +27,8 @@
 
         <ImageView
             android:id="@+id/search"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_normal"
@@ -39,8 +40,8 @@
             android:layout_width="130dp"
             android:layout_height="28dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="13dp"
-            android:layout_marginLeft="50dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="60dp"/>
         <!-- 定位、放大缩小、楼层切换 -->
 
         <LinearLayout
@@ -54,17 +55,19 @@
 
             <TextView
                 android:id="@+id/shoot"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginBottom="@dimen/margin_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="2dp"
                 android:background="@drawable/btn_tab_camera"
                 android:gravity="center"/>
 
             <TextView
                 android:id="@+id/locate"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginBottom="@dimen/margin_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="2dp"
                 android:background="@drawable/btn_tab_position"
                 android:gravity="center"/>
 
@@ -95,8 +98,8 @@
 
             <TextView
                 android:id="@+id/elevator"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/select_elevator"/>
 
             <TextView
@@ -115,7 +118,7 @@
                 android:id="@+id/water"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
+                android:layout_marginBottom="3dp"
                 android:background="@drawable/select_water"/>
 
             <TextView
@@ -128,11 +131,17 @@
                 android:id="@+id/b1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
                 android:background="@drawable/btn_tab_b1"/>
 
         </LinearLayout>
 
+
+        <ImageView
+            android:id="@+id/push"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:src="@drawable/infor_welcome_2"/>
 
     </RelativeLayout>
 
@@ -141,7 +150,9 @@
         android:id="@+id/search_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
+        android:background="#f2f7f9"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -152,7 +163,7 @@
             android:layout_marginLeft="@dimen/margin_large"
             android:layout_marginRight="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_large"
-            android:background="#ffffff"
+            android:background="@drawable/searchbar"
             >
 
 
@@ -191,85 +202,188 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/search_default"
             android:layout_width="match_parent"
-            android:layout_height="97dp"
-            android:layout_margin="@dimen/margin_large"
-            android:background="@color/white"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:id="@+id/search_default2"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ico_sea_elevator"/>
+                <LinearLayout
+                    android:id="@+id/hall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="电梯"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_h2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="H2大厅"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/meeting"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_meeting"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="会议室"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_ics"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="ICS实验室"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/office"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_office"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="ICS办公区"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:id="@+id/search_default"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ico_sea_toilet"/>
+                <LinearLayout
+                    android:id="@+id/ele"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="洗手间"/>
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_elevator"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="电梯"/>
+                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ico_sea_entrance"/>
+                <LinearLayout
+                    android:id="@+id/tol"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="出入口"/>
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_toilet"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="洗手间"/>
+                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ico_sea_water"/>
+                <LinearLayout
+                    android:id="@+id/exi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="茶水间"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_entrance"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="出入口"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/wat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ico_sea_water"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="茶水间"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/search_null_tv"
@@ -296,5 +410,68 @@
 
 
     </LinearLayout>
+
+    <!--选择对话框-->
+    <RelativeLayout
+        android:id="@+id/dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="#77000000">
+        <LinearLayout
+            android:id="@+id/btn_map"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:background="@drawable/btn_home_indormap"
+            android:layout_above="@+id/btn_foot"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:src="@drawable/ico_tab_line"-->
+                <!--android:layout_marginRight="15dp"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="15sp"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:text="室内地图"-->
+                <!--android:gravity="center"/>-->
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_foot"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:background="@drawable/btn_home_navgation"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:src="@drawable/ico_tab_line"-->
+                <!--android:layout_marginRight="15dp"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="15sp"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:text="参观路线"-->
+                <!--android:gravity="center"/>-->
+        </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

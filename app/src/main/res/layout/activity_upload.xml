@@ -5,7 +5,7 @@
     android:id="@+id/activity_upload"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
+    android:background="#f2f7f9"
     tools:context="com.palmap.demo.huaweih2.UploadActivity">
 <com.palmap.demo.huaweih2.view.TitleBar
     android:id="@+id/title_bar"

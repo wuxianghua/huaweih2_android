@@ -9,41 +9,41 @@ import android.os.Parcelable;
 
 public class PictureModel implements Parcelable {
 
-    private String url;
-    private long time;
-    private String details;
-    private String locationStr;
+    private String photo;
+    private long updtime;
+    private String appendix;
+    private String location;
 
-    public String getUrl() {
-        return url;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public long getTime() {
-        return time;
+    public long getUpdtime() {
+        return updtime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setUpdtime(long updtime) {
+        this.updtime = updtime;
     }
 
-    public String getDetails() {
-        return details;
+    public String getAppendix() {
+        return appendix;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setAppendix(String appendix) {
+        this.appendix = appendix;
     }
 
-    public String getLocationStr() {
-        return locationStr;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocationStr(String locationStr) {
-        this.locationStr = locationStr;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
@@ -53,20 +53,20 @@ public class PictureModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.url);
-        dest.writeLong(this.time);
-        dest.writeString(this.details);
-        dest.writeString(this.locationStr);
+        dest.writeString(this.photo);
+        dest.writeLong(this.updtime);
+        dest.writeString(this.appendix);
+        dest.writeString(this.location);
     }
 
     public PictureModel() {
     }
 
     protected PictureModel(Parcel in) {
-        this.url = in.readString();
-        this.time = in.readLong();
-        this.details = in.readString();
-        this.locationStr = in.readString();
+        this.photo = in.readString();
+        this.updtime = in.readLong();
+        this.appendix = in.readString();
+        this.location = in.readString();
     }
 
     public static final Parcelable.Creator<PictureModel> CREATOR = new Parcelable.Creator<PictureModel>() {

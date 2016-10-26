@@ -1,208 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:background="#eeeeee"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="#eeeeee"
+              android:orientation="vertical">
 
     <!--标题栏-->
     <com.palmap.demo.huaweih2.view.TitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true">
+        android:focusableInTouchMode="true">
     </com.palmap.demo.huaweih2.view.TitleBar>
 
     <LinearLayout
+        android:id="@+id/detailinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp">
+        android:layout_below="@+id/title_bar"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="48dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="#2f3336"
-                android:gravity="center_vertical|left"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="车牌号"/>
+                android:gravity="center_vertical|left"
+                android:text="车牌号"
+                android:textColor="#2f3336"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/carNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|right"
                 android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text=""
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text=""/>
+                android:textSize="14sp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="48dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="#2f3336"
-                android:gravity="center_vertical|left"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="停车位"/>
+                android:gravity="center_vertical|left"
+                android:text="停车位"
+                android:textColor="#2f3336"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/carPosi"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|right"
                 android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="￥5/小时"
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text="￥5/小时"/>
+                android:textSize="14sp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="48dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="#2f3336"
-                android:gravity="center_vertical|left"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="停车时长"/>
+                android:gravity="center_vertical|left"
+                android:text="停车时长"
+                android:textColor="#2f3336"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/carTime"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|right"
                 android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text=""
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text=""/>
+                android:textSize="14sp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="48dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="#2f3336"
-                android:gravity="center_vertical|left"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="支付金额"/>
+                android:gravity="center_vertical|left"
+                android:text="支付金额"
+                android:textColor="#2f3336"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/carMoney"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|right"
                 android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="￥5/小时"
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text="￥5/小时"/>
+                android:textSize="14sp"/>
 
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/payway"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="15dp"
+        android:layout_below="@+id/detailinfo"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/alipay"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="58dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/zfbimg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/ico_pay_ali"/>
+
+            <ImageView
+                android:id="@+id/alipaysel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ico_pay_sel"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="支付宝支付"
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text="支付宝支付"/>
+                android:textSize="16sp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/zfbimg"
+                android:layout_marginStart="16dp"
+                android:id="@+id/textView"/>
+        </RelativeLayout>
 
-
-        </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/wxpay"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="58dp"
             android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:padding="15dp">
+
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/wxpayimg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/ico_pay_wx"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/wxpayimg"
                 android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="微信支付"
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text="微信支付"/>
+                android:textSize="16sp"/>
 
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/white"
-            android:padding="15dp"
-            android:layout_height="48dp">
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/wxpaysel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ico_pay_nor"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/qqpay"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/qqpayimg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/ico_pay_qq"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/qqpayimg"
                 android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="QQ钱包"
                 android:textColor="#565c60"
-                android:textSize="14sp"
-                android:text="QQ钱包"/>
+                android:textSize="16sp"/>
 
-
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/qqpaysel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ico_pay_nor"/>
+        </RelativeLayout>
 
 
     </LinearLayout>
@@ -212,11 +256,28 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
+        android:layout_below="@+id/payway"
         android:layout_margin="15dp"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+        android:background="@color/blue"
         android:gravity="center"
         android:text="确认支付"
-        android:background="@color/blue"/>
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/success"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#77000000">
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@drawable/infor_paysuccess"
+/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

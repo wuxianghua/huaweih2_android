@@ -6,8 +6,8 @@ package com.palmap.demo.huaweih2.json;
  */
 
 public class PictureJson {
- String location;
-  byte[] photo;
+  String location;
+//  byte[] photo;
   String appendix;
 
   public PictureJson() {
@@ -21,13 +21,13 @@ public class PictureJson {
     this.location = location;
   }
 
-  public byte[] getPhoto() {
-    return photo;
-  }
+//  public byte[] getPhoto() {
+//    return photo;
+//  }
 
-  public void setPhoto(byte[] photo) {
-    this.photo = photo;
-  }
+//  public void setPhoto(byte[] photo) {
+//    this.photo = photo;
+//  }
 
   public String getAppendix() {
     return appendix;

@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.palmap.demo.huaweih2.R;
+import com.palmap.demo.huaweih2.util.QQShareUtils;
+import com.palmap.demo.huaweih2.util.WXShareUtils;
 
 /**
  * Created by 王天明 on 2016/10/22.
@@ -18,13 +19,12 @@ import com.palmap.demo.huaweih2.R;
  */
 public class SharePopView {
 
+    private static Activity mContext = null;
     public static class ShareModel{
-
-        private String title;
-        private String url;
-
+        public String title;
+        public String url;
+        public String imgUrl;
     }
-
 
     public static void showSharePop(Activity context,ShareModel shareModel) {
 
@@ -32,6 +32,8 @@ public class SharePopView {
 
         popupWindow.showAtLocation(context.findViewById(android.R.id.content),
                 Gravity.BOTTOM, 0, 0);
+
+        mContext = context;
     }
 
     private static class ContentPopWindow extends PopupWindow implements View.OnClickListener{
@@ -93,14 +95,16 @@ public class SharePopView {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getContentView().getContext(),"点击了分享",1).show();
+//            Toast.makeText(getContentView().getContext(),"点击了分享",1).show();
             switch (v.getId()) {
                 case R.id.layout_share_weChat:
                     //分享到微信
+                    WXShareUtils.sendToWeChat(shareModel.url);
                     break;
 
                 case R.id.layout_share_weiChat_friends:
-                    //分享到朋友圈
+                    //分享到QQ空间
+                    QQShareUtils.getInstance().shareToQzone(mContext,shareModel);
                     break;
 
                 case R.id.layout_share_weibo:
@@ -109,6 +113,7 @@ public class SharePopView {
 
                 case R.id.layout_share_qq:
                     //分享到QQ
+                    QQShareUtils.getInstance().shareToQQ(mContext,shareModel);
                     break;
             }
         }
