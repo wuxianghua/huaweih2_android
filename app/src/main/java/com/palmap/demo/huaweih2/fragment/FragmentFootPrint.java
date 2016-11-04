@@ -19,6 +19,7 @@ import com.palmap.demo.huaweih2.ActivityUploadCom;
 import com.palmap.demo.huaweih2.ImageAlbumActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.json.PictureModelSum;
@@ -204,7 +205,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
           intent.putExtra("location",Constant.ICS办公区);
           break;
         case R.id.footprintView_h2:
-          intent.putExtra("location",Constant.其他);
+          intent.putExtra("location",Constant.H2大楼);
           break;
         case R.id.footprintView_lab:
           intent.putExtra("location",Constant.ICS实验室);
@@ -230,7 +231,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showLongToast(errorCode + "");
+        ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -283,7 +284,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     DataProviderCenter.getInstance().getAllLocationPicNum(new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showLongToast(errorCode + "");
+        ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -311,7 +312,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
             footprintView_lab.setCount(pictureModelSums.get(i).getCount());
           }else if (location.contains(Constant.会议室)){
             footprintView_meetingRoom.setCount(pictureModelSums.get(i).getCount());
-          }else if (location.contains(Constant.其他)){
+          }else if (location.contains(Constant.H2大楼)){
             footprintView_h2.setCount(pictureModelSums.get(i).getCount());
           }
         }

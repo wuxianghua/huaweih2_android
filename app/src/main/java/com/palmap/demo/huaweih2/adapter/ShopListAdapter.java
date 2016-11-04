@@ -79,16 +79,26 @@ public class ShopListAdapter extends BaseAdapter{
       viewHolder.type.setText(mShopList.get(position).getType());
       viewHolder.location.setText(mShopList.get(position).getLocation());
 
-      if (mShopList.get(position).getName().equals("LESSA主题餐厅"))
-        viewHolder.img.setBackgroundResource(R.drawable.image5_2);
+      if (mShopList.get(position).getName().equals("韩客莱"))
+        viewHolder.img.setBackgroundResource(R.drawable.hankelai);
+      if (mShopList.get(position).getName().equals("松哥油焖大虾"))
+        viewHolder.img.setBackgroundResource(R.drawable.youmendaxia);
+      if (mShopList.get(position).getName().equals("illy新天地咖啡吧"))
+        viewHolder.img.setBackgroundResource(R.drawable.illy);
+      if (mShopList.get(position).getName().equals("中影博亚影城(坂田店)"))
+        viewHolder.img.setBackgroundResource(R.drawable.boya);
+      if (mShopList.get(position).getName().equals("千味涮"))
+        viewHolder.img.setBackgroundResource(R.drawable.qianweishuan);
+      if (mShopList.get(position).getName().equals("永和大王"))
+        viewHolder.img.setBackgroundResource(R.drawable.yonghe);
       if (mShopList.get(position).getName().equals("华莱士"))
-        viewHolder.img.setBackgroundResource(R.drawable.image5_3);
-      if (mShopList.get(position).getName().equals("illy咖啡"))
-        viewHolder.img.setBackgroundResource(R.drawable.image5_4);
+        viewHolder.img.setBackgroundResource(R.drawable.hualaishi);
+      if (mShopList.get(position).getName().equals("麦当劳"))
+        viewHolder.img.setBackgroundResource(R.drawable.maidanglao);
       if (mShopList.get(position).getName().equals("四云奶盖贡茶"))
-        viewHolder.img.setBackgroundResource(R.drawable.image5_5);
+        viewHolder.img.setBackgroundResource(R.drawable.gongcha);
       if (mShopList.get(position).getName().equals("7-11便利店"))
-        viewHolder.img.setBackgroundResource(R.drawable.image5_6);
+        viewHolder.img.setBackgroundResource(R.drawable.bianlidian711);
 
       viewHolder.item.setOnClickListener(new View.OnClickListener() {
         @Override

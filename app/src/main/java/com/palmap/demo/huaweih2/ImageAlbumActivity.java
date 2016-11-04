@@ -16,6 +16,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PictureModel;
 import com.palmap.demo.huaweih2.other.Constant;
@@ -117,7 +118,7 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
         DataProviderCenter.getInstance().getPictures(js, new HttpDataCallBack() {
             @Override
             public void onError(int errorCode) {
-                DialogUtils.showLongToast(errorCode + "");
+                ErrorCode.showError(errorCode);
             }
 
             @Override

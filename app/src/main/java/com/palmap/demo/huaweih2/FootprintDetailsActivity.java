@@ -2,14 +2,12 @@ package com.palmap.demo.huaweih2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.palmap.demo.huaweih2.json.PictureModel;
 import com.palmap.demo.huaweih2.util.DialogUtils;
-import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.text.SimpleDateFormat;
@@ -49,21 +47,21 @@ public class FootprintDetailsActivity extends BaseActivity {
         }
         titleBar = (TitleBar) findViewById(R.id.titleBar);
         titleBar.show(null,"足迹",null);
-        titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
-
-        titleBar.setRightIcoClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
-
-                shareModel.imgUrl = pictureModel.getPhoto();
-                shareModel.title = "图片分享";
-                shareModel.url = pictureModel.getAppendix();
-
-                SharePopView.showSharePop(FootprintDetailsActivity.this,shareModel);
-            }
-        });
+//        titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
+//
+//        titleBar.setRightIcoClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
+//
+//                shareModel.imgUrl = pictureModel.getPhoto();
+//                shareModel.title = "图片分享";
+//                shareModel.url = pictureModel.getAppendix();
+//
+//                SharePopView.showSharePop(FootprintDetailsActivity.this,shareModel);
+//            }
+//        });
 
 
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {

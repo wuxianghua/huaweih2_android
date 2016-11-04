@@ -39,5 +39,7 @@ public class ErrorCode {
       DialogUtils.showShortToast("网络错误");
     if (code==CODE_REQUEST_ERROR)
       DialogUtils.showShortToast("请求出错");
+//    if (code==204)
+//      DialogUtils.showShortToast("无定位数据");
   }
 }

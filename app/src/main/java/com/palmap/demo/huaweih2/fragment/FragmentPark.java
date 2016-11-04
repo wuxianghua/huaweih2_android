@@ -65,6 +65,7 @@ public class FragmentPark extends BaseFragment {
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
+        KeyBoardUtils.closeKeybord(carNum,getActivity());
         getMainActivity().showFragmentMap();
       }
 

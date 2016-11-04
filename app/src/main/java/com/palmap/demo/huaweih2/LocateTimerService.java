@@ -203,16 +203,16 @@ public static LocateTimerService getInstance(){
   public static String getCurrentLocationArea() {
 
     if (mContext==null||mContext.fragmentMap==null||mContext.fragmentMap.mMapView==null)
-      return "";
+      return Constant.其他;
 
-    String poiName="";
+    String poiName=Constant.其他;
 
 
 //    Types.Point point = mContext.fragmentMap.mMapView.converToScreenCoordinate(curX,curY);
 //    poiName=mContext.fragmentMap.getPOINameByPoint((float) point.x,(float)point.y);
 
     if (curX>h2[0]&&curX<h2[1]&&curY>h2[2]&&curY<h2[3])
-      poiName = Constant.ICS走廊;
+      poiName = Constant.H2大楼;
     if (curX>hall[0]&&curX<hall[1]&&curY>hall[2]&&curY<hall[3])
       poiName = Constant.H2大厅;
     if (curX>lab[0]&&curX<lab[1]&&curY>lab[2]&&curY<lab[3])

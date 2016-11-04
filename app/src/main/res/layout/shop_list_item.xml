@@ -61,18 +61,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
+                android:layout_marginRight="40dp"
                 android:layout_weight="4"
-                android:ellipsize = "marquee"
-                android:maxEms="11"
-                android:singleLine="true"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textSize="14sp"
                 android:textColor="#1fafe7"
                 android:text="shanghai"/>
             <TextView
                 android:id="@+id/distance"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
                 android:textSize="12sp"
                 android:textColor="#94999d"
                 android:text="800m"/>

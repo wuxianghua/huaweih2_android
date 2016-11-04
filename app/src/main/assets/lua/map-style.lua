@@ -1000,13 +1000,27 @@ CONFIG = {
                     font_path = GET_FONT_PATH(),
                     --font_path = lua_path,
                     renderer = {
-                        type = 'unique',
-                        key = {
-                            'category',
-                            'display',
+                        type = 'simple',
+                        ['2d'] = {
+                            style = 'annotation',
+                            color = '0xFF343434',
+                            field = 'display',
+                            unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+                            size = 6,
+                            outline_color = '0x00ffffff',
+                            outline_width = 0.5,
+                            anchor_x = 0.5,
+                            anchor_y = 0.5,
+                            height = 5.0,
+                            aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
                         },
-                        default = DEFAULT_TEXT(),
-                        styles = {
+--                        key = {
+--                            'category',
+--                            'display',
+--                        },
+--                        default = DEFAULT_TEXT(),
+--                        styles = {
+--
 --                            ['null'] = {
 --                                ['2d'] = {
 --                                    style = 'annotation',
@@ -1056,7 +1070,7 @@ CONFIG = {
 --                             aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
 --                             }
 --                             },
-                        }
+--                        }
                     }
                 },
                 -- icon_text

@@ -64,9 +64,7 @@ FragmentShake extends BaseFragment {
         locName = (TextView) fragmentView.findViewById(R.id.locName);
         shakeShowloc = (LinearLayout) fragmentView.findViewById(R.id.loca);
         String l = LocateTimerService.getCurrentLocationArea();
-        if (Constant.ICS走廊.equals(l)) {
-            locName.setText("ICS大楼");
-        } else if ("".equals(l)) {
+         if (Constant.其他.equals(l)) {
             shakeShowloc.setVisibility(View.GONE);
         } else {
             locName.setText(l);
@@ -195,7 +193,7 @@ FragmentShake extends BaseFragment {
      */
     private void showPoiInfo() {
         if (poiInfo == null) {
-            Toast.makeText(getActivity(), "没有信息,重试", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "网络不畅,请检查", Toast.LENGTH_SHORT).show();
             return;
         }
         shakeShow.setVisibility(View.VISIBLE);
@@ -212,6 +210,7 @@ FragmentShake extends BaseFragment {
         shakeUtils = new ShakeListenerUtils(getActivity(), new ShakeListenerUtils.OnShakeListener() {
             @Override
             public void onShake() {
+                shakeShow.setVisibility(View.GONE);
                 startAnim();
                 String js = JsonUtils.getShakeString(getCurrentLocationArea());
                 DataProviderCenter.getInstance().getShake(js, new HttpDataCallBack() {
@@ -266,6 +265,12 @@ FragmentShake extends BaseFragment {
         //获取传感器管理服务
         mSensorManager = (SensorManager) getActivity()
                 .getSystemService(Service.SENSOR_SERVICE);
+        //加速度传感器
+        mSensorManager.registerListener(shakeUtils,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                //还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，
+                //根据不同应用，需要的反应速率不同，具体根据实际情况设定
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void stopShakeSensor() {
@@ -279,18 +284,21 @@ FragmentShake extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mSensorManager.registerListener(shakeUtils,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                //还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，
-                //根据不同应用，需要的反应速率不同，具体根据实际情况设定
-                SensorManager.SENSOR_DELAY_NORMAL);
+//        mSensorManager.registerListener(shakeUtils,
+//                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+//                //还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，
+//                //根据不同应用，需要的反应速率不同，具体根据实际情况设定
+//                SensorManager.SENSOR_DELAY_NORMAL);
+//        ShakeListenerUtils.isTooShort = false;
+        initShakeSensor();
         ShakeListenerUtils.isTooShort = false;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(shakeUtils);
+//        mSensorManager.unregisterListener(shakeUtils);
+        stopShakeSensor();
     }
 
 

@@ -106,7 +106,7 @@
             android:id="@+id/poi_info"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-
+            android:clickable="true"
             android:elevation="15dp"
             android:background="@color/white"
             android:translationZ="15dp"
@@ -245,10 +245,8 @@
                 android:layout_height="38dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/btn_nav_setstart"
-                android:textSize="15sp"
-                android:gravity="center"
+                android:layout_centerVertical="true"
                 android:visibility="gone"
-                android:text=""
                 android:layout_margin="@dimen/margin_large"/>
 
             <!--请点击地图选择起点-->
@@ -266,7 +264,7 @@
 
         </RelativeLayout>
 
-        <RadioGroup
+        <LinearLayout
             android:id="@+id/tab_menu"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
@@ -307,17 +305,17 @@
                 android:text="附近"
                 android:textColor="@color/cg"/>
 
-            <RadioButton
+            <ImageView
                 android:id="@+id/shake"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:background="@drawable/radio_selector_bg"
                 android:button="@null"
-                android:drawableTop="@drawable/ico_tab_shake"
-                android:gravity="center_horizontal|bottom"
-                android:paddingTop="5dp"/>
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ico_tab_shake"
+                android:gravity="center_horizontal|bottom"/>
 
             <RadioButton
                 android:id="@+id/park"
@@ -347,7 +345,7 @@
                 android:padding="7dp"
                 android:text="足迹"
                 android:textColor="@color/cg"/>
-        </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
 
 

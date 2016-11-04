@@ -63,7 +63,7 @@ public class SearchResultAdapter extends BaseAdapter{
       }
 
       // 设置控件内容
-      viewHolder.name.setText(LocationModel.name.get(mLocationList.get(position)));
+      viewHolder.name.setText(LocationModel.display.get(mLocationList.get(position)));
       long floorID= LocationModel.parent.get(mLocationList.get(position));
       if (floorID==Constant.FLOOR_ID_B1){
         viewHolder.floor.setText("B1");

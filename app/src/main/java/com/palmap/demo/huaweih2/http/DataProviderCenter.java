@@ -44,6 +44,7 @@ public class DataProviderCenter {
   private static final String URL_UPLOAD_COMMENT_TEST = URL_SERVER_TEST+"insertCom"; // 评论上传
   private static final String URL_UPLOAD_COMMENT = URL_SERVER+"insertCom"; // 评论上传
 
+  private static final String URL_LOCATE_TEST_h2 = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData=0.255.0.30&sceneId=11672"; // H2定位
 
   private static DataProviderCenter instance = null;
   private DataProvider mDataProvider;
@@ -81,8 +82,9 @@ public class DataProviderCenter {
     if (Constant.openLocateTest)
       mDataProvider.postDataProvider("", heads,jsonString==null?null:jsonString.getBytes(),callBack);
     else
-      mDataProvider.postDataProvider(URL_LOCATE, heads,jsonString==null?null:jsonString.getBytes(),callBack);
-//    mDataProvider.getProvider(url,heads,callBack);
+//      mDataProvider.postDataProvider(URL_LOCATE, heads,jsonString==null?null:jsonString.getBytes(),callBack);
+//    mDataProvider.postDataProvider(URL_LOCATE_TEST_h2, heads,jsonString==null?null:jsonString.getBytes(),callBack);
+    mDataProvider.getProvider(URL_LOCATE_TEST_h2,heads,callBack);
   }
 
   /*

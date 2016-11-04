@@ -98,7 +98,7 @@ public class ActivityOffice extends BaseActivity {
         DataProviderCenter.getInstance().downloadZan(json, new HttpDataCallBack() {
             @Override
             public void onError(int errorCode) {
-                DialogUtils.showShortToast(errorCode + "");
+                ErrorCode.showError(errorCode);
             }
 
             @Override
@@ -119,7 +119,7 @@ public class ActivityOffice extends BaseActivity {
                 DataProviderCenter.getInstance().postZan(json, new HttpDataCallBack() {
                     @Override
                     public void onError(int errorCode) {
-                        DialogUtils.showShortToast(errorCode + "");
+                        ErrorCode.showError(errorCode);
                     }
 
                     @Override

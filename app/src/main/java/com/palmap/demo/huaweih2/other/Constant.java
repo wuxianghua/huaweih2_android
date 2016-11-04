@@ -66,7 +66,7 @@ public class Constant {
   public static final String 会议室 = "会议室";//poi详情
   public static final String ICS实验室 = "ICS实验室";//poi详情
   public static final String ICS办公区 = "ICS办公区";//poi详情
-  public static final String ICS走廊 = "走廊";//poi详情
+  public static final String H2大楼 = "H2大楼";//poi详情
   public static final String 其他 = "其他";//poi详情
 
 
@@ -105,10 +105,10 @@ public class Constant {
   public static final int startUploadText=4;
   public static final int startUploadPic=5;
 
-  public static boolean useTestServer = true;//是否使用内网测试服务器 10.
+  public static boolean useTestServer = false;//是否使用内网测试服务器 10.
 
   public static boolean openLocateService = true;//开启自动循环查询定位,本地测试也要开启
-  public static boolean openLocateTest = true;//开启本地定位测试
+  public static boolean openLocateTest = false;//开启本地定位测试
 
   public static long LOCATE_FRESH_TIME = 10000;//定位间隔时间
 }

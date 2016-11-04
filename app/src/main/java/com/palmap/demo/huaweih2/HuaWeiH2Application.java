@@ -84,4 +84,5 @@ public class HuaWeiH2Application extends Application {
 //    ImageLoader.getInstance().init(config);
 //  }
 
+
 }

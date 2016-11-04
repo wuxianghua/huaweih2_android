@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,15 +51,18 @@ import static com.palmap.demo.huaweih2.other.Constant.startTakePic;
 import static com.palmap.demo.huaweih2.other.Constant.会议室;
 import static com.palmaplus.nagrand.position.ble.BeaconUtils.TAG;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity{
   //  public FullScreenDialog dialog;
   public RelativeLayout dialog;
   LinearLayout btn_map;
   LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
-  private RadioGroup tabMenu;
+  private LinearLayout tabMenu;
   RadioButton rout;
   RadioButton park;
+  ImageView shake;
+  RadioButton foot;
+  RadioButton around;
   RelativeLayout poiInfoBar;
   FragmentAround fragmentAround;
   FragmentPark fragmentPark;
@@ -99,9 +101,6 @@ public class MainActivity extends BaseActivity {
     setContentView(R.layout.activity_main);
 
     initStatusBar(R.color.black);
-    //启动Android定时器，并且启动服务
-    if (Constant.openLocateService)
-      LocateTimerService.getLocation(this);
 
     WXShareUtils.regToWeChat(this);
     QQShareUtils.getInstance().regToQQ(this);
@@ -117,10 +116,19 @@ public class MainActivity extends BaseActivity {
     initView();
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    //启动Android定时器，并且启动服务
+    if (Constant.openLocateService)
+      LocateTimerService.getLocation(this);
+  }
+
   private void checkFirstRun() {
     SharedPreferences setting = getSharedPreferences(Constant.IS_FIRST_RUN, 0);
     Boolean user_first = setting.getBoolean("FIRST", true);
-    int time =  setting.getInt("time", 0);
+    int time =  setting.getInt("time", 2);
     if (time>0){
       shouldShow2choose1 = true;
       setting.edit().putInt("time", (time-1)).commit();//显示次数
@@ -203,7 +211,7 @@ public class MainActivity extends BaseActivity {
     btn_map.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        fragmentMap.initMapScale();
+//        fragmentMap.initMapScale();
         dialog.setVisibility(View.GONE);
       }
     });
@@ -215,12 +223,75 @@ public class MainActivity extends BaseActivity {
           DialogUtils.showShortToast("请切换至F1再查看行程");
           return;
         }
-        fragmentMap.initMapScale();
+//        fragmentMap.initMapScale();
         fragmentMap.setFootPrint();
         dialog.setVisibility(View.GONE);
       }
     });
     park = (RadioButton) findViewById(R.id.park);
+    park.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideAllFragments();
+        titleBar.hide();
+        transaction = getFragmentManager().beginTransaction();
+        titleBar.show(null, "停车", null);
+        hideMap();
+//            if (fragmentPark == null) {
+        fragmentPark = new FragmentPark();
+        transaction.add(R.id.main_content, fragmentPark);
+        transaction.commit();
+      }
+    });
+    foot = (RadioButton) findViewById(R.id.footprint);
+    foot.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideAllFragments();
+        titleBar.hide();
+        transaction = getFragmentManager().beginTransaction();
+        titleBar.show(null, "足迹", null);
+        hideMap();
+//            if (fragmentFootPrint == null) {
+        fragmentFootPrint = new FragmentFootPrint();
+        transaction.add(R.id.main_content, fragmentFootPrint);
+        transaction.commit();
+      }
+    });
+    around = (RadioButton) findViewById(R.id.around);
+    around.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideAllFragments();
+        titleBar.hide();
+        transaction = getFragmentManager().beginTransaction();
+        titleBar.show(null, "附近", null);
+        hideMap();
+//            if (fragmentAround == null) {
+        fragmentAround = new FragmentAround();
+        transaction.add(R.id.main_content, fragmentAround);
+        transaction.commit();
+      }
+    });
+    shake = (ImageView) findViewById(R.id.shake);
+    shake.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideAllFragments();
+        titleBar.hide();
+        transaction = getFragmentManager().beginTransaction();
+        hideMap();
+        titleBar.show(null, "摇一摇", null);
+//            if (fragmentShake == null) {
+        fragmentShake = new FragmentShake();
+        transaction.add(R.id.main_content, fragmentShake);
+        transaction.commit();
+      }
+    });
     rout = (RadioButton) findViewById(R.id.route);
     rout.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -229,7 +300,8 @@ public class MainActivity extends BaseActivity {
           fragmentMap.resetFootPrint();
         } else {
           if (fragmentMap.mCurrentFloor == Constant.FLOOR_ID_B1) {//B1
-            DialogUtils.showShortToast("请切换至楼层F1后再点击行程");
+//            DialogUtils.showShortToast("请切换至楼层F1后再点击行程");
+            fragmentMap.loadMapAndShowFoot();
             return;
           }
           fragmentMap.setFootPrint();
@@ -257,81 +329,89 @@ public class MainActivity extends BaseActivity {
     im_nav_start = (ImageView) findViewById(R.id.nav_start);
     titleBar = (TitleBar) findViewById(R.id.title_bar);
     titleBar.hide();//
-    tabMenu = (RadioGroup) findViewById(R.id.tab_menu);
-    tabMenu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-      @Override
-      public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-
-        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideAllFragments();
-        titleBar.hide();
-        transaction = getFragmentManager().beginTransaction();
-
-        // TODO Auto-generated method stub
-        switch (checkedId) {
-          case R.id.route:
-            showMap();
-            if (fragmentMap == null) {
-              fragmentMap = new FragmentMap();
-              transaction.add(R.id.main_content, fragmentMap);
-            } else {
-//              fragmentMap.isShowFootPrint=true;
-              transaction.show(fragmentMap);
-            }
-            break;
-          case R.id.around:
-            titleBar.show(null, "附近", null);
-            hideMap();
-//            if (fragmentAround == null) {
-            fragmentAround = new FragmentAround();
-            transaction.add(R.id.main_content, fragmentAround);
+    tabMenu = (LinearLayout) findViewById(R.id.tab_menu);
+//    tabMenu.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//      @Override
+//      public void onCheckedChanged(RadioGroup group, int checkedId) {
+//
+//
+//
+//
+//        // TODO Auto-generated method stub
+//        switch (checkedId) {
+//          case R.id.route:
+//            // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//            hideAllFragments();
+//            titleBar.hide();
+//            transaction = getFragmentManager().beginTransaction();
+//            showMap();
+//            if (fragmentMap == null) {
+//              fragmentMap = new FragmentMap();
+//              transaction.add(R.id.main_content, fragmentMap);
 //            } else {
-//              transaction.show(fragmentAround);
+////              fragmentMap.isShowFootPrint=true;
+//              transaction.show(fragmentMap);
 //            }
-
-            break;
-          case R.id.park:
-            titleBar.show(null, "停车", null);
-            hideMap();
-//            if (fragmentPark == null) {
-            fragmentPark = new FragmentPark();
-            transaction.add(R.id.main_content, fragmentPark);
-//            } else {
-//              transaction.show(fragmentPark);
-//            }
-            break;
-          case R.id.footprint:
-            titleBar.show(null, "足迹", null);
-            hideMap();
-//            if (fragmentFootPrint == null) {
-            fragmentFootPrint = new FragmentFootPrint();
-            transaction.add(R.id.main_content, fragmentFootPrint);
-//            } else {
-//              transaction.show(fragmentFootPrint);
-//            }
-
-            break;
-          case R.id.shake:
-            hideMap();
-            titleBar.show(null, "摇一摇", null);
-//            if (fragmentShake == null) {
-            fragmentShake = new FragmentShake();
-            transaction.add(R.id.main_content, fragmentShake);
-//            } else {
-//              fragmentShake.initShakeSensor();
-//              transaction.show(fragmentShake);
-//            }
-
-            break;
-          default:
-            break;
-        }
-
-        transaction.commit();
-      }
-    });
+//            transaction.commit();
+//            break;
+//          case R.id.around:
+//            // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//            hideAllFragments();
+//            titleBar.hide();
+//            transaction = getFragmentManager().beginTransaction();
+//            titleBar.show(null, "附近", null);
+//            hideMap();
+////            if (fragmentAround == null) {
+//            fragmentAround = new FragmentAround();
+//            transaction.add(R.id.main_content, fragmentAround);
+//            transaction.commit();
+//
+//            break;
+//          case R.id.park:
+//            // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//            hideAllFragments();
+//            titleBar.hide();
+//            transaction = getFragmentManager().beginTransaction();
+//            titleBar.show(null, "停车", null);
+//            hideMap();
+////            if (fragmentPark == null) {
+//            fragmentPark = new FragmentPark();
+//            transaction.add(R.id.main_content, fragmentPark);
+//            transaction.commit();
+//            break;
+//          case R.id.footprint:
+//            // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//            hideAllFragments();
+//            titleBar.hide();
+//            transaction = getFragmentManager().beginTransaction();
+//            titleBar.show(null, "足迹", null);
+//            hideMap();
+////            if (fragmentFootPrint == null) {
+//            fragmentFootPrint = new FragmentFootPrint();
+//            transaction.add(R.id.main_content, fragmentFootPrint);
+//            transaction.commit();
+//            break;
+//          case R.id.shake:
+//            // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//            hideAllFragments();
+//            titleBar.hide();
+//            transaction = getFragmentManager().beginTransaction();
+//            hideMap();
+//            titleBar.show(null, "摇一摇", null);
+////            if (fragmentShake == null) {
+//            fragmentShake = new FragmentShake();
+//            transaction.add(R.id.main_content, fragmentShake);
+//            transaction.commit();
+//
+//            break;
+//          default:
+//            break;
+//        }
+//
+//
+//      }
+//    });
 
 
 //    dialog = new FullScreenDialog(this, new FullScreenDialog.OnDialogListener() {
@@ -431,19 +511,22 @@ public class MainActivity extends BaseActivity {
 
   public void showFragmentMap() {
     poiInfoBar.setVisibility(View.GONE);
-    rout.setChecked(true);
-//    // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-//    hideAllFragments();
-//    titleBar.hide();
-//    showMap();
-//    transaction = getFragmentManager().beginTransaction();
-//    if (fragmentMap == null) {
-//      fragmentMap = new FragmentMap();
-//      transaction.add(R.id.main_content, fragmentMap);
-//    } else {
-//      fragmentMap.isShowFootPrint=true;
-//      transaction.show(fragmentMap);
-//    }
+//    rout.setChecked(true);
+
+
+    // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+        hideAllFragments();
+        titleBar.hide();
+        transaction = getFragmentManager().beginTransaction();
+        showMap();
+        if (fragmentMap == null) {
+          fragmentMap = new FragmentMap();
+          transaction.add(R.id.main_content, fragmentMap);
+        } else {
+//              fragmentMap.isShowFootPrint=true;
+          transaction.show(fragmentMap);
+        }
+        transaction.commit();
   }
 
 
@@ -704,14 +787,15 @@ public class MainActivity extends BaseActivity {
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  protected void onPause() {
+    super.onPause();
 
     //停止由AlarmManager启动的循环
     LocateTimerService.stop(this);
     //停止由服务启动的循环
     Intent intent = new Intent(this, LocateTimerService.class);
     stopService(intent);
+
   }
 
   //  @Override
@@ -807,4 +891,38 @@ public class MainActivity extends BaseActivity {
     startActivityForResult(intent, startTakePic);
   }
 
+//  @Override
+//  public void onClick(View v) {
+//    switch (v.getId()){
+//      case R.id.route:
+//        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
+//        hideAllFragments();
+//        titleBar.hide();
+//        transaction = getFragmentManager().beginTransaction();
+//        showMap();
+//        if (fragmentMap == null) {
+//          fragmentMap = new FragmentMap();
+//          transaction.add(R.id.main_content, fragmentMap);
+//        } else {
+////              fragmentMap.isShowFootPrint=true;
+//          transaction.show(fragmentMap);
+//        }
+//        transaction.commit();
+//        break;
+//      case R.id.around:
+//
+//
+//        break;
+//      case R.id.park:
+//
+//        break;
+//      case R.id.footprint:
+//
+//        break;
+//      case R.id.shake:
+//
+//
+//        break;
+//    }
+//  }
 }

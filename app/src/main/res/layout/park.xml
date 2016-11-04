@@ -24,12 +24,14 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/ico_park_car"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="查找爱车"
                 android:textColor="#2f3336"
                 android:textSize="15sp"/>
@@ -64,12 +66,13 @@
                     android:id="@+id/tv_car_num"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textCursorDrawable="@null"
                     android:layout_toLeftOf="@+id/btn_search"
                     android:layout_toRightOf="@+id/B"
                     android:gravity="center_vertical"
                     android:hint="如33333"
                     android:textColorHint="#dddddd"
-                    android:textColor="#b4b7b9"
+                    android:textColor="#000000"
                     android:textSize="14sp"/>
             </LinearLayout>
 
@@ -105,12 +108,14 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/ico_park_infor"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="车位信息"
                 android:textColor="#2f3336"
                 android:textSize="15sp"/>
@@ -181,12 +186,14 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/ico_park_pay"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="收费标准"
+            android:layout_gravity="center_vertical"
             android:textColor="#2f3336"
             android:textSize="15sp"/>
 </LinearLayout>

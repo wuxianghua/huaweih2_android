@@ -24,6 +24,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea;
+
 public class UploadActivity extends BaseActivity {
 
   TitleBar titleBar;
@@ -82,6 +84,16 @@ public class UploadActivity extends BaseActivity {
 //          return;
 //        }
 //        uploadImage();
+
+        String lo = LocateTimerService.getCurrentLocationArea();
+        if (!Constant.isDebug){
+          if(lo.equals(Constant.其他)){
+            DialogUtils.showShortToast("您不在华为H2大楼，不能上传");
+            finish();
+            return;
+          }
+        }
+
         uploadImageFormData();
 
       }
@@ -135,7 +147,7 @@ public class UploadActivity extends BaseActivity {
 
     PictureJson pictureJson = new PictureJson();
     pictureJson.setAppendix(tv_message.getText().toString());
-    pictureJson.setLocation(LocateTimerService.getCurrentLocationArea());
+    pictureJson.setLocation(getCurrentLocationArea());
     String picJson = JSON.toJSONString(pictureJson);
 
 //    MyAsyncTask myAsyncTask = new MyAsyncTask();

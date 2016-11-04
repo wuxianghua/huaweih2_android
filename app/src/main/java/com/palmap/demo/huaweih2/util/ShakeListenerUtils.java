@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.util.Log;
 
 /**
  * Created by eric3 on 2016/10/19.
@@ -14,8 +15,8 @@ public class ShakeListenerUtils implements SensorEventListener {
     private Activity context;
     private OnShakeListener onShakeListener;
     public static boolean isTooShort = false;//保证两次间隔
-//    public static float MAX_VAL = 19.8f;
-    public static float MAX_VAL = 15f;
+    public static float MAX_VAL = 25f;
+//    public static float MAX_VAL = 15f;
 
     public ShakeListenerUtils(Activity context, OnShakeListener onShakeListener) {
         super();
@@ -34,10 +35,13 @@ public class ShakeListenerUtils implements SensorEventListener {
             /*正常情况下，任意轴数值最大就在9.8~10之间，只有在突然摇动手机
               的时候，瞬时加速度才会突然增大或减少。   监听任一轴的加速度大于15即可
             */
-            if ((Math.abs(values[0]) > MAX_VAL || Math.abs(values[1]) > MAX_VAL || Math
-                    .abs(values[2]) > MAX_VAL)) {
-                if (isTooShort)
+            double len = Math.sqrt(values[0]*values[0]+values[1]*values[1]+values[2]*values[2]);
+            if (len>MAX_VAL) {
+                if (isTooShort) {
+                    Log.e("eric", "isTooShort");
+                    isTooShort = false;
                     return;
+                }
 
                 isTooShort = true;
                 VibratorUtil.Vibrate(context, 500);   //震动1000ms
