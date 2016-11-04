@@ -577,7 +577,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       public void run() {
         isSingleTapTooShort =false;
       }
-    },700);
+    },400);
 
     return false;
   }
@@ -806,12 +806,18 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
               if (isSearchCar)
                 findCar();
 
+              if (mCurrentFloor==Constant.FLOOR_ID_F1){
+                mMapView.visibleLayerFeature("Area_text","display",new Value("ICS办公区"),false);
+              }
+
               if (!hasChoosenFootPrint) {
                 mContext.runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
-                    mContext.dialog.setVisibility(View.VISIBLE);
-                    hasChoosenFootPrint = true;
+                    if (mContext.shouldShow2choose1) {
+                      mContext.dialog.setVisibility(View.VISIBLE);
+                      hasChoosenFootPrint = true;
+                    }
                   }
                 });
               }

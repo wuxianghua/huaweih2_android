@@ -107,6 +107,7 @@
             <com.palmap.demo.huaweih2.view.MyGridView
                 android:horizontalSpacing="10dp"
                 android:verticalSpacing="10dp"
+                android:background="@color/white"
                 android:numColumns="4"
                 android:id="@+id/nameGridView"
                 android:layout_width="match_parent"

@@ -114,11 +114,12 @@
 
             <TextView
                 android:id="@+id/poi_img"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="15dp"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="20sp"
+                android:textColor="#565c60"
                 android:background="@drawable/btn_tab_camera"/>
 
             <!--<TextView-->
@@ -139,18 +140,12 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/nav_start"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginRight="15dp"
-                        android:visibility="gone"
-                        android:src="@drawable/ico_tab_start"/>
+
 
                     <TextView
                         android:id="@+id/poi_name"
@@ -161,20 +156,33 @@
                         android:text="H2 office"
                         android:textSize="16sp"/>
 
+                    <ImageView
+                        android:id="@+id/nav_start"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="15dp"
+                        android:visibility="gone"
+                        android:src="@drawable/ico_tab_start"/>
 
+                    <TextView
+                        android:id="@+id/tv_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#565c60"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:text="H2 office"
+                        android:textSize="16sp"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/nav_end"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginRight="15dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ico_tab_end"/>
+
+
                 <TextView
                     android:id="@+id/poi_address"
                     android:layout_width="wrap_content"
@@ -191,17 +199,36 @@
                         android:textSize="14sp"
                         android:textColor="#1fafe7"
                         android:text="查看详情>>"/>
+
+                    <ImageView
+                        android:id="@+id/nav_end"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="15dp"
+                        android:visibility="gone"
+                        android:src="@drawable/ico_tab_end"/>
+                    <TextView
+                        android:id="@+id/tv_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="#565c60"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:text="H2 office"
+                        android:textSize="16sp"/>
                 </LinearLayout>
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/go_im"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="35dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ico_tab_navigation"/>
+                android:background="@drawable/ico_tab_navigation"/>
 
             <!--<ImageView-->
                 <!--android:id="@+id/share_im"-->
