@@ -22,10 +22,10 @@ import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.PoiInfoActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PoiInfo;
 import com.palmap.demo.huaweih2.other.Constant;
-import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.util.ShakeListenerUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
@@ -193,7 +193,7 @@ FragmentShake extends BaseFragment {
                 DataProviderCenter.getInstance().getShake(js, new HttpDataCallBack() {
                     @Override
                     public void onError(int errorCode) {
-                        DialogUtils.showShortToast(errorCode + "");
+                        ErrorCode.showError(errorCode);
                         ShakeListenerUtils.isTooShort = false;
                     }
 

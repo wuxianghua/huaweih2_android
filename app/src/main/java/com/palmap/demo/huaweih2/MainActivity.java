@@ -74,6 +74,8 @@ public class MainActivity extends BaseActivity {
   //  TextView tv_nav_len;
   ImageView im_nav_start;
   ImageView im_nav_end;
+  TextView tv_start;
+  TextView tv_end;
   TextView tv_poi_name;
   TextView tv_poi_address;
   TextView tv_poi_moreinfo;
@@ -238,6 +240,8 @@ public class MainActivity extends BaseActivity {
     tv_tip = (TextView) findViewById(R.id.btn_tip);
     tv_poi_name = (TextView) findViewById(R.id.poi_name);
     tv_poi_address = (TextView) findViewById(R.id.poi_address);
+    tv_start = (TextView) findViewById(R.id.tv_start);
+    tv_end = (TextView) findViewById(R.id.tv_end);
     tv_poi_moreinfo = (TextView) findViewById(R.id.poi_moreinfo);
     tv_poi_moreinfo.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -450,6 +454,10 @@ public class MainActivity extends BaseActivity {
     poiInfoBar.setVisibility(View.VISIBLE);
     im_poi.setVisibility(View.VISIBLE);
     im_poi.setBackgroundResource(R.drawable.huaweilogo);
+    tv_start.setVisibility(View.GONE);
+    tv_end.setVisibility(View.GONE);
+
+    im_go.setBackgroundResource(R.drawable.ico_tab_navigation);
 
 
     List<PoiImg> poiImgs = PoiImgList.getPoiImgList();
@@ -468,6 +476,9 @@ public class MainActivity extends BaseActivity {
   //显示poi详情
   public void showPoiInfoBar() {
     poiInfoBar.setVisibility(View.VISIBLE);
+    tv_start.setVisibility(View.GONE);
+    tv_end.setVisibility(View.GONE);
+    im_go.setBackgroundResource(R.drawable.ico_tab_navigation);
   }
 
   //暂时隐藏poi详情
@@ -485,11 +496,32 @@ public class MainActivity extends BaseActivity {
 
     im_nav_end.setVisibility(View.VISIBLE);
     im_nav_start.setVisibility(View.VISIBLE);
+    tv_start.setVisibility(View.VISIBLE);
+    tv_end.setVisibility(View.VISIBLE);
 
-    tv_poi_name.setVisibility(View.VISIBLE);//起点
-    tv_poi_name.setText(startName);
-    tv_poi_address.setVisibility(View.VISIBLE);//终点
-    tv_poi_name.setText(endName);
+    tv_poi_name.setVisibility(View.GONE);
+    tv_poi_address.setVisibility(View.GONE);
+
+    tv_start.setVisibility(View.VISIBLE);//起点
+    tv_start.setText(startName);
+    tv_end.setVisibility(View.VISIBLE);//终点
+    tv_end.setText(endName);
+
+
+//    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(45,45);
+//    im_go.setLayoutParams(params);
+//    im_go.setPadding(10,10,10,10);
+    im_go.setBackgroundResource(R.drawable.btn_tab_cancel);
+    im_go.setVisibility(View.VISIBLE);
+    im_go.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (isNavigating) {
+          showTabMenu();
+          fragmentMap.endNavigate();
+        }
+      }
+    });
 
   }
 

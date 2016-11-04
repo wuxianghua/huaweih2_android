@@ -577,7 +577,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       public void run() {
         isSingleTapTooShort =false;
       }
-    },700);
+    },400);
 
     return false;
   }
