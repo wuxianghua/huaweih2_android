@@ -244,8 +244,9 @@ public class FileUtils {
     image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
     if( baos.toByteArray().length / 1024>1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
       baos.reset();//重置baos即清空baos
-      image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
+      image.compress(Bitmap.CompressFormat.JPEG, 40, baos);//这里压缩50%，把压缩后的数据存放到baos中
     }
+    image.recycle();
     ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
     BitmapFactory.Options newOpts = new BitmapFactory.Options();
     //开始读入图片，此时把options.inJustDecodeBounds 设回true了
@@ -282,8 +283,7 @@ public class FileUtils {
       image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
       options -= 20;//每次都减少10
     }
-    ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-    Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-    return bitmap;
+    image.recycle();
+    return BitmapFactory.decodeStream(new ByteArrayInputStream(baos.toByteArray()), null, null);//把ByteArrayInputStream数据生成图片
   }
 }
