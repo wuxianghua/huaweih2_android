@@ -9,9 +9,18 @@ public class CommentDown {
   String comment;
   String userId;//ip地址
   long comTime;
+  int id;
 
   public CommentDown(){
 
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public String getLocation() {

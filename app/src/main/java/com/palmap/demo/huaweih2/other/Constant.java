@@ -9,7 +9,7 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
 public class Constant {
 //
 //
-public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统一
+  public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统一
   // public static final String APP_KEY = "30497ca93a3b47bd841db8dced24878f";//h2
   public static final long MAP_ID = 1430L;
   public static final long FLOOR_ID_F1 = 1262934L;
@@ -58,8 +58,9 @@ public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统�
   public static final long 建筑物大门 = 23043000L;
   public static final long 门窗楼梯_ID = 13164000L;
   public static final long 盥洗室_ID = 23047000L;
-  public static final long 茶水间_ID = 15000000L;//生活服务
+  public static final long 茶水间_ID = 23040000L;//饮水处
 
+  public static final long 空地_POI_ID = 1262934L;
   //四个poi详情
   public static final String H2大厅 = "H2大厅";//poi详情
   public static final String 会议室 = "会议室";//poi详情
@@ -69,6 +70,8 @@ public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统�
   public static final String 其他 = "其他";//poi详情
 
 
+  public static int   MAX_ZOOM = 5;
+  public static int   MIN_ZOOM = 1;
 
   public static final String FACILITY_LAYER = "Facility";
   public static final String FACILITY_KEY_CAT = "category";
@@ -89,19 +92,22 @@ public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统�
 
   public static boolean onSingleTap_changeColor =true;//是否变色
 
-  public static final int RESULT_PICTURE = 0;
+
 
   public static final int EACH_TIME_COMMENT_NUM = 5;
   public static final int EACH_TIME_PICTURE_NUM = 10;
 
   //startActivityForResult
+  public static final int startTakePic = 0;
   public static final int startPay = 2;
   public static final int startWelcome = 1;
   public static final int startOffice=3;
+  public static final int startUploadText=4;
+  public static final int startUploadPic=5;
 
   public static boolean useTestServer = true;//是否使用内网测试服务器 10.
 
-  public static boolean openLocateService = true;//开启自动查询定位,本地测试也要开启
+  public static boolean openLocateService = true;//开启自动循环查询定位,本地测试也要开启
   public static boolean openLocateTest = true;//开启本地定位测试
 
   public static long LOCATE_FRESH_TIME = 10000;//定位间隔时间

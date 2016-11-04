@@ -44,9 +44,9 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
   FootPrintItemView footprintView_h2;
   FootPrintItemView footprintView_meetingRoom;
   FootPrintItemView footprintView_h2_hall;
-  LinearLayout commentList;
+  public LinearLayout commentList;
   RelativeLayout write;
-  int start = 0;//开始加载
+  public int start = 0;//开始加载
 
   private PullToRefreshScrollView refreshScrollView;
 
@@ -68,7 +68,14 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
       public void onClick(View v) {
         Intent intent = new Intent(getMainActivity(),ActivityUploadCom.class);
         intent.putExtra("location",Constant.ICS实验室);
-        startActivity(intent);
+        getActivity().startActivityForResult(intent,Constant.startUploadText);
+      }
+    });
+    getMainActivity().titleBar.setRightIcoImageRes(R.drawable.ico_nav_camera);
+    getMainActivity().titleBar.setRightIcoClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getMainActivity().openCameraActivity();
       }
     });
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
@@ -103,6 +110,19 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     footprintView_h2 = (FootPrintItemView) view.findViewById(R.id.footprintView_h2);
     footprintView_meetingRoom = (FootPrintItemView) view.findViewById(R.id.footprintView_meetingRoom);
     footprintView_h2_hall = (FootPrintItemView) view.findViewById(R.id.footprintView_h2_hall);
+
+    footprintView_office.setImageResource(R.drawable.office_min_2);
+    footprintView_office.setName("ICS办公区");
+    footprintView_lab.setImageResource(R.drawable.laboratory_min_1);
+    footprintView_lab.setName("ICS实验室");
+    footprintView_h2.setImageResource(R.drawable.h2_foyer_min_1);
+    footprintView_h2.setName("H2大楼");
+    footprintView_meetingRoom.setImageResource(R.drawable.boardroom_min_1);
+    footprintView_meetingRoom.setName("ICS会议室");
+    footprintView_h2_hall.setImageResource(R.drawable.h2_foyer_min_3);
+    footprintView_h2_hall.setName("ICS大厅");
+
+
     registerFootPrintItemViewClickEvent(footprintView_office
         , footprintView_lab
         , footprintView_h2
@@ -203,10 +223,10 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     }
   }
 
-  private void loadComments() {
+  public void loadComments() {
     //加载评论
 
-    String js = JsonUtils.getCommentsDown(Constant.ICS实验室, start, Constant.EACH_TIME_COMMENT_NUM);
+    String js = JsonUtils.getCommentsDown("", start, Constant.EACH_TIME_COMMENT_NUM);
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
@@ -218,8 +238,15 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
 //            loadmore_view.setVisibility(View.INVISIBLE);
         Log.i("", content.toString());
         List<CommentDown> list = new ArrayList<>(JSONArray.parseArray(content.toString(), CommentDown.class));
-        if (list.size() == 0)
+        if (list==null){
+          DialogUtils.showShortToast("没有更多评论");
           return;
+        }
+        if (list.size() == 0){
+          DialogUtils.showShortToast("没有更多评论");
+          return;
+        }
+
 
 
         for (int i = 0; i < list.size(); i++) {
@@ -232,13 +259,15 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
           view.setLayoutParams(lp);
           TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
-          tn.setText("访客" + (start + 1));
+          tn.setText("访客" + list.get(i).getId());
           TextView tc = (TextView) view.findViewById(R.id.com_text);
           tc.setText(list.get(i).getComment());
           TextView tt = (TextView) view.findViewById(R.id.com_time);
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           Date date = new Date(list.get(i).getComTime());
           tt.setText(sdf.format(date));
+          TextView tl = (TextView) view.findViewById(R.id.loc);
+          tl.setText(list.get(i).getLocation());
 
           start++;
           commentList.addView(view);
@@ -247,7 +276,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     });
   }
 
-  private void loadPicNum() {
+  public void loadPicNum() {
     //加载总数
     DataProviderCenter.getInstance().getAllLocationPicNum(new HttpDataCallBack() {
       @Override
@@ -258,6 +287,15 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
       @Override
       public void onComplete(Object content) {
         List<PictureModelSum> pictureModelSums = JsonUtils.getPictureModelSum(content);
+        if (pictureModelSums==null){
+          footprintView_meetingRoom.setCount(0);
+          footprintView_lab.setCount(0);
+          footprintView_office.setCount(0);
+          footprintView_h2.setCount(0);
+          footprintView_h2_hall.setCount(0);
+
+          return;
+        }
         for (int i=0;i<pictureModelSums.size();i++){
           String location = pictureModelSums.get(i).getLocation();
           if (location==null)
@@ -271,12 +309,11 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
             footprintView_lab.setCount(pictureModelSums.get(i).getCount());
           }else if (location.contains(Constant.会议室)){
             footprintView_meetingRoom.setCount(pictureModelSums.get(i).getCount());
-          }else{
+          }else if (location.contains(Constant.其他)){
             footprintView_h2.setCount(pictureModelSums.get(i).getCount());
           }
         }
       }
     });
   }
-
 }

@@ -77,7 +77,8 @@
             android:layout_width="96dp"
             android:layout_height="68dp"
             android:layout_margin="15dp"
-            android:background="@drawable/boardroom_min_1"/>
+            android:scaleType="centerCrop"
+            android:background="@color/white"/>
         
         <LinearLayout
 

@@ -67,7 +67,7 @@ public class ActivityPay extends BaseActivity implements View.OnClickListener{
             setResult(RESULT_OK,getIntent());
             finish();
           }
-        }, 3000);
+        }, 1000);
 
 //        DialogUtils.showDialog(ActivityPay.this, "支付成功", new DialogUtils.DialogCallBack() {
 //          @Override

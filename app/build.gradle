@@ -1,18 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
 
-    //useLibrary 'org.apache.http.legacy'
     sourceSets.main.jniLibs.srcDirs = ['libs']
     defaultConfig {
         applicationId "com.palmap.demo.huaweih2"
-        minSdkVersion 17
-        targetSdkVersion 22
+        minSdkVersion 15
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            // 设置支持的 SO 库构架，一般而言，取你所有的库支持的构架的`交集`。
+            abiFilters 'armeabi';'armeabi-v7a'; 'x86'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
     }
     buildTypes {
         release {
@@ -22,13 +26,28 @@ android {
     }
 }
 
+//应用 Bugtags 插件
+apply plugin: 'com.bugtags.library.plugin'
+
+//Bugtags 插件配置
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+    appKey "267921bb8c8c795df7f7ffa41ac5d307"  //这里是你的 appKey
+    appSecret "d0d30381cc1af5d046caf69654749862"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled false
+}
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+//    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
     compile files('libs/fastjson-1.2.4.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/open_sdk_r5756_lite.jar')
@@ -36,7 +55,7 @@ dependencies {
     //compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile project(':pullToRefresh')
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile files('libs/httpmime-4.2.5.jar')
-    compile files('libs/nagrand-jar-with-dependencies27.jar')
+    compile files('libs/nagrand-jar-with-dependencies28.jar')
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.json.PoiInfo;
+import com.palmap.demo.huaweih2.util.DialogUtils;
 
 import java.net.URL;
 
@@ -27,13 +28,13 @@ public class PoiInfoActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_poi_info);
 
-    type = getIntent().getIntExtra("type",1);
-    poiInfo = (PoiInfo)getIntent().getSerializableExtra("poiinfo");
+    type = getIntent().getIntExtra("type", 1);
+    poiInfo = (PoiInfo) getIntent().getSerializableExtra("poiinfo");
 
-    detail = (TextView)findViewById(R.id.detail);
-    title= (TextView)findViewById(R.id.title);
-    imageView= (ImageView) findViewById(R.id.img);
-    close = (ImageView )findViewById(R.id.close);
+    detail = (TextView) findViewById(R.id.detail);
+    title = (TextView) findViewById(R.id.title);
+    imageView = (ImageView) findViewById(R.id.img);
+    close = (ImageView) findViewById(R.id.close);
 
     close.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -42,24 +43,46 @@ public class PoiInfoActivity extends BaseActivity {
       }
     });
 
-    if (type==YYY){
-       title.setText(poiInfo.getTitle());
+    if (type == YYY) {
+      title.setText(poiInfo.getTitle());
       detail.setText(poiInfo.getText());
-      URL picUrl = null;
-      try {
-        picUrl = new URL(poiInfo.getImage());
 
-      Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-        imageView.setImageBitmap(pngBM);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
 
-    }else if (type ==POI_HALL){
+      Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            URL picUrl = new URL(poiInfo.getImage());
+
+            final Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+
+            runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                imageView.setImageBitmap(pngBM);
+              }
+            });
+
+
+          } catch (final Exception e) {
+            runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                DialogUtils.showShortToast(e.getMessage());
+              }
+            });
+
+          }
+        }
+      });
+      thread.start();
+
+
+    } else if (type == POI_HALL) {
       title.setText("H2大厅");
       detail.setText("华为基地H区建立于2013年，目前有员工8000人，包括终端、企业、运营商3大BG的研发、销售、开发、产品等多个部门。");
       imageView.setImageResource(R.drawable.h2_foyer);
-    }else if (type ==POI_LAB){
+    } else if (type == POI_LAB) {
       title.setText("ICS实验室");
       detail.setText("华为ICS实验室成立于2010年，2016年完成改造升级。目前已搭建完善的测试环境主要用于设备集成验证、员工培训及客户接待参观。");
       imageView.setImageResource(R.drawable.laboratory_shake);

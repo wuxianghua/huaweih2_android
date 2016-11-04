@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
@@ -56,7 +57,7 @@ public class ActivityMeeting extends BaseActivity {
       public void onClick(View v) {
         Intent intent = new Intent(ActivityMeeting.this,ActivityUploadCom.class);
         intent.putExtra("location",Constant.会议室);
-        startActivity(intent);
+        startActivityForResult(intent,Constant.startUploadText);
       }
     });
 
@@ -66,7 +67,7 @@ public class ActivityMeeting extends BaseActivity {
     DataProviderCenter.getInstance().downloadZan(json, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        Log.e("",errorCode+"");
+        DialogUtils.showShortToast(errorCode+"");
       }
 
       @Override
@@ -87,7 +88,7 @@ public class ActivityMeeting extends BaseActivity {
         DataProviderCenter.getInstance().postZan(json, new HttpDataCallBack() {
           @Override
           public void onError(int errorCode) {
-            Log.e("",errorCode+"");
+            DialogUtils.showShortToast(errorCode+"");
           }
 
           @Override
@@ -137,7 +138,7 @@ public class ActivityMeeting extends BaseActivity {
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showLongToast(errorCode +"");
+        ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -145,8 +146,14 @@ public class ActivityMeeting extends BaseActivity {
 //            loadmore_view.setVisibility(View.INVISIBLE);
         Log.i("", content.toString());
         List<CommentDown> list = new ArrayList<>(JSONArray.parseArray(content.toString(), CommentDown.class));
-        if (list.size()==0)
+        if (list==null){
+          DialogUtils.showShortToast("没有更多评论");
           return;
+        }
+        if (list.size()==0) {
+          DialogUtils.showShortToast("没有更多评论");
+          return;
+        }
 
 
         for (int i = 0; i < list.size(); i++) {
@@ -159,18 +166,36 @@ public class ActivityMeeting extends BaseActivity {
           view.setLayoutParams(lp);
           TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
-          tn.setText("访客"+(start+1));
+          tn.setText("访客"+list.get(i).getId());
           TextView tc = (TextView) view.findViewById(R.id.com_text);
           tc.setText(list.get(i).getComment());
           TextView tt = (TextView) view.findViewById(R.id.com_time);
           SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           Date date = new Date(list.get(i).getComTime());
           tt.setText(sdf.format(date));
-
+          TextView tl = (TextView) view.findViewById(R.id.loc);
+          tl.setText(list.get(i).getLocation());
+          view.setBackgroundResource(R.drawable.commentbar_short);
           start++;
           commentList.addView(view);
         }
       }
     });
+  }
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode){
+      case Constant.startUploadText:
+        if (commentList==null){
+          break;
+        }
+        if (resultCode == RESULT_OK){
+          commentList.removeAllViews();
+          start = 0;
+          loadComments();
+        }
+        break;
+    }
+    super.onActivityResult(requestCode, resultCode, data);
   }
 }

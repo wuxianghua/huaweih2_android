@@ -21,6 +21,9 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 import static com.vividsolutions.jts.geom.Location.BOUNDARY;
@@ -40,6 +44,7 @@ import static com.vividsolutions.jts.geom.Location.BOUNDARY;
  */
 public class AsyncHttp {
   public static int HTTP_CONNECTION_TIMEOUT = 30; // 单位秒
+  private static final String CHARSET = "utf-8"; //设置编码
 
   private static AsyncHttp instance = null;
 
@@ -562,4 +567,204 @@ public class AsyncHttp {
     }
 
   }
+
+
+
+
+
+    /** * android上传文件到服务器
+     * @param file 需要上传的文
+     * @return 返回响应的内容
+     */
+    public void uploadFile(final String url, final File file, final String jsonData, final HttpDataCallBack callBack) {
+      // 如果callback为null，则请求结果无法返回
+      if (callBack == null){
+        return ;
+      }
+
+      // 检测网络是否连接
+      if (!PhoneUtils.isNetWorkConnected(HuaWeiH2Application.instance)){
+        callBack.onError(ErrorCode.CODE_NO_INTERNET); // 无网络连接
+        return ;
+      }
+
+      final String BOUNDARY = UUID.randomUUID().toString(); //边界标识 随机生成
+      final String PREFIX = "--" , LINE_END = "\r\n";
+
+      final String CONTENT_TYPE = "multipart/form-data"; //内容类型
+
+      // 判断数据是否为空
+      if (jsonData == null || jsonData.length() <= 0){
+        callBack.onError(ErrorCode.CODE_REQUEST_ERROR); // 网络请求错误
+        return;
+      }
+
+
+      Executors.newSingleThreadExecutor().execute(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            URL url1 = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+            conn.setReadTimeout(HTTP_CONNECTION_TIMEOUT*1000);
+            conn.setConnectTimeout(HTTP_CONNECTION_TIMEOUT*1000);
+            conn.setDoInput(true); //   允许输入流
+            conn.setDoOutput(true); //  允许输出流
+            conn.setUseCaches(false); //不允许使用缓存
+            conn.setRequestMethod("POST"); //请求方式
+            conn.setRequestProperty("Charset", CHARSET);
+            conn.setRequestProperty("Accept", "application/json");
+            //设置编码
+            conn.setRequestProperty("Connection", "keep-alive");
+            conn.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+
+//      // 获得输出流，向服务器输出内容
+//      OutputStream outputStream = conn.getOutputStream();
+//      outputStream.write(data, 0, data.length);
+//      outputStream.flush();
+//      outputStream.close();
+            if(file!=null) {
+              /** * 当文件不为空，把文件包装并且上传 */
+              OutputStream outputSteam=conn.getOutputStream();
+              DataOutputStream dos = new DataOutputStream(outputSteam);
+              StringBuffer sb = new StringBuffer();
+              sb.append(PREFIX);
+              sb.append(BOUNDARY);
+              sb.append(LINE_END);
+              /**
+               * 这里重点注意：
+               * name里面的值为服务器端需要key 只有这个key 才可以得到对应的文件
+               * filename是文件的名字，包含后缀名的 比如:abc.png
+               */
+              sb.append("Content-Disposition: form-data; name=\"file\"; filename=\""+file.getName()+"\""+LINE_END);
+              sb.append("Content-Type: image/png; charset="+CHARSET+LINE_END);
+              sb.append(LINE_END);
+              dos.write(sb.toString().getBytes());
+              InputStream is = new FileInputStream(file);
+              byte[] bytes = new byte[1024];
+              int len = 0;
+              while((len=is.read(bytes))!=-1)
+              {
+                dos.write(bytes, 0, len);
+              }
+              is.close();
+              dos.write(LINE_END.getBytes());
+
+              String jsonString = PREFIX+BOUNDARY+LINE_END+"Content-Disposition: form-data; name=\"text\""+LINE_END+LINE_END+jsonData+LINE_END;
+              dos.write(jsonString.getBytes());
+
+
+
+
+              byte[] end_data = (PREFIX+BOUNDARY+PREFIX+LINE_END).getBytes();
+              dos.write(end_data);
+              Log.i("dos",dos.toString());
+              dos.flush();
+              dos.close();
+              /**
+               * 获取响应码 200=成功
+               * 当响应成功，获取响应的流
+               */
+              int res = conn.getResponseCode();
+              if(res==200)
+              {
+                InputStream inputStream = conn.getInputStream();
+                String result = changeInputStream(inputStream, HTTP.UTF_8);
+                inputStream.close();
+                callBack.onComplete(result);
+              }
+            }
+          } catch (MalformedURLException e){
+            e.printStackTrace();
+          }
+          catch (IOException e){
+            e.printStackTrace();
+          }
+          callBack.onError(ErrorCode.CODE_EXCEPTION);
+        }
+      });
+//      Executors.newSingleThreadExecutor().execute(new Runnable() {
+//        @Override
+//        public void run() {
+////          try {
+////            URL url = new URL(URL_UPLOAD_IMAGE_TEST);
+////            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+////            conn.setReadTimeout(TIME_OUT);
+////            conn.setConnectTimeout(TIME_OUT);
+////            conn.setDoInput(true); //   允许输入流
+////            conn.setDoOutput(true); //  允许输出流
+////            conn.setUseCaches(false); //不允许使用缓存
+////            conn.setRequestMethod("POST"); //请求方式
+////            conn.setRequestProperty("Charset", CHARSET);
+////            conn.setRequestProperty("Accept", "application/json");
+////            //设置编码
+////            conn.setRequestProperty("connection", "keep-alive");
+////            conn.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+////
+//////      // 获得输出流，向服务器输出内容
+//////      OutputStream outputStream = conn.getOutputStream();
+//////      outputStream.write(data, 0, data.length);
+//////      outputStream.flush();
+//////      outputStream.close();
+////            if(file!=null) {
+////              /** * 当文件不为空，把文件包装并且上传 */
+////              OutputStream outputSteam=conn.getOutputStream();
+////              DataOutputStream dos = new DataOutputStream(outputSteam);
+////              StringBuffer sb = new StringBuffer();
+////              sb.append(PREFIX);
+////              sb.append(BOUNDARY);
+////              sb.append(LINE_END);
+////              /**
+////               * 这里重点注意：
+////               * name里面的值为服务器端需要key 只有这个key 才可以得到对应的文件
+////               * filename是文件的名字，包含后缀名的 比如:abc.png
+////               */
+////              sb.append("Content-Disposition: form-data; name=\"img\"; filename=\""+file.getName()+"\""+LINE_END);
+////              sb.append("Content-Type: application/octet-stream; charset="+CHARSET+LINE_END);
+////              sb.append(LINE_END);
+////              dos.write(sb.toString().getBytes());
+////              InputStream is = new FileInputStream(file);
+////              byte[] bytes = new byte[1024];
+////              int len = 0;
+////              while((len=is.read(bytes))!=-1)
+////              {
+////                dos.write(bytes, 0, len);
+////              }
+////              is.close();
+////              dos.write(LINE_END.getBytes());
+////              byte[] end_data = (PREFIX+BOUNDARY+PREFIX+LINE_END).getBytes();
+////              dos.write(end_data);
+////
+////              dos.write(data, 0, data.length);
+////
+////              dos.flush();
+////              dos.close();
+////              /**
+////               * 获取响应码 200=成功
+////               * 当响应成功，获取响应的流
+////               */
+////              int res = conn.getResponseCode();
+////              Log.e(TAG, "response code:"+res);
+////              if(res==200)
+////              {
+////                InputStream inputStream = conn.getInputStream();
+////                String result = changeInputStream(inputStream, HTTP.UTF_8);
+////                inputStream.close();
+////                callBack.onComplete(result);
+////              }
+////            }
+////          } catch (MalformedURLException e){
+////            e.printStackTrace();
+////          }
+////          catch (IOException e){
+////            e.printStackTrace();
+////          }
+////          callBack.onError(ErrorCode.CODE_EXCEPTION);
+//        }
+//      });
+//
+    }
+
+
+
 }

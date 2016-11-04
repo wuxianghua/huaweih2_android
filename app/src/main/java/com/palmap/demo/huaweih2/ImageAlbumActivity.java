@@ -113,7 +113,6 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
 
     private void loadPictureModels() {
         //加载图片库url
-     String location = LocateTimerService.getCurrentLocationArea();
         String js = JsonUtils.getDownloadImg(location);
         DataProviderCenter.getInstance().getPictures(js, new HttpDataCallBack() {
             @Override
@@ -125,8 +124,11 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
             public void onComplete(Object content) {
 
                 pictureModelList = JsonUtils.getPictureModel(content);
-                if (pictureModelList==null||pictureModelList.size()<=0)
+                if (pictureModelList==null||pictureModelList.size()<=0){
+                    DialogUtils.showShortToast("没有照片");
                     return;
+                }
+
 
                 int current =start;
                 for (; start< (Constant.EACH_TIME_PICTURE_NUM+current)&&start<pictureModelList.size(); start++) {

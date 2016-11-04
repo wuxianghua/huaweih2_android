@@ -8,13 +8,13 @@ local function LoadColorPointStyle(config, _3d)
 	local color = config.color
 	local shape = config.shape
 	local rotate = config.rotate
-  local enable_alpha = config.enable_alpha
+    local enable_alpha = config.enable_alpha
 
 	if size then style.size = size end
 	if color then style.color = color end
 	if shape then style.shape = shape end
 	if rotate then style.rotate = rotate end
-  if enable_alpha ~= nil then style.enable_alpha = enable_alpha end
+    if enable_alpha ~= nil then style.enable_alpha = enable_alpha end
 
   return style
 end
@@ -46,6 +46,9 @@ end
 
 local function LoadIconStyle(config, _3d)
 	local style = _3d and CreateStyle('icon_3d') or CreateStyle('icon_2d')
+
+	local unit = config.unit
+  	if unit then style.unit = unit end
 	if not _3d then
 		local width = config.width
 		local height = config.height
@@ -56,6 +59,7 @@ local function LoadIconStyle(config, _3d)
         local icon_url = config.icon_url
         local icon_cache = config.icon_cache
         local icon_online = config.icon_online
+        local enable_fadein = config.enable_fadein
 
 		if width then style.width = width end
 		if height then style.height = height end
@@ -66,6 +70,7 @@ local function LoadIconStyle(config, _3d)
 		if icon_url then style.icon_url = icon_url end
 		if icon_cache then style.icon_cache = icon_cache end
 		if icon_online then style.icon_online = icon_online end
+        if enable_fadein ~= nil then style.enable_fadein = enable_fadein end
 
 	else
 		local top_edge_width = config.top_edge_width
@@ -76,7 +81,7 @@ local function LoadIconStyle(config, _3d)
 		local bottom_color = config.bottom_color
 		local icon = config.icon
 		local always_lookto_camera = config.always_lookto_camera
-
+        
 		if top_edge_width then style.top_edge_width = top_edge_width end
 		if bottom_edge_width then style.bottom_edge_width = bottom_edge_width end
 		if height then style.height = height end
@@ -85,6 +90,7 @@ local function LoadIconStyle(config, _3d)
 		if bottom_color then icon.bottom_color = bottom_color end
 		if icon then style.icon = icon end
 		if always_lookto_camera ~= nil then style.always_lookto_camera = always_lookto_camera end
+        
 	end
 
 	return style
@@ -94,8 +100,10 @@ local function LoadAnnotationStyle(config, _3d)
   local style = _3d and CreateStyle('annotation_3d') or CreateStyle('annotation_2d')
 
   local height = config.height
+  local unit = config.unit
 
   if height then style.height = height end
+  if unit then style.unit = unit end
 
   if not _3d then
     local color = config.color
@@ -109,6 +117,7 @@ local function LoadAnnotationStyle(config, _3d)
     local anchor_y = config.anchor_y
 
     local aabbox_extend = config.aabbox_extend
+    local enable_fadein = config.enable_fadein
 
     if color then style.color = color end
     if field then style.field = field end
@@ -119,6 +128,7 @@ local function LoadAnnotationStyle(config, _3d)
     if anchor_y then style.anchor_y = anchor_y end
     if anchor_style then style.anchor_style = LoadStyleProxy(anchor_style, false) end
     if aabbox_extend then style.aabbox_extend = aabbox_extend end
+    if enable_fadein ~= nil then style.enable_fadein = enable_fadein end
   else
     local size = config.size
     local color = config.color
@@ -185,11 +195,13 @@ local function LoadSegmentStyle(config, _3d)
 	local width = config.width
   	local enable_alpha = config.enable_alpha
 	local automatic_scale = config.automatic_scale
+	local alignment = config.alignment
 
   	if color then style.color = color end
 	if width then style.width = width end
   	if enable_alpha ~= nil then style.enable_alpha = enable_alpha end
 	if automatic_scale ~= nil then style.automatic_scale = automatic_scale end
+	if alignment then style.alignment = alignment end
 
   	if _3d then
 		local left = config.left_side and LoadFaceStyle(config.left_side)
@@ -224,14 +236,22 @@ local function LoadLineStringStyle(config, _3d)
 	local color = config.color
 	local enable_alpha = config.enable_alpha
 	local automatic_scale = config.automatic_scale
+	local alignment = config.alignment
+	local enable_width = config.enable_width
+	local line_style = config.line_style
+	local has_arrow = config.has_arrow
 
 	if has_end ~= nil then style.has_end = has_end end
 	if has_start ~= nil then style.has_start = has_start end
 	if default then style.default = default end
 	if width then style.width = width end
 	if color then style.color = color end
-	if enable_alpha then style.enable_alpha = enable_alpha end
-	if automatic_scale then style.automatic_scale = automatic_scale end
+	if enable_alpha ~= nil then style.enable_alpha = enable_alpha end
+	if automatic_scale ~= nil then style.automatic_scale = automatic_scale end
+	if alignment then style.alignment = alignment end
+	if enable_width ~= nil then style.enable_width = enable_width end
+    if line_style then style.line_style = line_style end
+	if has_arrow ~= nil then style.has_arrow = has_arrow end
 
 	return style
 end

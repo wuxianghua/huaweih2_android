@@ -25,7 +25,7 @@
         android:layout_marginRight="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_large"
         android:layout_below="@+id/title_bar"
-
+        android:textColor="@color/black"
         android:textSize="14sp"
         android:hint="写点什么吧..."/>
 

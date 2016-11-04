@@ -20,7 +20,7 @@ public class Scale extends View {
     private int canvasHeight = 0;
     private int canvasWidth = 0;
     private Paint mPaint = new Paint();
-    private float mLineWidth = 0;
+    private float mLineWidth = 4;
 
     private int meter;
 
@@ -48,7 +48,7 @@ public class Scale extends View {
         mPaint.setAntiAlias(true);
         /*TypedArray a = mContext.obtainStyledAttributes(attributeSet, R.styleable.Scale);
         mLineWidth = a.getFloat(R.styleable.Scale_LineWidth,0);*/
-        mLineWidth = attributeSet.getAttributeFloatValue("http://schemas.android.com/apk/res-auto", "LineWidth", 0);
+//        mLineWidth = attributeSet.getAttributeFloatValue("http://schemas.android.com/apk/res-auto", "LineWidth", 0);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Scale extends View {
 
     private void drawText(Canvas canvas, int meter, float length) {
         mPaint.setStrokeWidth(0f);
-        mPaint.setTextSize(canvasHeight / 3);
+        mPaint.setTextSize((float) (canvasHeight / 2.5));
         mPaint.setTextAlign(Paint.Align.CENTER);
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
         int textLen = canvasHeight;

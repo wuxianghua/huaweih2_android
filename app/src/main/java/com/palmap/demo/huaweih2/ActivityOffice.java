@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
@@ -39,8 +40,9 @@ public class ActivityOffice extends BaseActivity {
   int start = 0;
   static boolean hasZan=false;
   GridLayout nameContainer;
-  static String[] names = new String[]{"范丽", "毛爱华/祝宏东"
-  ,  "王维/陈尚元"
+  static String[] names = new String[]{"范丽", "毛爱华",
+      "祝宏东"
+  ,  "王维","陈尚元"
    ,    "刘聚"
    , "黄维恒"
    ,     "磨昆"
@@ -48,18 +50,18 @@ public class ActivityOffice extends BaseActivity {
   ,      "王振恺"
   ,  "罗勇"
     ,   "苟小龙"
-  ,  "郑善学/王东波"
+  ,  "郑善学","王东波"
    ,    "石李建"
-  ,  "宋天曦、赖文文"
+  ,  "宋天曦","赖文文"
    ,     "范丽"
    , "谢树民"
      ,   "刘咏华"
    , "郑晓军"
-   , "邓刚、唐佳丽"
+   , "邓刚","唐佳丽"
    ,     "屈鹏"
-   , "许海堤、林瑞宏"
+   , "许海堤","林瑞宏"
    ,     "陈玉婷"
-   , "赖志铂",   "陈启煌","付江、王萍", "陈立军"};
+   , "赖志铂",   "陈启煌","付江","王萍", "陈立军"};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class ActivityOffice extends BaseActivity {
       public void onClick(View v) {
         Intent intent = new Intent(ActivityOffice.this,ActivityUploadCom.class);
         intent.putExtra("location",Constant.ICS办公区);
-        startActivity(intent);
+        startActivityForResult(intent,Constant.startUploadText);
       }
     });
 
@@ -93,7 +95,7 @@ public class ActivityOffice extends BaseActivity {
     DataProviderCenter.getInstance().downloadZan(json, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        Log.e("",errorCode+"");
+        DialogUtils.showShortToast(errorCode+"");
       }
 
       @Override
@@ -114,7 +116,7 @@ public class ActivityOffice extends BaseActivity {
         DataProviderCenter.getInstance().postZan(json, new HttpDataCallBack() {
           @Override
           public void onError(int errorCode) {
-            Log.e("",errorCode+"");
+            DialogUtils.showShortToast(errorCode+"");
           }
 
           @Override
@@ -166,8 +168,9 @@ public class ActivityOffice extends BaseActivity {
       final TextView tv_name = new TextView(this);
       tv_name.setText(names[i]);
       tv_name.setTextSize(15);
-      tv_name.setPadding(5,15,5,15);
-      tv_name.setTextColor(getResources().getColor(R.color.blue1));
+      tv_name.setPadding(50,50,50,50);
+      tv_name.setBackgroundColor(getResources().getColor(R.color.name_color_bg));
+      tv_name.setTextColor(getResources().getColor(R.color.name_color));
       nameContainer.addView(tv_name);
 
       tv_name.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +196,7 @@ public class ActivityOffice extends BaseActivity {
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showLongToast(errorCode +"");
+        ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -201,8 +204,14 @@ public class ActivityOffice extends BaseActivity {
 //            loadmore_view.setVisibility(View.INVISIBLE);
         Log.i("", content.toString());
         List<CommentDown> list = new ArrayList<>(JSONArray.parseArray(content.toString(), CommentDown.class));
-        if (list.size()==0)
+        if (list==null){
+          DialogUtils.showShortToast("没有更多评论");
           return;
+        }
+        if (list.size()==0) {
+          DialogUtils.showShortToast("没有更多评论");
+          return;
+        }
 
 
         for (int i = 0; i < list.size(); i++) {
@@ -215,18 +224,38 @@ public class ActivityOffice extends BaseActivity {
           view.setLayoutParams(lp);
           TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
-          tn.setText("访客"+(start+1));
+          tn.setText("访客"+list.get(i).getId());
           TextView tc = (TextView) view.findViewById(R.id.com_text);
           tc.setText(list.get(i).getComment());
           TextView tt = (TextView) view.findViewById(R.id.com_time);
           SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           Date date = new Date(list.get(i).getComTime());
           tt.setText(sdf.format(date));
+          TextView tl = (TextView) view.findViewById(R.id.loc);
+          tl.setText(list.get(i).getLocation());
 
+          view.setBackgroundResource(R.drawable.commentbar_short);
           start++;
           commentList.addView(view);
         }
       }
     });
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode){
+      case Constant.startUploadText:
+        if (commentList==null){
+          break;
+        }
+        if (resultCode == RESULT_OK){
+          commentList.removeAllViews();
+          start = 0;
+          loadComments();
+        }
+        break;
+    }
+    super.onActivityResult(requestCode, resultCode, data);
   }
 }

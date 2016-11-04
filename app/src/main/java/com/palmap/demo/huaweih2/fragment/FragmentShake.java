@@ -8,7 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea
 
 public class
 FragmentShake extends BaseFragment {
+  public static boolean needInit = true;
   private ShakeListenerUtils shakeUtils;
   private SensorManager mSensorManager; //定义sensor管理器, 注册监听器用
   LinearLayout shakeShow;
@@ -60,6 +60,8 @@ FragmentShake extends BaseFragment {
   public void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
     super.onCreate(savedInstanceState);
+
+
 
   }
 
@@ -100,6 +102,7 @@ FragmentShake extends BaseFragment {
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
+        stopShakeSensor();
         getMainActivity().showFragmentMap();
       }
 
@@ -108,6 +111,9 @@ FragmentShake extends BaseFragment {
 
       }
     });
+
+    initShakeSensor();//初始化传感器
+
     return fragmentView;
   }
 
@@ -182,7 +188,7 @@ FragmentShake extends BaseFragment {
     mImgDn.startAnimation(animdn);
 
   }
-  private void initSensor(){
+  public void initShakeSensor(){
     if (shakeUtils!=null)
       return;
 
@@ -194,7 +200,8 @@ FragmentShake extends BaseFragment {
         DataProviderCenter.getInstance().getShake(js, new HttpDataCallBack() {
           @Override
           public void onError(int errorCode) {
-            Log.e("",errorCode+"");
+            DialogUtils.showShortToast(errorCode+"");
+            ShakeListenerUtils.isTooShort = false;
           }
 
           @Override
@@ -207,15 +214,36 @@ FragmentShake extends BaseFragment {
             shakeShow.setVisibility(View.VISIBLE);
             title.setText(poiInfo.getTitle());
             text.setText(poiInfo.getText());
-            URL picUrl = null;
-            try {
-              picUrl = new URL(poiInfo.getImage());
-              Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-              result.setImageBitmap(pngBM);
-            } catch (Exception e) {
-              e.printStackTrace();
-              DialogUtils.showShortToast(e.getMessage());
-            }
+
+
+              Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                  try {
+                  URL picUrl = new URL(poiInfo.getImage());
+                    final Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+                    getActivity().runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                        result.setImageBitmap(pngBM);
+                        ShakeListenerUtils.isTooShort = false;
+                      }
+                    });
+
+                  } catch (final Exception e) {
+                    e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                        DialogUtils.showShortToast(e.getMessage());
+                      }
+                    });
+
+                  }
+                }
+              });
+            thread.start();
+
           }
         });
       }
@@ -231,17 +259,25 @@ FragmentShake extends BaseFragment {
         SensorManager.SENSOR_DELAY_NORMAL);
   }
 
+  public void stopShakeSensor(){
+    shakeShow.setVisibility(View.GONE);
+    if (mSensorManager!=null) {
+      mSensorManager.unregisterListener(shakeUtils);
+      shakeUtils = null;
+    }
+  }
   @Override
   public void onResume() {
-    initSensor();
+
+
+
     super.onResume();
   }
 
   @Override
   public void onPause() {
-    shakeShow.setVisibility(View.GONE);
-    if (mSensorManager!=null)
-    mSensorManager.unregisterListener(shakeUtils);
     super.onPause();
   }
+
+
 }

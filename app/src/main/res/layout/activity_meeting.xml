@@ -29,16 +29,18 @@
             android:id="@+id/activity_lab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/boardroo_max"/>
+                android:background="@drawable/boardroo_max"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -68,9 +70,9 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:lineSpacingExtra="7sp"
+                android:background="@color/white"
                 android:paddingRight="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:text="@string/meeting"
                 android:textColor="#2f3336"
                 android:textSize="14sp"/>
@@ -106,9 +108,8 @@
                 android:id="@+id/btn_com"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:background="@drawable/commentbar_long"
+
                 android:layout_marginTop="15dp">
 
                 <TextView
@@ -135,9 +136,7 @@
                 android:id="@+id/com_list"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:layout_height="wrap_content">
 
 
             </LinearLayout>

@@ -2,21 +2,12 @@ package com.palmap.demo.huaweih2;
 
 import android.app.Application;
 
+import com.bugtags.library.Bugtags;
+import com.bugtags.library.BugtagsOptions;
 import com.bumptech.glide.Glide;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.FileUtils;
-
-import java.io.File;
 
 /**
  * Created by eric3 on 2016/10/8.
@@ -34,7 +25,7 @@ public class HuaWeiH2Application extends Application {
     instance = this;
     copyPalmapFile();
 
-    initImageLoader();
+//    initImageLoader();
     if (BuildConfig.DEBUG) {
       new Thread(new Runnable() {
         @Override
@@ -44,6 +35,15 @@ public class HuaWeiH2Application extends Application {
       }).start();
     }
 
+    //Bugtags在这里初始化
+    BugtagsOptions options = new BugtagsOptions.Builder().
+        trackingLocation(true).//是否获取位置，默认 true
+        trackingCrashLog(true).//是否收集crash，默认 true
+        trackingConsoleLog(true).//是否收集console log，默认 true
+        trackingUserSteps(true).//是否收集用户操作步骤，默认 true
+        trackingNetworkURLFilter("(.*)").//自定义网络请求跟踪的 url 规则，默认 null
+        build();
+    Bugtags.start("267921bb8c8c795df7f7ffa41ac5d307", this, Bugtags.BTGInvocationEventNone,options);
 
   }
 
@@ -58,30 +58,30 @@ public class HuaWeiH2Application extends Application {
     }
   }
 
-  private void initImageLoader(){
-//    ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
-
-
-    File cacheDir = StorageUtils.getCacheDirectory(this);  //缓存文件夹路径
-    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-        .memoryCacheExtraOptions(480, 800) // default = device screen dimensions 内存缓存文件的最大长宽
-        .tasksProcessingOrder(QueueProcessingType.FIFO) // default
-        .denyCacheImageMultipleSizesInMemory()
-        .memoryCache(new LruMemoryCache(2 * 1024 * 1024)) //可以通过自己的内存缓存实现
-        .memoryCacheSize(2 * 1024 * 1024)  // 内存缓存的最大值
-        .memoryCacheSizePercentage(13) // default
-        .diskCache(new UnlimitedDiscCache(cacheDir)) // default 可以自定义缓存路径
-        .diskCacheSize(100 * 1024 * 1024) // 100 Mb sd卡(本地)缓存的最大值
-        .diskCacheFileCount(100)  // 可以缓存的文件数量
-        // default为使用HASHCODE对UIL进行加密命名， 还可以用MD5(new Md5FileNameGenerator())加密
-        .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
-        .imageDownloader(new BaseImageDownloader(this)) // default
-        .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
-        .writeDebugLogs() // 打印debug log
-        .build(); //开始构建
-
-
-    ImageLoader.getInstance().init(config);
-  }
+//  private void initImageLoader(){
+////    ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
+//
+//
+//    File cacheDir = StorageUtils.getCacheDirectory(this);  //缓存文件夹路径
+//    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+//        .memoryCacheExtraOptions(480, 800) // default = device screen dimensions 内存缓存文件的最大长宽
+//        .tasksProcessingOrder(QueueProcessingType.FIFO) // default
+//        .denyCacheImageMultipleSizesInMemory()
+//        .memoryCache(new LruMemoryCache(2 * 1024 * 1024)) //可以通过自己的内存缓存实现
+//        .memoryCacheSize(2 * 1024 * 1024)  // 内存缓存的最大值
+//        .memoryCacheSizePercentage(13) // default
+//        .diskCache(new UnlimitedDiscCache(cacheDir)) // default 可以自定义缓存路径
+//        .diskCacheSize(100 * 1024 * 1024) // 100 Mb sd卡(本地)缓存的最大值
+//        .diskCacheFileCount(100)  // 可以缓存的文件数量
+//        // default为使用HASHCODE对UIL进行加密命名， 还可以用MD5(new Md5FileNameGenerator())加密
+//        .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+//        .imageDownloader(new BaseImageDownloader(this)) // default
+//        .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
+//        .writeDebugLogs() // 打印debug log
+//        .build(); //开始构建
+//
+//
+//    ImageLoader.getInstance().init(config);
+//  }
 
 }

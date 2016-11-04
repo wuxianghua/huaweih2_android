@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class FootprintDetailsActivity extends BaseActivity {
 
-
+    TitleBar titleBar;
     private PictureModel pictureModel;
 
     private ImageView imageView;
@@ -45,8 +45,10 @@ public class FootprintDetailsActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
             DialogUtils.showShortToast(e.getMessage());
+
         }
-        TitleBar titleBar = (TitleBar) findViewById(R.id.titleBar);
+        titleBar = (TitleBar) findViewById(R.id.titleBar);
+        titleBar.show(null,"足迹",null);
         titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
 
         titleBar.setRightIcoClickListener(new View.OnClickListener() {
@@ -63,7 +65,7 @@ public class FootprintDetailsActivity extends BaseActivity {
             }
         });
 
-        titleBar.show(null,"足迹",null);
+
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {

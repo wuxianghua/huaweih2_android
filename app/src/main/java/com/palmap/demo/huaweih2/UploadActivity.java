@@ -64,6 +64,10 @@ public class UploadActivity extends BaseActivity {
 
       @Override
       public void onRight() {
+//        if("".equals(tv_message.getText().toString())){
+//          DialogUtils.showShortToast("写点什么吧");
+//          return;
+//        }
 //        uploadImage();
         uploadImageFormData();
 
@@ -107,6 +111,7 @@ public class UploadActivity extends BaseActivity {
           dis.close();
       }
     } catch (Exception e) {
+      DialogUtils.showShortToast(e.getMessage());
     }
     File imgUp = new File(Constant.PATH_PICTURE_UPLOAD);
     //若该文件存在
@@ -117,17 +122,17 @@ public class UploadActivity extends BaseActivity {
 
     PictureJson pictureJson = new PictureJson();
     pictureJson.setAppendix(tv_message.getText().toString());
-    pictureJson.setLocation("H2大厅");
+    pictureJson.setLocation(LocateTimerService.getCurrentLocationArea());
     String picJson = JSON.toJSONString(pictureJson);
 
 //    MyAsyncTask myAsyncTask = new MyAsyncTask();
 //    myAsyncTask.execute();
 
     showProgress("上传","正在上传图片。请稍后...");
-    DataProviderCenter.UploadImageUtils.uploadFile(imgUp, picJson, new HttpDataCallBack() {
+    DataProviderCenter.getInstance().postFormDATA(imgUp, picJson, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-//        DialogUtils.showShortToast(errorCode+"");
+        DialogUtils.showShortToast(errorCode+"");
         closeProgress();
         Log.e("error",errorCode+"");
       }
@@ -135,8 +140,9 @@ public class UploadActivity extends BaseActivity {
       @Override
       public void onComplete(Object content) {
         DialogUtils.showShortToast("上传成功");
-        finish();
+
         closeProgress();
+        finish();
       }
     });
   }

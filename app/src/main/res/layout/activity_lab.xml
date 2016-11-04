@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/bg"
     android:layout_width="match_parent"
@@ -29,16 +28,18 @@
             android:id="@+id/activity_lab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/laboratory_max"/>
+                android:background="@drawable/laboratory_max"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -68,9 +69,9 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:lineSpacingExtra="7sp"
-                android:paddingRight="10dp"
+                android:background="@color/white"
+                android:padding="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:text="@string/lab"
                 android:textColor="#2f3336"
                 android:textSize="14sp"/>
@@ -102,9 +103,7 @@
                 android:id="@+id/btn_com"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:background="@drawable/commentbar_long"
                 android:layout_marginTop="15dp">
 
                 <TextView
@@ -131,9 +130,7 @@
                 android:id="@+id/com_list"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:layout_height="wrap_content">
 
 
             </LinearLayout>

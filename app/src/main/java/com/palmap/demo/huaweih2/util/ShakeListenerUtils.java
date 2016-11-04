@@ -14,6 +14,7 @@ public class ShakeListenerUtils implements SensorEventListener
 {
   private Activity context;
   private OnShakeListener onShakeListener;
+  public static boolean isTooShort = false;//保证两次间隔
 
   public ShakeListenerUtils(Activity context,OnShakeListener onShakeListener)
   {
@@ -35,9 +36,13 @@ public class ShakeListenerUtils implements SensorEventListener
             /*正常情况下，任意轴数值最大就在9.8~10之间，只有在突然摇动手机
               的时候，瞬时加速度才会突然增大或减少。   监听任一轴的加速度大于15即可
             */
-      if ((Math.abs(values[0]) > 17 || Math.abs(values[1]) > 17 || Math
-          .abs(values[2]) > 17))
+      if ((Math.abs(values[0]) > 19.8 || Math.abs(values[1]) > 19.8 || Math
+          .abs(values[2]) > 19.8))
       {
+        if (isTooShort)
+          return;
+
+        isTooShort = true;
         VibratorUtil.Vibrate(context, 500);   //震动1000ms
         onShakeListener.onShake();
 //        DataProviderCenter.getInstance().

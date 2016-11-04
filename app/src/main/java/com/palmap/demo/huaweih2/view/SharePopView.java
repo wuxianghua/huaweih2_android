@@ -99,7 +99,7 @@ public class SharePopView {
             switch (v.getId()) {
                 case R.id.layout_share_weChat:
                     //分享到微信
-                    WXShareUtils.sendToWeChat(shareModel.url);
+                    WXShareUtils.sendToWeChat(shareModel.imgUrl);
                     break;
 
                 case R.id.layout_share_weiChat_friends:

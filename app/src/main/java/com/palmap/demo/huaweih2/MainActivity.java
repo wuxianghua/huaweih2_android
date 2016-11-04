@@ -4,7 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +25,7 @@ import com.palmap.demo.huaweih2.fragment.FragmentPark;
 import com.palmap.demo.huaweih2.fragment.FragmentShake;
 import com.palmap.demo.huaweih2.model.ParkInfo;
 import com.palmap.demo.huaweih2.model.PoiImg;
+import com.palmap.demo.huaweih2.model.PoiImgList;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
@@ -31,24 +35,26 @@ import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
 import com.palmaplus.nagrand.data.Feature;
-import com.palmaplus.nagrand.data.LocationModel;
 import com.palmaplus.nagrand.view.MapView;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigating;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
 import static com.palmap.demo.huaweih2.other.Constant.H2大厅;
 import static com.palmap.demo.huaweih2.other.Constant.ICS办公区;
 import static com.palmap.demo.huaweih2.other.Constant.ICS实验室;
 import static com.palmap.demo.huaweih2.other.Constant.isDebug;
+import static com.palmap.demo.huaweih2.other.Constant.startTakePic;
 import static com.palmap.demo.huaweih2.other.Constant.会议室;
+import static com.palmaplus.nagrand.position.ble.BeaconUtils.TAG;
 
 public class MainActivity extends BaseActivity {
-//  public FullScreenDialog dialog;
-//public RelativeLayout dialog;
+  //  public FullScreenDialog dialog;
+  public RelativeLayout dialog;
   LinearLayout btn_map;
   LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
@@ -58,13 +64,13 @@ public class MainActivity extends BaseActivity {
   RelativeLayout poiInfoBar;
   FragmentAround fragmentAround;
   FragmentPark fragmentPark;
-  FragmentMap fragmentMap;
+  public FragmentMap fragmentMap;
   FragmentFootPrint fragmentFootPrint;
   FragmentShake fragmentShake;
 
   public TextView im_poi;
   ImageView im_go;
-//  ImageView im_share;
+  //  ImageView im_share;
   //  TextView tv_nav_len;
   ImageView im_nav_start;
   ImageView im_nav_end;
@@ -120,23 +126,46 @@ public class MainActivity extends BaseActivity {
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    switch (requestCode){
+    switch (requestCode) {
       case Constant.startWelcome:
         initMapFragment();
         break;
       case Constant.startPay:
-        if (requestCode == RESULT_OK)
-        fragmentPark.setPayed();
+        if (resultCode == RESULT_OK)
+          fragmentPark.setPayed();
         break;
       case Constant.startOffice:
-        String name = data.getStringExtra("peopleName");
-        fragmentMap.searchPeopleName(name);
+        if (data != null) {
+          String name = data.getStringExtra("peopleName");
+          if (name == null)
+            break;
+
+          fragmentMap.searchPeopleName(name);
+        }
+        break;
+      case Constant.startTakePic:
+        Log.i(TAG, "拍摄完成，resultCode=" + requestCode);
+        Intent intent = new Intent(this, UploadActivity.class);
+//    intent.putExtra()
+        startActivityForResult(intent, Constant.startUploadPic);
+        break;
+      case Constant.startUploadText:
+        if (fragmentFootPrint.commentList == null) {
+          break;
+        }
+        if (resultCode == RESULT_OK) {
+          fragmentFootPrint.commentList.removeAllViews();
+          fragmentFootPrint.start = 0;
+          fragmentFootPrint.loadComments();
+        }
+        break;
+      case Constant.startUploadPic:
+        if (fragmentFootPrint != null)
+          fragmentFootPrint.loadPicNum();
         break;
       default:
         break;
     }
-
-
 
 
     super.onActivityResult(requestCode, resultCode, data);
@@ -159,6 +188,28 @@ public class MainActivity extends BaseActivity {
     poiInfoBar = (RelativeLayout) findViewById(R.id.poi_info);
     mMapContainer = (RelativeLayout) findViewById(R.id.map_container);
 
+    dialog = (RelativeLayout) findViewById(R.id.dialog);
+    btn_map = (LinearLayout) findViewById(R.id.btn_map);
+    btn_map.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        fragmentMap.initMapScale();
+        dialog.setVisibility(View.GONE);
+      }
+    });
+    btn_foot = (LinearLayout) findViewById(R.id.btn_foot);
+    btn_foot.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (fragmentMap.mCurrentFloor == Constant.FLOOR_ID_B1) {
+          DialogUtils.showShortToast("请切换至F1再查看行程");
+          return;
+        }
+        fragmentMap.initMapScale();
+        fragmentMap.setFootPrint();
+        dialog.setVisibility(View.GONE);
+      }
+    });
     park = (RadioButton) findViewById(R.id.park);
     rout = (RadioButton) findViewById(R.id.route);
     rout.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +218,7 @@ public class MainActivity extends BaseActivity {
         if (fragmentMap.isShowFootPrint) {
           fragmentMap.resetFootPrint();
         } else {
-          if (fragmentMap.mCurrentFloor==0) {//B1
+          if (fragmentMap.mCurrentFloor == Constant.FLOOR_ID_B1) {//B1
             DialogUtils.showShortToast("请切换至楼层F1后再点击行程");
             return;
           }
@@ -221,44 +272,45 @@ public class MainActivity extends BaseActivity {
           case R.id.around:
             titleBar.show(null, "附近", null);
             hideMap();
-            if (fragmentAround == null) {
-              fragmentAround = new FragmentAround();
-              transaction.add(R.id.main_content, fragmentAround);
-            } else {
-              transaction.show(fragmentAround);
-            }
+//            if (fragmentAround == null) {
+            fragmentAround = new FragmentAround();
+            transaction.add(R.id.main_content, fragmentAround);
+//            } else {
+//              transaction.show(fragmentAround);
+//            }
 
             break;
           case R.id.park:
             titleBar.show(null, "停车", null);
             hideMap();
-            if (fragmentPark == null) {
-              fragmentPark = new FragmentPark();
-              transaction.add(R.id.main_content, fragmentPark);
-            } else {
-              transaction.show(fragmentPark);
-            }
+//            if (fragmentPark == null) {
+            fragmentPark = new FragmentPark();
+            transaction.add(R.id.main_content, fragmentPark);
+//            } else {
+//              transaction.show(fragmentPark);
+//            }
             break;
           case R.id.footprint:
             titleBar.show(null, "足迹", null);
             hideMap();
-            if (fragmentFootPrint == null) {
-              fragmentFootPrint = new FragmentFootPrint();
-              transaction.add(R.id.main_content, fragmentFootPrint);
-            } else {
-              transaction.show(fragmentFootPrint);
-            }
+//            if (fragmentFootPrint == null) {
+            fragmentFootPrint = new FragmentFootPrint();
+            transaction.add(R.id.main_content, fragmentFootPrint);
+//            } else {
+//              transaction.show(fragmentFootPrint);
+//            }
 
             break;
           case R.id.shake:
             hideMap();
             titleBar.show(null, "摇一摇", null);
-            if (fragmentShake == null) {
-              fragmentShake = new FragmentShake();
-              transaction.add(R.id.main_content, fragmentShake);
-            } else {
-              transaction.show(fragmentShake);
-            }
+//            if (fragmentShake == null) {
+            fragmentShake = new FragmentShake();
+            transaction.add(R.id.main_content, fragmentShake);
+//            } else {
+//              fragmentShake.initShakeSensor();
+//              transaction.show(fragmentShake);
+//            }
 
             break;
           default:
@@ -268,7 +320,6 @@ public class MainActivity extends BaseActivity {
         transaction.commit();
       }
     });
-
 
 
 //    dialog = new FullScreenDialog(this, new FullScreenDialog.OnDialogListener() {
@@ -303,10 +354,13 @@ public class MainActivity extends BaseActivity {
     mMapContainer.setVisibility(View.VISIBLE);
     fragmentMap.mMapView.setOverlayContainer(mMapContainer);
     fragmentMap.moveToCar(parkInfo);
+
+    //寻车不导航
+    im_go.setVisibility(View.GONE);
   }
 
   public MapView getMapView() {
-      return fragmentMap.mMapView;
+    return fragmentMap.mMapView;
   }
 
 
@@ -315,7 +369,6 @@ public class MainActivity extends BaseActivity {
     fragmentMap.mMapView.setVisibility(View.GONE);
     mMapContainer.setVisibility(View.GONE);
   }
-
 
 
   public void showFragment(Fragment fragment) {
@@ -365,6 +418,7 @@ public class MainActivity extends BaseActivity {
   }
 
   public void showFragmentMap() {
+    poiInfoBar.setVisibility(View.GONE);
     rout.setChecked(true);
 //    // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
 //    hideAllFragments();
@@ -382,7 +436,7 @@ public class MainActivity extends BaseActivity {
 
 
   //显示poi详情
-  public void showPoiInfoBar(final Feature feature) {
+  public void showPoiInfoBar(final long featureCategoryID) {
     isShowPoiInfoBar = true;
     tv_tip.setVisibility(View.GONE);
     poiInfoBar.setVisibility(View.VISIBLE);
@@ -390,50 +444,11 @@ public class MainActivity extends BaseActivity {
     im_poi.setBackgroundResource(R.drawable.huaweilogo);
 
 
-    List<PoiImg> poiImgs= new ArrayList<>();
-
-    PoiImg img = new PoiImg(R.drawable.huaweilogo,23999000);
-    PoiImg img1 = new PoiImg(R.drawable.elevator,24091000);
-    PoiImg img2 = new PoiImg(R.drawable.stairs,24097000);
-    PoiImg img3= new PoiImg(R.drawable.toilet,23024000);
-    PoiImg img4 = new PoiImg(R.drawable.dtoilet,23059000);
-    PoiImg img5 = new PoiImg(R.drawable.mtoilet,23024000);
-    PoiImg img6 = new PoiImg(R.drawable.wtoilet,23025000);
-    PoiImg img7 = new PoiImg(R.drawable.service,23018000);
-    PoiImg img8 = new PoiImg(R.drawable.lifeservice,15000000);
-    PoiImg img9 = new PoiImg(R.drawable.park,17004000);
-    PoiImg img10 = new PoiImg(R.drawable.park,22001000);
-    PoiImg img11 = new PoiImg(R.drawable.laboratory,23027000);
-    PoiImg img12 = new PoiImg(R.drawable.meeting,23001000);
-    PoiImg img13 = new PoiImg(R.drawable.office,23027000);
-    PoiImg img14 = new PoiImg(R.drawable.office,24002000);
-    PoiImg img15 = new PoiImg(R.drawable.office,24005000);
-    PoiImg img16 = new PoiImg(R.drawable.office,24007000);
-    PoiImg img17 = new PoiImg(R.drawable.office,24008000);
-    poiImgs.add(img);
-    poiImgs.add(img1);
-    poiImgs.add(img2);
-    poiImgs.add(img3);
-    poiImgs.add(img4);
-    poiImgs.add(img5);
-    poiImgs.add(img6);
-    poiImgs.add(img7);
-    poiImgs.add(img8);
-    poiImgs.add(img9);
-    poiImgs.add(img10);
-    poiImgs.add(img11);
-    poiImgs.add(img12);
-    poiImgs.add(img13);
-    poiImgs.add(img14);
-    poiImgs.add(img15);
-    poiImgs.add(img16);
-    poiImgs.add(img17);
-    for (int i=0;i<poiImgs.size();i++){
-      if (MapParamUtils.getCategoryId(feature)==poiImgs.get(i).getCat())
-          im_poi.setBackgroundResource(poiImgs.get(i).getId());
+    List<PoiImg> poiImgs = PoiImgList.getPoiImgList();
+    for (int i = 0; i < poiImgs.size(); i++) {
+      if (featureCategoryID == poiImgs.get(i).getCat())
+        im_poi.setBackgroundResource(poiImgs.get(i).getId());
     }
-
-
 
 
     tv_poi_name.setVisibility(View.VISIBLE);
@@ -471,16 +486,16 @@ public class MainActivity extends BaseActivity {
   }
 
   //设置poi详情
-  public void setPoiInfoBar(final LocationModel locationModel) {
-    final String name = MapParamUtils.getName(locationModel);
+  public void setPoiInfoBar(final Feature feature) {
+    final String name = MapParamUtils.getName(feature);
     if (isSearchCar) {
       tv_poi_name.setText(fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : name));
     } else {
-      tv_poi_name.setText(name == null ? "未知位置" : name);
+      tv_poi_name.setText(name == null ? "H2大楼" : name);
     }
 
-    String address = MapParamUtils.getAddress(locationModel);
-    tv_poi_address.setText(address == null ? fragmentMap.mCurrentFloor == 1 ? "F1" : "B1" : address);
+    String address = MapParamUtils.getAddress(feature);
+    tv_poi_address.setText(address == null ? fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1 ? "F1" : "B1" : address);
 
     checkShowMoreInfo(name);
 
@@ -503,7 +518,7 @@ public class MainActivity extends BaseActivity {
           }
         });
         //将POI mark图标改为终点
-        fragmentMap.resetFeatureStyle(fragmentMap.markFeature);
+        fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
 //        fragmentMap.mMapView.removeOverlay(fragmentMap.mark);
 //        fragmentMap.addMark(fragmentMap.xx,fragmentMap.yy);
         fragmentMap.addMark(fragmentMap.endX, fragmentMap.endY, Mark.END);
@@ -511,7 +526,7 @@ public class MainActivity extends BaseActivity {
 
         } else {//无定位点
           fragmentMap.isSelectStartPoint = true;
-          fragmentMap.toFloorID = LocationModel.parent.get(locationModel);
+          fragmentMap.toFloorID = Feature.planar_graph.get(feature);
 
           tv_poi_address.setVisibility(View.GONE);
           tv_poi_moreinfo.setVisibility(View.GONE);
@@ -523,27 +538,18 @@ public class MainActivity extends BaseActivity {
         }
       }
     });
-//    im_share.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//
-//            SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
-//
-//            shareModel.imgUrl = pictureModel.getPhoto();
-//            shareModel.title = "图片分享";
-//            shareModel.url = pictureModel.getAppendix();
-//
-//            SharePopView.showSharePop(MainActivity.this,shareModel);
-//
-//      }
-//    });
-//    im_share.setVisibility(View.GONE);
+
   }
 
   //判断是否显示 查看详情
   private void checkShowMoreInfo(String name) {
+    if (name == null) {
+      tv_poi_moreinfo.setText("");
+      tv_poi_moreinfo.setClickable(false);
+      return;
+    }
     //若为4个节点，显示详情
-    if (name.equals(H2大厅) || name.equals(ICS办公区) || name.contains(ICS实验室) || name.equals(会议室)) {
+    if (H2大厅.equals(name) || ICS办公区.equals(name) || name.contains(ICS实验室) || 会议室.equals(name)) {
       tv_poi_moreinfo.setVisibility(View.VISIBLE);
       tv_poi_moreinfo.setText("查看详情>>");
       morePoiInfoName = name;
@@ -558,12 +564,15 @@ public class MainActivity extends BaseActivity {
 
   //查看更多
   private void shouMoreInfo() {
+    if (morePoiInfoName == null)
+      return;
+
     if (H2大厅.equals(morePoiInfoName)) {
       startActivity(new Intent(this, ActivityHall.class));
     } else if (会议室.equals(morePoiInfoName)) {
       startActivity(new Intent(this, ActivityMeeting.class));
     } else if (ICS办公区.equals(morePoiInfoName)) {
-      startActivityForResult(new Intent(this, ActivityOffice.class),Constant.startOffice);
+      startActivityForResult(new Intent(this, ActivityOffice.class), Constant.startOffice);
     } else if (morePoiInfoName.contains(ICS实验室)) {
       startActivity(new Intent(this, ActivityLab.class));
     }
@@ -573,6 +582,7 @@ public class MainActivity extends BaseActivity {
   public void hideTabMenu() {
     tabMenu.setVisibility(View.GONE);
   }
+
   //显示导航栏，隐藏title
   public void showTabMenu() {
     isShowPoiInfoBar = false;
@@ -612,18 +622,18 @@ public class MainActivity extends BaseActivity {
   }
 
 
-  public void setStartPoiInfo(LocationModel locationModel) {
+  public void setStartPoiInfo(Feature feature) {
     poiInfoBar.setVisibility(View.VISIBLE);
     im_poi.setVisibility(View.VISIBLE);
     tv_poi_name.setVisibility(View.VISIBLE);
     tv_poi_address.setVisibility(View.VISIBLE);
     tabMenu.setVisibility(View.GONE);
 
-    String name = MapParamUtils.getName(locationModel);
+    String name = MapParamUtils.getName(feature);
 
     tv_poi_name.setText(name == null ? "未知位置" : name);
 
-    String address = MapParamUtils.getAddress(locationModel);
+    String address = MapParamUtils.getAddress(feature);
 
     tv_poi_address.setText(address == null ? fragmentMap.mCurrentFloor == 1 ? "F1" : "B1" : address);
 
@@ -673,7 +683,32 @@ public class MainActivity extends BaseActivity {
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      exitBy2Click(); //调用双击退出函数
+      if (fragmentShake != null && fragmentShake.isVisible()) {
+        fragmentShake.stopShakeSensor();
+      }
+
+
+      if (tabMenu.getVisibility() == View.VISIBLE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true)) {//只有在首页才退出
+
+        exitBy2Click(); //调用双击退出函数
+
+      } else {
+        if (isNavigating) {
+          showTabMenu();
+          fragmentMap.endNavigate();
+        } else if (fragmentMap.isShowFootPrint) {
+          fragmentMap.resetFootPrint();
+        } else if (isSearchCar) {
+          isSearchCar = false;
+          showFragmentPark();
+          fragmentPark.mainlayout.setVisibility(View.VISIBLE);
+          fragmentMap.mMapView.removeAllOverlay();
+          fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
+          fragmentMap.mMapView.getOverlayController().refresh();
+        } else {
+          showFragmentMap();
+        }
+      }
     }
     return true;
 
@@ -704,5 +739,32 @@ public class MainActivity extends BaseActivity {
     }
   }
 
+
+  public void openCameraActivity() {
+    Intent intent = new Intent();
+    // 指定开启系统相机的Action
+    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    //如果路径不存在，则创建
+    // 创建文件夹
+    File file = new File(Constant.DIR_PICTURE_UPLOAD);
+    if (!file.exists()) {
+      file.mkdirs();
+//      file = new File(Constant.DIR_PICTURE_UPLOAD);
+//      if (!file.exists()) {
+//        file.mkdirs();
+//      }
+    }
+    // 根据文件地址创建文件
+    file = new File(Constant.PATH_PICTURE_UPLOAD);
+    if (file.exists()) {
+      file.delete();
+    }
+    // 把文件地址转换成Uri格式
+    Uri uri = Uri.fromFile(file);
+    // 设置系统相机拍摄照片完成后图片文件的存放地址
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+    startActivityForResult(intent, startTakePic);
+  }
 
 }

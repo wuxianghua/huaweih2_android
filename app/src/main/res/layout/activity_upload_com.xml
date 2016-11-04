@@ -27,7 +27,7 @@
         <EditText
             android:id="@+id/text"
             android:layout_width="match_parent"
-            android:layout_height="144dp"
+            android:layout_height="200dp"
             android:gravity="top"
             android:layout_margin="15dp"
             android:editable="true"

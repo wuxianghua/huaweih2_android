@@ -105,7 +105,7 @@
         <RelativeLayout
             android:id="@+id/poi_info"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
 
             android:elevation="15dp"
             android:background="@color/white"
@@ -114,8 +114,8 @@
 
             <TextView
                 android:id="@+id/poi_img"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
                 android:layout_margin="15dp"
                 android:gravity="center"
                 android:textSize="18sp"
@@ -157,8 +157,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
+                        android:textColor="#565c60"
                         android:text="H2 office"
-                        android:textSize="14sp"/>
+                        android:textSize="16sp"/>
 
 
                 </LinearLayout>
@@ -178,15 +179,16 @@
                     android:id="@+id/poi_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#94999d"
                     android:text="F1"
-                    android:textSize="12sp"/>
+                    android:textSize="14sp"/>
                     <TextView
                         android:id="@+id/poi_moreinfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:layout_marginLeft="10dp"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="#1fafe7"
                         android:text="查看详情>>"/>
                 </LinearLayout>
@@ -194,10 +196,10 @@
 
             <ImageView
                 android:id="@+id/go_im"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="25dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="35dp"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ico_tab_navigation"/>
 
@@ -321,5 +323,40 @@
         </RadioGroup>
     </LinearLayout>
 
+
+    <!--选择对话框-->
+    <RelativeLayout
+        android:id="@+id/dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="#77000000">
+        <LinearLayout
+            android:id="@+id/btn_map"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:background="@drawable/btn_home_indormap"
+            android:layout_above="@+id/btn_foot"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_foot"
+            android:layout_width="225dp"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:background="@drawable/btn_home_navgation"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

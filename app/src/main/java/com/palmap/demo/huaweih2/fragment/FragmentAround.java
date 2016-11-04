@@ -3,13 +3,13 @@ package com.palmap.demo.huaweih2.fragment;
 
 import android.app.ListFragment;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.palmap.demo.huaweih2.ActivityWeb;
 import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.ShopListAdapter;
@@ -42,9 +42,14 @@ public class FragmentAround extends ListFragment {
         if (shop.getUrl()==null)
           return;
 
-        final Uri uri = Uri.parse(shop.getUrl());
-        final Intent it = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(it);
+        Intent intent = new Intent(getActivity(), ActivityWeb.class);
+        intent.putExtra("url",shop.getUrl());
+        startActivity(intent);
+
+//调用系统浏览器
+//        final Uri uri = Uri.parse(shop.getUrl());
+//        final Intent it = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(it);
       }
     });
     this.setListAdapter(shopListAdapter);

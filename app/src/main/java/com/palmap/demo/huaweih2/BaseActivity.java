@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.bugtags.library.Bugtags;
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
 
 /**
@@ -29,9 +31,30 @@ public class BaseActivity extends FragmentActivity {
 //    initStatusBar();
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    //注：Bugtags回调 1
+    Bugtags.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    //注：Bugtags回调 2
+    Bugtags.onPause(this);
+  }
+
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev) {
+    //注：Bugtags回调 3
+    Bugtags.onDispatchTouchEvent(this, ev);
+    return super.dispatchTouchEvent(ev);
+  }
+
   /*
-  *  显示进度条
-  * */
+        *  显示进度条
+        * */
   protected void showProgress(String title, String msg){
     if (progressDialog == null){
       progressDialog = new ProgressDialog(this);

@@ -28,7 +28,7 @@
             android:layout_height="400dp" />
 
         <TextView
-            android:textSize="10sp"
+            android:textSize="16sp"
             android:textColor="#94999d"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:textSize="10sp"
+            android:textSize="16sp"
             android:textColor="#94999d"
             android:id="@+id/tv_location"
             android:layout_marginRight="15dp"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textColor="#565c60"
             android:id="@+id/tv_details"
             android:layout_below="@+id/tv_time"

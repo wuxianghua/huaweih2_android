@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
@@ -44,20 +45,27 @@ public class ActivityUploadCom extends BaseActivity {
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
+        setResult(RESULT_CANCELED,getIntent());
         finish();
       }
       @Override
       public void onRight() {
+        if (textView.getText().toString().equals("")){
+          DialogUtils.showShortToast("写点什么吧");
+          return;
+        }
         String s = JsonUtils.getPostComment(location,textView.getText().toString());
         DataProviderCenter.getInstance().postComments(s, new HttpDataCallBack() {
           @Override
           public void onError(int errorCode) {
-            Log.e("",errorCode+"");
+            DialogUtils.showShortToast(errorCode+"");
           }
 
           @Override
           public void onComplete(Object content) {
             DialogUtils.showShortToast("上传成功！");
+            textView.setText("");
+            setResult(RESULT_OK,getIntent());
             finish();
           }
         });
@@ -92,7 +100,7 @@ public class ActivityUploadCom extends BaseActivity {
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showLongToast(errorCode +"");
+        ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -100,8 +108,14 @@ public class ActivityUploadCom extends BaseActivity {
 //            loadmore_view.setVisibility(View.INVISIBLE);
         Log.i("", content.toString());
         List<CommentDown> list = new ArrayList<>(JSONArray.parseArray(content.toString(), CommentDown.class));
-        if (list.size()==0)
+        if (list==null){
+          DialogUtils.showShortToast("没有更多评论");
           return;
+        }
+        if (list.size()==0) {
+          DialogUtils.showShortToast("没有更多评论");
+          return;
+        }
 
 
         for (int i = 0; i < list.size(); i++) {
@@ -114,13 +128,15 @@ public class ActivityUploadCom extends BaseActivity {
           view.setLayoutParams(lp);
           TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
-          tn.setText("访客"+(start+1));
+          tn.setText("访客"+list.get(i).getId());
           TextView tc = (TextView) view.findViewById(R.id.com_text);
           tc.setText(list.get(i).getComment());
           TextView tt = (TextView) view.findViewById(R.id.com_time);
           SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           Date date = new Date(list.get(i).getComTime());
           tt.setText(sdf.format(date));
+          TextView tl = (TextView) view.findViewById(R.id.loc);
+          tl.setText(list.get(i).getLocation());
 
           start++;
           commentList.addView(view);

@@ -45,9 +45,9 @@
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
         <activity android:name=".WelcomeActivity"/>
         <activity android:name=".UploadActivity"/>
@@ -118,6 +118,8 @@
             android:name=".PoiInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        <activity android:name=".ActivityWeb">
         </activity>
     </application>
 

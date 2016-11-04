@@ -5,17 +5,18 @@
                 android:focusable="true"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:fitsSystemWindows="true"
-                android:background="@drawable/navbar">
+                android:fitsSystemWindows="false"
+                android:background="@drawable/shadow">
 
     <ImageView
         android:id="@+id/title_bar_back"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:padding="13dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/ico_arrow_left_blue" />
+        android:src="@drawable/ico_nav_back" />
 
 
     <TextView
@@ -27,7 +28,7 @@
         android:gravity="center"
         android:text="返回"
         android:textColor="@color/black"
-        android:textSize="17sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/title_center_tv"
@@ -38,7 +39,7 @@
         android:gravity="center"
         android:text="室内地图"
         android:textColor="@color/black"
-        android:textSize="24sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/title_right_tv"
@@ -49,15 +50,16 @@
         android:gravity="center"
         android:text="确定"
         android:textColor="@color/black"
-        android:textSize="17sp" />
+        android:textSize="16sp" />
 
     <ImageView
-        android:visibility="gone"
-        android:layout_marginRight="13dp"
+        android:visibility="visible"
+        android:layout_marginRight="6dp"
         android:id="@+id/ico_right"
+        android:padding="10dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
 
 </RelativeLayout>

@@ -2,11 +2,9 @@ package com.palmap.demo.huaweih2.fragment;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,19 +21,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.palmap.demo.huaweih2.ActivityHall;
+import com.palmap.demo.huaweih2.ActivityLab;
+import com.palmap.demo.huaweih2.ActivityMeeting;
+import com.palmap.demo.huaweih2.ActivityOffice;
 import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.PoiInfoActivity;
 import com.palmap.demo.huaweih2.R;
-import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.adapter.SearchResultAdapter;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PositionJson;
 import com.palmap.demo.huaweih2.model.Floor;
 import com.palmap.demo.huaweih2.model.ParkInfo;
+import com.palmap.demo.huaweih2.model.RoutePoi;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.KeyBoardUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
 import com.palmap.demo.huaweih2.view.LocationMarkAnim;
 import com.palmap.demo.huaweih2.view.Mark;
@@ -65,7 +70,6 @@ import com.palmaplus.nagrand.view.gestures.OnSingleTapListener;
 import com.palmaplus.nagrand.view.gestures.OnZoomListener;
 import com.palmaplus.nagrand.view.layer.FeatureLayer;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,19 +98,19 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       2588907.851,
       2588875.184
   };
-//  //四节点行程选择坐标
+  //  //四节点行程选择坐标
 //  long[] poi4huawei = new long[]{1284129    ,1284130 ,1270043, 1264378,
 //        1264100, 1270042 ,1264420 ,1264107};
   double[] xxx = {12697150.096,
-    12697132.168,
-    12697127.299,
-    12697130.157,
-    12697129.987,
-    12697098.491,
-    12697097.793,
-    12697086.776
+      12697132.168,
+      12697127.299,
+      12697130.157,
+      12697129.987,
+      12697098.491,
+      12697097.793,
+      12697086.776
 
-};
+  };
   double[] yyy = {
       2588906.247,
       2588906.713,
@@ -118,15 +122,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       2588877.236
   };
 
-  public RelativeLayout dialog;
-  LinearLayout btn_map;
-  LinearLayout btn_foot;
+
   LocationMarkAnim locationMarkAnim;
   //地图初始化
   private static final double initX = 1.2697134896049999E7;
   private static final double initY = 2588904.3841;
   private static final double initScale = 3;
-  public double xx, yy;
+  //  public double xx, yy;
   private TextView mF1;
   private TextView mB1;
   private TextView mLocation;
@@ -137,7 +139,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   private TextView mExit;
   private TextView mWater;
   private TextView mWc;
-  private TextView mKeywords;
+  private EditText mKeywords;
   private ImageView mCompass;
   private ImageView mSearch;
   private RelativeLayout mSearchBox;
@@ -163,8 +165,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   private LinearLayout btn_tol;
 
   private SearchResultAdapter mSearchResultAdapter;
-  public Feature markFeature;//用于变色后恢复
-  public Feature startFeature;//导航开始
+  public long markFeatureID;//用于变色后恢复
+  public long startFeatureID;//导航开始
+  public double startX;
+  public double startY;
   //  public Feature endFeature;//导航结束
   private String startName;
   private String endName;
@@ -173,13 +177,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   public long startFloorID;
   public long toFloorID;
   private FeatureLayer navigateLayer;//
+  FeatureLayer huaweiLayer;//poi结点变色
   private NavigateManager navigateManager;
 
   private MainActivity mContext;
   private Scale mScale;
 
   private List<Floor> mFloorListData;
-  public int mCurrentFloor = 1; // 当前楼层索引 0-B1  1-F1
+  public long mCurrentFloor = -1; // 当前楼层id  0-B1  1-F1
   private int mCurrentPoiFilter = 0; // 当前poi过滤 0-无 1-电梯 2-厕所 3-出口 4-盥洗室
   public long mFloorId;
 
@@ -204,7 +209,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   public Mark mark;
 
   public ParkInfo parkInfo;//停车信息
+  private double currentMapZoom;//当前缩放级别
 
+  private boolean isSingleTapTooShort = false;//不让连续点击
   @Override
   public void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
@@ -225,14 +232,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     imPush = (ImageView) fragmentView.findViewById(R.id.push);
     imPush.setVisibility(View.GONE);
     mSearchNull = (TextView) fragmentView.findViewById(search_null_tv);
-    btn_hall= (LinearLayout) fragmentView.findViewById(R.id.hall);
-      btn_meeting= (LinearLayout) fragmentView.findViewById(R.id.meeting);
-      btn_lab= (LinearLayout) fragmentView.findViewById(R.id.lab);
-      btn_office= (LinearLayout) fragmentView.findViewById(R.id.office);
-      btn_ele= (LinearLayout) fragmentView.findViewById(R.id.ele);
-      btn_wat= (LinearLayout) fragmentView.findViewById(R.id.wat);
-     btn_exit= (LinearLayout) fragmentView.findViewById(R.id.exi);
-    btn_tol= (LinearLayout) fragmentView.findViewById(R.id.tol);
+    btn_hall = (LinearLayout) fragmentView.findViewById(R.id.hall);
+    btn_meeting = (LinearLayout) fragmentView.findViewById(R.id.meeting);
+    btn_lab = (LinearLayout) fragmentView.findViewById(R.id.lab);
+    btn_office = (LinearLayout) fragmentView.findViewById(R.id.office);
+    btn_ele = (LinearLayout) fragmentView.findViewById(R.id.ele);
+    btn_wat = (LinearLayout) fragmentView.findViewById(R.id.wat);
+    btn_exit = (LinearLayout) fragmentView.findViewById(R.id.exi);
+    btn_tol = (LinearLayout) fragmentView.findViewById(R.id.tol);
     btn_hall.setOnClickListener(this);
     btn_meeting.setOnClickListener(this);
     btn_office.setOnClickListener(this);
@@ -258,9 +265,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mCancelSearch.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        KeyBoardUtils.closeKeybord(mKeywords,getActivity());
         mSearchBg.setVisibility(View.GONE);
         mCompass.setVisibility(View.VISIBLE);
         mSearch.setVisibility(View.VISIBLE);
+        mContext.showTabMenu();
       }
     });
     mSearch = (ImageView) fragmentView.findViewById(R.id.search);
@@ -272,9 +281,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mCompass.setVisibility(View.GONE);
         mSearch.setVisibility(View.GONE);
 
+        mMapView.removeAllOverlay();
         if (mContext.isShowPoiInfoBar) {
-          if (markFeature != null)
-            resetFeatureStyle(markFeature);
+            resetFeatureStyle(markFeatureID);
 
           if (currentClickMark != null)
             mMapView.removeOverlay(currentClickMark);
@@ -285,7 +294,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       }
     });
     mScale = (Scale) fragmentView.findViewById(R.id.scale);
-    mKeywords = (TextView) fragmentView.findViewById(R.id.tv_keywords);
+    mKeywords = (EditText) fragmentView.findViewById(R.id.tv_keywords);
     mKeywords.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -323,11 +332,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mWater.setOnClickListener(this);
     mExit = (TextView) fragmentView.findViewById(R.id.exit);
     mExit.setOnClickListener(this);
-    dialog = (RelativeLayout) fragmentView.findViewById(R.id.dialog);
-    btn_map = (LinearLayout) fragmentView.findViewById(R.id.btn_map);
-    btn_map.setOnClickListener(this);
-    btn_foot = (LinearLayout) fragmentView.findViewById(R.id.btn_foot);
-    btn_foot.setOnClickListener(this);
+
 
     mMapViewFrame = (FrameLayout) getActivity().findViewById(R.id.map_view);
     mMapOptions = new MapOptions(); // 该对象可设置一些地图手势操作
@@ -337,8 +342,27 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mMapView.setMapOptions(mMapOptions);
     mMapView.setBackgroundColor(0xffebebeb);
     mMapView.initRatio(1.0F);
+//    mMapView.setMaxZoomLevel(MAX_ZOOM);//不起作用
+//    mMapView.setMinZoomLevel(MIN_ZOOM);//不起作用
     mScale.setMapView(mMapView);
 
+    mMapView.setOnMapViewStatusChangedListener(new MapView.OnMapViewStatusListener() {//不起作用
+      @Override
+      public void onMapViewStatus(MapView mapView, MapView.MapViewStatus mapViewStatus, MapView.MapViewStatus mapViewStatus1) {
+        switch (mapViewStatus1){
+          case Uninitializd:
+            break;
+          case Initialized:
+            break;
+          case Drawing:
+            break;
+          case Pausing:
+            break;
+          case Shutdown:
+            break;
+        }
+      }
+    });
 //    mMapContainer.setOnTouchListener(new View.OnTouchListener() {
 //      @Override
 //      public boolean onTouch(View v, MotionEvent event) {
@@ -358,20 +382,33 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       @Override
       public void onSingleTap(MapView mapView, float x, float y) {
 
-        if (isNavigating || isShowFootPrint || isSearchCar)
+        if (isTapTooShort())
+          return;
+
+        isSingleTapTooShort=true;
+        new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            isSingleTapTooShort =false;
+          }
+        },1000);
+
+
+
+        if ((isNavigating || isShowFootPrint || isSearchCar) && !isSelectStartPoint)
           return;
 
         if (isSelectStartPoint) {
           selectStartPoint(x, y);
         } else {
           if (mContext.isShowPoiInfoBar) {
-            if (markFeature != null)
-              resetFeatureStyle(markFeature);
+              resetFeatureStyle(markFeatureID);
 
             if (currentClickMark != null)
               mMapView.removeOverlay(currentClickMark);
 
-            mContext.showTabMenu();
+//            mContext.showTabMenu();
+            searchPOIByPoint(x, y);
           } else {
             searchPOIByPoint(x, y);
           }
@@ -385,6 +422,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mMapView.setOnZoomListener(new OnZoomListener() {
       @Override
       public void preZoom(MapView mapView, float v, float v2) {
+
       }
 
       @Override
@@ -402,8 +440,25 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       @Override
       public void postZoom(MapView mapView, float v, float v2) {
         mMapView.getOverlayController().refresh();
+
+
+        Log.e("","level = "+mMapView.getZoomLevel());
+//        if (mMapView.GetZoomLevel() < 1.0100) {
+//          if (currentMapZoom >= 2.0000) {
+//            DialogUtils.showShortToast("不能再放大");
+//
+//          }
+//        }
+//        if (mMapView.getZoomLevel() > 11.9990) {
+//          if (currentMapZoom <= 11.0000) {
+//            DialogUtils.showShortToast("不能再缩小");
+//          }
+//        }
+
+        currentMapZoom = mMapView.getZoomLevel();
       }
     });
+
 
 
     return fragmentView;
@@ -461,7 +516,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mCompass.setVisibility(View.GONE);
     mSearch.setVisibility(View.GONE);
 
-
   }
 
   //结束搜索
@@ -510,14 +564,32 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   }
 
+
+  private boolean isTapTooShort(){//防止点太快闪退
+    if (isSingleTapTooShort) {
+      DialogUtils.showShortToast("点得太快了喔");
+      return true;
+    }
+
+    isSingleTapTooShort=true;
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        isSingleTapTooShort =false;
+      }
+    },700);
+
+    return false;
+  }
+
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == Constant.RESULT_PICTURE) {
-      Log.i(TAG, "拍摄完成，resultCode=" + requestCode);
-      Intent intent = new Intent(mContext, UploadActivity.class);
-//    intent.putExtra()
-      startActivity(intent);
-    }
+//    if (requestCode == Constant.startTakePic) {
+//      Log.i(TAG, "拍摄完成，resultCode=" + requestCode);
+//      Intent intent = new Intent(mContext, UploadActivity.class);
+////    intent.putExtra()
+//      startActivity(intent);
+//    }
   }
 
   @Override
@@ -527,7 +599,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         rotataToNorth();
         break;
       case R.id.shoot:
-        openCameraActivity();
+        mContext.openCameraActivity();
         break;
       case R.id.locate:
         DataProviderCenter.getInstance().getPosition("", new HttpDataCallBack() {
@@ -543,7 +615,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             try {
 
               List<PositionJson> list = new ArrayList<PositionJson>(JSONArray.parseArray(content.toString(), PositionJson.class));
-              addLocationMark(list.get(0).getX(), list.get(0).getX());
+              addLocationMark(list.get(0).getX(), list.get(0).getY());
 
 
 //              JSONObject jo1 = JSON.parseObject(content.toString());
@@ -554,7 +626,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 //              Types.Point point = mMapView.converToScreenCoordinate(x,y);
 //              addLocationMark(x,y);
-//              addMark(x,y);
+//              addMark(list.get(0).getX(), list.get(0).getY());
 
 
             } catch (IndexOutOfBoundsException e) {
@@ -584,26 +656,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         break;
       case R.id.f1:
         loadMap(Constant.FLOOR_ID_F1);
-        mCurrentFloor = 1;
-        refeshFloorView();
         break;
       case R.id.b1:
         loadMap(Constant.FLOOR_ID_B1);
-        mCurrentFloor = 0;
-        refeshFloorView();
         break;
-      case R.id.dialog:
-        //什么都不做
-        break;
-      case R.id.btn_map:
-        initMapScale();
-        dialog.setVisibility(View.GONE);
-        break;
-      case R.id.btn_foot:
-        setFootPrint();
-        initMapScale();
-        dialog.setVisibility(View.GONE);
-        break;
+
       case R.id.hall:
         showSearch4Poi(0);
         break;
@@ -634,56 +691,22 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
   }
 
-  private void showSearch4Poi(int index){
+  private void showSearch4Poi(int index) {
     mSearchBg.setVisibility(View.GONE);
     mCompass.setVisibility(View.VISIBLE);
     mSearch.setVisibility(View.VISIBLE);
-    addMark(x[index],y[index]);
+//    addMark(x[index], y[index]);
+    Types.Point point = mMapView.converToScreenCoordinate(x[index], y[index]);
+    searchPOIByPoint((float) point.x,(float) point.y);
+    initMapScale();
   }
 
-  private void showSearch4Fliter(int index){
+  private void showSearch4Fliter(int index) {
     mSearchBg.setVisibility(View.GONE);
     mCompass.setVisibility(View.VISIBLE);
     mSearch.setVisibility(View.VISIBLE);
     refeshPoiFilter(index);
-  }
-
-  private void openCameraActivity() {
-    Intent intent = new Intent();
-    // 指定开启系统相机的Action
-    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.addCategory(Intent.CATEGORY_DEFAULT);
-    //如果路径不存在，则创建
-    // 创建文件夹
-    File file = new File(Constant.DIR_PICTURE_UPLOAD);
-    if (!file.exists()) {
-      file.mkdirs();
-//      file = new File(Constant.DIR_PICTURE_UPLOAD);
-//      if (!file.exists()) {
-//        file.mkdirs();
-//      }
-    }
-    // 根据文件地址创建文件
-    file = new File(Constant.PATH_PICTURE_UPLOAD);
-    if (file.exists()) {
-      file.delete();
-    }
-    // 把文件地址转换成Uri格式
-    Uri uri = Uri.fromFile(file);
-    // 设置系统相机拍摄照片完成后图片文件的存放地址
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-    startActivityForResult(intent, Constant.RESULT_PICTURE);
-  }
-
-  private long getCurrentFloorID() {
-    if (mCurrentFloor == 0) {
-      return Constant.FLOOR_ID_B1;
-    } else if (mCurrentFloor == 1) {
-      return Constant.FLOOR_ID_F1;
-    } else {
-      return -1;
-    }
-
+    initMapScale();
   }
 
   private void refeshPoiFilterView() {
@@ -715,15 +738,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
   }
 
-  private void refeshFloorView() {
-    if (mCurrentFloor == 0) {
-      mF1.setBackgroundResource(R.drawable.btn_tab_f1);
+  private void refeshFloorView(long id) {
+    mCurrentFloor = id;
+    if (mCurrentFloor == Constant.FLOOR_ID_B1) {
+      mF1.setBackgroundResource(R.drawable.btn_floor_f1);
       mB1.setBackgroundResource(R.drawable.btn_tab_b1_sel);
-    } else if (mCurrentFloor == 1) {
-      mF1.setBackgroundResource(R.drawable.btn_tab_f1_sel);
+    } else if (mCurrentFloor == Constant.FLOOR_ID_F1) {
+      mF1.setBackgroundResource(R.drawable.btn_floor_f1_sel);
       mB1.setBackgroundResource(R.drawable.btn_tab_b1);
     } else {
-      mF1.setBackgroundResource(R.drawable.btn_tab_f1);
+      mF1.setBackgroundResource(R.drawable.btn_floor_f1);
       mB1.setBackgroundResource(R.drawable.btn_tab_b1);
     }
   }
@@ -732,10 +756,26 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   * TODO 加载地图 - 根据floorId
   * */
   private void loadMap(final long floorId) {
-    if (isSelectStartPoint) {//防止闪退
-      resetFeatureStyle(markFeature);
-      markFeature = null;
+    if (mCurrentFloor == floorId)
+      return;
+
+    if (isShowFootPrint&&floorId==Constant.FLOOR_ID_B1){//行程不能切换
+      DialogUtils.showShortToast("请返回地图页面再切换楼层");
+      return;
     }
+
+    if (huaweiLayer!=null&&floorId==Constant.FLOOR_ID_B1){
+      huaweiLayer.clearFeatures();
+      mMapView.removeLayer(huaweiLayer);
+    }
+
+    if (isSelectStartPoint) {//防止闪退
+      resetFeatureStyle(markFeatureID);
+      markFeatureID = -1;
+    }
+    if (mMapView!=null)
+      mMapView.removeAllOverlay();
+
     showProgress(mHandler, "提示", "地图加载中，请稍后...");
 
     Log.w(TAG, "开始加载地图，floorId = " + floorId);
@@ -751,7 +791,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
           Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-//              Looper.prepare();
+              mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  refeshFloorView(floorId);
+                }
+              });
+
               mMapView.drawPlanarGraph(planarGraph);
               mMapView.start();
               if (!isSearchCar)
@@ -764,7 +810,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mContext.runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
-                    dialog.setVisibility(View.VISIBLE);
+                    mContext.dialog.setVisibility(View.VISIBLE);
                     hasChoosenFootPrint = true;
                   }
                 });
@@ -790,7 +836,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 
   private void requestPOI() {
-    mDataSource.requestCategories(Constant.MAP_ID, getCurrentFloorID(), new DataSource.OnRequestDataEventListener<DataList<CategoryModel>>() {
+    mDataSource.requestCategories(Constant.MAP_ID, mCurrentFloor, new DataSource.OnRequestDataEventListener<DataList<CategoryModel>>() {
       @Override
       public void onRequestDataEvent(DataSource.ResourceState state, DataList<CategoryModel> data) {
         if (state != DataSource.ResourceState.ok)
@@ -807,20 +853,20 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   }
 
   private void refeshPoiFilter(int choose) {
-    if (mCurrentPoiFilter != 0) {
+    if (mCurrentPoiFilter == choose) {
       mCurrentPoiFilter = 0;
     } else {
       mCurrentPoiFilter = choose;
     }
 
 
-    if (mCurrentPoiFilter == 0) {
-      mMapView.visibleLayerAllFeature(Constant.FACILITY_LAYER, true);
-      if (currentPoiMarks != null) {
-        for (int i = 0; i < currentPoiMarks.size(); i++)
-          mMapView.removeOverlay(currentPoiMarks.get(i));
-      }
+    mMapView.visibleLayerAllFeature(Constant.FACILITY_LAYER, true);
+    if (currentPoiMarks != null) {
+      for (int i = 0; i < currentPoiMarks.size(); i++)
+        mMapView.removeOverlay(currentPoiMarks.get(i));
+    }
 
+    if (mCurrentPoiFilter == 0) {
       currentPoiMarks = null;
       currentPoiMarks = new ArrayList<>();
 //      mMapView.removeAllOverlay();
@@ -832,11 +878,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     } else if (mCurrentPoiFilter == 3) {
       searchPOIAndRefeshView(new long[]{Constant.安全出口_ID, Constant.建筑物大门});
     } else if (mCurrentPoiFilter == 4) {
-//      searchPOIAndRefeshView(new long[]{Constant.茶水间_ID});
-      mMapView.visibleLayerAllFeature(Constant.FACILITY_LAYER, false);
-
-      addOverlaysByFeatures(mMapView.searchFeature(Constant.FACILITY_LAYER, Constant.FACILITY_KEY_NAME, new Value("茶水间")));
-      mMapView.visibleLayerFeature(Constant.FACILITY_LAYER, Constant.FACILITY_KEY_NAME, new Value("茶水间"), true);
+      searchPOIAndRefeshView(new long[]{Constant.茶水间_ID});
+//      mMapView.visibleLayerAllFeature(Constant.FACILITY_LAYER, false);
+//
+//      addOverlaysByFeatures(mMapView.searchFeature(Constant.FACILITY_LAYER, Constant.FACILITY_KEY_NAME, new Value("茶水间")));
+//      mMapView.visibleLayerFeature(Constant.FACILITY_LAYER, Constant.FACILITY_KEY_NAME, new Value("茶水间"), true);
     }
 
     refeshPoiFilterView();
@@ -853,53 +899,78 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   }
 
+//  private Feature getPOIFeature(Feature feature){
+//    for (int i = 0; i < xxx.length; i++) {
+////      if (MapParamUtils.getId(feature)==)
+//
+//    }
+//  }
+  private boolean hasInfo(Feature feature){//判断是否显示poi bar
+    if (feature == null ) {//没有搜索到feature
+      return false;
+    }
+    long id = MapParamUtils.getId(feature);
+    String display=MapParamUtils.getDisplay(feature);
+    String name=MapParamUtils.getName(feature);
+
+    if (id==1263037||id==1270023||id==Constant.空地_POI_ID){
+      return false;
+    }
+    if (display!=null){
+      if (display.contains("办公楼"))
+        return false;
+    }
+    if (name==null){
+      return false;
+    }
+
+    return true;
+  }
 
   private void searchPOIByPoint(float x, float y) {
 //    List<Feature> features =mMapView.searchFeature(Constant.AREA_LAYER,"display",new Value("H114"));
 
     final Feature feature = mMapView.selectFeature(x, y);
-    if (feature == null)
+    if (!hasInfo(feature)){
+      mContext.showTabMenu();
       return;
+    }
 
-
-    endX = feature.getCentroid().getX();//可能
-    endY = feature.getCentroid().getY();
+    Types.Point point = mMapView.converToWorldCoordinate(x, y);
+    endX = point.x;//feature.getCentroid().getX();//可能
+    endY = point.y;//feature.getCentroid().getY();
     endName = MapParamUtils.getDisplay(feature);
     long poiID = MapParamUtils.getId(feature);
     if (Constant.isDebug) {
-      DialogUtils.showLongToast("poiID=" + poiID);
+      DialogUtils.showShortToast("poiID=" + poiID);
     }
-    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
-      @Override
-      public void onRequestDataEvent(DataSource.ResourceState resourceState, final LocationModel locationModel) {
-        if (resourceState == DataSource.ResourceState.ok ||
-            resourceState == DataSource.ResourceState.CACHE) {
-          Log.w(TAG, "resourceState = " + resourceState);
+//    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
+//      @Override
+//      public void onRequestDataEvent(DataSource.ResourceState resourceState, final LocationModel locationModel) {
+//        if (resourceState == DataSource.ResourceState.ok ||
+//            resourceState == DataSource.ResourceState.CACHE) {
+//          Log.w(TAG, "resourceState = " + resourceState);
 
-          String name = MapParamUtils.getName(locationModel);
-
-          if (name == null || name.contains("办公楼"))
-            return;
 
 //          if (name!=null)
-          mContext.setPoiInfoBar(locationModel);
-          markFeature = feature;
-          if (Constant.onSingleTap_changeColor) {
-            setFeatureColor(feature, 0xffFFB5B5);
-          }
-          xx = feature.getCentroid().getX();
-          yy = feature.getCentroid().getY();
+    mContext.setPoiInfoBar(feature);
+    markFeatureID = MapParamUtils.getId(feature);
+    if (Constant.onSingleTap_changeColor) {
+      setFeatureColor(feature, 0xffFFB5B5);
+    }
+//          xx = feature.getCentroid().getX();
+//          yy = feature.getCentroid().getY();
 
-          if (isSearchCar)//寻车页面对话框延迟消失
-            closeProgress();
+    if (isSearchCar)//寻车页面对话框延迟消失
+      closeProgress();
 
-          addMark(feature.getCentroid().getX(), feature.getCentroid().getY());
+    addMark(point.x, point.y);
 
-          mContext.showPoiInfoBar(feature);
-        } else
-          DialogUtils.showShortToast("poi数据请求失败。");
-      }
-    });
+    mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature));
+//        } else
+//          DialogUtils.showShortToast("poi数据请求失败。");
+//      }
+//    });
 
 
   }
@@ -921,45 +992,47 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   private void selectStartPoint(float x, float y) {
 
     final Feature feature = mMapView.selectFeature(x, y);
-    if (feature == null)
+    if (feature == null || MapParamUtils.getName(feature) == null || MapParamUtils.getName(feature).contains("办公楼"))
       return;
 
-    long poiID = MapParamUtils.getId(feature);
-    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
-      @Override
-      public void onRequestDataEvent(DataSource.ResourceState resourceState, LocationModel locationModel) {
-        if (resourceState == DataSource.ResourceState.ok ||
-            resourceState == DataSource.ResourceState.CACHE) {
-          Log.w(TAG, "resourceState = " + resourceState);
+//    long poiID = MapParamUtils.getId(feature);
+//    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
+//      @Override
+//      public void onRequestDataEvent(DataSource.ResourceState resourceState, LocationModel locationModel) {
+//        if (resourceState == DataSource.ResourceState.ok ||
+//            resourceState == DataSource.ResourceState.CACHE) {
+//          Log.w(TAG, "resourceState = " + resourceState);
 
-          String name = MapParamUtils.getName(locationModel);
-          if (name == null || name.equals("H2办公楼"))
-            return;
+    mContext.setStartPoiInfo(feature);
+    resetFeatureStyle(markFeatureID);//若切换楼层会闪退
+    markFeatureID = MapParamUtils.getId(feature);
+    startFeatureID = MapParamUtils.getId(feature);
+    startFloorID = Feature.planar_graph.get(feature);
+    startName = MapParamUtils.getName(feature);
+    Types.Point point = mMapView.converToWorldCoordinate(x, y);
+    startX = point.x;
+    startY = point.y;
+    if (Constant.onSingleTap_changeColor) {
+      setFeatureColor(feature, 0xffFFB5B5);
+    }
 
-          mContext.setStartPoiInfo(locationModel);
-          resetFeatureStyle(markFeature);//若切换楼层会闪退
-          markFeature = feature;
-          startFeature = feature;
-          if (Constant.onSingleTap_changeColor) {
-            setFeatureColor(feature, 0xffFFB5B5);
-          }
-          addMark(feature.getCentroid().getX(), feature.getCentroid().getY(), Mark.START);
 
-        } else
-          DialogUtils.showShortToast("poi数据请求失败。");
-      }
-    });
+    addMark(point.x, point.y, Mark.START);
+
+//        } else
+//          DialogUtils.showShortToast("poi数据请求失败。");
+//      }
+//    });
 
   }
 
-
-  public void resetFeatureStyle(Feature feature) {
-    if (feature != null)
-      mMapView.resetOriginStyle("Area", LocationModel.id.get(feature));
-  }
 
   public void resetFeatureStyle(long featureID) {
-    mMapView.resetOriginStyle("Area", featureID);
+      mMapView.resetOriginStyle("Area", featureID);
+  }
+
+  public void resetFeatureStyle(String layerName,long featureID) {
+    mMapView.resetOriginStyle(layerName, featureID);
   }
 
   private void setFeatureColor(Feature feature, int color) {
@@ -968,6 +1041,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   private void setFeatureColor(long featureID, int color) {
     mMapView.setRenderableColor("Area", featureID, color);
+  }
+
+  private void setFeatureColor(String layerName,long featureID, int color) {
+    mMapView.setRenderableColor(layerName, featureID, color);
   }
 
   public void addMark(double x, double y, int type) {
@@ -1010,8 +1087,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //    mMapView.removeAllOverlay();
 
     checkPoiPush(LocateTimerService.getCurrentLocationArea());
-    if (Constant.isDebug)
-      DialogUtils.showLongToast("location:" + x + " " + y);
+//    if (Constant.isDebug)
+//      DialogUtils.showLongToast("location:" + x + " " + y);
 
 //    LocationMark mark = new LocationMark(mContext);
 //    mark.init(new double[]{x, y});
@@ -1073,8 +1150,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mDataSource.search(keyWords, 1, 10, new long[]{Constant.FLOOR_ID_F1}, new long[]{}, new DataSource.OnRequestDataEventListener<LocationPagingList>() {
       @Override
       public void onRequestDataEvent(DataSource.ResourceState state, LocationPagingList data) {
-        if (state != DataSource.ResourceState.ok && state != DataSource.ResourceState.CACHE)
+        if (state != DataSource.ResourceState.ok && state != DataSource.ResourceState.CACHE) {
+          ErrorCode.showError(ErrorCode.CODE_NO_INTERNET);
           return;
+        }
         if (data.getSize() == 0) {
           mSearchList.setVisibility(View.GONE);
           mSearchDef.setVisibility(View.GONE);
@@ -1096,11 +1175,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
             Mark mark = new Mark(mContext);
             Coordinate c = getCoordinate(locationModel);
-            if (c==null)
+            if (c == null)
               return;
 
             Feature feature = mMapView.selectFeature(MapParamUtils.getId(locationModel));
-            mContext.showPoiInfoBar(feature);
+            mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature));
             addMark(c.getX(), c.getY());
             mCompass.setVisibility(View.VISIBLE);
             mSearch.setVisibility(View.VISIBLE);
@@ -1128,8 +1207,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mContext.showPoiInfoBar();
         Coordinate c = getCoordinate(data.getPOI(0));
         Types.Point point = mMapView.converToScreenCoordinate(c.getX(), c.getY());
-        if (markFeature != null)
-          resetFeatureStyle(markFeature);
+          resetFeatureStyle(markFeatureID);
 
         searchPOIByPoint((float) point.x, (float) point.y);
 //        addMark(c.getX(), c.getY());
@@ -1165,8 +1243,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       return null;
 
     Feature feature = mMapView.selectFeature(LocationModel.id.get(locationModel));
-    if (feature!=null)
-    return feature.getCentroid();
+    if (feature != null)
+      return feature.getCentroid();
     else
       return null;
   }
@@ -1178,9 +1256,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       navigateManager.drop();
       mMapView.removeLayer(navigateLayer);
     }
-    if (startFeature != null) {
-      resetFeatureStyle(startFeature);
-      startFeature = null;
+    if (startFeatureID != -1) {
+      resetFeatureStyle(startFeatureID);
+      startFeatureID = -1;
     }
     mMapView.removeAllOverlay();
     mMapView.getOverlayController().refresh();
@@ -1191,13 +1269,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     isSelectStartPoint = false;
   }
 
-  public void startNavigate() {//final Feature startFeature, final double toX, final double toY, final long toFloorID
+  public void startNavigate() {//final Feature startFeatureID, final double toX, final double toY, final long toFloorID
     isNavigating = true;
     navigateManager = new NavigateManager();
     navigateLayer = new FeatureLayer("navigate");
     mMapView.addLayer(navigateLayer);
     mMapView.setLayerOffset(navigateLayer);
-    startName = MapParamUtils.getDisplay(startFeature);
+
 
 
     navigateManager.setOnNavigateComplete(new NavigateManager.OnNavigateComplete() {
@@ -1216,7 +1294,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mMapView.setOnChangePlanarGraph(new MapView.OnChangePlanarGraph() {
       @Override
       public void onChangePlanarGraph(PlanarGraph oldPlanarGraph, PlanarGraph newPlanarGraph, long oldPlanarGraphId, long newPlanarGraphId) {
-        long floorId = newPlanarGraphId;
+//        long floorId = newPlanarGraphId;
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
@@ -1225,32 +1303,32 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
       }
     });
-    long poiID = MapParamUtils.getId(startFeature);
-    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
-      @Override
-      public void onRequestDataEvent(DataSource.ResourceState resourceState, LocationModel locationModel) {
-        if (resourceState == DataSource.ResourceState.ok ||
-            resourceState == DataSource.ResourceState.CACHE) {
-          Log.w(TAG, "resourceState = " + resourceState);
+//    long poiID = MapParamUtils.getId(startFeatureID);
+//    mDataSource.requestPOI(poiID, new DataSource.OnRequestDataEventListener<LocationModel>() {
+//      @Override
+//      public void onRequestDataEvent(DataSource.ResourceState resourceState, LocationModel locationModel) {
+//        if (resourceState == DataSource.ResourceState.ok ||
+//            resourceState == DataSource.ResourceState.CACHE) {
+//          Log.w(TAG, "resourceState = " + resourceState);
 
-          resetFeatureStyle(startFeature);
-          startFloorID = LocationModel.parent.get(locationModel);
-          double startX = startFeature.getCentroid().getX();
-          double startY = startFeature.getCentroid().getY();
+    resetFeatureStyle(startFeatureID);
+
 //          long toFloorId = LocationModel.parent.get(locationModel);
-          double toX = endX;
-          double toY = endY;
 
-          navigateManager.navigation(startX, startY, startFloorID, toX, toY, toFloorID); // TODO 请求导航线
-        }
-      }
-    });
+    navigateManager.navigation(startX, startY, startFloorID, endX, endY, toFloorID); // TODO 请求导航线
+//        }
+//      }
+//    });
 
 
   }
 
   public void initMapScale() {
-    mMapView.initRatio(1.0F);
+//    mMapView.initRatio(1.0F);
+
+    Types.Point point = mMapView.converToScreenCoordinate(initX, initY);
+//    mMapView.moveToPoint(coordinate,true,500);
+    mMapView.rotate(point, -mMapView.getRotate(),true,500);
     Coordinate coordinate = new Coordinate(initX, initY);
     mMapView.moveToPoint(coordinate, true, 500);
     mMapView.zoom(initScale);
@@ -1258,23 +1336,64 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   }
 
   private void rotataToNorth() {
-    mCompass.setRotation(-BigDecimal.valueOf(mMapView.getRotate()).floatValue());
-    mCompass.invalidate();
-    if (mScale != null) {
-      mScale.postInvalidate();
-    }
+
 //    Coordinate coordinate = new Coordinate(initX,initY);
 //    Types.Point point = new Types.Point(initX,initY);
     Types.Point point = mMapView.converToScreenCoordinate(initX, initY);
 //    mMapView.moveToPoint(coordinate,true,500);
-    mMapView.rotate(point, -mMapView.getRotate());
+    mMapView.rotate(point, -mMapView.getRotate(),true,500);
 
+//    new Handler().postDelayed(new Runnable() {
+//      @Override
+//      public void run() {
+//        initMapScale();
+//      }
+//    },550);
+    new Handler().postDelayed(new Runnable()
+    {//旋转指北针
+      public void run()
+      {
+        mCompass.setRotation(-BigDecimal.valueOf(mMapView.getRotate()).floatValue());
+        mCompass.invalidate();
+        if (mScale != null) {
+          mScale.postInvalidate();
+        }
+      }
+    }, 700);
+
+
+    mMapView.getOverlayController().refresh();
   }
 
-  FeatureLayer huaweiLayer;
+
+  private void initHuaWeiLayer(){//初始化poi结点
+//    if (huaweiLayer == null) {
+      huaweiLayer = new FeatureLayer("poi"); //新建一个放置定位点的图层
+      mMapView.addLayer(huaweiLayer);  //把这个图层添加至MapView中
+      mMapView.setLayerOffset(huaweiLayer); //让这个图层获取到当前地图的坐标偏移
+//    }
+
+    for (int i = 0; i < xxx.length; i++) {
+      Types.Point point1 = mMapView.converToScreenCoordinate(xxx[i], yyy[i]);
+      Feature fea = mMapView.selectFeature((float) point1.x, (float) point1.y);
+      MapElement mapElement = new MapElement(); //设置它的属性
+      mapElement.addElement("id", new BasicElement((long) (i + 1 + 100))); //设置id
+//      Geometry geometry = GeometryFactory.createLineString(fea.getGeometry().getCoordinates());
+
+      Feature feature = new Feature(fea.getGeometry(), mapElement); //创建Feature
+      huaweiLayer.addFeature(feature); //把这个Feature添加到FeatureLayer中
+    }
+  }
+
   public void setFootPrint() {
+//    if (huaweiLayer == null)
+//      initHuaWeiLayer();
+
     isShowFootPrint = true;
     mContext.hideTabMenu();
+    mSearch.setVisibility(View.GONE);
+    mF1.setVisibility(View.GONE);
+    mB1.setVisibility(View.GONE);
     mContext.titleBar.show(null, "行程", null);
     mContext.titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
@@ -1288,56 +1407,49 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       }
     });
 
-    if (huaweiLayer==null) {
-      huaweiLayer = new FeatureLayer("poi"); //新建一个放置定位点的图层
-      mMapView.addLayer(huaweiLayer);  //把这个图层添加至MapView中
-      mMapView.setLayerOffset(huaweiLayer); //让这个图层获取到当前地图的坐标偏移
-    }
-//    int foot_room = 0xff0196d0;
-    for (int i=0;i<xxx.length;i++){
-      Types.Point point1 = mMapView.converToScreenCoordinate(xxx[i], yyy[i]);
-      Feature fea= mMapView.selectFeature((float)point1.x,(float)point1.y);
-      MapElement mapElement = new MapElement(); //设置它的属性
-      mapElement.addElement("id", new BasicElement((long)(i+1+100))); //设置id
-      Feature feature = new Feature(fea.getGeometry(),mapElement); //创建Feature
-      huaweiLayer.addFeature(feature); //把这个Feature添加到FeatureLayer中
-//      setFeatureColor((long)(i+1+100), foot_room);
-    }
 
-    int foot_road = 0xff36bef0;
-    setFeatureColor(1270023L, foot_road);
-    add4PoiMark();
+//    int foot_room = 0xff0196d0;
+//    for (int i = 0; i < xxx.length; i++) {
+//      setFeatureColor("poi",(long)(i + 1 + 100), foot_room);
+//    }
+//    mMapView.visibleLayerAllFeature("poi",true);
+
+//    int foot_road = 0xff36bef0;
+//    setFeatureColor("Area",1270023L, foot_road);
+//    add4PoiMark();
 
 //    showProgress(mHandler, "加载行程", "请稍后...");
 //    Thread thread = new Thread(new Runnable() {
 //      @Override
 //      public void run() {
-//        //poiID  大厅1284129    办公区1284130  ics实验室1270043 1264378
-//        // 会议室1264100 1270042 1264420 1264107 路1270023
-////    setFeatureColor(1284129,R.color.foot_room);
-//
-//        add4PoiMark();
-//        int foot_room = 0xff0196d0;
-//        for (int i = 0; i < RoutePoi.pois.length; i++) {
-////      setFeatureColor(RoutePoi.pois[i],foot_room);
+        //poiID  大厅1284129  1264643 tai  办公区1284130  ics实验室1270043 1264378
+        // 会议室 1270042  1264107 1284127 1264105路1270023
+//    setFeatureColor(1284129,R.color.foot_room);
+
+        add4PoiMark();
+        int foot_room = 0xff36b1f0;
+        for (int i = 0; i < RoutePoi.pois.length; i++) {
+      setFeatureColor(RoutePoi.pois[i],foot_room);
 //          mMapView.visibleLayerFeature("Area", "id", new Value(RoutePoi.pois[i]), false);
-//        }
-//
-//        setFeatureColor(1284130, foot_room);
-//        setFeatureColor(1284129, foot_room);
-//
-//        setFeatureColor(1270043, foot_room);
-//        setFeatureColor(1264378, foot_room);
-//
-//        setFeatureColor(1264100, foot_room);
-//        setFeatureColor(1270042, foot_room);
-//        setFeatureColor(1264420, foot_room);
-//        setFeatureColor(1264107, foot_room);
-//        setFeatureColor(1264105, foot_room);
-//
-//        int foot_road = 0xff36bef0;
-//        setFeatureColor(1270023, foot_road);
-//        closeProgress();
+        }
+
+        setFeatureColor(1284130, foot_room);
+        setFeatureColor(1264643, foot_room);
+
+        setFeatureColor(1284129, foot_room);
+
+        setFeatureColor(1270043, foot_room);
+        setFeatureColor(1264378, foot_room);
+
+        setFeatureColor(1270042, foot_room);
+        setFeatureColor(1264107, foot_room);
+        setFeatureColor(1284127, foot_room);
+        setFeatureColor(1264105, foot_room);
+
+
+        int foot_road = 0xff75d4ea;
+        setFeatureColor(1270023, foot_road);
+        closeProgress();
 //      }
 //    });
 //    thread.start();
@@ -1350,7 +1462,24 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     String[] name = new String[]{Constant.H2大厅, Constant.会议室, Constant.ICS实验室, Constant.ICS办公区};
     for (int i = 0; i < x.length; i++) {
       Types.Point point = mMapView.converToScreenCoordinate(x[i], y[i]);
-      PoiGreyMark p = new PoiGreyMark(mContext, name[i]);
+      PoiGreyMark p = new PoiGreyMark(mContext, name[i], new PoiGreyMark.OnClickListenerForMark() {
+        @Override
+        public void onMarkSelect(PoiGreyMark mark) {
+          String name=mark.getName();
+          if (name==null)
+            return;
+
+          if (H2大厅.equals(name)) {
+            mContext.startActivity(new Intent(mContext, ActivityHall.class));
+          } else if (会议室.equals(name)) {
+            mContext.startActivity(new Intent(mContext, ActivityMeeting.class));
+          } else if (ICS办公区.equals(name)) {
+            mContext.startActivity(new Intent(mContext, ActivityOffice.class));
+          } else if (name.contains(ICS实验室)) {
+            mContext.startActivity(new Intent(mContext, ActivityLab.class));
+          }
+        }
+      });
       p.init(new double[]{x[i], y[i]});
       mMapView.addOverlay(p);
     }
@@ -1362,44 +1491,59 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     isShowFootPrint = false;
     mMapView.removeAllOverlay();
 
+    mSearch.setVisibility(View.VISIBLE);
+    mF1.setVisibility(View.VISIBLE);
+    mB1.setVisibility(View.VISIBLE);
     mContext.titleBar.hide();
     mContext.showTabMenu();
 
-    huaweiLayer.clearFeatures();
-    mMapView.removeLayer(huaweiLayer);
+//    huaweiLayer.clearFeatures();
+//    mMapView.removeLayer(huaweiLayer);
+
+//    int t_color=0x00ffffff;
+//    for (int i = 0; i < xxx.length; i++) {
+//      setFeatureColor("poi",(long)(i + 1 + 100), t_color);
+//    }
+
+
+
+//    mMapView.visibleLayerAllFeature("poi",false);
+
+
 //    huaweiLayer = null;
 //    int nocolor = 0x00ffffff;
 //    for (int i = 0; i < x.length; i++) {
 //      setFeatureColor((long)(i+1+100),nocolor);
 //    }
     resetFeatureStyle(1270023L);
-//
+
 //    showProgress(mHandler, "加载地图", "请稍后...");
 //    Thread thread = new Thread(new Runnable() {
 //      @Override
 //      public void run() {
-//        //poiID  大厅1284129    办公区1284130  ics实验室1270043 1264378
-//        // 会议室1264100 1270042 1264420 1264107 1264105路1270023
-//        for (int i = 0; i < RoutePoi.pois.length; i++) {
-////      resetFeatureStyle(RoutePoi.pois[i]);
+        //poiID  大厅1284129  1264643 tai  办公区1284130  ics实验室1270043 1264378
+        // 会议室 1270042  1264107 1284127 1264105路1270023
+        for (int i = 0; i < RoutePoi.pois.length; i++) {
+      resetFeatureStyle(RoutePoi.pois[i]);
 //          mMapView.visibleLayerFeature("Area", "id", new Value(RoutePoi.pois[i]), true);
-//        }
-//        resetFeatureStyle(1284129);
-//
-//        resetFeatureStyle(1284130);
-//
-//        resetFeatureStyle(1270043);
-//        resetFeatureStyle(1264378);
-//
-//        resetFeatureStyle(1264100);
-//        resetFeatureStyle(1270042);
-//        resetFeatureStyle(1264420);
-//        resetFeatureStyle(1264107);
-//        resetFeatureStyle(1264105);
-//
-//        resetFeatureStyle(1270023);
-//
-//        closeProgress();
+        }
+        resetFeatureStyle(1284129);
+        resetFeatureStyle(1264643);
+
+        resetFeatureStyle(1284130);
+
+        resetFeatureStyle(1270043);
+        resetFeatureStyle(1264378);
+
+        resetFeatureStyle(1270042);
+        resetFeatureStyle(1264107);
+        resetFeatureStyle(1284127);
+        resetFeatureStyle(1264105);
+
+
+        resetFeatureStyle(1270023);
+
+        closeProgress();
 //      }
 //    });
 //    thread.start();
@@ -1407,9 +1551,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   public void moveToCar(ParkInfo p) {
     isSearchCar = true;
-    loadMap(Constant.FLOOR_ID_B1);
-    mCurrentFloor = 0;
-    refeshFloorView();
+    if (mCurrentFloor==Constant.FLOOR_ID_B1){
+      if (isSearchCar)
+        findCar();
+    }else {
+      loadMap(Constant.FLOOR_ID_B1);
+    }
+//    mCurrentFloor = 0;
     parkInfo = p;
 
   }

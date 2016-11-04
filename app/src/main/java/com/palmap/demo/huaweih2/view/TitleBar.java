@@ -24,7 +24,6 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
   private OnTitleClickListener onTitleClickListener;
   private boolean enableLeft =true;
   private boolean enableRight =true;
-
   private ImageView ico_right;
 
 
@@ -82,6 +81,7 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
   }
   private void hideRight(){
     right.setVisibility(View.GONE);
+    ico_right.setVisibility(GONE);
   }
   private void setBackIcon(int i){
     left.setVisibility(View.GONE);

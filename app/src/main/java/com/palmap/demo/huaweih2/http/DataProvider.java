@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import org.apache.http.NameValuePair;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,33 @@ public class DataProvider {
   * */
   public void postDataProvider(String url, Map<String,String> heads, byte[] data, final HttpDataCallBack callBack){
     AsyncHttp.getInstance().sendDataByPost(url, data, heads, new HttpDataCallBack() {
+      @Override
+      public void onError(final int errorCode) {
+        mHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            callBack.onError(errorCode);
+          }
+        });
+      }
+
+      @Override
+      public void onComplete(final Object content) {
+        mHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            callBack.onComplete(content);
+          }
+        });
+      }
+    });
+  }
+
+  /*
+  * post formdata数据
+  * */
+  public void postFormDataProvider(String url, final File file, final String jsonData, final HttpDataCallBack callBack){
+    AsyncHttp.getInstance().uploadFile(url,file,jsonData,  new HttpDataCallBack() {
       @Override
       public void onError(final int errorCode) {
         mHandler.post(new Runnable() {

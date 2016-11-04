@@ -20,7 +20,6 @@ public class DialogUtils {
   }
 
   public static void showLongToast(String msg){
-
     Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_LONG).show();
   }
 

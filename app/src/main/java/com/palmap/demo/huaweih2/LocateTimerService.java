@@ -72,7 +72,11 @@ public class LocateTimerService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     instance = this;
     Log.d("TimerService", "onStartCommand");
-    if (intent.getStringExtra("flags").equals("3")) {
+    String ext = intent.getStringExtra("flags");
+    if (ext == null){
+      DialogUtils.showLongToast("请重启定位服务");
+    }
+    if ("3".equals(ext)) {
       //判断当系统版本大于20，即超过Android5.0时，我们采用线程循环的方式请求。
       //当小于5.0时的系统则采用定时唤醒服务的方式执行循环
       int currentapiVersion = android.os.Build.VERSION.SDK_INT;
@@ -82,7 +86,7 @@ public class LocateTimerService extends Service {
         getHttp();
       }
     }
-    return super.onStartCommand(intent, flags, startId);
+    return START_NOT_STICKY;
   }
 
   //循环请求的线程
@@ -109,11 +113,15 @@ public class LocateTimerService extends Service {
     DataProviderCenter.getInstance().getPosition("", new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        if (!Constant.openLocateTest) ErrorCode.showError(errorCode);
-        curX = x[count];
-        curY = y[count];
-        mContext.fragmentMap.addLocationMark(curX,curY);
-        count = ++count%(x.length);
+        if (Constant.openLocateTest) {
+          curX = x[count];
+          curY = y[count];
+          if (mContext.fragmentMap!=null && mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
+            mContext.fragmentMap.addLocationMark(curX, curY);
+
+          count = ++count % (x.length);
+        }else
+          ErrorCode.showError(errorCode);
       }
 
       @Override
@@ -123,7 +131,8 @@ public class LocateTimerService extends Service {
             List<PositionJson> list=new ArrayList<PositionJson>(JSONArray.parseArray(content.toString(),PositionJson.class));
             curY = list.get(0).getY();
             curX = list.get(0).getX();
-            mContext.fragmentMap.addLocationMark(curX, curY);
+            if (mContext.fragmentMap!=null && mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
+              mContext.fragmentMap.addLocationMark(curX, curY);
           }else {
             JSONObject jo1 = JSON.parseObject(content.toString());
             JSONObject jo2 = jo1.getJSONObject("geometry");
@@ -132,6 +141,7 @@ public class LocateTimerService extends Service {
             curY = jo3.getDoubleValue(1);
 
 //            Types.Point point = mMapView.converToScreenCoordinate(x,y);
+            if (mContext.fragmentMap!=null &&  mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
             mContext.fragmentMap.addLocationMark(curX,curY);
           }
 
@@ -143,19 +153,6 @@ public class LocateTimerService extends Service {
       }
     });
 
-
-
-//    String url = "http://sns.maimaicha.com/api?apikey=b4f4ee31a8b9acc866ef2afb754c33e6&format=json&method=news.getNewsContent&id=1";
-//    OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-//      @Override
-//      public void onError(Call call, Exception e, int id) {
-//        Log.d("TimerService", "TimerService" + e.toString());
-//      }
-//      @Override
-//      public void onResponse(String response, int id) {
-//        Log.d("TimerService", "response==" + response);
-//      }
-//    });
   }
 
   @Override

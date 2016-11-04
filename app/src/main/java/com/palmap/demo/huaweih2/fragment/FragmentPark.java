@@ -29,7 +29,7 @@ public class FragmentPark extends BaseFragment {
    EditText carNum;
   ImageView btnSearch;
   ParkInfoList parkInfoList;
-  LinearLayout mainlayout;
+  public LinearLayout mainlayout;
 
   @Override
   public View onCreateView(LayoutInflater inflater,
@@ -56,7 +56,7 @@ public class FragmentPark extends BaseFragment {
           DialogUtils.showShortToast("没有车牌号为"+"粤B-"+carNum.getText()+"的停车信息");
           return;
         }
-        DialogUtils.showLongToast("正在为您跳转到车牌号为"+"粤B-"+carNum.getText()+"的停车位，请稍后...");
+        DialogUtils.showShortToast("正在为您跳转到车牌号为"+"粤B-"+carNum.getText()+"的停车位，请稍后...");
         KeyBoardUtils.closeKeybord(carNum,getActivity());
 //        getMainActivity().hideTabMenu();
         showCarOnMap(t);
@@ -79,12 +79,16 @@ public class FragmentPark extends BaseFragment {
     mainlayout.setVisibility(View.GONE);
     getMainActivity().showCarOnMap(p);
     getMainActivity().titleBar.show(null,"找车","缴费");
+    getMainActivity().titleBar.setEnableRight(true);
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
         isSearchCar = false;
         getMainActivity().showFragmentPark();
         mainlayout.setVisibility(View.VISIBLE);
+        getMainActivity().fragmentMap.mMapView.removeAllOverlay();
+        getMainActivity().fragmentMap.resetFeatureStyle(getMainActivity().fragmentMap.markFeatureID);
+        getMainActivity().fragmentMap.mMapView.getOverlayController().refresh();
       }
 
       @Override

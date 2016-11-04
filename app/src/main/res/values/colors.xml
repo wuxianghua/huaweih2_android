@@ -36,6 +36,8 @@
     <color name="map_bg">#00000000</color>
     <color name="bg">#f2f7f9</color>
     <color name="cg">#565c60</color>
-    <color name="blue1">#1fafe7</color>;
+    <color name="blue1">#1fafe7</color>
+    <color name="name_color">#565c60</color>
+    <color name="name_color_bg">#f8fbff</color>;
     <!--<color name="foot_room">#b6d7a8</color>-->
 </resources>

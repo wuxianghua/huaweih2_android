@@ -40,7 +40,7 @@
             android:layout_width="130dp"
             android:layout_height="28dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="60dp"/>
         <!-- 定位、放大缩小、楼层切换 -->
 
@@ -75,7 +75,7 @@
                 android:id="@+id/map_zoom_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_tab_zoomin"/>
+                android:background="@drawable/btn_zoomin"/>
 
             <TextView
                 android:id="@+id/map_zoom_out"
@@ -125,7 +125,7 @@
                 android:id="@+id/f1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_tab_f1_sel"/>
+                android:background="@drawable/btn_floor_f1_sel"/>
 
             <TextView
                 android:id="@+id/b1"
@@ -181,6 +181,9 @@
                 android:id="@+id/tv_keywords"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:textColor="@color/black"
                 android:layout_toLeftOf="@+id/tv_cancel"
                 android:layout_toRightOf="@+id/btn_search"
                 />
@@ -231,6 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="H2大厅"/>
                 </LinearLayout>
 
@@ -251,6 +255,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="会议室"/>
                 </LinearLayout>
 
@@ -271,6 +276,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="ICS实验室"/>
                 </LinearLayout>
 
@@ -291,6 +297,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="ICS办公区"/>
                 </LinearLayout>
             </LinearLayout>
@@ -319,6 +326,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="电梯"/>
                 </LinearLayout>
 
@@ -339,6 +347,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="洗手间"/>
                 </LinearLayout>
 
@@ -359,6 +368,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="出入口"/>
                 </LinearLayout>
 
@@ -379,6 +389,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="#565c60"
                         android:text="茶水间"/>
                 </LinearLayout>
             </LinearLayout>
@@ -411,67 +422,39 @@
 
     </LinearLayout>
 
-    <!--选择对话框-->
-    <RelativeLayout
-        android:id="@+id/dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:clickable="true"
-        android:visibility="gone"
-        android:background="#77000000">
-        <LinearLayout
-            android:id="@+id/btn_map"
-            android:layout_width="225dp"
-            android:layout_height="44dp"
-            android:background="@drawable/btn_home_indormap"
-            android:layout_above="@+id/btn_foot"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center">
+    <!--&lt;!&ndash;选择对话框&ndash;&gt;-->
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/dialog"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:focusable="true"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="visible"-->
+        <!--android:background="#77000000">-->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/btn_map"-->
+            <!--android:layout_width="225dp"-->
+            <!--android:layout_height="44dp"-->
+            <!--android:background="@drawable/btn_home_indormap"-->
+            <!--android:layout_above="@+id/btn_foot"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center">-->
 
-            <!--<ImageView-->
-                <!--android:layout_width="20dp"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:src="@drawable/ico_tab_line"-->
-                <!--android:layout_marginRight="15dp"/>-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/btn_foot"-->
+            <!--android:layout_width="225dp"-->
+            <!--android:layout_height="44dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@drawable/btn_home_navgation"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:textSize="15sp"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:text="室内地图"-->
-                <!--android:gravity="center"/>-->
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/btn_foot"
-            android:layout_width="225dp"
-            android:layout_height="44dp"
-            android:orientation="horizontal"
-            android:background="@drawable/btn_home_navgation"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:layout_gravity="center">
-
-            <!--<ImageView-->
-                <!--android:layout_width="20dp"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:src="@drawable/ico_tab_line"-->
-                <!--android:layout_marginRight="15dp"/>-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:textSize="15sp"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:text="参观路线"-->
-                <!--android:gravity="center"/>-->
-        </LinearLayout>
-    </RelativeLayout>
+        <!--</LinearLayout>-->
+    <!--</RelativeLayout>-->
 
 </FrameLayout>
