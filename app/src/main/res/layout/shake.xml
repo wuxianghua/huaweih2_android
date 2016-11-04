@@ -12,12 +12,14 @@
 
     <!--</FrameLayout>-->
 
-    <FrameLayout
+    <RelativeLayout
+        android:clipChildren="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true">
 
         <ImageView
+            android:layout_centerInParent="true"
             android:paddingLeft="75dp"
             android:paddingRight="75dp"
             android:layout_width="match_parent"
@@ -25,6 +27,8 @@
             android:src="@drawable/shakeit_map" />
 
         <LinearLayout
+            android:layout_centerInParent="true"
+            android:clipChildren="false"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -41,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/shakeit_down" />
         </LinearLayout>
-    </FrameLayout>
+    </RelativeLayout>
 
 
     <LinearLayout

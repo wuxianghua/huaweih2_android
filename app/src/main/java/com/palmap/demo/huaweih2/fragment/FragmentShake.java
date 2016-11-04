@@ -1,5 +1,9 @@
 package com.palmap.demo.huaweih2.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -9,9 +13,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,8 +83,8 @@ FragmentShake extends BaseFragment {
                 startActivity(intent);
             }
         });
-        mImgDn = (ImageView) fragmentView.findViewById(R.id.img_up);
-        mImgUp = (ImageView) fragmentView.findViewById(R.id.img_down);
+        mImgUp = (ImageView) fragmentView.findViewById(R.id.img_up);
+        mImgDn = (ImageView) fragmentView.findViewById(R.id.img_down);
         text = (TextView) fragmentView.findViewById(R.id.content);
         title = (TextView) fragmentView.findViewById(R.id.title);
         result = (ImageView) fragmentView.findViewById(R.id.img);
@@ -108,62 +109,85 @@ FragmentShake extends BaseFragment {
 
     private void startAnim() { // 定义摇一摇动画动画
         poiInfo = null;
-        AnimationSet animup = new AnimationSet(true);
+//        AnimationSet animup = new AnimationSet(true);
+//
+//        TranslateAnimation mup0 = new TranslateAnimation(
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
+//                +1.0f);
+//        mup0.setDuration(1000);
+//        TranslateAnimation mup1 = new TranslateAnimation(
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
+//
+//                -1.0f);
+//        mup1.setDuration(1000);
+//        //延迟执行1秒
+//        mup1.setStartOffset(1000);
+//        animup.addAnimation(mup0);
+//        animup.addAnimation(mup1);
+//
+//        AnimationSet animdn = new AnimationSet(true);
+//        TranslateAnimation mdn0 = new TranslateAnimation(
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
+//                -1.0f);
+//        mdn0.setDuration(1000);
+//        TranslateAnimation mdn1 = new TranslateAnimation(
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
+//                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
+//                +1.0f);
+//        mdn1.setDuration(1000);
+//        //延迟执行1秒
+//        mdn1.setStartOffset(1000);
+//        animdn.addAnimation(mdn0);
+//        animdn.addAnimation(mdn1);
 
-        TranslateAnimation mup0 = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-                +1.0f);
-        mup0.setDuration(1000);
-        TranslateAnimation mup1 = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
+//
+//        animup.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                showPoiInfo();
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//
+//        //上图片的动画效果的添加
+//        mImgUp.startAnimation(animup);
+//        //下图片动画效果的添加
+//        mImgDn.startAnimation(animdn);
 
-                -1.0f);
-        mup1.setDuration(1000);
-        //延迟执行1秒
-        mup1.setStartOffset(1000);
-        animup.addAnimation(mup0);
-        animup.addAnimation(mup1);
+        int topHeight = mImgUp.getHeight();
+        int buttomHeight = mImgDn.getHeight();
 
-        AnimationSet animdn = new AnimationSet(true);
-        TranslateAnimation mdn0 = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-                -1.0f);
-        mdn0.setDuration(1000);
-        TranslateAnimation mdn1 = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-                Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-                +1.0f);
-        mdn1.setDuration(1000);
-        //延迟执行1秒
-        mdn1.setStartOffset(1000);
-        animdn.addAnimation(mdn0);
-        animdn.addAnimation(mdn1);
+        int top = mImgUp.getTop();
 
+        ObjectAnimator topAnim = ObjectAnimator.ofFloat(mImgUp, "translationY", top, top - topHeight, top);
+        topAnim.setDuration(2000);
+        ObjectAnimator bottomAnim = ObjectAnimator.ofFloat(mImgDn, "translationY", top, top + buttomHeight, top);
+        bottomAnim.setDuration(2000);
 
-        animup.setAnimationListener(new Animation.AnimationListener() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(topAnim);
+        animatorSet.play(bottomAnim);
+
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
+            public void onAnimationEnd(Animator animation) {
                 showPoiInfo();
             }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
         });
+        animatorSet.start();
 
-        //上图片的动画效果的添加
-        mImgUp.startAnimation(animup);
-        //下图片动画效果的添加
-        mImgDn.startAnimation(animdn);
     }
 
     /**
@@ -242,12 +266,6 @@ FragmentShake extends BaseFragment {
         //获取传感器管理服务
         mSensorManager = (SensorManager) getActivity()
                 .getSystemService(Service.SENSOR_SERVICE);
-        //加速度传感器
-        mSensorManager.registerListener(shakeUtils,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                //还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，
-                //根据不同应用，需要的反应速率不同，具体根据实际情况设定
-                SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void stopShakeSensor() {
@@ -260,14 +278,19 @@ FragmentShake extends BaseFragment {
 
     @Override
     public void onResume() {
-
-
         super.onResume();
+        mSensorManager.registerListener(shakeUtils,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                //还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，
+                //根据不同应用，需要的反应速率不同，具体根据实际情况设定
+                SensorManager.SENSOR_DELAY_NORMAL);
+        ShakeListenerUtils.isTooShort = false;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mSensorManager.unregisterListener(shakeUtils);
     }
 
 
