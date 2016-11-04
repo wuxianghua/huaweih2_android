@@ -8,7 +8,6 @@
     android:background="#77000000"
     tools:context="com.palmap.demo.huaweih2.PoiInfoActivity">
 
-
     <RelativeLayout
         android:id="@+id/co"
         android:layout_width="250dp"
