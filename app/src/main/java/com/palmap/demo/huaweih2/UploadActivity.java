@@ -67,7 +67,7 @@ public class UploadActivity extends BaseActivity {
 
 
     bitmap = FileUtils.comp(bitmap);
-
+    System.gc();
     titleBar.show("取消","","上传");
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
@@ -98,8 +98,8 @@ public class UploadActivity extends BaseActivity {
 
 //    bitmap = comp(bitmap);//压缩
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    System.gc();
     //输出压缩图片
     byte[] inputByte = null;
     int length = 0;
@@ -109,7 +109,7 @@ public class UploadActivity extends BaseActivity {
       try {
         dis = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
         fos = new FileOutputStream(new File(Constant.PATH_PICTURE_UPLOAD));
-        inputByte = new byte[1024];
+        inputByte = new byte[2048];
         System.out.println("开始接收数据...");
         while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
           System.out.println(length);
@@ -153,7 +153,10 @@ public class UploadActivity extends BaseActivity {
       @Override
       public void onComplete(Object content) {
         DialogUtils.showShortToast("上传成功");
-
+        if (bitmap != null) {
+          bitmap.recycle();
+        }
+        System.gc();
         closeProgress();
         finish();
       }
