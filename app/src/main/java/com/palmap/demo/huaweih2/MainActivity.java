@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity {
   FragmentTransaction transaction;
 
   public boolean isShowPoiInfoBar = false;//是否显示poi详情栏
+  public boolean shouldShow2choose1 = false;//是否显示2选1
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +118,16 @@ public class MainActivity extends BaseActivity {
   private void checkFirstRun() {
     SharedPreferences setting = getSharedPreferences(Constant.IS_FIRST_RUN, 0);
     Boolean user_first = setting.getBoolean("FIRST", true);
+    int time =  setting.getInt("time", 0);
+    if (time>0){
+      shouldShow2choose1 = true;
+      setting.edit().putInt("time", (time-1)).commit();//显示次数
+    }
+
     if (user_first) {//第一次
       HuaWeiH2Application.firstRun = true;
       setting.edit().putBoolean("FIRST", false).commit();
+      setting.edit().putInt("time", 2).commit();//显示次数
       startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
     }
   }

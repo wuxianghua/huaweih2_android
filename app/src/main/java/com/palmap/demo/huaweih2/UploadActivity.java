@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
+import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PictureJson;
 import com.palmap.demo.huaweih2.other.Constant;
@@ -132,7 +133,7 @@ public class UploadActivity extends BaseActivity {
     DataProviderCenter.getInstance().postFormDATA(imgUp, picJson, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
-        DialogUtils.showShortToast(errorCode+"");
+        ErrorCode.showError(errorCode);
         closeProgress();
         Log.e("error",errorCode+"");
       }

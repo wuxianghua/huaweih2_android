@@ -58,7 +58,7 @@ public class ActivityUploadCom extends BaseActivity {
         DataProviderCenter.getInstance().postComments(s, new HttpDataCallBack() {
           @Override
           public void onError(int errorCode) {
-            DialogUtils.showShortToast(errorCode+"");
+            ErrorCode.showError(errorCode);
           }
 
           @Override
