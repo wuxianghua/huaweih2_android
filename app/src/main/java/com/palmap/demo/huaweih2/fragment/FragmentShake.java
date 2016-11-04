@@ -2,8 +2,6 @@ package com.palmap.demo.huaweih2.fragment;
 
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -17,7 +15,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.PoiInfoActivity;
 import com.palmap.demo.huaweih2.R;
@@ -29,8 +29,6 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.util.ShakeListenerUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
-
-import java.net.URL;
 
 import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea;
 
@@ -109,75 +107,78 @@ FragmentShake extends BaseFragment {
     }
 
     private void startAnim() { // 定义摇一摇动画动画
-
+        poiInfo = null;
         AnimationSet animup = new AnimationSet(true);
 
         TranslateAnimation mup0 = new TranslateAnimation(
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-
                 +1.0f);
-
         mup0.setDuration(1000);
-
         TranslateAnimation mup1 = new TranslateAnimation(
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
 
                 -1.0f);
-
         mup1.setDuration(1000);
-
-//延迟执行1秒
-
+        //延迟执行1秒
         mup1.setStartOffset(1000);
-
         animup.addAnimation(mup0);
-
         animup.addAnimation(mup1);
 
-//上图片的动画效果的添加
-
-        mImgUp.startAnimation(animup);
-
         AnimationSet animdn = new AnimationSet(true);
-
         TranslateAnimation mdn0 = new TranslateAnimation(
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-
                 -1.0f);
-
         mdn0.setDuration(1000);
-
         TranslateAnimation mdn1 = new TranslateAnimation(
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f,
-
                 Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF,
-
                 +1.0f);
-
         mdn1.setDuration(1000);
-
-//延迟执行1秒
-
+        //延迟执行1秒
         mdn1.setStartOffset(1000);
-
         animdn.addAnimation(mdn0);
-
         animdn.addAnimation(mdn1);
 
-//下图片动画效果的添加
 
+        animup.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showPoiInfo();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        //上图片的动画效果的添加
+        mImgUp.startAnimation(animup);
+        //下图片动画效果的添加
         mImgDn.startAnimation(animdn);
+    }
 
+    /**
+     * 显示poi信息UI
+     */
+    private void showPoiInfo() {
+        if (poiInfo == null) {
+            Toast.makeText(getActivity(), "没有信息,重试", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        shakeShow.setVisibility(View.VISIBLE);
+        title.setText(poiInfo.getTitle());
+        text.setText(poiInfo.getText());
+        Glide.with(this).load(poiInfo.getImage()).into(result);
+        ShakeListenerUtils.isTooShort = false;
     }
 
     public void initShakeSensor() {
@@ -198,44 +199,42 @@ FragmentShake extends BaseFragment {
 
                     @Override
                     public void onComplete(Object content) {
-
                         poiInfo = JsonUtils.getPoiInfo(content);
-                        if (poiInfo == null)
-                            return;
-
-                        shakeShow.setVisibility(View.VISIBLE);
-                        title.setText(poiInfo.getTitle());
-                        text.setText(poiInfo.getText());
-
-
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    URL picUrl = new URL(poiInfo.getImage());
-                                    final Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            result.setImageBitmap(pngBM);
-                                            ShakeListenerUtils.isTooShort = false;
-                                        }
-                                    });
-
-                                } catch (final Exception e) {
-                                    e.printStackTrace();
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            DialogUtils.showShortToast(e.getMessage());
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
-                        thread.start();
-
+//                        if (poiInfo == null)
+//                            return;
+//
+//                        shakeShow.setVisibility(View.VISIBLE);
+//                        title.setText(poiInfo.getTitle());
+//                        text.setText(poiInfo.getText());
+//
+//
+//                        Thread thread = new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    URL picUrl = new URL(poiInfo.getImage());
+//                                    final Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
+//                                    getActivity().runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            result.setImageBitmap(pngBM);
+//                                            ShakeListenerUtils.isTooShort = false;
+//                                        }
+//                                    });
+//
+//                                } catch (final Exception e) {
+//                                    e.printStackTrace();
+//                                    getActivity().runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            DialogUtils.showShortToast(e.getMessage());
+//                                        }
+//                                    });
+//
+//                                }
+//                            }
+//                        });
+//                        thread.start();
                     }
                 });
             }
