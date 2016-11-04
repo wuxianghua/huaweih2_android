@@ -364,7 +364,7 @@ local function DEFAULT_TEXT()
         ['2d'] = {
             style = 'annotation',
             color = '0xFF343434',
-            field = 'display',
+            field = 'category',
             unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
             size = 6,
             outline_color = '0x00ffffff',
@@ -1002,60 +1002,60 @@ CONFIG = {
                     renderer = {
                         type = 'unique',
                         key = {
-                            --              'category',
+                            'category',
                             'display',
                         },
                         default = DEFAULT_TEXT(),
                         styles = {
-                            ['null'] = {
-                                ['2d'] = {
-                                    style = 'annotation',
-                                    color = '0x00ffffff',
-                                    field = 'display',
-                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
-                                    size = 6,
-                                    outline_color = '0x00ffffff',
-                                    outline_width = 0.5,
-                                    anchor_x = 0.5,
-                                    anchor_y = 0.5,
-                                    height = 5.0,
-                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
-                                }
-                            },
-                            ['ICS办公区'] = {
-                                ['2d'] = {
-                                    style = 'annotation',
-                                    color = '0x00ffffff',
-                                    field = 'display',
-                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
-                                    size = 6,
-                                    outline_color = '0x00ffffff',
-                                    outline_width = 0.5,
-                                    anchor_x = 0.5,
-                                    anchor_y = 0.5,
-                                    height = 5.0,
-                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
-                                }
-                            }
-                            --              [24005000] = {  --假设匹配到了category为4018000000的Feature，那么使用下面设置的样式
-                            --- -                ['2d'] = {
-                            ---- style='nullstyle',
-                            ---- }
-                            --
-                            -- ['2d'] = {
-                            -- style = 'annotation',
-                            -- color = '0x00343434',
-                            -- field = 'display',
-                            -- unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
-                            -- size = 6,
-                            -- outline_color = '0x00ffffff',
-                            -- outline_width = 0.5,
-                            -- anchor_x = 0.5,
-                            -- anchor_y = 0.5,
-                            -- height = 5.0,
-                            -- aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
-                            -- }
-                            -- },
+--                            ['null'] = {
+--                                ['2d'] = {
+--                                    style = 'annotation',
+--                                    color = '0x00ffffff',
+--                                    field = 'display',
+--                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+--                                    size = 6,
+--                                    outline_color = '0x00ffffff',
+--                                    outline_width = 0.5,
+--                                    anchor_x = 0.5,
+--                                    anchor_y = 0.5,
+--                                    height = 5.0,
+--                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+--                                }
+--                            },
+--                            ['ICS办公区'] = {
+--                                ['2d'] = {
+--                                    style = 'annotation',
+--                                    color = '0x00ffffff',
+--                                    field = 'display',
+--                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+--                                    size = 6,
+--                                    outline_color = '0x00ffffff',
+--                                    outline_width = 0.5,
+--                                    anchor_x = 0.5,
+--                                    anchor_y = 0.5,
+--                                    height = 5.0,
+--                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+--                                }
+--                            }
+                            [24005000] = {  --假设匹配到了category为4018000000的Feature，那么使用下面设置的样式
+                                           ['2d'] = {
+                             style='nullstyle',
+                             }
+
+--                             ['2d'] = {
+--                             style = 'annotation',
+--                             color = '0x00343434',
+--                             field = 'display',
+--                             unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+--                             size = 6,
+--                             outline_color = '0x00ffffff',
+--                             outline_width = 0.5,
+--                             anchor_x = 0.5,
+--                             anchor_y = 0.5,
+--                             height = 5.0,
+--                             aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+--                             }
+                             },
                         }
                     }
                 },
