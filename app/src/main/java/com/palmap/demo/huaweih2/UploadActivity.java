@@ -47,7 +47,19 @@ public class UploadActivity extends BaseActivity {
     File file = new File(Constant.PATH_PICTURE_UPLOAD);
     Uri uri = Uri.fromFile(file);
     im_upload.setImageURI(uri);
-    bitmap= BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD);
+
+    // TODO: 2016/11/4 节省创建bitMap的内存
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inPreferredConfig=Bitmap.Config.RGB_565;
+//    options.inDither=false;
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD, options);
+    int outWidth = 400;//输出图片的宽度
+    options.outHeight = options.outHeight * options.outWidth / outWidth;
+    options.outWidth = outWidth;
+    options.inJustDecodeBounds = false;
+    bitmap= BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD,options);
+
     if (bitmap==null) {
       finish();
       return;
