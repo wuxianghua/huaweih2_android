@@ -168,7 +168,7 @@ public class ActivityOffice extends BaseActivity {
       final TextView tv_name = new TextView(this);
       tv_name.setText(names[i]);
       tv_name.setTextSize(15);
-      tv_name.setPadding(50,50,50,50);
+      tv_name.setPadding(35,40,35,40);
       tv_name.setBackgroundColor(getResources().getColor(R.color.name_color_bg));
       tv_name.setTextColor(getResources().getColor(R.color.name_color));
       nameContainer.addView(tv_name);
