@@ -19,6 +19,7 @@ import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
+import com.palmap.demo.huaweih2.util.KeyBoardUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.text.SimpleDateFormat;
@@ -45,11 +46,13 @@ public class ActivityUploadCom extends BaseActivity {
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
+        KeyBoardUtils.closeKeybord(textView, ActivityUploadCom.this);
         setResult(RESULT_CANCELED,getIntent());
         finish();
       }
       @Override
       public void onRight() {
+        KeyBoardUtils.closeKeybord(textView, ActivityUploadCom.this);
         if (textView.getText().toString().equals("")){
           DialogUtils.showShortToast("写点什么吧");
           return;
@@ -90,7 +93,10 @@ public class ActivityUploadCom extends BaseActivity {
       }
     });
 
-    loadComments();
+//    loadComments();//加载评论
+
+    KeyBoardUtils.openKeybord(textView, this);
+    textView.requestFocus();
   }
 
 
@@ -144,4 +150,5 @@ public class ActivityUploadCom extends BaseActivity {
       }
     });
   }
+
 }

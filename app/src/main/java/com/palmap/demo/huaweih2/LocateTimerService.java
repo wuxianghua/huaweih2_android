@@ -21,45 +21,68 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.palmap.demo.huaweih2.fragment.FragmentMap.hasLocated;
+
 /**
  * Created by eric3 on 2016/10/23.
  */
 
 public class LocateTimerService extends Service {
-  private static double curX;
-  private static double curY;
-  static MainActivity mContext;
+  public static double curX;
+  public static double curY;
+  public static long curFloorID;//当前定位点floor
+  static Context mContext;
+  static MainActivity mMainActivity;
   private boolean pushthread = false;
   private static LocateTimerService instance;
   //地理围栏
-  static double[] hall=new double[]{12697136.398,	12697170.670 ,	2588890.742 	,2588913.578
+  static double[] hall = new double[]{12697136.398, 12697170.670, 2588890.742, 2588913.578
   };//  x左,x右,y上,y下
-  static double[] meeting=new double[]{12697124.910 ,	12697133.112, 	2588902.794 ,	2588917.187
+  static double[] meeting = new double[]{12697124.910, 12697133.112, 2588902.794, 2588917.187
   };
-  static double[] lab=new double[]{12697093.954 ,	12697102.738 ,	2588902.847 	,2588913.271
+  static double[] lab = new double[]{12697093.954, 12697102.738, 2588902.847, 2588913.271
   };
-  static double[] office=new double[]{12697082.524 ,	12697091.996 ,	2588865.223 ,	2588885.331
+  static double[] office = new double[]{12697082.524, 12697091.996, 2588865.223, 2588885.331
   };
-  static double[] h2=new double[]{12697080.571 ,	12697195.929 ,	2588843.728 ,	2588958.557
+  static double[] h2 = new double[]{12697080.571, 12697195.929, 2588843.728, 2588958.557
   };
 
   //6个定位参测试点坐标
-  double[] x={12697143.402,
+  double[] x = {
+//      12697159.860  ,
+      12697143.402,
+      12697142.402,
       12697130.823,
+      12697131.823,
       12697100.672,
+      12697101.672,
       12697090.221,
+      12697091.221,
       12697110.501,
+      12697111.501,
       12697227.218
   };
-  double[] y={2588906.316,
+  double[] y = {
+//      2588920.829,
+      2588906.316,
+      2588906.316,
+      2588907.362,
       2588907.362,
       2588904.129,
+      2588904.129,
       2588878.236,
+      2588878.236,
+      2588901.734,
       2588901.734,
       2588831.403,
   };
   int count = 0;
+
   public LocateTimerService() {
+  }
+
+  public static void setmMainActivity(MainActivity mMainActivity) {
+    LocateTimerService.mMainActivity = mMainActivity;
   }
 
   @Override
@@ -73,7 +96,7 @@ public class LocateTimerService extends Service {
     instance = this;
     Log.d("TimerService", "onStartCommand");
     String ext = intent.getStringExtra("flags");
-    if (ext == null){
+    if (ext == null) {
       DialogUtils.showLongToast("请重启定位服务");
     }
     if ("3".equals(ext)) {
@@ -90,7 +113,7 @@ public class LocateTimerService extends Service {
   }
 
   //循环请求的线程
-  public void getPushThread() {
+  private void getPushThread() {
     pushthread = true;
     new Thread(new Runnable() {
       @Override
@@ -116,37 +139,47 @@ public class LocateTimerService extends Service {
         if (Constant.openLocateTest) {
           curX = x[count];
           curY = y[count];
-          if (mContext.fragmentMap!=null && mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
-            mContext.fragmentMap.addLocationMark(curX, curY);
+          curFloorID = Constant.FLOOR_ID_F1;
+          hasLocated = true;
+          if (mMainActivity!=null&&mMainActivity.fragmentMap != null) {
+              mMainActivity.fragmentMap.addLocationMark(curX, curY);
 
+          }
           count = ++count % (x.length);
-        }else
+        } else
           ErrorCode.showError(errorCode);
       }
 
       @Override
       public void onComplete(Object content) {
+        if (mMainActivity==null ||mMainActivity.fragmentMap == null)
+          return;
+
+
         try {
-          if (Constant.useTestServer){
-            List<PositionJson> list=new ArrayList<PositionJson>(JSONArray.parseArray(content.toString(),PositionJson.class));
+          if (Constant.useTestServer) {
+            List<PositionJson> list = new ArrayList<PositionJson>(JSONArray.parseArray(content.toString(), PositionJson.class));
             curY = list.get(0).getY();
             curX = list.get(0).getX();
-            if (mContext.fragmentMap!=null && mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
-              mContext.fragmentMap.addLocationMark(curX, curY);
-          }else {
+            if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1)
+              mMainActivity.fragmentMap.addLocationMark(curX, curY);
+          } else {
             JSONObject jo1 = JSON.parseObject(content.toString());
             JSONObject jo2 = jo1.getJSONObject("geometry");
+            JSONObject jo4 = jo1.getJSONObject("properties");
+            curFloorID = jo4.getLongValue("floor_id");
             JSONArray jo3 = jo2.getJSONArray("coordinates");
             curX = jo3.getDoubleValue(0);
             curY = jo3.getDoubleValue(1);
+            hasLocated = true;
 
 //            Types.Point point = mMapView.converToScreenCoordinate(x,y);
-            if (mContext.fragmentMap!=null &&  mContext.fragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1)
-            mContext.fragmentMap.addLocationMark(curX,curY);
+            if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1)
+              mMainActivity.fragmentMap.addLocationMark(curX, curY);
           }
 
 
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
           DialogUtils.showShortToast(e.getMessage());
         }
 
@@ -163,8 +196,8 @@ public class LocateTimerService extends Service {
   }
 
   //启动服务和定时器
-  public static void getLocation(Context mContext) {
-    LocateTimerService.mContext = (MainActivity) mContext;
+  public static void start(Context mContext) {
+    LocateTimerService.mContext =  mContext;
     try {
       Intent intent = new Intent(mContext, LocateTimerService.class);
       intent.putExtra("flags", "3");
@@ -182,13 +215,14 @@ public class LocateTimerService extends Service {
             System.currentTimeMillis(), Constant.LOCATE_FRESH_TIME, pIntent);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      DialogUtils.showShortToast(e.getMessage());
     }
   }
 
-public static LocateTimerService getInstance(){
-  return instance;
-}
+  public static LocateTimerService getInstance() {
+    return instance;
+  }
+
   //停止由AlarmManager启动的循环
   public static void stop(Context mContext) {
     instance = null;
@@ -202,24 +236,24 @@ public static LocateTimerService getInstance(){
 
   public static String getCurrentLocationArea() {
 
-    if (mContext==null||mContext.fragmentMap==null||mContext.fragmentMap.mMapView==null)
-      return Constant.其他;
+    if (mMainActivity == null || mMainActivity.fragmentMap == null || mMainActivity.fragmentMap.mMapView == null)
+      return Constant.其它;
 
-    String poiName=Constant.其他;
+    String poiName = Constant.其它;
 
 
 //    Types.Point point = mContext.fragmentMap.mMapView.converToScreenCoordinate(curX,curY);
 //    poiName=mContext.fragmentMap.getPOINameByPoint((float) point.x,(float)point.y);
 
-    if (curX>h2[0]&&curX<h2[1]&&curY>h2[2]&&curY<h2[3])
+    if (curX > h2[0] && curX < h2[1] && curY > h2[2] && curY < h2[3])
       poiName = Constant.H2大楼;
-    if (curX>hall[0]&&curX<hall[1]&&curY>hall[2]&&curY<hall[3])
+    if (curX > hall[0] && curX < hall[1] && curY > hall[2] && curY < hall[3])
       poiName = Constant.H2大厅;
-    if (curX>lab[0]&&curX<lab[1]&&curY>lab[2]&&curY<lab[3])
+    if (curX > lab[0] && curX < lab[1] && curY > lab[2] && curY < lab[3])
       poiName = Constant.ICS实验室;
-    if (curX>office[0]&&curX<office[1]&&curY>office[2]&&curY<office[3])
+    if (curX > office[0] && curX < office[1] && curY > office[2] && curY < office[3])
       poiName = Constant.ICS办公区;
-    if (curX>meeting[0]&&curX<meeting[1]&&curY>meeting[2]&&curY<meeting[3])
+    if (curX > meeting[0] && curX < meeting[1] && curY > meeting[2] && curY < meeting[3])
       poiName = Constant.会议室;
 
 

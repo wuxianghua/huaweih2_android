@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -33,6 +34,7 @@ import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
+import com.palmaplus.nagrand.core.Types;
 import com.palmaplus.nagrand.data.Feature;
 import com.palmaplus.nagrand.view.MapView;
 
@@ -41,6 +43,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigateCar;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigating;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
 import static com.palmap.demo.huaweih2.other.Constant.H2大厅;
@@ -54,6 +57,7 @@ import static com.palmaplus.nagrand.position.ble.BeaconUtils.TAG;
 public class MainActivity extends BaseActivity{
   //  public FullScreenDialog dialog;
   public RelativeLayout dialog;
+  public FrameLayout foot_up;
   LinearLayout btn_map;
   LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
@@ -100,6 +104,7 @@ public class MainActivity extends BaseActivity{
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    LocateTimerService.setmMainActivity(this);
     initStatusBar(R.color.black);
 
     WXShareUtils.regToWeChat(this);
@@ -108,7 +113,6 @@ public class MainActivity extends BaseActivity{
     if (Constant.isDebug) {
       HuaWeiH2Application.firstRun = true;
       startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
-
     } else
       checkFirstRun();
 
@@ -120,9 +124,16 @@ public class MainActivity extends BaseActivity{
   protected void onResume() {
     super.onResume();
 
-    //启动Android定时器，并且启动服务
-    if (Constant.openLocateService)
-      LocateTimerService.getLocation(this);
+    if (HuaWeiH2Application.startWelcomeAct){
+      HuaWeiH2Application.startWelcomeAct = false;
+      startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
+    }else {
+      //启动Android定时器，并且启动定位查询服务
+      if (Constant.openLocateService&&LocateTimerService.getInstance()==null)
+        LocateTimerService.start(this);
+    }
+
+
   }
 
   private void checkFirstRun() {
@@ -136,9 +147,15 @@ public class MainActivity extends BaseActivity{
 
     if (user_first) {//第一次
       HuaWeiH2Application.firstRun = true;
+      HuaWeiH2Application.startWelcomeAct =true;
       setting.edit().putBoolean("FIRST", false).commit();
       setting.edit().putInt("time", 2).commit();//显示次数
-      startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
+
+    }
+    else {
+//      //启动Android定时器，并且启动服务
+//      if (Constant.openLocateService)
+//        LocateTimerService.start(this);
     }
   }
 
@@ -147,6 +164,10 @@ public class MainActivity extends BaseActivity{
     switch (requestCode) {
       case Constant.startWelcome:
         initMapFragment();
+//        //启动Android定时器，并且启动服务
+//        if (Constant.openLocateService)
+//          LocateTimerService.start(this);
+
         break;
       case Constant.startPay:
         if (resultCode == RESULT_OK)
@@ -157,6 +178,10 @@ public class MainActivity extends BaseActivity{
           String name = data.getStringExtra("peopleName");
           if (name == null)
             break;
+          String isRoute = data.getStringExtra("isRoute");
+          if ("true".equals(isRoute)){
+            fragmentMap.resetFootPrint();
+          }
 
           fragmentMap.searchPeopleName(name);
         }
@@ -206,6 +231,14 @@ public class MainActivity extends BaseActivity{
     poiInfoBar = (RelativeLayout) findViewById(R.id.poi_info);
     mMapContainer = (RelativeLayout) findViewById(R.id.map_container);
 
+    foot_up = (FrameLayout)findViewById(R.id.foot_up);
+    foot_up.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        fragmentMap.showFootInfo();
+      }
+    });
+    foot_up.setVisibility(View.GONE);
     dialog = (RelativeLayout) findViewById(R.id.dialog);
     btn_map = (LinearLayout) findViewById(R.id.btn_map);
     btn_map.setOnClickListener(new View.OnClickListener() {
@@ -236,7 +269,7 @@ public class MainActivity extends BaseActivity{
         hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
-        titleBar.show(null, "停车", null);
+        titleBar.show(null, "找车", null);
         hideMap();
 //            if (fragmentPark == null) {
         fragmentPark = new FragmentPark();
@@ -447,8 +480,8 @@ public class MainActivity extends BaseActivity{
     fragmentMap.mMapView.setOverlayContainer(mMapContainer);
     fragmentMap.moveToCar(parkInfo);
 
-    //寻车不导航
-    im_go.setVisibility(View.GONE);
+    //反向寻车
+    im_go.setVisibility(View.VISIBLE);
   }
 
   public MapView getMapView() {
@@ -495,7 +528,7 @@ public class MainActivity extends BaseActivity{
     transaction.commit();
     showTabMenu();
     tabMenu.setVisibility(View.GONE);
-    titleBar.show(null, "停车", null);
+    titleBar.show(null, "找车", null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -511,6 +544,8 @@ public class MainActivity extends BaseActivity{
 
   public void showFragmentMap() {
     poiInfoBar.setVisibility(View.GONE);
+    fragmentMap.mSearchBg.setVisibility(View.GONE);
+    fragmentMap.hideSearchView();
 //    rout.setChecked(true);
 
 
@@ -531,7 +566,7 @@ public class MainActivity extends BaseActivity{
 
 
   //显示poi详情
-  public void showPoiInfoBar(final long featureCategoryID) {
+  public void showPoiInfoBar(final long featureCategoryID,String name) {
     isShowPoiInfoBar = true;
     tv_tip.setVisibility(View.GONE);
     poiInfoBar.setVisibility(View.VISIBLE);
@@ -542,11 +577,17 @@ public class MainActivity extends BaseActivity{
 
     im_go.setBackgroundResource(R.drawable.ico_tab_navigation);
 
+   name = name==null?"H2大楼":name;
 
     List<PoiImg> poiImgs = PoiImgList.getPoiImgList();
-    for (int i = 0; i < poiImgs.size(); i++) {
+    for (int i = 0; i < poiImgs.size(); i++) {//设置特殊poi图片
       if (featureCategoryID == poiImgs.get(i).getCat())
         im_poi.setBackgroundResource(poiImgs.get(i).getId());
+
+      if (featureCategoryID==Constant.商务办公_ID){
+        if (name.contains("实验室"))
+          im_poi.setBackgroundResource(R.drawable.laboratory);
+      }
     }
 
 
@@ -573,6 +614,7 @@ public class MainActivity extends BaseActivity{
   public void showNavigateInfoBar(String startName, String endName, String len) {
     im_poi.setVisibility(View.GONE);
     btn_set_start.setVisibility(View.GONE);
+    tv_poi_moreinfo.setVisibility(View.GONE);
     im_poi.setVisibility(View.VISIBLE);
     im_poi.setBackgroundResource(R.drawable.trans);
     im_poi.setText(len + "m");
@@ -600,6 +642,12 @@ public class MainActivity extends BaseActivity{
       @Override
       public void onClick(View v) {
         if (isNavigating) {
+
+          if (isSearchCar){
+            isSearchCar=false;
+            isNavigateCar=false;
+          }
+
           showTabMenu();
           fragmentMap.endNavigate();
         }
@@ -610,12 +658,19 @@ public class MainActivity extends BaseActivity{
 
   //设置poi详情
   public void setPoiInfoBar(final Feature feature) {
-    final String name = MapParamUtils.getName(feature);
+    String name = MapParamUtils.getName(feature);
+    if (name==null)
+      name = MapParamUtils.getDisplay(feature);
+
+    if (name==null)
+      name = PoiImgList.getName(MapParamUtils.getCategoryId(feature));
+
     if (isSearchCar) {
       tv_poi_name.setText(fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : name));
     } else {
       tv_poi_name.setText(name == null ? "H2大楼" : name);
     }
+
 
     String address = MapParamUtils.getAddress(feature);
     tv_poi_address.setText(address == null ? fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1 ? "F1" : "B1" : address);
@@ -627,11 +682,22 @@ public class MainActivity extends BaseActivity{
     im_go.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        if (isSearchCar){//反向寻车
+          fragmentMap.isNavigateCar=true;
+          showFragmentMap();
+        }
+
+
         //标题栏
-        titleBar.show(null, "导航路线", null);
+        titleBar.show(null, "选择起点", null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
           @Override
           public void onLeft() {
+            if (isSearchCar) {
+              isSearchCar = false;
+              isNavigateCar = false;
+            }
+
             showTabMenu();
             fragmentMap.endNavigate();
           }
@@ -645,23 +711,63 @@ public class MainActivity extends BaseActivity{
 //        fragmentMap.mMapView.removeOverlay(fragmentMap.mark);
 //        fragmentMap.addMark(fragmentMap.xx,fragmentMap.yy);
         fragmentMap.addMark(fragmentMap.endX, fragmentMap.endY, Mark.END);
+
+
+        fragmentMap.toFloorID = Feature.planar_graph.get(feature);
+
+
+
+
+
         if (fragmentMap.hasLocated) {//有定位点
+          double x= LocateTimerService.curX;
+          double y =LocateTimerService.curY;
+          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
+          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
+          if (f==null){
+            showSelectStartPoint(feature);
+            return;
+          }
+          String name = MapParamUtils.getName(f);
+          if ( name==null||"".equals(name)) {
+            showSelectStartPoint(feature);
+            return;
+          }
+
+          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
+            name = name + " "+MapParamUtils.getAddress(f);
+          }
+
+          fragmentMap.startX = x;
+          fragmentMap.startY = y;
+          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
+          fragmentMap.startName =name;
+
+          fragmentMap.startNavigate();
+
+
 
         } else {//无定位点
-          fragmentMap.isSelectStartPoint = true;
-          fragmentMap.toFloorID = Feature.planar_graph.get(feature);
-
-          tv_poi_address.setVisibility(View.GONE);
-          tv_poi_moreinfo.setVisibility(View.GONE);
-          tv_poi_name.setVisibility(View.GONE);
-          im_poi.setVisibility(View.GONE);
-          im_go.setVisibility(View.GONE);
-//          im_share.setVisibility(View.GONE);
-          tv_tip.setVisibility(View.VISIBLE);
+          showSelectStartPoint(feature);
         }
       }
     });
 
+  }
+
+  private void showSelectStartPoint(Feature feature){
+    fragmentMap.isSelectStartPoint = true;
+    fragmentMap.toFloorID = Feature.planar_graph.get(feature);
+
+    hideTabMenu();
+    poiInfoBar.setVisibility(View.VISIBLE);
+    tv_poi_address.setVisibility(View.GONE);
+    tv_poi_moreinfo.setVisibility(View.GONE);
+    tv_poi_name.setVisibility(View.GONE);
+    im_poi.setVisibility(View.GONE);
+    im_go.setVisibility(View.GONE);
+//          im_share.setVisibility(View.GONE);
+    tv_tip.setVisibility(View.VISIBLE);
   }
 
   //判断是否显示 查看详情
@@ -674,7 +780,7 @@ public class MainActivity extends BaseActivity{
     //若为4个节点，显示详情
     if (H2大厅.equals(name) || ICS办公区.equals(name) || name.contains(ICS实验室) || 会议室.equals(name)) {
       tv_poi_moreinfo.setVisibility(View.VISIBLE);
-      tv_poi_moreinfo.setText("查看详情>>");
+      tv_poi_moreinfo.setText("详情>>");
       morePoiInfoName = name;
       tv_poi_moreinfo.setClickable(true);
     } else {
@@ -694,7 +800,7 @@ public class MainActivity extends BaseActivity{
       startActivity(new Intent(this, ActivityHall.class));
     } else if (会议室.equals(morePoiInfoName)) {
       startActivity(new Intent(this, ActivityMeeting.class));
-    } else if (ICS办公区.equals(morePoiInfoName)) {
+    } else if (ICS办公区.equals(morePoiInfoName)) {//然后在手机上安装ics软件，停止运行后
       startActivityForResult(new Intent(this, ActivityOffice.class), Constant.startOffice);
     } else if (morePoiInfoName.contains(ICS实验室)) {
       startActivity(new Intent(this, ActivityLab.class));
@@ -753,14 +859,32 @@ public class MainActivity extends BaseActivity{
     tabMenu.setVisibility(View.GONE);
 
     String name = MapParamUtils.getName(feature);
+    long featureCategoryID = MapParamUtils.getCategoryId(feature);
 
-    tv_poi_name.setText(name == null ? "未知位置" : name);
+    if (name==null)
+      name = PoiImgList.getName(MapParamUtils.getCategoryId(feature));
+
+    tv_poi_name.setText(name == null ? "H2大楼" : name);
 
     String address = MapParamUtils.getAddress(feature);
 
     tv_poi_address.setText(address == null ? fragmentMap.mCurrentFloor == 1 ? "F1" : "B1" : address);
 
 //          tv_poi_moreinfo.setText(MapParamUtils.getEnglishName(locationModel));
+
+    name = name==null?"H2大楼":name;
+
+    List<PoiImg> poiImgs = PoiImgList.getPoiImgList();
+    for (int i = 0; i < poiImgs.size(); i++) {//设置特殊poi图片
+      if (featureCategoryID == poiImgs.get(i).getCat())
+        im_poi.setBackgroundResource(poiImgs.get(i).getId());
+
+      if (featureCategoryID==Constant.商务办公_ID){
+        if (name.contains("实验室"))
+          im_poi.setBackgroundResource(R.drawable.laboratory);
+      }
+    }
+
 
     im_go.setVisibility(View.GONE);
 //    im_share.setVisibility(View.GONE);
@@ -790,11 +914,7 @@ public class MainActivity extends BaseActivity{
   protected void onPause() {
     super.onPause();
 
-    //停止由AlarmManager启动的循环
-    LocateTimerService.stop(this);
-    //停止由服务启动的循环
-    Intent intent = new Intent(this, LocateTimerService.class);
-    stopService(intent);
+
 
   }
 
@@ -812,23 +932,30 @@ public class MainActivity extends BaseActivity{
       }
 
 
-      if (tabMenu.getVisibility() == View.VISIBLE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true)) {//只有在首页才退出
+      if (tabMenu.getVisibility() == View.VISIBLE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true &&!isNavigating)) {//只有在首页才退出
 
         exitBy2Click(); //调用双击退出函数
 
       } else {
-        if (isNavigating) {
+        if (isNavigating&&!isSearchCar) {
           showTabMenu();
           fragmentMap.endNavigate();
         } else if (fragmentMap.isShowFootPrint) {
           fragmentMap.resetFootPrint();
         } else if (isSearchCar) {
           isSearchCar = false;
-          showFragmentPark();
-          fragmentPark.mainlayout.setVisibility(View.VISIBLE);
-          fragmentMap.mMapView.removeAllOverlay();
-          fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
-          fragmentMap.mMapView.getOverlayController().refresh();
+
+          if (isNavigateCar){
+            isNavigateCar = false;
+            showTabMenu();
+            fragmentMap.endNavigate();
+          }else {
+            showFragmentPark();
+            fragmentPark.mainlayout.setVisibility(View.VISIBLE);
+            fragmentMap.mMapView.removeAllOverlay();
+            fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
+            fragmentMap.mMapView.getOverlayController().refresh();
+          }
         } else {
           showFragmentMap();
         }
@@ -869,6 +996,7 @@ public class MainActivity extends BaseActivity{
     // 指定开启系统相机的Action
     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
     intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT,400*200);
     //如果路径不存在，则创建
     // 创建文件夹
     File file = new File(Constant.DIR_PICTURE_UPLOAD);

@@ -88,7 +88,7 @@ public class ActivityPay extends BaseActivity implements View.OnClickListener{
 //        });
       }
     });
-    titleBar.show(null,"支付",null);
+    titleBar.show(null,"在线支付",null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {

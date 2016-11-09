@@ -1,212 +1,358 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/park_main"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f2f7f7"
-              android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="13dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ico_park_car"/>
-
-            <TextView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="查找爱车"
-                android:textColor="#2f3336"
-                android:textSize="15sp"/>
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/park_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f2f7f7"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/c_parking"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="39dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请输入车牌号，如粤B·33333"
+                android:textColorHint="#565c60"
+                android:textSize="12sp"/>
 
             <LinearLayout
-                android:id="@+id/er"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="5"
-                android:background="@drawable/searchbar">
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/B"
-                    android:layout_width="48dp"
+                <LinearLayout
+                    android:id="@+id/er"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center"
-                    android:text="粤B ·"
-                    android:textColor="#565c60"
-                    android:textSize="14sp"/>
+                    android:layout_weight="5"
+                    android:background="@drawable/searchbar"
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/tv_car_num"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textCursorDrawable="@null"
-                    android:layout_toLeftOf="@+id/btn_search"
-                    android:layout_toRightOf="@+id/B"
-                    android:gravity="center_vertical"
-                    android:hint="如33333"
-                    android:textColorHint="#dddddd"
-                    android:textColor="#000000"
-                    android:textSize="14sp"/>
+                    <TextView
+                        android:id="@+id/B"
+                        android:layout_width="48dp"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:text="粤B ·"
+                        android:textColor="#565c60"
+                        android:textSize="14sp"/>
+
+                    <EditText
+                        android:id="@+id/tv_car_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/btn_search"
+                        android:layout_toRightOf="@+id/B"
+                        android:gravity="center_vertical"
+                        android:hint="如33333"
+                        android:background="@null"
+                        android:singleLine="true"
+                        android:textColor="#2f3336"
+                        android:textColorHint="#dddddd"
+                        android:textCursorDrawable="@null"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+
             </LinearLayout>
 
-
-            <ImageView
+            <TextView
                 android:id="@+id/btn_search"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/er"
-                android:layout_alignParentRight="true"
-                android:clickable="true"
-                android:background="@drawable/park_search"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="13dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ico_park_infor"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="车位信息"
-                android:textColor="#2f3336"
-                android:textSize="15sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="B1剩余"
-                android:textColor="#565c60"
-                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
                 android:layout_marginTop="15dp"
-                android:textSize="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="查找爱车"
+                android:textSize="18sp"
+                android:background="@drawable/shakebar_buttom_blue"
+                android:clickable="true"/>
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/ico_park_infor"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:gravity="center"
-                    android:text="171"
-                    android:textColor="#1fafe7"
-                    android:textSize="55sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="/300"
+                    android:layout_gravity="center_vertical"
+                    android:text="车位剩余："
                     android:textColor="#565c60"
-                    android:textSize="55sp"/>
+                    android:textSize="15sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="172"
+                    android:textColor="#1fafe7"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="个"
+                    android:textColor="#565c60"
+                    android:textSize="15sp"/>
 
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/ico_park_pay"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="收费标准：15元/天"
+                    android:textColor="#565c60"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="15dp">-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="13dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:background="@drawable/ico_park_car"/>-->
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:text="查找爱车"-->
+        <!--android:textColor="#2f3336"-->
+        <!--android:textSize="15sp"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_height="39dp">-->
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/er"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_weight="5"-->
+        <!--android:background="@drawable/searchbar">-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/B"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:focusable="true"-->
+        <!--android:focusableInTouchMode="true"-->
+        <!--android:gravity="center"-->
+        <!--android:text="粤B ·"-->
+        <!--android:textColor="#565c60"-->
+        <!--android:textSize="14sp"/>-->
+
+        <!--<EditText-->
+        <!--android:id="@+id/tv_car_num"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textCursorDrawable="@null"-->
+        <!--android:layout_toLeftOf="@+id/btn_search"-->
+        <!--android:layout_toRightOf="@+id/B"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:hint="如33333"-->
+        <!--android:textColorHint="#dddddd"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textSize="14sp"/>-->
+        <!--</LinearLayout>-->
+
+
+        <!--<ImageView-->
+        <!--android:id="@+id/btn_search"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_toRightOf="@+id/er"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:clickable="true"-->
+        <!--android:background="@drawable/park_search"/>-->
+        <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="15dp">-->
+
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="13dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:background="@drawable/ico_park_infor"/>-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:text="车位信息"-->
+        <!--android:textColor="#2f3336"-->
+        <!--android:textSize="15sp"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/white"-->
+        <!--android:paddingBottom="15dp"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+        <!--android:text="B1剩余"-->
+        <!--android:textColor="#565c60"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:textSize="15dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+        <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:gravity="center"-->
+        <!--android:text="171"-->
+        <!--android:textColor="#1fafe7"-->
+        <!--android:textSize="55sp"/>-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="/300"-->
+        <!--android:textColor="#565c60"-->
+        <!--android:textSize="55sp"/>-->
+
+        <!--</LinearLayout>-->
+
+
+        <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="15dp">-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="13dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:background="@drawable/ico_park_pay"/>-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="收费标准"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:textColor="#2f3336"-->
+        <!--android:textSize="15sp"/>-->
+        <!--</LinearLayout>-->
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="39dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:background="@color/white"-->
+        <!--android:text="    ￥15/天"-->
+        <!--android:textColor="#565c60"-->
+        <!--android:textSize="14sp"/>-->
+
+        <!--</LinearLayout>-->
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        android:padding="15dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="13dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ico_park_pay"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="收费标准"
-            android:layout_gravity="center_vertical"
-            android:textColor="#2f3336"
-            android:textSize="15sp"/>
-</LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:gravity="center_vertical"
-            android:background="@color/white"
-            android:text="    ￥15/天"
-            android:textColor="#565c60"
-            android:textSize="14sp"/>
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

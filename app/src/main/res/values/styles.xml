@@ -39,4 +39,10 @@
         <!-- 指定消失的动画xml -->
     </style>
 
+    <!--启动透明Theme-->
+    <style name="Theme.AppStartLoadTranslucent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>

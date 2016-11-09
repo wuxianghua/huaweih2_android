@@ -64,7 +64,7 @@ FragmentShake extends BaseFragment {
         locName = (TextView) fragmentView.findViewById(R.id.locName);
         shakeShowloc = (LinearLayout) fragmentView.findViewById(R.id.loca);
         String l = LocateTimerService.getCurrentLocationArea();
-         if (Constant.其他.equals(l)) {
+         if (Constant.其它.equals(l)) {
             shakeShowloc.setVisibility(View.GONE);
         } else {
             locName.setText(l);
@@ -140,7 +140,7 @@ FragmentShake extends BaseFragment {
 //        mdn1.setStartOffset(1000);
 //        animdn.addAnimation(mdn0);
 //        animdn.addAnimation(mdn1);
-
+//
 //
 //        animup.setAnimationListener(new Animation.AnimationListener() {
 //            @Override
@@ -163,6 +163,12 @@ FragmentShake extends BaseFragment {
 //        mImgUp.startAnimation(animup);
 //        //下图片动画效果的添加
 //        mImgDn.startAnimation(animdn);
+
+
+
+
+
+
 
         int topHeight = mImgUp.getHeight();
         int buttomHeight = mImgDn.getHeight();

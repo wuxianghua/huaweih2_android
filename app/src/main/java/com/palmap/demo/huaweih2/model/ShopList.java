@@ -22,17 +22,27 @@ public class ShopList {
     Shop shop9 = new Shop("韩客莱","中餐","龙岗区民治民康路民治华南物流站","http://www.dianping.com/shop/68938102",180);
     Shop shop10 = new Shop("7-11便利店","便利店","龙岗区坂田街道（华为H2基地）","",180);
 
+    Shop shop11 = new Shop("电影院","","龙岗区坂田街道（华为H2基地）","",180);
+    Shop shop22 = new Shop("便利店","","龙岗区坂田街道（华为H2基地）","",180);
+    Shop shop33 = new Shop("美食","","龙岗区坂田街道（华为H2基地）","",180);
+
     shopList = new ArrayList<>();
+    shopList.add(shop11);
+    shopList.add(shop4);
+    shopList.add(shop22);
     shopList.add(shop10);
+    shopList.add(shop33);
     shopList.add(shop9);
     shopList.add(shop8);
     shopList.add(shop7);
-    shopList.add(shop4);
+    shopList.add(shop2);
     shopList.add(shop5);
     shopList.add(shop6);
     shopList.add(shop3);
-    shopList.add(shop2);
     shopList.add(shop1);
+
+
+
 
   }
 

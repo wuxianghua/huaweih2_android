@@ -46,7 +46,7 @@ public class FootprintDetailsActivity extends BaseActivity {
 
         }
         titleBar = (TitleBar) findViewById(R.id.titleBar);
-        titleBar.show(null,"足迹",null);
+        titleBar.show(null,pictureModel.getLocation(),null);
 //        titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
 //
 //        titleBar.setRightIcoClickListener(new View.OnClickListener() {
@@ -82,5 +82,11 @@ public class FootprintDetailsActivity extends BaseActivity {
         tvTime = (TextView) findViewById(R.id.tv_time);
         tvDetails = (TextView) findViewById(R.id.tv_details);
         tvLocation = (TextView) findViewById(R.id.tv_location);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
     }
 }

@@ -66,7 +66,7 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
 
 
         titleBar=(TitleBar)findViewById(R.id.title_bar);
-        titleBar.show(null,"图片浏览",null);
+        titleBar.show(null,location,null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {
@@ -207,4 +207,9 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
         return findViewById(android.R.id.content);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
+    }
 }

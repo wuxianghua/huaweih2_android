@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -56,7 +57,7 @@ public class UploadActivity extends BaseActivity {
 //    options.inDither=false;
     options.inJustDecodeBounds = true;
     BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD, options);
-    int outWidth = 400;//输出图片的宽度
+    int outWidth = 300;//输出图片的宽度
     options.outHeight = options.outHeight * options.outWidth / outWidth;
     options.outWidth = outWidth;
     options.inJustDecodeBounds = false;
@@ -87,8 +88,8 @@ public class UploadActivity extends BaseActivity {
 
         String lo = LocateTimerService.getCurrentLocationArea();
         if (!Constant.isDebug){
-          if(lo.equals(Constant.其他)){
-            DialogUtils.showShortToast("您不在华为H2大楼，不能上传");
+          if(lo.equals(Constant.其它)){
+            DialogUtils.showShortToast("您不在华为H2大楼，不能上传", Gravity.CENTER);
             finish();
             return;
           }
@@ -110,7 +111,7 @@ public class UploadActivity extends BaseActivity {
 
 //    bitmap = comp(bitmap);//压缩
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
     System.gc();
     //输出压缩图片
     byte[] inputByte = null;
@@ -176,68 +177,68 @@ public class UploadActivity extends BaseActivity {
   }
 
 
-  private void uploadImage(){
-    File img = new File(Constant.PATH_PICTURE_UPLOAD);
-    //若该文件存在
-    if (!img.exists()) {
-      DialogUtils.showShortToast(Constant.PATH_PICTURE_UPLOAD+"没有找到待上传的图片。");
-      return;
-    }
-
-//    bitmap = comp(bitmap);//压缩
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-
-
-
-
-//输出压缩图片
-//    byte[] inputByte = null;
-//    int length = 0;
-//    DataInputStream dis = null;
-//    FileOutputStream fos = null;
-//    try {
-//      try {
-//        dis = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-//        fos = new FileOutputStream(new File(Environment.getExternalStorageDirectory()+"/hhhhhh.png"));
-//        inputByte = new byte[1024];
-//        System.out.println("开始接收数据...");
-//        while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
-//          System.out.println(length);
-//          fos.write(inputByte, 0, length);
-//          fos.flush();
-//        }
-//        System.out.println("完成接收");
-//      } finally {
-//        if (fos != null)
-//          fos.close();
-//        if (dis != null)
-//          dis.close();
-//      }
-//    } catch (Exception e) {
+//  private void uploadImage(){
+//    File img = new File(Constant.PATH_PICTURE_UPLOAD);
+//    //若该文件存在
+//    if (!img.exists()) {
+//      DialogUtils.showShortToast(Constant.PATH_PICTURE_UPLOAD+"没有找到待上传的图片。");
+//      return;
 //    }
-
-
-
-    PictureJson pictureJson = new PictureJson();
-    pictureJson.setAppendix(tv_message.getText().toString());
-    pictureJson.setLocation("H2大厅");
-//    pictureJson.setPhoto(baos.toByteArray());
-    String picJson = JSON.toJSONString(pictureJson);
-
-    DataProviderCenter.getInstance().postImage(picJson, new HttpDataCallBack() {
-      @Override
-      public void onError(int errorCode) {
-        DialogUtils.showLongToast("error:"+errorCode);
-        finish();
-      }
-
-      @Override
-      public void onComplete(Object content) {
-        DialogUtils.showShortToast("照片评论上传成功。");
-        finish();
-      }
-    });
-  }
+//
+////    bitmap = comp(bitmap);//压缩
+//    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//
+//
+//
+//
+////输出压缩图片
+////    byte[] inputByte = null;
+////    int length = 0;
+////    DataInputStream dis = null;
+////    FileOutputStream fos = null;
+////    try {
+////      try {
+////        dis = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+////        fos = new FileOutputStream(new File(Environment.getExternalStorageDirectory()+"/hhhhhh.png"));
+////        inputByte = new byte[1024];
+////        System.out.println("开始接收数据...");
+////        while ((length = dis.read(inputByte, 0, inputByte.length)) > 0) {
+////          System.out.println(length);
+////          fos.write(inputByte, 0, length);
+////          fos.flush();
+////        }
+////        System.out.println("完成接收");
+////      } finally {
+////        if (fos != null)
+////          fos.close();
+////        if (dis != null)
+////          dis.close();
+////      }
+////    } catch (Exception e) {
+////    }
+//
+//
+//
+//    PictureJson pictureJson = new PictureJson();
+//    pictureJson.setAppendix(tv_message.getText().toString());
+//    pictureJson.setLocation("H2大厅");
+////    pictureJson.setPhoto(baos.toByteArray());
+//    String picJson = JSON.toJSONString(pictureJson);
+//
+//    DataProviderCenter.getInstance().postImage(picJson, new HttpDataCallBack() {
+//      @Override
+//      public void onError(int errorCode) {
+//        DialogUtils.showLongToast("error:"+errorCode);
+//        finish();
+//      }
+//
+//      @Override
+//      public void onComplete(Object content) {
+//        DialogUtils.showShortToast("照片评论上传成功。");
+//        finish();
+//      }
+//    });
+//  }
 
 }

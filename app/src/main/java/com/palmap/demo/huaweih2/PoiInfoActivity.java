@@ -16,6 +16,7 @@ public class PoiInfoActivity extends BaseActivity {
   public static final int YYY = 0;
   public static final int POI_HALL = 1;
   public static final int POI_LAB = 2;
+  public static final int POI_FOOT = 3;//足迹
   ImageView close;
   ImageView imageView;
   TextView title;
@@ -86,6 +87,10 @@ public class PoiInfoActivity extends BaseActivity {
       title.setText("ICS实验室");
       detail.setText("华为ICS实验室成立于2010年，2016年完成改造升级。目前已搭建完善的测试环境主要用于设备集成验证、员工培训及客户接待参观。");
       imageView.setImageResource(R.drawable.laboratory_shake);
+    } else if (type == POI_FOOT) {
+      title.setVisibility(View.GONE);
+      detail.setVisibility(View.GONE);
+      imageView.setImageResource(R.drawable.c_footprint);
     }
 
   }

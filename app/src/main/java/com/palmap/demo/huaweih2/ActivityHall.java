@@ -177,7 +177,7 @@ public class ActivityHall extends BaseActivity {
           TextView tl = (TextView) view.findViewById(R.id.loc);
           tl.setText(list.get(i).getLocation());
 
-          view.setBackgroundResource(R.drawable.commentbar_short);
+//          view.setBackgroundResource(R.drawable.commentbar_short);
 
           start++;
           commentList.addView(view);

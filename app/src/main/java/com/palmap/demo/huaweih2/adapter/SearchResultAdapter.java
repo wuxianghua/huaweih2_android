@@ -63,7 +63,12 @@ public class SearchResultAdapter extends BaseAdapter{
       }
 
       // 设置控件内容
-      viewHolder.name.setText(LocationModel.display.get(mLocationList.get(position)));
+      String poiName = LocationModel.display.get(mLocationList.get(position));
+      if ("办公室".equals(poiName)||"会议室".equals(poiName)){//加门牌号
+        poiName = poiName +"  "+ LocationModel.address.get(mLocationList.get(position));
+      }
+
+      viewHolder.name.setText(poiName);
       long floorID= LocationModel.parent.get(mLocationList.get(position));
       if (floorID==Constant.FLOOR_ID_B1){
         viewHolder.floor.setText("B1");

@@ -44,6 +44,7 @@ public class FragmentAround extends ListFragment {
 
         Intent intent = new Intent(getActivity(), ActivityWeb.class);
         intent.putExtra("url",shop.getUrl());
+        intent.putExtra("shopName",shop.getName());
         startActivity(intent);
 
 //调用系统浏览器

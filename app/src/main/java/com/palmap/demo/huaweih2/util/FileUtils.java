@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,6 +15,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 /**
  * Created by eric3 on 2016/10/8.
@@ -25,7 +32,11 @@ public class FileUtils {
  *  检测SDCard是否存在
  * */
   public static boolean checkoutSDCard() {
-    return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    boolean MOUNTED = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+
+//    boolean HASDIR = Environment.getExternalStorageDirectory().exists();
+
+    return MOUNTED;//||HASDIR;
   }
 
   /*
@@ -36,8 +47,12 @@ public class FileUtils {
       AssetManager assetManager = context.getAssets();
       String[] fileList = assetManager.list(dirNameFromAssert);
       outputStr(dirNameFromAssert, fileList); // 输出dirName2中文件名
-      String dir = Environment.getExternalStorageDirectory() + File.separator + dirNameTo;
+      String dir = getExternalSdCardPath() + File.separator + dirNameTo;
 
+      if (getExternalSdCardPath()==null||"".equals(getExternalSdCardPath())){
+        DialogUtils.showShortToast("未找到存储器");
+        return;
+      }
       if (fileList != null && fileList.length > 0) {
         File file = null;
 
@@ -125,7 +140,7 @@ public class FileUtils {
     Log.w("FileUtils", "file path: " + file.getAbsolutePath());
     Log.w("FileUtils", "file name: " + file.getName());
     if (file.exists() && file.isFile()){
-      String dirName = Environment.getExternalStorageDirectory().getPath() + File.separator + DIR_NAME;
+      String dirName = getExternalStorageDirectory().getPath() + File.separator + DIR_NAME;
       File dirFile = new File(dirName);
       if (!dirFile.exists()){
         dirFile.mkdirs();
@@ -241,7 +256,7 @@ public class FileUtils {
   public static Bitmap comp(Bitmap image) {//压缩图片
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    image.compress(Bitmap.CompressFormat.JPEG, 60, baos);
     if( baos.toByteArray().length / 1024>1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
       baos.reset();//重置baos即清空baos
       image.compress(Bitmap.CompressFormat.JPEG, 40, baos);//这里压缩50%，把压缩后的数据存放到baos中
@@ -286,4 +301,111 @@ public class FileUtils {
     image.recycle();
     return BitmapFactory.decodeStream(new ByteArrayInputStream(baos.toByteArray()), null, null);//把ByteArrayInputStream数据生成图片
   }
+
+
+  /**
+   * 获取扩展SD卡存储目录
+   *
+   * 如果有外接的SD卡，并且已挂载，则返回这个外置SD卡目录
+   * 否则：返回内置SD卡目录
+   *
+   * @return
+   */
+  public static String getExternalSdCardPath() {
+
+    if (checkoutSDCard()) {
+      File sdCardFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+      return sdCardFile.getAbsolutePath();
+    }
+
+    String path = null;
+
+    File sdCardFile = null;
+
+    ArrayList<String> devMountList = getDevMountList();
+
+    for (String devMount : devMountList) {
+      File file = new File(devMount);
+
+      if (file.isDirectory() && file.canWrite()) {
+        path = file.getAbsolutePath();
+
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        File testWritable = new File(path, "test_" + timeStamp);
+
+        if (testWritable.mkdirs()) {
+          testWritable.delete();
+        } else {
+          path = null;
+        }
+      }
+    }
+
+    if (path != null) {
+      sdCardFile = new File(path);
+      return sdCardFile.getAbsolutePath();
+    }
+
+    return null;
+  }
+
+  /**
+   * 遍历 "system/etc/vold.fstab” 文件，获取全部的Android的挂载点信息
+   *
+   * @return
+   */
+  private static ArrayList<String> getDevMountList() {
+    String[] toSearch = FileUtils.readFile("/etc/vold.fstab").split(" ");
+    ArrayList<String> out = new ArrayList<String>();
+    for (int i = 0; i < toSearch.length; i++) {
+      if (toSearch[i].contains("dev_mount")) {
+        if (new File(toSearch[i + 2]).exists()) {
+          out.add(toSearch[i + 2]);
+        }
+      }
+    }
+    return out;
+  }
+
+
+  /**
+   * read file
+   *
+   * @param filePath
+   * @param charsetName The name of a supported {@link java.nio.charset.Charset </code>charset<code>}
+   * @return if file not exist, return null, else return content of file
+   * @throws RuntimeException if an error occurs while operator BufferedReader
+   */
+  public static String readFile(String filePath) {
+    String fileContent = "";
+    File file = new File(filePath);
+    if (file == null || !file.isFile()) {
+      return null;
+    }
+
+    BufferedReader reader = null;
+    try {
+      InputStreamReader is = new InputStreamReader(new FileInputStream(file));
+      reader = new BufferedReader(is);
+      String line = null;
+      int i = 0;
+      while ((line = reader.readLine()) != null) {
+        fileContent += line + " ";
+      }
+      reader.close();
+      return fileContent;
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      if (reader != null) {
+        try {
+          reader.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return fileContent;
+  }
+
 }

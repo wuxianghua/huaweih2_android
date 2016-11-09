@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:gravity="center"
+            android:visibility="gone"
             android:textSize="15sp"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
@@ -54,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
+            android:visibility="gone"
             android:layout_marginRight="15dp"
             android:fadingEdge="vertical"
             android:scrollbars="vertical">

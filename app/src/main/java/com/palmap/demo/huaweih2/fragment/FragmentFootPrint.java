@@ -1,6 +1,7 @@
 package com.palmap.demo.huaweih2.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,6 +18,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.palmap.demo.huaweih2.ActivityUploadCom;
 import com.palmap.demo.huaweih2.ImageAlbumActivity;
+import com.palmap.demo.huaweih2.LocateTimerService;
+import com.palmap.demo.huaweih2.MainActivity;
+import com.palmap.demo.huaweih2.PoiInfoActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
 import com.palmap.demo.huaweih2.http.ErrorCode;
@@ -45,6 +49,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
   FootPrintItemView footprintView_h2;
   FootPrintItemView footprintView_meetingRoom;
   FootPrintItemView footprintView_h2_hall;
+  MainActivity mContext;
   public LinearLayout commentList;
   RelativeLayout write;
   public int start = 0;//开始加载
@@ -63,12 +68,13 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     // TODO Auto-generated method stub
     View fragmentView = inflater.inflate(R.layout.foot_print, container, false);
     commentList = (LinearLayout)fragmentView.findViewById(R.id.com_list);
+    mContext = (MainActivity) getActivity();
     write = (RelativeLayout) fragmentView.findViewById(R.id.btn_com);
     write.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(getMainActivity(),ActivityUploadCom.class);
-        intent.putExtra("location",Constant.ICS实验室);
+        intent.putExtra("location", LocateTimerService.getCurrentLocationArea());
         getActivity().startActivityForResult(intent,Constant.startUploadText);
       }
     });
@@ -94,9 +100,20 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
 
     loadPicNum();
 
-
+    checkFirst();
 
     return fragmentView;
+  }
+
+  private void checkFirst(){
+    SharedPreferences setting = mContext.getSharedPreferences(Constant.IS_FIRST_RUN, 0);
+    int time =  setting.getInt("time", 2);
+    if (time==2){//第一次显示
+      Intent intent = new Intent(mContext, PoiInfoActivity.class);
+      intent.putExtra("type",PoiInfoActivity.POI_FOOT);
+      mContext.startActivity(intent);
+    }
+
   }
 
   @Override
@@ -119,7 +136,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     footprintView_h2.setImageResource(R.drawable.h2_foyer_min_1);
     footprintView_h2.setName("H2大楼");
     footprintView_meetingRoom.setImageResource(R.drawable.boardroom_min_1);
-    footprintView_meetingRoom.setName("ICS会议室");
+    footprintView_meetingRoom.setName("会议室");
     footprintView_h2_hall.setImageResource(R.drawable.h2_foyer_min_3);
     footprintView_h2_hall.setName("ICS大厅");
 
@@ -270,7 +287,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
           TextView tl = (TextView) view.findViewById(R.id.loc);
           tl.setText(list.get(i).getLocation());
 
-          view.setBackgroundResource(R.drawable.commentbar_short);
+//          view.setBackgroundResource(R.drawable.commentbar_short);
 
           start++;
           commentList.addView(view);

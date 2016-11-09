@@ -435,7 +435,6 @@ CONFIG = {
                         type = 'unique',
                         key = {
                             'id',
-
                             'category',
                             'name',
                             'display',
@@ -479,15 +478,106 @@ CONFIG = {
                             ['\\接待处'] = Set2dColor('0xfffffff8', '0xfffffff8', 0.15);
                             ['\\H2办公楼'] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
 
-                            ['\\H2大厅'] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
+                            [1284129] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
 
 
                             [24002000] = Set2dColor('0xffc8dedc', '0xffe6f0ef', 0.05);
 
                             [24005000] = Set2dColor('0xffcce0de', '0xffcce0de', 0);
 
-                            [1263037] = Set2dColor('0xfffffff8', '0xfffffff8', 0); --走廊
-                            [1263037] = Set2dColor('0xfffffff8', '0xfffffff8', 0); --走廊
+--                            [1263037] = Set2dColor('0xfffffff8', '0x00fffff8', 0); --走廊
+
+                            ['1263037'] = {--走廊
+                                ['2d'] = {
+                                    style = 'polygon',
+                                    face = {
+                                        color = '0xfffffff8',
+                                        enable_alpha = false,
+                                    },
+                                    outline = {
+                                        color = '0xffaf967e',
+                                        width = 0.5,
+                                        alignment = 'AlignLeft',
+                                    },
+                                    left_side = {}
+                                }
+                            },
+                            ['1270158'] = {--H1
+                                ['2d'] = {
+                                    style = 'polygon',
+                                    face = {
+                                        color = '0xffe6edf6',
+                                        enable_alpha = false,
+                                    },
+                                    outline = {
+                                        color = '0xffaf967e',
+                                        width = 0.5,
+                                        alignment = 'AlignLeft',
+                                    },
+                                    left_side = {}
+                                }
+                            },
+                            ['1270162'] = {--H3
+                                ['2d'] = {
+                                    style = 'polygon',
+                                    face = {
+                                        color = '0xffe6edf6',
+                                        enable_alpha = false,
+                                    },
+                                    outline = {
+                                        color = '0xffaf967e',
+                                        width = 0.5,
+                                        alignment = 'AlignLeft',
+                                    },
+                                    left_side = {}
+                                }
+                            },
+                            ['1270166'] = {--H4
+                                ['2d'] = {
+                                    style = 'polygon',
+                                    face = {
+                                        color = '0xffe6edf6',
+                                        enable_alpha = false,
+                                    },
+                                    outline = {
+                                        color = '0xffaf967e',
+                                        width = 0.5,
+                                        alignment = 'AlignLeft',
+                                    },
+                                    left_side = {}
+                                }
+                            },
+--                            ['1261981'] = {--H2 B1
+--                                ['2d'] = {
+--                                    style = 'polygon',
+--                                    face = {
+--                                        color = '0x00e6edf6',
+--                                        enable_alpha = true,
+--                                    },
+--                                    outline = {
+--                                        color = '0xffaf967e',
+--                                        width = 0.5,
+--                                        alignment = 'AlignLeft',
+--                                    },
+--                                    left_side = {}
+--                                }
+--                            },
+                            ['1284122'] = {--H 停车场
+                                ['2d'] = {
+                                    style = 'polygon',
+                                    face = {
+                                        color = '0xffe6edf6',
+                                        enable_alpha = false,
+                                    },
+                                    outline = {
+                                        color = '0xffaf967e',
+                                        width = 0.5,
+                                        alignment = 'AlignLeft',
+                                    },
+                                    left_side = {}
+                                }
+                            },
+--                            [1263037] = Set2dColor('0xfffffff8', '0xfffffff8', 0); --走廊
 
                             --              ['\\ICS'] = Set2dColor('0xfffffff8','0xfffffff8',0.15);
                             --              ['\\ICS'] = Set2dColor('0xfffffff8','0xfffffff8',0.15);
@@ -1253,12 +1343,12 @@ CONFIG = {
                             ['2d'] = {
                                 style = 'linestring',
                                 color = '0xFF0e89dc', -- 颜色
-                                width = 0.9, -- 线宽
+                                width = 3, -- 线宽
                                 line_style = 'NONE', -- 线型，NONE、ARROW、DASHED
                                 has_arrow = true, -- 是否绘制方向指示箭头，仅在line_style为NONE时有效
                                 has_start = true, -- 绘制起始点
                                 has_end = true, -- 绘制终点
-                                automatic_scale = true, -- 导航线自适应地图大小
+                                automatic_scale = false, -- 导航线自适应地图大小
                             },
                         },
                         styles = {

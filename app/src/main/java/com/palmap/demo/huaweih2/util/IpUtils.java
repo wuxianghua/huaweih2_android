@@ -23,6 +23,7 @@ public class IpUtils {
         }
       }
     } catch (Exception e) {
+      DialogUtils.showShortToast(e.getMessage());
     }
     return "";
   }

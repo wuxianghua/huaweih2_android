@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
-    android:orientation="vertical">
+    android:background="@color/bg">
 
     <!--<FrameLayout-->
     <!--android:layout_width="match_parent"-->
@@ -11,43 +10,21 @@
     <!--android:background="@color/white">-->
 
     <!--</FrameLayout>-->
-
-    <RelativeLayout
-        android:clipChildren="false"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="75dp"
-            android:paddingRight="75dp"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_marginTop="140dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/shakeit_map" />
-
-        <LinearLayout
-            android:layout_centerHorizontal="true"
-            android:clipChildren="false"
-            android:orientation="vertical"
-            android:layout_marginTop="140dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/img_up"
-                android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/shakeit_up" />
-            <ImageView
-                android:scaleType="centerCrop"
-                android:id="@+id/img_down"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/shakeit_down" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:gravity="center"
+            android:layout_marginBottom="60dp"
+            android:textSize="18sp"
+            android:textColor="#1fafe7"
+            android:layout_alignParentTop="true"
+            android:text="摇一摇手机，获取更多资讯信息"/>
+    </LinearLayout>
 
 
     <LinearLayout
@@ -55,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -81,7 +58,7 @@
         android:layout_height="98dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="15dp"
-        android:background="#1fafe7"
+        android:background="@drawable/shakebar_buttom_blue"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -128,4 +105,46 @@
 
         </LinearLayout>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:scaleType="fitXY"
+            android:layout_marginTop="135dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shakeit_map" />
+
+        <LinearLayout
+            android:layout_centerHorizontal="true"
+            android:clipChildren="false"
+            android:orientation="vertical"
+            android:layout_marginTop="140dp"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_up"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shakeit_up" />
+            <ImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/img_down"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shakeit_down" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

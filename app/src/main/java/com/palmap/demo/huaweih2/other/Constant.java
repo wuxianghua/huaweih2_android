@@ -15,7 +15,7 @@ public class Constant {
   public static final long FLOOR_ID_F1 = 1262934L;
   public static final long FLOOR_ID_B1 = 1261980L;
 
-//  public static final String APP_KEY = "19e7db5672824721a9e47ac84a8aa222";//图聚办公室的
+//  public static final String APP_KEY = "8793ae1b12d64ee7a58d446f9cd202c3";//图聚办公室的
 //  public static final long FLOOR_ID_F1 = 1003497L;//21楼
 //  public static final long FLOOR_ID_B1 = 1261980L;
 //  public static final long MAP_ID = 6L;
@@ -41,6 +41,7 @@ public class Constant {
   public static final String PATH_PICTURE_UPLOAD = DIR_PICTURE_UPLOAD+"/temp.jpg";
   public static final String PATH_MAP_CASH = APP_DATA_PATH+"/Nagrand/download/";
 
+
   //Environment.getExternalStorageDirectory()会有权限问题
 
 //  public static final String DIR_PICTURE_UPLOAD = APP_DATA_PATH+"/temp";
@@ -59,6 +60,7 @@ public class Constant {
   public static final long 门窗楼梯_ID = 13164000L;
   public static final long 盥洗室_ID = 23047000L;
   public static final long 茶水间_ID = 23040000L;//饮水处
+  public static final long 商务办公_ID = 23027000L;//办公室、实验室
 
   public static final long 空地_POI_ID = 1262934L;
   //四个poi详情
@@ -67,7 +69,7 @@ public class Constant {
   public static final String ICS实验室 = "ICS实验室";//poi详情
   public static final String ICS办公区 = "ICS办公区";//poi详情
   public static final String H2大楼 = "H2大楼";//poi详情
-  public static final String 其他 = "其他";//poi详情
+  public static final String 其它 = "其它";//poi详情
 
 
   public static int   MAX_ZOOM = 5;
@@ -85,10 +87,9 @@ public class Constant {
 
 
   //是否开启地图缓存模式
-  public static Boolean useCash = false;
+  public static Boolean useCash = true;
 
-  //测试参数，控制
-  public static Boolean isDebug = false;
+
 
   public static boolean onSingleTap_changeColor =true;//是否变色
 
@@ -105,10 +106,21 @@ public class Constant {
   public static final int startUploadText=4;
   public static final int startUploadPic=5;
 
-  public static boolean useTestServer = false;//是否使用内网测试服务器 10.
+  //测试参数，控制
+  public static Boolean isDebug = false;
 
   public static boolean openLocateService = true;//开启自动循环查询定位,本地测试也要开启
-  public static boolean openLocateTest = false;//开启本地定位测试
+
+  public static boolean useTestServer = false;//是否使用内网测试服务器 10.
+  public static boolean openLocateTest = true;//开启本地定位测试
+
+  public static boolean usePhoneIp = true;
+  public static String testIp = "10.1.137.118";
 
   public static long LOCATE_FRESH_TIME = 10000;//定位间隔时间
+
+
+  public static final double NAV_MIN_DISTANCE = 5.0;
+
+
 }

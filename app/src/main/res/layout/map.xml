@@ -9,9 +9,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-
-
-
         <ImageView
             android:id="@+id/compass"
             android:layout_width="54dp"
@@ -48,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="left"
             android:layout_marginLeft="@dimen/margin_normal"
             android:orientation="vertical"
             android:paddingBottom="@dimen/margin_normal">
@@ -88,9 +84,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_gravity="right"
+            android:layout_alignParentBottom="true"
             android:orientation="vertical"
             android:paddingBottom="@dimen/margin_normal"
             android:paddingRight="@dimen/margin_normal">
@@ -140,8 +135,32 @@
             android:id="@+id/push"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_marginTop="7dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/infor_welcome_2"/>
+
+
+        <RelativeLayout
+            android:id="@+id/foot_info"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/c_line"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/foot_down"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ico_line_down"
+                    android:layout_gravity="center"
+                    android:layout_width="27dp"
+                    android:layout_height="9dp"/>
+            </FrameLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -187,6 +206,7 @@
                 android:focusableInTouchMode="true"
                 android:hint="请输入想去的地方"
                 android:imeOptions="actionDone"
+                android:background="@null"
                 android:textSize="15sp"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -421,7 +441,6 @@
             android:layout_alignBottom="@+id/search_box"
             android:layout_marginLeft="@dimen/margin_large"
             android:layout_marginRight="@dimen/margin_large"
-            android:layout_marginTop="@dimen/margin_large"
             >
 
         </ListView>

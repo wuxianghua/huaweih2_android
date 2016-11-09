@@ -10,17 +10,24 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static android.widget.Toast.makeText;
+
 /**
  * Created by eric3 on 2016/10/8.
  */
 
 public class DialogUtils {
   public static void showShortToast(String msg){
-    Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
+    makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
+  }
+
+  public static void showShortToast(String msg,int locate){
+    Toast toast = Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT);
+    toast.setGravity(locate,0,-10);
   }
 
   public static void showLongToast(String msg){
-    Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_LONG).show();
+    makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_LONG).show();
   }
 
   // 定义一个显示消息的对话框,通过反射方式调用方法，目前只支持无参方法

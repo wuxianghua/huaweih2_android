@@ -40,23 +40,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+        <activity android:name=".SplashActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppStartLoadTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".WelcomeActivity"/>
-        <activity android:name=".UploadActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UploadActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- qq分享 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -69,30 +79,37 @@
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityPay"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityHall"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityMeeting"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityOffice"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityLab"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityUploadCom"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ImageAlbumActivity"
@@ -103,9 +120,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".FootprintDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".ActivityShopDetail"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
 
@@ -117,10 +136,14 @@
         <activity
             android:name=".PoiInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-        <activity android:name=".ActivityWeb">
+        <activity
+            android:name=".ActivityWeb"
+            android:screenOrientation="portrait">
         </activity>
+
     </application>
 
 </manifest>

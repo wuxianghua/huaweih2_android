@@ -60,7 +60,7 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
   public void setOnTitleClickListener(OnTitleClickListener onTitleClickListener){
     this.onTitleClickListener = onTitleClickListener;
   }
-  private void setTitle(String s){
+  public void setTitle(String s){
     title.setVisibility(VISIBLE);
     title.setText(s);
   }

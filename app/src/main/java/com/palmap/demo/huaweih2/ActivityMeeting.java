@@ -115,7 +115,7 @@ public class ActivityMeeting extends BaseActivity {
       }
     });
 
-    titleBar.show(null,"ICS会议室",null);
+    titleBar.show(null,"会议室",null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -134,7 +134,7 @@ public class ActivityMeeting extends BaseActivity {
   private void loadComments(){
     //加载评论
 
-    String js = JsonUtils.getCommentsDown(Constant.ICS实验室,start,Constant.EACH_TIME_COMMENT_NUM);
+    String js = JsonUtils.getCommentsDown(Constant.会议室,start,Constant.EACH_TIME_COMMENT_NUM);
     DataProviderCenter.getInstance().getComments(js, new HttpDataCallBack() {
       @Override
       public void onError(int errorCode) {
@@ -175,7 +175,7 @@ public class ActivityMeeting extends BaseActivity {
           tt.setText(sdf.format(date));
           TextView tl = (TextView) view.findViewById(R.id.loc);
           tl.setText(list.get(i).getLocation());
-          view.setBackgroundResource(R.drawable.commentbar_short);
+//          view.setBackgroundResource(R.drawable.commentbar_short);
           start++;
           commentList.addView(view);
         }

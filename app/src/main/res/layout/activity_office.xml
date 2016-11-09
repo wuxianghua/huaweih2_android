@@ -36,33 +36,44 @@
                 android:layout_height="200dp"
                 android:background="@drawable/office_max"/>
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:src="@drawable/office_min_1"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:src="@drawable/office_min_2"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:src="@drawable/office_min_3"/>
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/office_min"/>
             </LinearLayout>
+            </HorizontalScrollView>
 
             <TextView
                 android:layout_width="match_parent"

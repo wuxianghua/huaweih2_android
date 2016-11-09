@@ -2,10 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@color/bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
 
 
     <!--标题栏-->
@@ -13,9 +13,9 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true">
+        android:focusableInTouchMode="true">
     </com.palmap.demo.huaweih2.view.TitleBar>
 
     <com.handmark.pulltorefresh.library.PullToRefreshScrollView
@@ -29,50 +29,60 @@
             android:id="@+id/activity_lab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@drawable/boardroo_max"/>
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
+                >
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/boardroom_min_2"/>
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/boardroom_min_1"/>
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/boardroom_min_2"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/boardroom_min_3"/>
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/boardroom_min_1"/>
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/boardroom_min_3"/>
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:lineSpacingExtra="7sp"
-                android:background="@color/white"
-                android:paddingRight="10dp"
                 android:layout_marginBottom="5dp"
+                android:background="@color/white"
+                android:lineSpacingExtra="7sp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:text="@string/meeting"
                 android:textColor="#2f3336"
                 android:textSize="14sp"/>
@@ -88,35 +98,37 @@
                     android:layout_height="78dp"
                     android:layout_centerInParent="true"
                     android:src="@drawable/btn_like"/>
+
                 <TextView
                     android:id="@+id/zanSum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:textColor="@color/white"
                     android:layout_marginTop="45dp"
-                    android:text="0"/>
+                    android:text="0"
+                    android:textColor="@color/white"/>
 
             </RelativeLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
                 android:src="@drawable/img_form_meeting"/>
 
             <RelativeLayout
                 android:id="@+id/btn_com"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/commentbar_long"
+                android:layout_marginTop="15dp"
 
-                android:layout_marginTop="15dp">
+                android:background="@drawable/commentbar_long">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
                     android:text="评论"
                     android:textColor="#2f3336"
                     android:textSize="20sp"/>
@@ -125,18 +137,18 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="15dp"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
                     android:src="@drawable/ico_tab_message"
                     />
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/com_list"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
             </LinearLayout>

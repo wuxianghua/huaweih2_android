@@ -1,5 +1,6 @@
 package com.palmap.demo.huaweih2;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -9,6 +10,7 @@ import com.palmap.demo.huaweih2.view.TitleBar;
 
 public class ActivityWeb extends BaseActivity {
   String url;
+  String shopName;
   WebView webView ;
   TitleBar titleBar;
   @Override
@@ -16,8 +18,11 @@ public class ActivityWeb extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_web);
 
+
+    url = getIntent().getStringExtra("url");
+    shopName = getIntent().getStringExtra("shopName");
     titleBar = (TitleBar)findViewById(R.id.title_bar);
-    titleBar.show(null,"点餐",null);
+    titleBar.show(null,shopName==null?"点餐":shopName,null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -29,7 +34,6 @@ public class ActivityWeb extends BaseActivity {
 
       }
     });
-    url = getIntent().getStringExtra("url");
     webView = (WebView) findViewById(R.id.web_view);
     webView.setWebViewClient(new WebViewClient(){
       @Override
@@ -46,6 +50,19 @@ public class ActivityWeb extends BaseActivity {
     webSettings.setUseWideViewPort(true);// 适应手机
     webSettings.setLoadWithOverviewMode(true);
     webView.setWebViewClient(new WebViewClient(){
+
+      @Override
+      public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        showProgress("提示","加载中，请稍后");
+      }
+
+      @Override
+      public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        closeProgress();
+      }
+
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
         //对网页中超链接按钮的响应

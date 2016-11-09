@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.ActivityPay;
 import com.palmap.demo.huaweih2.R;
@@ -27,9 +27,10 @@ import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
 public class FragmentPark extends BaseFragment {
   public static boolean hasPay;//
    EditText carNum;
-  ImageView btnSearch;
+  TextView btnSearch;
   ParkInfoList parkInfoList;
   public LinearLayout mainlayout;
+//  public LinearLayout floorlayout;
 
   @Override
   public View onCreateView(LayoutInflater inflater,
@@ -39,8 +40,10 @@ public class FragmentPark extends BaseFragment {
 
     parkInfoList = new ParkInfoList();
     carNum = (EditText) fragmentView.findViewById(R.id.tv_car_num);
-    btnSearch = (ImageView)fragmentView.findViewById(R.id.btn_search);
+    btnSearch = (TextView) fragmentView.findViewById(R.id.btn_search);
     mainlayout = (LinearLayout)fragmentView.findViewById(R.id.park_main);
+//    floorlayout = (LinearLayout)fragmentView.findViewById(R.id.floor_park);
+//    floorlayout.setVisibility(View.GONE);
 
     return fragmentView;
   }
@@ -78,6 +81,7 @@ public class FragmentPark extends BaseFragment {
 
   private void showCarOnMap(final ParkInfo p) {
     mainlayout.setVisibility(View.GONE);
+//    floorlayout.setVisibility(View.VISIBLE);
     getMainActivity().showCarOnMap(p);
     getMainActivity().titleBar.show(null,"找车","缴费");
     getMainActivity().titleBar.setEnableRight(true);

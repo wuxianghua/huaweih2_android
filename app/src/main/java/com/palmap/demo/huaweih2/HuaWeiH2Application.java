@@ -1,12 +1,13 @@
 package com.palmap.demo.huaweih2;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.bugtags.library.Bugtags;
 import com.bugtags.library.BugtagsOptions;
 import com.bumptech.glide.Glide;
+import com.palmap.demo.huaweih2.model.MyPlanarGraph;
 import com.palmap.demo.huaweih2.other.Constant;
-import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.FileUtils;
 
 /**
@@ -15,8 +16,12 @@ import com.palmap.demo.huaweih2.util.FileUtils;
 
 public class HuaWeiH2Application extends Application {
   public static boolean firstRun = false;//第一次启动
+  public static boolean startWelcomeAct = false;//启动欢迎界面
   public static HuaWeiH2Application instance;
   public static String userIp = "00000000";
+
+  public static MyPlanarGraph planarGraphF1 = null;//缓存楼层数据
+  public static MyPlanarGraph planarGraphB1= null;
 
   @Override
   public void onCreate() {
@@ -24,6 +29,12 @@ public class HuaWeiH2Application extends Application {
 
     instance = this;
     copyPalmapFile();
+
+
+
+
+
+
 
 //    initImageLoader();
     if (BuildConfig.DEBUG) {
@@ -49,13 +60,13 @@ public class HuaWeiH2Application extends Application {
 
   private void copyPalmapFile(){
     // copy字体文件和lur配置文件
-    if (FileUtils.checkoutSDCard()) {
+//    if (FileUtils.checkoutSDCard()) {
       FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, "lua");
 //      FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, "font");
 //      FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, Constant.LUR_NAME);
-    } else {
-      DialogUtils.showShortToast("未找到SDCard");
-    }
+//    } else {
+//      DialogUtils.showShortToast("未找到存储器");
+//    }
   }
 
 //  private void initImageLoader(){
@@ -85,4 +96,18 @@ public class HuaWeiH2Application extends Application {
 //  }
 
 
+  @Override
+  public void onTerminate() {
+    super.onTerminate();
+
+    if (LocateTimerService.getInstance()!=null) {
+//      HuaWeiH2Application.firstRun=false;
+
+      //停止由AlarmManager启动的循环
+      LocateTimerService.stop(this);
+      //停止由服务启动的循环
+      Intent intent = new Intent(this, LocateTimerService.class);
+      stopService(intent);
+    }
+  }
 }

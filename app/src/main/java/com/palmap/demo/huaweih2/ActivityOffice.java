@@ -39,6 +39,7 @@ public class ActivityOffice extends BaseActivity {
     ImageView up;
     RelativeLayout write;
     TextView zan;
+    boolean isRoute = false;//是否从行程进入
     int start = 0;
     static boolean hasZan = false;
     GridView nameGridView;
@@ -73,6 +74,7 @@ public class ActivityOffice extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_office);
 
+        isRoute = getIntent().getBooleanExtra("isRoute",false);
         nameGridView = (GridView) findViewById(R.id.nameGridView);
         addPeople();
         titleBar = (TitleBar) findViewById(R.id.title_bar);
@@ -173,6 +175,7 @@ public class ActivityOffice extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
                     bundle.putString("peopleName", nameGridViewAdapter.getItem(position));//给 bundle 写入数据
+                bundle.putString("isRoute",isRoute==true ? "true" : "false");
                     Intent mIntent = new Intent();
                     mIntent.putExtras(bundle);
                     setResult(RESULT_OK, mIntent);
@@ -227,7 +230,7 @@ public class ActivityOffice extends BaseActivity {
                     TextView tl = (TextView) view.findViewById(R.id.loc);
                     tl.setText(list.get(i).getLocation());
 
-                    view.setBackgroundResource(R.drawable.commentbar_short);
+//                    view.setBackgroundResource(R.drawable.commentbar_short);
                     start++;
                     commentList.addView(view);
                 }
