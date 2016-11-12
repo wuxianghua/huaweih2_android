@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.ShakeListenerUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
+import java.io.IOException;
+
 import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea;
 
 
@@ -51,6 +54,7 @@ FragmentShake extends BaseFragment {
   ImageView mImgUp;
 
   ImageView mImgFinish;
+  MediaPlayer mediaPlayer;
 
   ImageView result;
   TextView title;
@@ -227,6 +231,7 @@ FragmentShake extends BaseFragment {
         LogUtils.i("ShakeListenerUtils->onShake");
         shakeShow.setVisibility(View.GONE);
         startAnim();
+        playMp3();
         String js = JsonUtils.getShakeString(getCurrentLocationArea());
         DataProviderCenter.getInstance().getShake(js, new HttpDataCallBack() {
           @Override
@@ -321,8 +326,51 @@ FragmentShake extends BaseFragment {
 
   private void playMp3() {
 
+      boolean createState=false;
+      if(mediaPlayer==null){
+        mediaPlayer=createLocalMp3();
+        createState=true;
+      }
+      //当播放完音频资源时，会触发onCompletion事件，可以在该事件中释放音频资源，
+      //以便其他应用程序可以使用该资源:
+      mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+          mp.release();//释放音频资源
+        }
+      });
+      try {
+        //在播放音频资源之前，必须调用Prepare方法完成些准备工作
+        if(createState) mediaPlayer.prepare();
+        //开始播放音频
+        mediaPlayer.start();
 
-}
+      } catch (IllegalStateException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+
+  }
+
+
+  /**
+   * 创建本地MP3
+   * @return
+   */
+  public MediaPlayer createLocalMp3(){
+    /**
+     * 创建音频文件的方法：
+     * 1、播放资源目录的文件：MediaPlayer.create(MainActivity.this,R.raw.beatit);//播放res/raw 资源目录下的MP3文件
+     * 2:播放sdcard卡的文件：mediaPlayer=new MediaPlayer();
+     *   mediaPlayer.setDataSource("/sdcard/beatit.mp3");//前提是sdcard卡要先导入音频文件
+     */
+    MediaPlayer mp=MediaPlayer.create(getActivity(),R.raw.shake);
+    mp.stop();
+    return mp;
+  }
+
 
 
 }

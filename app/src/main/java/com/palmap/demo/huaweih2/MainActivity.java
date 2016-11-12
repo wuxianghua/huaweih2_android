@@ -35,6 +35,7 @@ import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
+import com.palmaplus.nagrand.core.Types;
 import com.palmaplus.nagrand.data.Feature;
 import com.palmaplus.nagrand.view.MapView;
 
@@ -720,34 +721,34 @@ public class MainActivity extends BaseActivity{
 
 
         if (fragmentMap.hasLocated) {//有定位点
-          showSelectStartPoint(feature);
+//          showSelectStartPoint(feature);
 
 
-//          double x= LocateTimerService.curX;
-//          double y =LocateTimerService.curY;
-//          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
-//          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
-//          if (f==null){
-//            showSelectStartPoint(feature);
-//            return;
-//          }
-//          String name = MapParamUtils.getName(f);
-//          if ( name==null||"".equals(name)) {
-//            showSelectStartPoint(feature);
-//            return;
-//          }
-//
-//          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
-//            String addr = MapParamUtils.getAddress(feature)==null?"":MapParamUtils.getAddress(feature);
-//            name = name + addr;
-//          }
-//
-//          fragmentMap.startX = x;
-//          fragmentMap.startY = y;
-//          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
-//          fragmentMap.startName =name;
-//
-//          fragmentMap.startNavigate();
+          double x= LocateTimerService.curX;
+          double y =LocateTimerService.curY;
+          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
+          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
+          if (f==null){
+            showSelectStartPoint(feature);
+            return;
+          }
+          String name = MapParamUtils.getName(f);
+          if ( name==null||"".equals(name)) {
+            showSelectStartPoint(feature);
+            return;
+          }
+
+          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
+            String addr = MapParamUtils.getAddress(feature)==null?"":MapParamUtils.getAddress(feature);
+            name = name + addr;
+          }
+
+          fragmentMap.startX = x;
+          fragmentMap.startY = y;
+          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
+          fragmentMap.startName =name;
+
+          fragmentMap.startNavigate();
 
 
 

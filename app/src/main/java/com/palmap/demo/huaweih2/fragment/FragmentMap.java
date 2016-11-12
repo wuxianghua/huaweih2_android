@@ -861,9 +861,15 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         break;
       case R.id.map_zoom_in:
         mMapView.zoomIn();
+        if (mScale != null) {
+          mScale.postInvalidate();
+        }
         break;
       case R.id.map_zoom_out:
         mMapView.zoomOut();
+        if (mScale != null) {
+          mScale.postInvalidate();
+        }
         break;
       case R.id.elevator:
         refeshPoiFilter(1);
