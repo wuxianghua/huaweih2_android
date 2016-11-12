@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.os.Handler;
 import android.util.Log;
 
 /**
@@ -39,7 +40,15 @@ public class ShakeListenerUtils implements SensorEventListener {
             if (len>MAX_VAL) {
                 if (isTooShort) {
                     Log.e("eric", "isTooShort");
-                    isTooShort = false;
+//                    isTooShort = false;
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isTooShort = false;
+                        }
+                    },8000);
                     return;
                 }
 

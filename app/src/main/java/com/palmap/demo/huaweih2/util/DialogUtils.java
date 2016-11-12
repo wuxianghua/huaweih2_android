@@ -24,6 +24,7 @@ public class DialogUtils {
   public static void showShortToast(String msg,int locate){
     Toast toast = Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT);
     toast.setGravity(locate,0,-10);
+    toast.show();
   }
 
   public static void showLongToast(String msg){

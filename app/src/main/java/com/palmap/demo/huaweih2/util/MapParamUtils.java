@@ -31,8 +31,12 @@ public class MapParamUtils {
   public static long getPOI(DataElement dataElement){
     return POI.get(dataElement);
   }
-  public static long getCategoryId(DataElement dataElement){return categoryId.get(dataElement);}
+  public static long getCategoryId(DataElement dataElement){
+
+    return categoryId.get(dataElement);}
   public static String getName(DataElement dataElement){
+    if (dataElement==null)
+      return "";
 //    if (Config.language == Config.Language.ENGLISH) {
 //      String name =  getEnglishName(dataElement);
 //      if (!TextUtils.isEmpty(name)) {

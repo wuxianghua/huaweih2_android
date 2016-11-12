@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
+                android:clipChildren="false"
                 android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/park_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         android:background="#f2f7f7"
         android:orientation="vertical">
 
@@ -20,6 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:padding="15dp">
@@ -27,20 +30,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请输入车牌号，如粤B·33333"
+                android:text="请输入车牌号:"
                 android:textColorHint="#565c60"
                 android:textSize="12sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:clipChildren="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/er"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
                     android:layout_weight="5"
                     android:background="@drawable/searchbar"
                     android:orientation="horizontal">
@@ -48,7 +53,7 @@
                     <TextView
                         android:id="@+id/B"
                         android:layout_width="48dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="44dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:gravity="center"
@@ -56,24 +61,38 @@
                         android:textColor="#565c60"
                         android:textSize="14sp"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:clipChildren="false"
+                        android:orientation="vertical">
                     <EditText
                         android:id="@+id/tv_car_num"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="44dp"
                         android:layout_toLeftOf="@+id/btn_search"
                         android:layout_toRightOf="@+id/B"
                         android:gravity="center_vertical"
-                        android:hint="如33333"
+                        android:hint="如810HP"
                         android:background="@null"
+                        android:maxLength="5"
                         android:singleLine="true"
                         android:textColor="#2f3336"
                         android:textColorHint="#dddddd"
                         android:textCursorDrawable="@null"
                         android:textSize="14sp"/>
+
+                    </LinearLayout>
                 </LinearLayout>
 
 
             </LinearLayout>
+
+            <ListView
+                android:id="@+id/carNum_list"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/btn_search"
@@ -353,6 +372,4 @@
 
         <!--</LinearLayout>-->
     </LinearLayout>
-
-
 </RelativeLayout>

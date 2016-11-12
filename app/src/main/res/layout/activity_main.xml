@@ -87,7 +87,7 @@
         <com.palmap.demo.huaweih2.view.TitleBar
             android:id="@+id/title_bar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:focusable="true"
             android:layout_gravity="top"
             android:focusableInTouchMode="true"

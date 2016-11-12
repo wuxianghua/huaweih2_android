@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -71,7 +70,7 @@ public class UploadActivity extends BaseActivity {
 
     bitmap = FileUtils.comp(bitmap);
     System.gc();
-    titleBar.show("取消","","上传");
+    titleBar.show("取消","","确定");
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -86,14 +85,7 @@ public class UploadActivity extends BaseActivity {
 //        }
 //        uploadImage();
 
-        String lo = LocateTimerService.getCurrentLocationArea();
-        if (!Constant.isDebug){
-          if(lo.equals(Constant.其它)){
-            DialogUtils.showShortToast("您不在华为H2大楼，不能上传", Gravity.CENTER);
-            finish();
-            return;
-          }
-        }
+
 
         uploadImageFormData();
 
@@ -165,7 +157,7 @@ public class UploadActivity extends BaseActivity {
 
       @Override
       public void onComplete(Object content) {
-        DialogUtils.showShortToast("上传成功");
+        DialogUtils.showShortToast("发表成功");
         if (bitmap != null) {
           bitmap.recycle();
         }

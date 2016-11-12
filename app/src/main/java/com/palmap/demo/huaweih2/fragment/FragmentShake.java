@@ -328,7 +328,9 @@ FragmentShake extends BaseFragment {
 
       boolean createState=false;
       if(mediaPlayer==null){
-        mediaPlayer=createLocalMp3();
+        mediaPlayer=MediaPlayer.create(getActivity(),R.raw.shake);
+        mediaPlayer.stop();
+//        mediaPlayer=createLocalMp3();
         createState=true;
       }
       //当播放完音频资源时，会触发onCompletion事件，可以在该事件中释放音频资源，
@@ -337,6 +339,7 @@ FragmentShake extends BaseFragment {
         @Override
         public void onCompletion(MediaPlayer mp) {
           mp.release();//释放音频资源
+          mediaPlayer = null;
         }
       });
       try {
@@ -366,9 +369,8 @@ FragmentShake extends BaseFragment {
      * 2:播放sdcard卡的文件：mediaPlayer=new MediaPlayer();
      *   mediaPlayer.setDataSource("/sdcard/beatit.mp3");//前提是sdcard卡要先导入音频文件
      */
-    MediaPlayer mp=MediaPlayer.create(getActivity(),R.raw.shake);
-    mp.stop();
-    return mp;
+
+    return mediaPlayer;
   }
 
 

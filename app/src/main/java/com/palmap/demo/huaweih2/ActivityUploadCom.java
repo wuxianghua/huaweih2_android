@@ -66,7 +66,7 @@ public class ActivityUploadCom extends BaseActivity {
 
           @Override
           public void onComplete(Object content) {
-            DialogUtils.showShortToast("上传成功！");
+            DialogUtils.showShortToast("发表成功！");
             textView.setText("");
             setResult(RESULT_OK,getIntent());
             finish();

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:focusable="true"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:fitsSystemWindows="false"
-                android:background="@drawable/navbar_9">
+                android:background="@drawable/commentbar_long">
+    <!--android:background="@drawable/navbar_9"-->
                 <!--android:elevation="15dp"-->
                 <!--android:translationZ="-15dp"-->
                 <!--android:background="@drawable/shadow">-->
