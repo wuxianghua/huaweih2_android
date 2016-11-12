@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+
     android:id="@+id/refreshScrollView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     android:fadingEdge="vertical">
-
+    <!--<ScrollView-->
 
     <LinearLayout
         android:id="@+id/activity_da_ting"
@@ -22,35 +23,35 @@
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_office"
                 android:layout_marginLeft="9dp"
-                android:layout_marginTop="137dp"
+                android:layout_marginTop="177dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_lab"
-                android:layout_marginLeft="46dp"
-                android:layout_marginTop="23dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginTop="73dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_h2"
-                android:layout_marginLeft="105dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="120dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_meetingRoom"
                 android:layout_marginLeft="170dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="70dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_h2_hall"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="78dp"
                 android:layout_marginRight="69dp"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"

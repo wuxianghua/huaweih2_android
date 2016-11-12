@@ -6,7 +6,10 @@
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:fitsSystemWindows="false"
-                android:background="@drawable/shadow">
+                android:background="@drawable/navbar_9">
+                <!--android:elevation="15dp"-->
+                <!--android:translationZ="-15dp"-->
+                <!--android:background="@drawable/shadow">-->
 
     <ImageView
         android:id="@+id/title_bar_back"

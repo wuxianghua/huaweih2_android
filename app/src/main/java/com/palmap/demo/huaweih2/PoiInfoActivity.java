@@ -13,10 +13,12 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import java.net.URL;
 
 public class PoiInfoActivity extends BaseActivity {
-  public static final int YYY = 0;
-  public static final int POI_HALL = 1;
-  public static final int POI_LAB = 2;
+  public static final int YYY = 0;//摇一摇
+  public static final int POI_HALL = 1;//大厅
+  public static final int POI_LAB = 2;//实验室
   public static final int POI_FOOT = 3;//足迹
+  public static final int POI_OFFICE = 4;//办公区
+  public static final int POI_MEETING = 5;//会议室
   ImageView close;
   ImageView imageView;
   TextView title;
@@ -91,6 +93,14 @@ public class PoiInfoActivity extends BaseActivity {
       title.setVisibility(View.GONE);
       detail.setVisibility(View.GONE);
       imageView.setImageResource(R.drawable.c_footprint);
+    }else if (type == POI_OFFICE) {
+      title.setText("ICS办公区");
+      detail.setText("华为ICS包括交付、开发、MKT、销售、产品等各领域在内一支经验丰富的专家队伍，总人数超过300人。");
+      imageView.setImageResource(R.drawable.office_poi);
+    }else if (type == POI_MEETING) {
+      title.setText("会议室");
+      detail.setText("用户可使用会议室预订管理系统，在基于位置的地图显示下，直观清晰的使每一个用户了解会议室预订情况");
+      imageView.setImageResource(R.drawable.boardroo);
     }
 
   }

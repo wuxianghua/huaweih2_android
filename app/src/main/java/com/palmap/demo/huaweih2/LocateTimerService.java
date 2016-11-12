@@ -36,13 +36,13 @@ public class LocateTimerService extends Service {
   private boolean pushthread = false;
   private static LocateTimerService instance;
   //地理围栏
-  static double[] hall = new double[]{12697136.398, 12697170.670, 2588890.742, 2588913.578
+  static double[] hall = new double[]{12697136.696 , 12697172.696 , 2588890.655 , 2588917.384
   };//  x左,x右,y上,y下
-  static double[] meeting = new double[]{12697124.910, 12697133.112, 2588902.794, 2588917.187
+  static double[] meeting = new double[]{12697125.262 , 12697133.136  , 2588900.784 , 2588917.194
   };
-  static double[] lab = new double[]{12697093.954, 12697102.738, 2588902.847, 2588913.271
+  static double[] lab = new double[]{12697094.209  , 12697102.759 , 2588900.784 ,  2588912.914
   };
-  static double[] office = new double[]{12697082.524, 12697091.996, 2588865.223, 2588885.331
+  static double[] office = new double[]{12697081.767 , 12697093.989  , 2588868.311 ,   2588890.293
   };
   static double[] h2 = new double[]{12697080.571, 12697195.929, 2588843.728, 2588958.557
   };

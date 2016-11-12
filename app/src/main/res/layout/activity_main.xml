@@ -270,7 +270,7 @@
             android:layout_height="55dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:background="#ffffffff"
+            android:background="@drawable/tabbar_9"
             android:elevation="15dp"
             android:orientation="horizontal"
             android:translationZ="15dp"

@@ -42,7 +42,7 @@ public class ActivityUploadCom extends BaseActivity {
 
     textView = (EditText) findViewById(R.id.text);
     titleBar  = (TitleBar)findViewById(R.id.title_bar);
-    titleBar.show(null,"评论","发布");
+    titleBar.show(null,"评论","发表");
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {

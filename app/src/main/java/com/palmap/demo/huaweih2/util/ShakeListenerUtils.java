@@ -15,7 +15,7 @@ public class ShakeListenerUtils implements SensorEventListener {
     private Activity context;
     private OnShakeListener onShakeListener;
     public static boolean isTooShort = false;//保证两次间隔
-    public static float MAX_VAL = 21f;
+    public static float MAX_VAL = 20f;
 //    public static float MAX_VAL = 15f;
 
     public ShakeListenerUtils(Activity context, OnShakeListener onShakeListener) {

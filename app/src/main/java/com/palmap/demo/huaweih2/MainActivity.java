@@ -29,12 +29,12 @@ import com.palmap.demo.huaweih2.model.PoiImgList;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
+import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
-import com.palmaplus.nagrand.core.Types;
 import com.palmaplus.nagrand.data.Feature;
 import com.palmaplus.nagrand.view.MapView;
 
@@ -720,30 +720,34 @@ public class MainActivity extends BaseActivity{
 
 
         if (fragmentMap.hasLocated) {//有定位点
-          double x= LocateTimerService.curX;
-          double y =LocateTimerService.curY;
-          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
-          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
-          if (f==null){
-            showSelectStartPoint(feature);
-            return;
-          }
-          String name = MapParamUtils.getName(f);
-          if ( name==null||"".equals(name)) {
-            showSelectStartPoint(feature);
-            return;
-          }
+          showSelectStartPoint(feature);
 
-          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
-            name = name + " "+MapParamUtils.getAddress(f);
-          }
 
-          fragmentMap.startX = x;
-          fragmentMap.startY = y;
-          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
-          fragmentMap.startName =name;
-
-          fragmentMap.startNavigate();
+//          double x= LocateTimerService.curX;
+//          double y =LocateTimerService.curY;
+//          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
+//          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
+//          if (f==null){
+//            showSelectStartPoint(feature);
+//            return;
+//          }
+//          String name = MapParamUtils.getName(f);
+//          if ( name==null||"".equals(name)) {
+//            showSelectStartPoint(feature);
+//            return;
+//          }
+//
+//          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
+//            String addr = MapParamUtils.getAddress(feature)==null?"":MapParamUtils.getAddress(feature);
+//            name = name + addr;
+//          }
+//
+//          fragmentMap.startX = x;
+//          fragmentMap.startY = y;
+//          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
+//          fragmentMap.startName =name;
+//
+//          fragmentMap.startNavigate();
 
 
 
@@ -928,6 +932,7 @@ public class MainActivity extends BaseActivity{
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if ((keyCode == KeyEvent.KEYCODE_BACK)) {
       if (fragmentShake != null && fragmentShake.isVisible()) {
+        LogUtils.i("onKeyDown->stopShakeSensor");
         fragmentShake.stopShakeSensor();
       }
 
@@ -937,8 +942,7 @@ public class MainActivity extends BaseActivity{
         exitBy2Click(); //调用双击退出函数
 
       } else {
-        if (isNavigating&&!isSearchCar) {
-          showTabMenu();
+        if (isNavigating&&!isSearchCar&&!fragmentMap.isShowFootPrint){
           fragmentMap.endNavigate();
         } else if (fragmentMap.isShowFootPrint) {
           fragmentMap.resetFootPrint();

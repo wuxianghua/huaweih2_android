@@ -20,9 +20,10 @@
 
     <com.handmark.pulltorefresh.library.PullToRefreshScrollView
         android:id="@+id/refreshScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:fadingEdge="vertical"
+        android:fillViewport="true"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -110,18 +111,47 @@
 
             </RelativeLayout>
 
-            <ImageView
+            <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/meeting_top"/>-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_form_meeting"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="会议室预定情况"
+                    android:textColor="#777777"/>
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/meeting_top"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="10/11/2016"
+                    android:textColor="#777777"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/meeting_but"/>
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/btn_com"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
-
                 android:background="@drawable/commentbar_long">
 
                 <TextView

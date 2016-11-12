@@ -676,11 +676,13 @@ public class AsyncHttp {
             }
           } catch (MalformedURLException e){
             e.printStackTrace();
+            callBack.onError(ErrorCode.CODE_EXCEPTION);
           }
           catch (IOException e){
             e.printStackTrace();
+            callBack.onError(ErrorCode.CODE_EXCEPTION);
           }
-          callBack.onError(ErrorCode.CODE_EXCEPTION);
+
         }
       });
 //      Executors.newSingleThreadExecutor().execute(new Runnable() {

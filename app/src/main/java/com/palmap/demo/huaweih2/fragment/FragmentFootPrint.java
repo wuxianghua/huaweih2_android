@@ -53,6 +53,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
   public LinearLayout commentList;
   RelativeLayout write;
   public int start = 0;//开始加载
+  public static boolean hasShowGide = false;//
 
   private PullToRefreshScrollView refreshScrollView;
 
@@ -108,7 +109,8 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
   private void checkFirst(){
     SharedPreferences setting = mContext.getSharedPreferences(Constant.IS_FIRST_RUN, 0);
     int time =  setting.getInt("time", 2);
-    if (time==2){//第一次显示
+    if (time==2&&!hasShowGide){//第一次显示
+      hasShowGide = true;
       Intent intent = new Intent(mContext, PoiInfoActivity.class);
       intent.putExtra("type",PoiInfoActivity.POI_FOOT);
       mContext.startActivity(intent);

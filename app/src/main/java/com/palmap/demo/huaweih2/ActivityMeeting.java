@@ -36,6 +36,7 @@ public class ActivityMeeting extends BaseActivity {
   ImageView up;
   RelativeLayout write;
   TextView zan;
+  TextView dateTv;
   int start = 0;
   static boolean hasZan=false;
 
@@ -60,6 +61,13 @@ public class ActivityMeeting extends BaseActivity {
         startActivityForResult(intent,Constant.startUploadText);
       }
     });
+
+    dateTv = (TextView )findViewById(R.id.date);
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    long times = System.currentTimeMillis();
+    Date date = new Date(times);
+    String tim = sdf.format(date);
+    dateTv.setText(tim);
 
     zan = (TextView )findViewById(R.id.zanSum);
 

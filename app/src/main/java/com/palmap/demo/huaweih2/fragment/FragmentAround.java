@@ -1,16 +1,15 @@
 package com.palmap.demo.huaweih2.fragment;
 
 
-import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.palmap.demo.huaweih2.ActivityWeb;
-import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.ShopListAdapter;
 import com.palmap.demo.huaweih2.model.Shop;
@@ -21,8 +20,8 @@ import com.palmap.demo.huaweih2.view.TitleBar;
  * Created by eric3 on 2016/10/8.
  */
 
-public class FragmentAround extends ListFragment {
-//  ListView shopListView;
+public class FragmentAround extends BaseFragment {
+  ListView shopListView;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     // TODO Auto-generated method stub
@@ -34,7 +33,7 @@ public class FragmentAround extends ListFragment {
                            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     // TODO Auto-generated method stub
     View fragmentView = inflater.inflate(R.layout.around, container, false);
-//    shopListView = (ListView) fragmentView.findViewById(R.id.list);
+    shopListView = (ListView) fragmentView.findViewById(R.id.shop_list_view);
     ShopList shopList = new ShopList();
     ShopListAdapter shopListAdapter = new ShopListAdapter(getActivity(), shopList.getShopList(), new ShopListAdapter.OnItemClickListener() {
       @Override
@@ -53,7 +52,7 @@ public class FragmentAround extends ListFragment {
 //        startActivity(it);
       }
     });
-    this.setListAdapter(shopListAdapter);
+    shopListView.setAdapter(shopListAdapter);
     getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
@@ -68,7 +67,7 @@ public class FragmentAround extends ListFragment {
     return fragmentView;
   }
 
-  private MainActivity getMainActivity() {
-    return (MainActivity)getActivity();
-  }
+//  private MainActivity getMainActivity() {
+//    return (MainActivity)getActivity();
+//  }
 }
