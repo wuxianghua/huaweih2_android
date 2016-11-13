@@ -19,7 +19,7 @@ public class ActivityWeb extends BaseActivity {
     setContentView(R.layout.activity_web);
 
 
-    url = getIntent().getStringExtra("url");
+    url = getIntent().getStringExtra("text");
     shopName = getIntent().getStringExtra("shopName");
     titleBar = (TitleBar)findViewById(R.id.title_bar);
     titleBar.show(null,shopName==null?"点餐":shopName,null);
@@ -71,7 +71,7 @@ public class ActivityWeb extends BaseActivity {
         }
 
         // Otherwise allow the OS to handle things like tel, mailto, etc.
-//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
 //        startActivity( intent );
         return true;//不处理
       }

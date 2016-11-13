@@ -15,9 +15,53 @@
     </com.palmap.demo.huaweih2.view.TitleBar>
 
 
-    <com.palmap.demo.huaweih2.view.CustomerViewPager
-        android:id="@+id/imgPager"
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:padding="15dp"
+        android:background="@android:color/white"
+        android:layout_height="match_parent">
+
+
+        <com.palmap.demo.huaweih2.view.CustomerViewPager
+            android:id="@+id/imgPager"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            />
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="#94999d"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/tv_time"
+            android:layout_below="@+id/imgPager"
+            android:text="2016年9月28日 15:23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="#94999d"
+            android:id="@+id/tv_location"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@+id/tv_time"
+            android:text="ICS实验室"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="#565c60"
+            android:id="@+id/tv_details"
+            android:layout_below="@+id/tv_time"
+            android:layout_alignLeft="@+id/tv_time"
+            android:layout_marginTop="15dp"
+            android:text="ICS实验室"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 </LinearLayout>

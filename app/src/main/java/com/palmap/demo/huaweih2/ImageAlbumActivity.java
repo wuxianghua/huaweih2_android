@@ -122,7 +122,7 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
             }
 
             @Override
-            public void onComplete(Object content) {
+            public void onComplete(final Object content) {
 
                 pictureModelList = JsonUtils.getPictureModel(content);
                 if (pictureModelList==null||pictureModelList.size()<=0){
@@ -144,21 +144,22 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-//                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
+                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
 //                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
-//                intent.putExtra("itemIndex",
-//                        position);
+                        intent.putExtra("imgListJson",  content.toString());
+                intent.putExtra("itemIndex",
+                        position);
 
-                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
-
-                        PictureModel pictureModel = new PictureModel();
-                        pictureModel = pictureModelList.get(position);
+//                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
+//
+//                        PictureModel pictureModel = new PictureModel();
+//                        pictureModel = pictureModelList.get(position);
 //                        pictureModel.setAppendix("测试测试测试描述");
 //                        pictureModel.setUpdtime(System.currentTimeMillis());
 //                        pictureModel.setLocation("ICS实验室");
 //                        pictureModel.setPhoto("http://7xnnph.com1.z0.glb.clouddn.com/11385343fbf2b2112cf911efce8065380dd78eb8.jpg");
 
-                        intent.putExtra(PictureModel.class.getSimpleName(),  pictureModel);
+//                        intent.putExtra(PictureModel.class.getSimpleName(),  pictureModel);
                         startActivity(intent);
                     }
                 });

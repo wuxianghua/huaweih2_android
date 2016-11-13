@@ -57,7 +57,7 @@ public class FootprintDetailsActivity extends BaseActivity {
 //
 //                shareModel.imgUrl = pictureModel.getPhoto();
 //                shareModel.title = "图片分享";
-//                shareModel.url = pictureModel.getAppendix();
+//                shareModel.text = pictureModel.getAppendix();
 //
 //                SharePopView.showSharePop(FootprintDetailsActivity.this,shareModel);
 //            }
@@ -87,6 +87,7 @@ public class FootprintDetailsActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Glide.get(this).clearMemory();
         System.gc();
     }
 }

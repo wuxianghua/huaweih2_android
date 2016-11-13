@@ -79,7 +79,7 @@ public class DataProviderCenter {
     String jsonString = JSON.toJSONString(ipList);
 //    jsonString = "[" +jsonString + "]";
     //URL_LOCATE
-//    String url = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData=10.209.206.66";
+//    String text = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData=10.209.206.66";
     if (Constant.openLocateTest)
       mDataProvider.postDataProvider("", heads, jsonString == null ? null : jsonString.getBytes(), callBack);
     else {

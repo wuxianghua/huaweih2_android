@@ -52,7 +52,7 @@ public class HuaWeiH2Application extends Application {
         trackingCrashLog(true).//是否收集crash，默认 true
         trackingConsoleLog(true).//是否收集console log，默认 true
         trackingUserSteps(true).//是否收集用户操作步骤，默认 true
-        trackingNetworkURLFilter("(.*)").//自定义网络请求跟踪的 url 规则，默认 null
+        trackingNetworkURLFilter("(.*)").//自定义网络请求跟踪的 text 规则，默认 null
         build();
     Bugtags.start("267921bb8c8c795df7f7ffa41ac5d307", this, Bugtags.BTGInvocationEventNone,options);
 

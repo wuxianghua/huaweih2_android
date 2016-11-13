@@ -78,7 +78,7 @@ public class AsyncHttp {
       callback.onError(ErrorCode.CODE_REQUEST_ERROR); // 网络请求错误
       return null;
     }
-    Log.w("AsyncHttp", "url: " + url);
+    Log.w("AsyncHttp", "text: " + url);
 
     // 创建http连接相关对象
     final HttpClient httpClient = new DefaultHttpClient();
@@ -185,7 +185,7 @@ public class AsyncHttp {
       callback.onError(ErrorCode.CODE_REQUEST_ERROR); // 网络请求错误
       return null;
     }
-    Log.w("AsyncHttp", "url: " + url);
+    Log.w("AsyncHttp", "text: " + url);
 
     // 创建http连接相关对象
     final DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -306,7 +306,7 @@ public class AsyncHttp {
       return;
     }
 
-    Log.i("AsyncHttp", "url: " + url);
+    Log.i("AsyncHttp", "text: " + url);
 
     Executors.newSingleThreadExecutor().execute(new Runnable() {
       @Override
@@ -384,7 +384,7 @@ public class AsyncHttp {
       callback.onError(ErrorCode.CODE_REQUEST_ERROR); // 网络请求错误
       return;
     }
-    Log.i("AsyncHttp", "url: " + url);
+    Log.i("AsyncHttp", "text: " + url);
 
     Executors.newSingleThreadExecutor().execute(new Runnable() {
       @Override
@@ -464,7 +464,7 @@ public class AsyncHttp {
       callback.onError(ErrorCode.CODE_REQUEST_ERROR); // 网络请求错误
       return;
     }
-    Log.i("AsyncHttp", "url: " + url);
+    Log.i("AsyncHttp", "text: " + url);
 
     Executors.newSingleThreadExecutor().execute(new Runnable() {
       @Override
@@ -689,8 +689,8 @@ public class AsyncHttp {
 //        @Override
 //        public void run() {
 ////          try {
-////            URL url = new URL(URL_UPLOAD_IMAGE_TEST);
-////            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+////            URL text = new URL(URL_UPLOAD_IMAGE_TEST);
+////            HttpURLConnection conn = (HttpURLConnection) text.openConnection();
 ////            conn.setReadTimeout(TIME_OUT);
 ////            conn.setConnectTimeout(TIME_OUT);
 ////            conn.setDoInput(true); //   允许输入流

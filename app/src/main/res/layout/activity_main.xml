@@ -328,7 +328,7 @@
                 android:drawableTop="@drawable/ico_tab_park"
                 android:gravity="center_horizontal|bottom"
                 android:padding="7dp"
-                android:text="停车"
+                android:text="寻车"
                 android:textColor="@color/cg"/>
 
             <RadioButton

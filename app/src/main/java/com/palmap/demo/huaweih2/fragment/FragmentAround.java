@@ -42,7 +42,7 @@ public class FragmentAround extends BaseFragment {
           return;
 
         Intent intent = new Intent(getActivity(), ActivityWeb.class);
-        intent.putExtra("url",shop.getUrl());
+        intent.putExtra("text",shop.getUrl());
         intent.putExtra("shopName",shop.getName());
         startActivity(intent);
 

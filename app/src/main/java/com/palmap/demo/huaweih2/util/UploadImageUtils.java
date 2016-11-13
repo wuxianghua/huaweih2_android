@@ -46,8 +46,8 @@
 //    byte[] data = jsonData.getBytes();
 //
 //    try {
-//      URL url = new URL(RequestURL);
-//      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//      URL text = new URL(RequestURL);
+//      HttpURLConnection conn = (HttpURLConnection) text.openConnection();
 //      conn.setReadTimeout(TIME_OUT);
 //      conn.setConnectTimeout(TIME_OUT);
 //      conn.setDoInput(true); //允许输入流

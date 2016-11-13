@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.PopupWindow;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 
 /**
  * Created by 王天明 on 2016/10/22.
@@ -22,8 +24,9 @@ public class SharePopView {
     private static Activity mContext = null;
     public static class ShareModel{
         public String title;
-        public String url;
+        public String text;
         public String imgUrl;
+        public Bitmap urlBmp;
     }
 
     public static void showSharePop(Activity context,ShareModel shareModel) {
@@ -99,12 +102,13 @@ public class SharePopView {
             switch (v.getId()) {
                 case R.id.layout_share_weChat:
                     //分享到微信
-                    WXShareUtils.sendToWeChat(shareModel.imgUrl);
+                    WXShareUtils.sendToWeChat(shareModel.urlBmp,shareModel.text, SendMessageToWX.Req.WXSceneSession);
+//                    WXShareUtils.sendTextToWeChat(shareModel.text);
                     break;
 
                 case R.id.layout_share_weiChat_friends:
-                    //分享到QQ空间
-                    QQShareUtils.getInstance().shareToQzone(mContext,shareModel);
+                    //分享到朋友圈
+                    WXShareUtils.sendToWeChat(shareModel.urlBmp,shareModel.text, SendMessageToWX.Req.WXSceneTimeline);
                     break;
 
                 case R.id.layout_share_weibo:
@@ -114,8 +118,10 @@ public class SharePopView {
                 case R.id.layout_share_qq:
                     //分享到QQ
                     QQShareUtils.getInstance().shareToQQ(mContext,shareModel);
+//                    QQShareUtils.getInstance().shareToQzone(mContext,shareModel);
                     break;
             }
+            dismiss();
         }
     }
 
