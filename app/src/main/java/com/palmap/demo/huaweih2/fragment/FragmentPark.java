@@ -133,7 +133,6 @@ public class FragmentPark extends BaseFragment {
       public void onLeft() {
         KeyBoardUtils.closeKeybord(carNum,getActivity());
         getMainActivity().showFragmentMap();
-
       }
 
       @Override

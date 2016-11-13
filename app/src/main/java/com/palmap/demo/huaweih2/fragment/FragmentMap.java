@@ -218,7 +218,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   public static boolean isNavigateCar = false;//是否反向巡车（规划路线）
   private boolean isShowSearchResult = false;//切换楼层是否显示搜索结果
 
-  LocationModel searchResultModel;
+  long searchResultID;
 
   private Mark startMark;
   private Mark endMark;
@@ -258,6 +258,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
       };
   private boolean canPush = true;//是否显示欢迎信息
+  private int isSearch4Poi = -1;
 
 
   public void doResult(int action) {
@@ -950,6 +951,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mSearchBg.setVisibility(View.GONE);
     mCompass.setVisibility(View.VISIBLE);
     mSearch.setVisibility(View.VISIBLE);
+    //判断切换楼层
+    if (Constant.FLOOR_ID_F1!=mCurrentFloor){
+      isSearch4Poi = index;
+      loadMap(Constant.FLOOR_ID_F1);
+      return;
+    }
+
+
 //    addMark(x[index], y[index]);
     Types.Point point = mMapView.converToScreenCoordinate(x[index], y[index]);
     searchPOIByPoint((float) point.x, (float) point.y);
@@ -1111,6 +1120,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   public void loadMap(final long floorId) {
     loadMap(floorId, true);
+//    mContext.hidePoiInfoBar();
+    mContext.showTabMenu();
   }
 
   /**
@@ -1158,6 +1169,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         if (isShowSearchResult){
           isShowSearchResult = false;
           showSearchResult();
+        }
+
+        if (isSearch4Poi>=0){
+          mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              showSearch4Poi(isSearch4Poi);
+              isSearch4Poi = -1;
+            }
+          });
         }
 
         isLoadingMap = false;
@@ -1647,7 +1668,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             mKeywords.setText("");
 
 //            Mark mark = new Mark(mContext);
-            searchResultModel = locationModel;
+            searchResultID = LocationModel.id.get(locationModel);
             Coordinate c = getCoordinate(locationModel);
             if (c == null) {
               //判断切换楼层
@@ -1678,8 +1699,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     mContext.runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        Coordinate c = getCoordinate(searchResultModel);
-        Feature feature = mMapView.selectFeature(MapParamUtils.getId(searchResultModel));
+//        Coordinate c = getCoordinate(searchResultID);
+        Feature feature = mMapView.selectFeature(searchResultID);
 
         endX = feature.getCentroid().getX();//point.x;//可能
         endY = feature.getCentroid().getY();//point.y;
@@ -1695,10 +1716,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
         mContext.setPoiInfoBar(feature);
         mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature),endName);
-        addMark(c.getX(), c.getY());
+        addMark(endX, endY);
         mCompass.setVisibility(View.VISIBLE);
         mSearch.setVisibility(View.VISIBLE);
-        mMapView.moveToPoint(c);
+        mMapView.moveToPoint(feature.getCentroid());
       }
     });
   }
