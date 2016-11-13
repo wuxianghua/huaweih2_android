@@ -21,6 +21,7 @@ public static List<PoiImg> getPoiImgList(){
   PoiImg img3= new PoiImg(R.drawable.tearoom,23040000,"茶水间");
   PoiImg img4 = new PoiImg(R.drawable.dtoilet,23059000,"残障洗手间");
   PoiImg img5 = new PoiImg(R.drawable.mtoilet,23024000,"男洗手间");
+  PoiImg img18 = new PoiImg(R.drawable.toilet,23063000,"洗手间");
   PoiImg img6 = new PoiImg(R.drawable.wtoilet,23025000,"女洗手间");
   PoiImg img7 = new PoiImg(R.drawable.service,23018000,"服务台");
   PoiImg img8 = new PoiImg(R.drawable.lifeservice,15000000,"生活服务");
@@ -51,6 +52,7 @@ public static List<PoiImg> getPoiImgList(){
   poiImgs.add(img15);
   poiImgs.add(img16);
   poiImgs.add(img17);
+  poiImgs.add(img18);
 
   return poiImgs;
 }

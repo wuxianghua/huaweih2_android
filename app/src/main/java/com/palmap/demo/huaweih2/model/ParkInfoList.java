@@ -12,11 +12,11 @@ public class ParkInfoList {
 
   public ParkInfoList() {
     parkInfoList = new ArrayList<>();
-    ParkInfo P1 = new ParkInfo("粤B·22376", "H135", "P1", "￥15", "2h");
-    ParkInfo P2 = new ParkInfo("粤B·32398", "H148", "P2", "￥15", "4h");
-    ParkInfo P3 = new ParkInfo("粤B·810HP", "H251", "P3", "￥15", "4h30min");
-    ParkInfo P4 = new ParkInfo("粤B·570HS", "H199", "P4", "￥15", "10h");
-    ParkInfo P5 = new ParkInfo("粤B·646FF", "H237", "P5", "￥15", "10h36min");
+    ParkInfo P1 = new ParkInfo("粤B·22376", "H152", "P1", "￥15", "2h");
+    ParkInfo P2 = new ParkInfo("粤B·32398", "H152", "P2", "￥15", "4h");
+    ParkInfo P3 = new ParkInfo("粤B·810HP", "H152", "P3", "￥15", "4h30min");
+    ParkInfo P4 = new ParkInfo("粤B·570HS", "H152", "P4", "￥15", "10h");
+    ParkInfo P5 = new ParkInfo("粤B·646FF", "H152", "P5", "￥15", "10h36min");
 
     parkInfoList.add(P1);
     parkInfoList.add(P2);

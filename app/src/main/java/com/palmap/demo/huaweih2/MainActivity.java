@@ -46,6 +46,8 @@ import java.util.TimerTask;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigateCar;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigating;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
+import static com.palmap.demo.huaweih2.fragment.FragmentPark.isFindCarJumpF1;
+import static com.palmap.demo.huaweih2.other.Constant.FLOOR_ID_F1;
 import static com.palmap.demo.huaweih2.other.Constant.H2大厅;
 import static com.palmap.demo.huaweih2.other.Constant.ICS办公区;
 import static com.palmap.demo.huaweih2.other.Constant.ICS实验室;
@@ -532,6 +534,11 @@ public class MainActivity extends BaseActivity{
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
+        if (isFindCarJumpF1){
+          isFindCarJumpF1 = false;
+          if (FragmentMap.mCurrentFloor==Constant.FLOOR_ID_B1)
+            fragmentMap.loadMap(FLOOR_ID_F1);
+        }
         showFragmentMap();
       }
 
@@ -543,6 +550,7 @@ public class MainActivity extends BaseActivity{
   }
 
   public void showFragmentMap() {
+
     poiInfoBar.setVisibility(View.GONE);
     fragmentMap.mSearchBg.setVisibility(View.GONE);
     fragmentMap.hideSearchView();
@@ -698,7 +706,6 @@ public class MainActivity extends BaseActivity{
               isSearchCar = false;
               isNavigateCar = false;
             }
-
             showTabMenu();
             fragmentMap.endNavigate();
           }
@@ -919,8 +926,6 @@ public class MainActivity extends BaseActivity{
   protected void onPause() {
     super.onPause();
 
-
-
   }
 
   //  @Override
@@ -962,6 +967,11 @@ public class MainActivity extends BaseActivity{
             fragmentMap.mMapView.getOverlayController().refresh();
           }
         } else {
+          if (isFindCarJumpF1){
+            isFindCarJumpF1 = false;
+            if (FragmentMap.mCurrentFloor==Constant.FLOOR_ID_B1)
+              fragmentMap.loadMap(FLOOR_ID_F1);
+          }
           showFragmentMap();
         }
       }

@@ -55,6 +55,8 @@ public class Constant {
   public static final long 男洗手间_ID = 23024000L;
   public static final long 女洗手间_ID = 23025000L;
   public static final long 残障洗手间_ID = 23059000L;
+  public static final long 洗手间_ID = 23063000L;
+
   public static final long 安全出口_ID = 23061000L;
   public static final long 建筑物大门 = 23043000L;
   public static final long 门窗楼梯_ID = 13164000L;
@@ -122,4 +124,5 @@ public class Constant {
   public static final double NAV_MIN_DISTANCE = 2.0;
 
 
+  public static boolean useSystemShare = true;//是否使用系统分享
 }

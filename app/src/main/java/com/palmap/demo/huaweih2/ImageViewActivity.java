@@ -18,7 +18,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.palmap.demo.huaweih2.json.PictureModel;
+import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.JsonUtils;
+import com.palmap.demo.huaweih2.util.ShareUtils;
 import com.palmap.demo.huaweih2.view.CustomerViewPager;
 import com.palmap.demo.huaweih2.view.MyProgressDialog;
 import com.palmap.demo.huaweih2.view.RecyclableImageView;
@@ -44,6 +46,7 @@ public class ImageViewActivity extends Activity {
     private MyProgressDialog progressDialog;
     private TitleBar titleBar;
 
+    private int currentPos = 0;
     private TextView tvTime,tvDetails,tvLocation;
 //    private Bitmap currentBmp;
 
@@ -59,7 +62,7 @@ public class ImageViewActivity extends Activity {
 //        imgList = intent.getStringArrayListExtra("imgList");
         String content = getIntent().getStringExtra("imgListJson");
         pictureModelList = JsonUtils.getPictureModel(content);
-        int itemIndex = intent.getIntExtra("itemIndex", 0);
+        currentPos = intent.getIntExtra("itemIndex", 0);
 
         titleBar=(TitleBar)findViewById(R.id.title_bar);
         titleBar.show(null,pictureModelList.get(0).getLocation(),null);
@@ -77,7 +80,7 @@ public class ImageViewActivity extends Activity {
         imgPager = (CustomerViewPager) findViewById(R.id.imgPager);
         mAdapter = new ImageAdapter();
         imgPager.setAdapter(mAdapter);
-        imgPager.setCurrentItem(itemIndex);
+        imgPager.setCurrentItem(currentPos);
         imgPager.setOnPageChangeListener(new CustomerViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -86,6 +89,7 @@ public class ImageViewActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
+                currentPos = position;
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
                     "yyyy年MM月dd日 HH:mm"
                 );
@@ -110,32 +114,33 @@ public class ImageViewActivity extends Activity {
                     @Override
                     public void run() {
                         Looper.prepare();
-//                        myHandler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-                                SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
 
-                                shareModel.imgUrl = pictureModelList.get(imgPager.getCurrentItem()).getPhoto();
-                                Bitmap myBitmap = null;
-                                try {
-                                    myBitmap = Glide.with(ImageViewActivity.this)
-                                        .load(shareModel.imgUrl)
-                                        .asBitmap() //必须
-                                        .centerCrop()
-                                        .into(500, 500)
-                                        .get();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                }
-                                shareModel.urlBmp =myBitmap;
-                                shareModel.title = "ICS足迹分享";
-                                shareModel.text =pictureModelList.get(imgPager.getCurrentItem()).getAppendix();
+                        if (Constant.useSystemShare){
+                            ShareUtils.shareText(ImageViewActivity.this,"我在华为ICS实验室参观："+pictureModelList.get(currentPos).getAppendix()+"  快来看看我拍的照片吧："+
+                                pictureModelList.get(currentPos).getPhoto());
+                        }else {
+                            SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
 
-                                SharePopView.showSharePop(ImageViewActivity.this,shareModel);
-//                            }
-//                        });
+                            shareModel.imgUrl = pictureModelList.get(imgPager.getCurrentItem()).getPhoto();
+                            Bitmap myBitmap = null;
+                            try {
+                                myBitmap = Glide.with(ImageViewActivity.this)
+                                    .load(shareModel.imgUrl)
+                                    .asBitmap() //必须
+                                    .centerCrop()
+                                    .into(500, 500)
+                                    .get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            shareModel.urlBmp = myBitmap;
+                            shareModel.title = "ICS足迹分享";
+                            shareModel.text = pictureModelList.get(currentPos).getAppendix();
+
+                            SharePopView.showSharePop(ImageViewActivity.this, shareModel);
+                        }
                         Looper.loop();
                     }
                 }).start();

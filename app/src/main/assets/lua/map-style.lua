@@ -445,6 +445,8 @@ CONFIG = {
                             [24091000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [24097000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [23024000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
+                            [23063000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
+
                             [23059000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
 
                             [23024000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
@@ -1309,6 +1311,9 @@ CONFIG = {
                             [34002000] = ICON('icons/34002000.png'),
                             [35001000] = ICON('icons/35001000.png'),
                             [22006000] = ICON('icons/22006000.png'),
+
+
+                            [23063000] = ICON('icons/23063000.png'),
                         }
                     }
                 },

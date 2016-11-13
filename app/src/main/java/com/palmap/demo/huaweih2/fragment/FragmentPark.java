@@ -38,6 +38,7 @@ public class FragmentPark extends BaseFragment {
   List<ParkInfo> parkInfoList;
   ParkInfoAdapter parkInfoAdapter;
   public LinearLayout mainlayout;
+  public static boolean isFindCarJumpF1 = false;
   String keyWord;
   ListView carNumList;
 //  public LinearLayout floorlayout;
@@ -132,6 +133,7 @@ public class FragmentPark extends BaseFragment {
       public void onLeft() {
         KeyBoardUtils.closeKeybord(carNum,getActivity());
         getMainActivity().showFragmentMap();
+
       }
 
       @Override
@@ -197,5 +199,11 @@ public class FragmentPark extends BaseFragment {
 
     getMainActivity().titleBar.show(null,"找车","已缴费");
     getMainActivity().titleBar.setEnableRight(false);
+  }
+
+  @Override
+  public void onResume() {
+    isFindCarJumpF1 = FragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1;
+    super.onResume();
   }
 }
