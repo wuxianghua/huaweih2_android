@@ -259,6 +259,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       };
   private boolean canPush = true;//是否显示欢迎信息
   private int isSearch4Poi = -1;
+  private boolean hasShowArriveEnd = false;//
 
 
   public void doResult(int action) {
@@ -1036,6 +1037,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         return false;
 
       Log.w(TAG, "加载内存缓存，floorId = " + floorID);
+      HuaWeiH2Application.planarGraphF1.obtain();
       initPlanarGraph(HuaWeiH2Application.planarGraphF1,floorID);
       return true;
     }
@@ -1044,6 +1046,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         return false;
 
       Log.w(TAG, "加载内存缓存，floorId = " + floorID);
+      HuaWeiH2Application.planarGraphB1.obtain();
       initPlanarGraph(HuaWeiH2Application.planarGraphB1,floorID);
       return true;
     }
@@ -1082,8 +1085,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     Log.w(TAG, "开始加载地图，floorId = " + floorId);
     isLoadingMap = true;
-//    if (checkCashAndLoad(floorId))//有缓存
-//      return;
+
+
+
+
+    if (checkCashAndLoad(floorId))//有缓存
+      return;
+
+
+
+
 
     mDataSource.requestPlanarGraph(floorId, new DataSource.OnRequestDataEventListener<PlanarGraph>() {
       @Override
@@ -1095,14 +1106,23 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
           mSearch.setClickable(true);//防止欢迎页面点到
 
           if (floorId==Constant.FLOOR_ID_F1) {//缓存
-//            HuaWeiH2Application.planarGraphF1 = planarGraph;
-            HuaWeiH2Application.planarGraphF1 = new MyPlanarGraph(PlanarGraph.getPtrAddress(planarGraph),false);
+            planarGraph.obtain();
+            HuaWeiH2Application.planarGraphF1 = planarGraph;
+//            HuaWeiH2Application.planarGraphF1 = new MyPlanarGraph(PlanarGraph.getPtrAddress(planarGraph),false);
+
           }if (floorId==Constant.FLOOR_ID_B1) {
-//            HuaWeiH2Application.planarGraphB1 = planarGraph;
-            HuaWeiH2Application.planarGraphB1 = new MyPlanarGraph(PlanarGraph.getPtrAddress(planarGraph),false);
+            planarGraph.obtain();
+            HuaWeiH2Application.planarGraphB1 = planarGraph;
+//            HuaWeiH2Application.planarGraphB1 = new MyPlanarGraph(PlanarGraph.getPtrAddress(planarGraph),false);
           }
 
+
+
+
           initPlanarGraph(planarGraph,floorId);
+
+
+
         } else {
           closeProgress(mHandler);
           mSearch.setClickable(true);//防止欢迎页面点到
@@ -1131,10 +1151,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   */
   public void initPlanarGraph(final PlanarGraph planarGraph, final long floorID){
     refeshPoiFilter(0);
-    mContext.runOnUiThread(new Runnable() {
+    mHandler.post(new Runnable() {
       @Override
       public void run() {
         refeshFloorView(floorID);
+        if (mScale != null) {
+          mScale.postInvalidate();
+        }
       }
     });
 
@@ -1172,13 +1195,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
 
         if (isSearch4Poi>=0){
-          mHandler.post(new Runnable() {
+          mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
               showSearch4Poi(isSearch4Poi);
               isSearch4Poi = -1;
             }
-          });
+          },1000);
         }
 
         isLoadingMap = false;
@@ -1351,7 +1374,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         return false;
     }
     long id = MapParamUtils.getId(feature);
-    if (id == 1263037 || id == 1270023 || id == Constant.空地_POI_ID) {
+    if (id == 1284127 || id == 1263037 || id == 1270023 || id == Constant.空地_POI_ID) {
       return false;
     }
 
@@ -1564,8 +1587,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 
     if (isNavigating&&navigateManager!=null){//将定位点放到导航线上
+      Coordinate co = new Coordinate(x,y);
       navigateManager.switchPlanarGraph(mCurrentFloor);
-      Coordinate co = new Coordinate(x,y,Constant.FLOOR_ID_F1);
+      double dis = navigateManager.getMinDistanceByPoint(co);
+      if (dis<3.0){
 //      Types.Point point = mMapView.converToScreenCoordinate(x,y);
 //      Feature feature = mMapView.selectFeature((float) point.x,(float) point.y);
 //      if (feature!=null) {
@@ -1574,13 +1599,15 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
           x = coordinate.getX();
           y = coordinate.getY();
           LogUtils.d("addLocationMark->getPointOfIntersectioanByPoint x="+x+" y="+y);
-
         }
 
 
-      if (navigateManager.getMinDistanceByPoint(co)<Constant.NAV_MIN_DISTANCE){
-        DialogUtils.showShortToast("您已到达终点附近");
+        if (!hasShowArriveEnd&&navigateManager.getMinDistanceByPoint(co)<Constant.NAV_MIN_DISTANCE){
+          hasShowArriveEnd = true;
+          DialogUtils.showLongToast("您已到达终点附近");
+        }
       }
+
 
 //      }
 
@@ -1821,6 +1848,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   public void startNavigate() {//final Feature startFeatureID, final double toX, final double toY, final long toFloorID
     isNavigating = true;
+    hasShowArriveEnd = false;
     mContext.titleBar.setTitle("导航路线");
     //隐藏不相关功能
     mSearch.setVisibility(View.GONE);

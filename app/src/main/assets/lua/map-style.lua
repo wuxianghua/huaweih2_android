@@ -481,6 +481,7 @@ CONFIG = {
                             ['\\H2办公楼'] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
 
                             [1284129] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
+                            [1284127] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
 
 
                             [24002000] = Set2dColor('0xffc8dedc', '0xffe6f0ef', 0.05);

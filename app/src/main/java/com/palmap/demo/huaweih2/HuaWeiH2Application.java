@@ -6,9 +6,9 @@ import android.content.Intent;
 import com.bugtags.library.Bugtags;
 import com.bugtags.library.BugtagsOptions;
 import com.bumptech.glide.Glide;
-import com.palmap.demo.huaweih2.model.MyPlanarGraph;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
+import com.palmaplus.nagrand.data.PlanarGraph;
 
 /**
  * Created by eric3 on 2016/10/8.
@@ -20,8 +20,8 @@ public class HuaWeiH2Application extends Application {
   public static HuaWeiH2Application instance;
   public static String userIp = "00000000";
 
-  public static MyPlanarGraph planarGraphF1 = null;//缓存楼层数据
-  public static MyPlanarGraph planarGraphB1= null;
+  public static PlanarGraph planarGraphF1 = null;//缓存楼层数据
+  public static PlanarGraph planarGraphB1= null;
 
   @Override
   public void onCreate() {

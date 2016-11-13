@@ -674,7 +674,7 @@ public class MainActivity extends BaseActivity{
       name = PoiImgList.getName(MapParamUtils.getCategoryId(feature));
 
     if (isSearchCar) {
-      tv_poi_name.setText(fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H145"));
+      tv_poi_name.setText("您的爱车"+fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H145"));
     im_go.setVisibility(View.GONE);
     } else {
       tv_poi_name.setText(name == null ? "H2大楼" : name);
