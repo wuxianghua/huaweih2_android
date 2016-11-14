@@ -1060,7 +1060,7 @@ public class MainActivity extends BaseActivity {
                         fragmentMap.endNavigate();
                     } else {
                         showFragmentPark();
-                        fragmentPark.mainlayout.setVisibility(View.VISIBLE);
+//                        fragmentPark.mainlayout.setVisibility(View.VISIBLE);
                         fragmentMap.mMapView.removeAllOverlay();
                         fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
                         fragmentMap.mMapView.getOverlayController().refresh();
