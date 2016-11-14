@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity {
         } else {
 //            showTabMenu();
             if (isNavigating && !isSearchCar) {
-                fragmentMap.endNavigate();
+                fragmentMap.endNavigateInFootAndPark();
 //        fragmentMap.loadMap(FLOOR_ID_F1);
             }
         }
