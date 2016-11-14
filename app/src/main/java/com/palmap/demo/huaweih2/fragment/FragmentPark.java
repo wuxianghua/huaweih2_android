@@ -1,6 +1,5 @@
 package com.palmap.demo.huaweih2.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.palmap.demo.huaweih2.ActivityPay;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.ParkInfoAdapter;
 import com.palmap.demo.huaweih2.model.ParkInfo;
@@ -22,11 +20,8 @@ import com.palmap.demo.huaweih2.model.ParkInfoList;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.KeyBoardUtils;
-import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.util.List;
-
-import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
 
 /**
  * Created by eric3 on 2016/10/8.
@@ -53,11 +48,13 @@ public class FragmentPark extends BaseFragment {
     parkInfos = new ParkInfoList();
     parkInfoList = parkInfos.getParkInfoList();
     carNum = (EditText) fragmentView.findViewById(R.id.tv_car_num);
-    carNum.setInputType(InputType.TYPE_CLASS_NUMBER);
+//    carNum.setInputType(InputType.TYPE_CLASS_NUMBER);
+    carNum.setRawInputType(InputType.TYPE_CLASS_NUMBER);
     carNum.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
       }
+//
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -130,38 +127,36 @@ public class FragmentPark extends BaseFragment {
         showCarOnMap(t);
       }
     });
-    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-      @Override
-      public void onLeft() {
-        KeyBoardUtils.closeKeybord(carNum,getActivity());
-        getMainActivity().showFragmentMap();
-      }
-
-      @Override
-      public void onRight() {
-      }
-    });
+//    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+//      @Override
+//      public void onLeft() {
+//        KeyBoardUtils.closeKeybord(carNum,getActivity());
+//        getMainActivity().showFragmentMap();
+//      }
+//
+//      @Override
+//      public void onRight() {
+//      }
+//    });
   }
 
   private void showCarOnMap(final ParkInfo p) {
     mainlayout.setVisibility(View.GONE);
     carNumList.setVisibility(View.GONE);
 //    floorlayout.setVisibility(View.VISIBLE);
-    getMainActivity().showCarOnMap(p);
-    getMainActivity().titleBar.show(null,"找车","缴费");
-    getMainActivity().titleBar.setEnableRight(true);
-    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-      @Override
-      public void onLeft() {
-        isSearchCar = false;
-        getMainActivity().showFragmentPark();
-        mainlayout.setVisibility(View.VISIBLE);
-
-        getMainActivity().fragmentMap.endNavigateInFootAndPark();
-        getMainActivity().fragmentMap.mMapView.removeAllOverlay();
-//        getMainActivity().fragmentMap.resetFeatureStyle(getMainActivity().fragmentMap.markFeatureID);
-        getMainActivity().fragmentMap.mMapView.getOverlayController().refresh();
-      }
+        /*getMainActivity().showCarOnMap(p);
+        getMainActivity().titleBar.show(null, "找车", "缴费");
+        getMainActivity().titleBar.setEnableRight(true);
+        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+            @Override
+            public void onLeft() {
+                isSearchCar = false;
+                getMainActivity().showFragmentPark();
+                mainlayout.setVisibility(View.VISIBLE);
+                getMainActivity().fragmentMap.endNavigateInFootAndPark();
+                getMainActivity().fragmentMap.mMapView.removeAllOverlay();
+                getMainActivity().fragmentMap.mMapView.getOverlayController().refresh();
+            }
 
       @Override
       public void onRight() {
@@ -193,14 +188,13 @@ public class FragmentPark extends BaseFragment {
 //        });
 
       }
-    });
+    });*/
   }
 
-  public void setPayed(){
-
-    getMainActivity().titleBar.show(null,"找车","已缴费");
-    getMainActivity().titleBar.setEnableRight(false);
-  }
+    public void setPayed() {
+//        getMainActivity().titleBar.show(null, "找车", "已缴费");
+//        getMainActivity().titleBar.setEnableRight(false);
+    }
 
   @Override
   public void onResume() {

@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * 图册activity
- *  Created by 王天明 on 2016/10/22
+ * Created by 王天明 on 2016/10/22
  */
 public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBase.OnRefreshListener2 {
 
@@ -62,11 +62,11 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
         recyclerView.setOnRefreshListener(this);
         recyclerView.getRefreshableView().addItemDecoration(new SpacesItemDecoration(10));
 
-       loadPictureModels();
+        loadPictureModels();
 
 
-        titleBar=(TitleBar)findViewById(R.id.title_bar);
-        titleBar.show(null,location,null);
+        titleBar = (TitleBar) findViewById(R.id.title_bar);
+        titleBar.show(null, location, null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {
@@ -87,9 +87,16 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+
+        if(start >=  pictureModelList.size()){
+            DialogUtils.showShortToast("没有更多");
+            refreshView.onRefreshComplete();
+            return;
+        }
+
         ArrayList<String> urlData2 = new ArrayList<>();
-        int current =start;
-        for (; start< (Constant.EACH_TIME_PICTURE_NUM+current)&&start<pictureModelList.size(); start++) {
+        int current = start;
+        for (; start < (Constant.EACH_TIME_PICTURE_NUM + current) && start < pictureModelList.size(); start++) {
             urlData.add(pictureModelList.get(start).getPhoto());
         }
         imageAlbumAdapter.addAll(urlData2);
@@ -125,30 +132,30 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
             public void onComplete(final Object content) {
 
                 pictureModelList = JsonUtils.getPictureModel(content);
-                if (pictureModelList==null||pictureModelList.size()<=0){
+                if (pictureModelList == null || pictureModelList.size() <= 0) {
                     DialogUtils.showShortToast("没有照片");
                     return;
                 }
 
 
-                int current =start;
-                for (; start< (Constant.EACH_TIME_PICTURE_NUM+current)&&start<pictureModelList.size(); start++) {
+                int current = start;
+                for (; start < (Constant.EACH_TIME_PICTURE_NUM + current) && start < pictureModelList.size(); start++) {
                     urlData.add(pictureModelList.get(start).getPhoto());
                 }
-                if (start>=pictureModelList.size()-1)
-                    DialogUtils.showShortToast("没有更多");
+//                if (start>=pictureModelList.size()-1)
+//                    DialogUtils.showShortToast("没有更多");
 
-                imageAlbumAdapter = new ImageAlbumAdapter(ImageAlbumActivity.this,urlData);
+                imageAlbumAdapter = new ImageAlbumAdapter(ImageAlbumActivity.this, urlData);
                 recyclerView.getRefreshableView().setAdapter(imageAlbumAdapter);
                 imageAlbumAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
+                        Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
 //                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
-                        intent.putExtra("imgListJson",  content.toString());
-                intent.putExtra("itemIndex",
-                        position);
+                        intent.putExtra("imgListJson", content.toString());
+                        intent.putExtra("itemIndex",
+                                position);
 
 //                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
 //

@@ -76,6 +76,7 @@
                         android:gravity="center_vertical"
                         android:hint="如810HP"
                         android:background="@null"
+                        android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ"
                         android:maxLength="5"
                         android:singleLine="true"
                         android:textColor="#2f3336"

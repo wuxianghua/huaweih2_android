@@ -17,6 +17,7 @@ public class ShakeListenerUtils implements SensorEventListener {
     private OnShakeListener onShakeListener;
     public static boolean isTooShort = false;//保证两次间隔
     public static float MAX_VAL = 20f;
+    private boolean hasTimer=false;
 //    public static float MAX_VAL = 15f;
 
     public ShakeListenerUtils(Activity context, OnShakeListener onShakeListener) {
@@ -42,13 +43,19 @@ public class ShakeListenerUtils implements SensorEventListener {
                     Log.e("eric", "isTooShort");
 //                    isTooShort = false;
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            isTooShort = false;
-                        }
-                    },8000);
+                    if (!hasTimer) {
+                        hasTimer = true;
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                isTooShort = false;
+                                hasTimer = false;
+                            }
+                        }, 3000);
+                    }
+
+
                     return;
                 }
 

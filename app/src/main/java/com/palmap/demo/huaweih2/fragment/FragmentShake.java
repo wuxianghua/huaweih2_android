@@ -27,10 +27,10 @@ import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PoiInfo;
 import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.ShakeListenerUtils;
-import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.io.IOException;
 
@@ -95,19 +95,19 @@ FragmentShake extends BaseFragment {
     title = (TextView) fragmentView.findViewById(R.id.title);
     result = (ImageView) fragmentView.findViewById(R.id.img);
 
-    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-      @Override
-      public void onLeft() {
-        LogUtils.i("onLeft->stopShakeSensor");
-        stopShakeSensor();
-        getMainActivity().showFragmentMap();
-      }
-
-      @Override
-      public void onRight() {
-
-      }
-    });
+//    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+//      @Override
+//      public void onLeft() {
+//        LogUtils.i("onLeft->stopShakeSensor");
+//        stopShakeSensor();
+//        getMainActivity().showFragmentMap();
+//      }
+//
+//      @Override
+//      public void onRight() {
+//
+//      }
+//    });
 
     LogUtils.i("onCreateView->initShakeSensor");
     initShakeSensor();//初始化传感器
@@ -211,13 +211,13 @@ FragmentShake extends BaseFragment {
    */
   private void showPoiInfo() {
     if (poiInfo == null) {
-      Toast.makeText(getActivity(), "网络不畅,请检查", Toast.LENGTH_SHORT).show();
+      DialogUtils.showShortToast( "没有获取到信息，再摇摇试试", Toast.LENGTH_SHORT);
       return;
     }
     shakeShow.setVisibility(View.VISIBLE);
     title.setText(poiInfo.getTitle());
     text.setText(poiInfo.getText());
-    Glide.with(this).load(poiInfo.getImage()).into(result);
+    Glide.with(this).load(poiInfo.getImage()).centerCrop().into(result);
     ShakeListenerUtils.isTooShort = false;
   }
 
@@ -299,7 +299,13 @@ FragmentShake extends BaseFragment {
       mSensorManager.unregisterListener(shakeUtils);
       shakeUtils = null;
     }
+
+    mImgUp.clearAnimation();
+    mImgUp.invalidate();
+    mImgDn.clearAnimation();
+    mImgDn.invalidate();
   }
+
 
   @Override
   public void onResume() {
