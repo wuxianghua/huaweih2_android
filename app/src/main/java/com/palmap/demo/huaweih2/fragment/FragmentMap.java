@@ -967,10 +967,46 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             return;
         }
 
-
 //    addMark(x[index], y[index]);
-        Types.Point point = mMapView.converToScreenCoordinate(x[index], y[index]);
-        searchPOIByPoint((float) point.x, (float) point.y);
+//        Types.Point point = mMapView.converToScreenCoordinate(x[index], y[index]);
+//        searchPOIByPoint((float) point.x, (float) point.y);
+
+        //index 0
+
+        switch (index) {
+
+            case 0:
+                Feature featureH2 = mMapView.selectFeature(1284129);
+                if (featureH2 != null) {
+                    addOverlaysByFeatures(featureH2);
+                }
+                break;
+
+            case 1:
+                List<Feature> featureMeetings = mMapView.searchFeature("Area", "name", new Value("会议室"));
+                if (featureMeetings != null) {
+                    addOverlaysByFeatures(featureMeetings);
+                }
+                break;
+            case 2:
+                Feature featureLaboratory1 = mMapView.selectFeature(1270043);
+                if (featureLaboratory1 != null) {
+                    addOverlaysByFeatures(featureLaboratory1);
+                }
+                Feature featureLaboratory2 = mMapView.selectFeature(1264378);
+                if (featureLaboratory2 != null) {
+                    addOverlaysByFeatures(featureLaboratory2);
+                }
+                break;
+
+            case 3:
+                Feature featureOffice = mMapView.selectFeature(1284130);
+                if (featureOffice != null) {
+                    addOverlaysByFeatures(featureOffice);
+                }
+                break;
+        }
+
         initMapScale();
     }
 
@@ -1813,7 +1849,23 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mMapView.getOverlayController().refresh();
             }
         }, 500);
+    }
 
+    private void addOverlaysByFeatures(Feature ...featureList) {
+        if (featureList == null)
+            return;
+        for (Feature feature : featureList) {
+            Mark mark = new Mark(mContext);
+            mark.init(new double[]{feature.getCentroid().getX(), feature.getCentroid().getY()});
+            mMapView.addOverlay(mark);
+            currentPoiMarks.add(mark);
+        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMapView.getOverlayController().refresh();
+            }
+        }, 500);
     }
 
 
@@ -2125,24 +2177,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
 
     private void rotataToNorth() {
-
-//    Coordinate coordinate = new Coordinate(initX,initY);
-//    Types.Point point = new Types.Point(initX,initY);
-        Types.Point point = mMapView.converToScreenCoordinate(initX, initY);
         mMapView.rotate(getScreenCenter(), -mMapView.getRotate(), true, 500);
-
-//    mHandler.postDelayed(new Runnable() {
-//      @Override
-//      public void run() {
-//        initMapScale();
-//      }
-//    },550);
+        Log.d("rotate", "rotate :" + mMapView.getRotate());
         mHandler.postDelayed(new Runnable() {//旋转指北针
             public void run() {
                 LocationMarkAnim.currentMapDegree = BigDecimal.valueOf(mMapView.getRotate()).floatValue();
                 mCompass.setRotation(-BigDecimal.valueOf(mMapView.getRotate()).floatValue());
                 mCompass.invalidate();
-//        initMapScale();
                 if (mScale != null) {
                     mScale.postInvalidate();
                 }
@@ -2150,8 +2191,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mMapView.getOverlayController().refresh();
             }
         }, 700);
-
-
     }
 
 
