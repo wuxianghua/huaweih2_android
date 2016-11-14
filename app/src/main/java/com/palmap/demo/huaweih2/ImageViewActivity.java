@@ -104,7 +104,7 @@ public class ImageViewActivity extends Activity {
             }
         });
 
-
+        imgPager.setCurrentItem(0);
         titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
 
         titleBar.setRightIcoClickListener(new View.OnClickListener() {
