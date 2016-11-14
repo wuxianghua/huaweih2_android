@@ -302,7 +302,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         // TODO Auto-generated method stub
 
 
-
         View fragmentView = inflater.inflate(R.layout.map, container, false);
         // 初始化view
         imPush = (ImageView) fragmentView.findViewById(R.id.push);
@@ -463,8 +462,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //        return false;//优化地图手势操作
 //      }
 //    });
-
-
 
 
         mMapView.setOnSingleTapListener(new OnSingleTapListener() {
@@ -786,7 +783,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapView.initRatio(1.0F);
 //    mMapView.setMaxZoomLevel(MAX_ZOOM);//不起作用
 //    mMapView.setMinZoomLevel(MIN_ZOOM);//不起作用
-
 
 
         mMapView.setOverlayContainer(mContext.mMapContainer);
@@ -1861,7 +1857,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }, 500);
     }
 
-    private void addOverlaysByFeatures(Feature ...featureList) {
+    private void addOverlaysByFeatures(Feature... featureList) {
         if (featureList == null)
             return;
         for (Feature feature : featureList) {
@@ -1905,6 +1901,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             navigateManager.drop();
             navigateManager = null;
             mMapView.removeLayer(navigateLayer);
+            navigateLayer = null;
         }
         if (startFeatureID != -1) {
             resetFeatureStyle(startFeatureID);
@@ -1932,7 +1929,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mWater.setVisibility(View.GONE);
         mExit.setVisibility(View.GONE);
         mShoot.setVisibility(View.GONE);
-
+        if (navigateManager != null) {
+            navigateManager.clear();
+            navigateManager.drop();
+            navigateManager = null;
+        }
         navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
@@ -2058,11 +2059,19 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     public void startNavigateInFoot() {//
         isNavigating = true;
 
+
+        if (navigateLayer != null) {
+            mMapView.removeLayer(navigateLayer);
+        }
+        if (navigateManager != null) {
+            navigateManager.clear();
+            navigateManager.drop();
+            navigateManager = null;
+        }
         navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
-
 
         navigateManager.setOnNavigateComplete(new NavigateManager.OnNavigateComplete() {
             @Override
@@ -2106,42 +2115,48 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     public void startNavigateInPark() {//
         isNavigating = true;
 
+        if (navigateLayer != null) {
+            mMapView.removeLayer(navigateLayer);
+        }
+        if (navigateManager != null) {
+            navigateManager.clear();
+            navigateManager.drop();
+            navigateManager = null;
+        }
         navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
 
-
         navigateManager.setOnNavigateComplete(new NavigateManager.OnNavigateComplete() {
             @Override
-            public void onNavigateComplete(final NavigateManager.NavigateState navigateState, FeatureCollection featureCollection) {
+            public void onNavigateComplete(final NavigateManager.NavigateState navigateState,final FeatureCollection featureCollection) {
 
-                if (navigateState == NavigateManager.NavigateState.ok
-                        || navigateState == NavigateManager.NavigateState.CLIP_NAVIGATE_SUCCESS
-                        || navigateState == NavigateManager.NavigateState.SWITCH_NAVIGATE_SUCCESS) {
-                    navigateLayer.clearFeatures();  //先把之前的导航线清理掉
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (navigateState == NavigateManager.NavigateState.ok
+                                || navigateState == NavigateManager.NavigateState.CLIP_NAVIGATE_SUCCESS
+                                || navigateState == NavigateManager.NavigateState.SWITCH_NAVIGATE_SUCCESS) {
 
-                    navigateLayer.addFeatures(featureCollection); //重新添加新的导航线
-                    Feature s = featureCollection.getFirstFeature();
-                    Feature e = featureCollection.getEedFeature();
-                    Coordinate firstCoordinate = navigateManager.getCoordinateByFeature(s, 0);
-                    Coordinate endCoordinate = navigateManager.getCoordinateByFeature(e, navigateManager.getFeatureLength(e) - 1);
+                            navigateLayer.clearFeatures();  //先把之前的导航线清理掉
+                            navigateLayer.addFeatures(featureCollection); //重新添加新的导航线
+                            Feature s = featureCollection.getFirstFeature();
+                            Feature e = featureCollection.getEedFeature();
+                            Coordinate firstCoordinate = navigateManager.getCoordinateByFeature(s, 0);
+                            Coordinate endCoordinate = navigateManager.getCoordinateByFeature(e, navigateManager.getFeatureLength(e) - 1);
 
-                    if (firstCoordinate != null && endCoordinate != null)
-                        moveNavMark(firstCoordinate.getX(), firstCoordinate.getY(), endCoordinate.getX(), endCoordinate.getY());
+                            if (firstCoordinate != null && endCoordinate != null)
+                                moveNavMark(firstCoordinate.getX(), firstCoordinate.getY(), endCoordinate.getX(), endCoordinate.getY());
 
-                } else {
-
-                    mContext.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
+                        } else {
                             DialogUtils.showShortToast("导航线请求失败:" + navigateState);
                             mContext.showTabMenu();
                             endNavigate();
                         }
-                    });
-                }
+
+                    }
+                });
             }
         });
 
@@ -2439,7 +2454,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
         mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
 //    mMapView.zoom(3);//放大
-        initMapScale();
+
+     //   initMapScale();
+
         mMapView.getOverlayController().refresh();
 
 //   mHandler.postDelayed(new Runnable() {

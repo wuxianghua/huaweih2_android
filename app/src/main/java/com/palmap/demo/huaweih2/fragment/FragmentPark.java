@@ -151,7 +151,7 @@ public class FragmentPark extends BaseFragment {
     Intent intent = new Intent(getActivity(), MainActivity.class);
     intent.putExtra("parkInfo",p);
     startActivity(intent);
-
+    getActivity().finish();
 //        getMainActivity().showCarOnMap(p);
 //        getMainActivity().titleBar.show(null, "寻车", "缴费");
 //        getMainActivity().titleBar.setEnableRight(true);

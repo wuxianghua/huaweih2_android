@@ -56,6 +56,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleInstance"
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
