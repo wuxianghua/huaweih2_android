@@ -105,11 +105,15 @@ public class MainActivity extends BaseActivity{
   public boolean isShowPoiInfoBar = false;//是否显示poi详情栏
   public boolean shouldShow2choose1 = false;//是否显示2选1
 
+  ParkInfo parkInfo;
+//  private boolean showFindCar = false;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    parkInfo = getIntent().getParcelableExtra("parkInfo");
     LocateTimerService.setmMainActivity(this);
     initStatusBar(R.color.black);
 
@@ -139,6 +143,17 @@ public class MainActivity extends BaseActivity{
         LocateTimerService.start(this);
     }
 
+    if (parkInfo!=null){
+      LogUtils.i("");
+      showCarOnMap();
+    }else {
+      showTabMenu();
+      if (isNavigating){
+        fragmentMap.endNavigate();
+//        fragmentMap.loadMap(FLOOR_ID_F1);
+      }
+    }
+
 
   }
 
@@ -165,6 +180,34 @@ public class MainActivity extends BaseActivity{
     }
   }
 
+  public void openCameraActivity() {
+    Intent intent = new Intent();
+    // 指定开启系统相机的Action
+    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT,400*200);
+    //如果路径不存在，则创建
+    // 创建文件夹
+    File file = new File(Constant.DIR_PICTURE_UPLOAD);
+    if (!file.exists()) {
+      file.mkdirs();
+//      file = new File(Constant.DIR_PICTURE_UPLOAD);
+//      if (!file.exists()) {
+//        file.mkdirs();
+//      }
+    }
+    // 根据文件地址创建文件
+    file = new File(Constant.PATH_PICTURE_UPLOAD);
+    if (file.exists()) {
+      file.delete();
+    }
+    // 把文件地址转换成Uri格式
+    Uri uri = Uri.fromFile(file);
+    // 设置系统相机拍摄照片完成后图片文件的存放地址
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+    startActivityForResult(intent, startTakePic);
+  }
+
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     switch (requestCode) {
@@ -177,7 +220,7 @@ public class MainActivity extends BaseActivity{
         break;
       case Constant.startPay:
         if (resultCode == RESULT_OK)
-          fragmentPark.setPayed();
+          setPayed();
         break;
       case Constant.startOffice:
         if (data != null) {
@@ -485,21 +528,62 @@ public class MainActivity extends BaseActivity{
     fragmentMap.mMapView.setOverlayContainer(mMapContainer);
   }
 
-  public void showCarOnMap(ParkInfo parkInfo) {
+  public void showCarOnMap() {
 //    showMap();
-    fragmentMap.mMapView.setVisibility(View.VISIBLE);
-    mMapContainer.setVisibility(View.VISIBLE);
-    fragmentMap.mMapView.setOverlayContainer(mMapContainer);
+    hideTabMenu();
+//    fragmentMap.mMapView.setVisibility(View.VISIBLE);
+//    mMapContainer.setVisibility(View.VISIBLE);
+//    fragmentMap.mMapView.setOverlayContainer(mMapContainer);
     fragmentMap.moveToCar(parkInfo);
 
-//    //反向寻车
-//    im_go.setVisibility(View.VISIBLE);
+    titleBar.show(null, "寻车", "缴费");
+    titleBar.setEnableRight(true);
+    titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+            @Override
+            public void onLeft() {
+              isSearchCar = false;
+              parkInfo=null;
+//              finish();
+              startActivity(new Intent(MainActivity.this,FindCarActivity.class));
+//               showFragmentPark();
+//                mainlayout.setVisibility(View.VISIBLE);
+//               fragmentMap.endNavigateInFootAndPark();
+//               fragmentMap.mMapView.removeAllOverlay();
+//               fragmentMap.mMapView.getOverlayController().refresh();
+            }
+
+      @Override
+      public void onRight() {
+//        getMainActivity().getMapView().setVisibility(View.INVISIBLE);
+//        getMainActivity().hidePoiInfoBar();
+//        final FragmentPay fragmentPay = new FragmentPay();
+//        Bundle args = new Bundle();
+//        args.putParcelable("parkInfo", p);
+//        fragmentPay.setArguments(args);
+//        getMainActivity().showFragment(fragmentPay);
+
+        Intent intent = new Intent(MainActivity.this, ActivityPay.class);
+        Bundle args = new Bundle();
+        args.putParcelable("parkInfo", parkInfo);
+        parkInfo = null;
+        intent.putExtras(args);
+        startActivityForResult(intent, Constant.startPay);
+
+
+
+      }
+    });
+    //反向寻车
+    im_go.setVisibility(View.VISIBLE);
   }
 
   public MapView getMapView() {
     return fragmentMap.mMapView;
   }
-
+  public void setPayed() {
+    titleBar.show(null, "找车", "已缴费");
+    titleBar.setEnableRight(false);
+  }
 
   private void hideMap() {
     tabMenu.setVisibility(View.GONE);
@@ -684,7 +768,7 @@ public class MainActivity extends BaseActivity{
       name = PoiImgList.getName(MapParamUtils.getCategoryId(feature));
 
     if (isSearchCar) {
-      tv_poi_name.setText("您的爱车"+fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H145"));
+      tv_poi_name.setText("您的爱车"+fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H152"));
     im_go.setVisibility(View.GONE);
     } else {
       tv_poi_name.setText(name == null ? "H2大楼" : name);
@@ -1016,33 +1100,7 @@ public class MainActivity extends BaseActivity{
   }
 
 
-  public void openCameraActivity() {
-    Intent intent = new Intent();
-    // 指定开启系统相机的Action
-    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.addCategory(Intent.CATEGORY_DEFAULT);
-    intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT,400*200);
-    //如果路径不存在，则创建
-    // 创建文件夹
-    File file = new File(Constant.DIR_PICTURE_UPLOAD);
-    if (!file.exists()) {
-      file.mkdirs();
-//      file = new File(Constant.DIR_PICTURE_UPLOAD);
-//      if (!file.exists()) {
-//        file.mkdirs();
-//      }
-    }
-    // 根据文件地址创建文件
-    file = new File(Constant.PATH_PICTURE_UPLOAD);
-    if (file.exists()) {
-      file.delete();
-    }
-    // 把文件地址转换成Uri格式
-    Uri uri = Uri.fromFile(file);
-    // 设置系统相机拍摄照片完成后图片文件的存放地址
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-    startActivityForResult(intent, startTakePic);
-  }
+
 
 //  @Override
 //  public void onClick(View v) {

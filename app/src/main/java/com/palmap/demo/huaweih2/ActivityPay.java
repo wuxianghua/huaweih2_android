@@ -92,7 +92,7 @@ public class ActivityPay extends BaseActivity implements View.OnClickListener{
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {
-        setResult(RESULT_CANCELED,getIntent());
+        setResult(RESULT_OK,getIntent());
         finish();
       }
       @Override

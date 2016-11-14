@@ -1,5 +1,6 @@
 package com.palmap.demo.huaweih2.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.ParkInfoAdapter;
 import com.palmap.demo.huaweih2.model.ParkInfo;
@@ -144,57 +146,60 @@ public class FragmentPark extends BaseFragment {
     mainlayout.setVisibility(View.GONE);
     carNumList.setVisibility(View.GONE);
 //    floorlayout.setVisibility(View.VISIBLE);
-        /*getMainActivity().showCarOnMap(p);
-        getMainActivity().titleBar.show(null, "找车", "缴费");
-        getMainActivity().titleBar.setEnableRight(true);
-        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-            @Override
-            public void onLeft() {
-                isSearchCar = false;
-                getMainActivity().showFragmentPark();
-                mainlayout.setVisibility(View.VISIBLE);
-                getMainActivity().fragmentMap.endNavigateInFootAndPark();
-                getMainActivity().fragmentMap.mMapView.removeAllOverlay();
-                getMainActivity().fragmentMap.mMapView.getOverlayController().refresh();
-            }
 
-      @Override
-      public void onRight() {
-//        getMainActivity().getMapView().setVisibility(View.INVISIBLE);
-//        getMainActivity().hidePoiInfoBar();
-//        final FragmentPay fragmentPay = new FragmentPay();
+
+    Intent intent = new Intent(getActivity(), MainActivity.class);
+    intent.putExtra("parkInfo",p);
+    startActivity(intent);
+
+//        getMainActivity().showCarOnMap(p);
+//        getMainActivity().titleBar.show(null, "寻车", "缴费");
+//        getMainActivity().titleBar.setEnableRight(true);
+//        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+//            @Override
+//            public void onLeft() {
+//                isSearchCar = false;
+//                getMainActivity().showFragmentPark();
+//                mainlayout.setVisibility(View.VISIBLE);
+//                getMainActivity().fragmentMap.endNavigateInFootAndPark();
+//                getMainActivity().fragmentMap.mMapView.removeAllOverlay();
+//                getMainActivity().fragmentMap.mMapView.getOverlayController().refresh();
+//            }
+//
+//      @Override
+//      public void onRight() {
+////        getMainActivity().getMapView().setVisibility(View.INVISIBLE);
+////        getMainActivity().hidePoiInfoBar();
+////        final FragmentPay fragmentPay = new FragmentPay();
+////        Bundle args = new Bundle();
+////        args.putParcelable("parkInfo", p);
+////        fragmentPay.setArguments(args);
+////        getMainActivity().showFragment(fragmentPay);
+//
+//        Intent intent = new Intent(getActivity(), ActivityPay.class);
 //        Bundle args = new Bundle();
 //        args.putParcelable("parkInfo", p);
-//        fragmentPay.setArguments(args);
-//        getMainActivity().showFragment(fragmentPay);
-
-        Intent intent = new Intent(getActivity(), ActivityPay.class);
-        Bundle args = new Bundle();
-        args.putParcelable("parkInfo", p);
-        intent.putExtras(args);
-        getActivity().startActivityForResult(intent, Constant.startPay);
-
-//        getMainActivity().titleBar.show(null,"支付",null);
-//        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-//          @Override
-//          public void onLeft() {
-////            getMainActivity().showPoiInfoBar();
-////            getMainActivity().closeFragment(fragmentPay);
+//        intent.putExtras(args);
+//        getActivity().startActivityForResult(intent, Constant.startPay);
 //
-//          }
-//          @Override
-//          public void onRight() {
-//          }
-//        });
-
-      }
-    });*/
+////        getMainActivity().titleBar.show(null,"支付",null);
+////        getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+////          @Override
+////          public void onLeft() {
+//////            getMainActivity().showPoiInfoBar();
+//////            getMainActivity().closeFragment(fragmentPay);
+////
+////          }
+////          @Override
+////          public void onRight() {
+////          }
+////        });
+//
+//      }
+//    });
   }
 
-    public void setPayed() {
-//        getMainActivity().titleBar.show(null, "找车", "已缴费");
-//        getMainActivity().titleBar.setEnableRight(false);
-    }
+
 
   @Override
   public void onResume() {

@@ -16,6 +16,9 @@ public class BaseFragment extends Fragment {
 //  private MainActivity mContext;
   private MyProgressDialog progressDialog = null;
 
+  protected MainActivity getMainActivity(){
+    return (MainActivity) getActivity();
+  }
   /*
   *  显示进度条
   * */

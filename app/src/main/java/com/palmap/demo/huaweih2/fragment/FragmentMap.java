@@ -292,14 +292,17 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
         mHandler = new Handler(Looper.getMainLooper());
         mContext = (MainActivity) getActivity();
-//    startMark = new Mark(mContext,Mark.START);
         initEngine();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+
+
+
         View fragmentView = inflater.inflate(R.layout.map, container, false);
         // 初始化view
         imPush = (ImageView) fragmentView.findViewById(R.id.push);
@@ -321,6 +324,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         btn_wat.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
         btn_tol.setOnClickListener(this);
+
 
         footDown = (ImageView) fragmentView.findViewById(R.id.foot_down);
         gestureDetector = new GestureDetector(mContext, onGestureListener);
@@ -390,7 +394,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mContext.hideTabMenu();
             }
         });
-        mScale = (Scale) fragmentView.findViewById(R.id.scale);
+
         mKeywords = (EditText) fragmentView.findViewById(R.id.tv_keywords);
         mKeywords.addTextChangedListener(new TextWatcher() {
             @Override
@@ -432,50 +436,37 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mExit.setOnClickListener(this);
 
 
-        mMapViewFrame = (FrameLayout) getActivity().findViewById(R.id.map_view);
-        mMapOptions = new MapOptions(); // 该对象可设置一些地图手势操作
-        mMapOptions.setSkewEnabled(false);//关闭俯仰
-        mMapView = new MapView("default", mContext); //初始化MapView
-        mMapViewFrame.addView(mMapView);
-        mMapView.setMapOptions(mMapOptions);
-        mMapView.setBackgroundColor(0xffebebeb);
-        mMapView.initRatio(1.0F);
-//    mMapView.setMaxZoomLevel(MAX_ZOOM);//不起作用
-//    mMapView.setMinZoomLevel(MIN_ZOOM);//不起作用
+        mScale = (Scale) fragmentView.findViewById(R.id.scale);
         mScale.setMapView(mMapView);
 
-        mMapView.setOnMapViewStatusChangedListener(new MapView.OnMapViewStatusListener() {//不起作用
-            @Override
-            public void onMapViewStatus(MapView mapView, MapView.MapViewStatus mapViewStatus, MapView.MapViewStatus mapViewStatus1) {
-                switch (mapViewStatus1) {
-                    case Uninitializd:
-                        break;
-                    case Initialized:
-                        break;
-                    case Drawing:
-                        break;
-                    case Pausing:
-                        break;
-                    case Shutdown:
-                        break;
-                }
-            }
-        });
+//    mMapView.setLayerOffset(mMapContainer);
+        //        mMapView.setOnMapViewStatusChangedListener(new MapView.OnMapViewStatusListener() {//不起作用
+//            @Override
+//            public void onMapViewStatus(MapView mapView, MapView.MapViewStatus mapViewStatus, MapView.MapViewStatus mapViewStatus1) {
+//                switch (mapViewStatus1) {
+//                    case Uninitializd:
+//                        break;
+//                    case Initialized:
+//                        break;
+//                    case Drawing:
+//                        break;
+//                    case Pausing:
+//                        break;
+//                    case Shutdown:
+//                        break;
+//                }
+//            }
+//        });
 //    mMapContainer.setOnTouchListener(new View.OnTouchListener() {
 //      @Override
 //      public boolean onTouch(View v, MotionEvent event) {
 //        return false;//优化地图手势操作
 //      }
 //    });
-        mMapView.setOverlayContainer(mContext.mMapContainer);
-//    mMapView.setBackgroundResource(android.R.color.transparent);
-        mMapView.setBackgroundResource(R.color.map_bg);
-        mMapView.setMinAngle(45);
-//    mMapView.setLayerOffset(mMapContainer);
 
-        featureLayer = new FeatureLayer("poi");
-        mMapView.addLayer(featureLayer);
-        mMapView.setLayerOffset(featureLayer);
+
+
+
         mMapView.setOnSingleTapListener(new OnSingleTapListener() {
             @Override
             public void onSingleTap(MapView mapView, float x, float y) {
@@ -519,7 +510,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapView.setOnZoomListener(new OnZoomListener() {
             @Override
             public void preZoom(MapView mapView, float v, float v2) {
-
             }
 
             @Override
@@ -556,7 +546,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 currentMapZoom = mMapView.getZoomLevel();
             }
         });
-
 
         return fragmentView;
     }
@@ -787,8 +776,29 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             mDataSource = new DataSource(Constant.SERVER_URL);
         }
 
-        loadMap(FLOOR_ID_F1);
+        mMapViewFrame = (FrameLayout) getActivity().findViewById(R.id.map_view);
+        mMapOptions = new MapOptions(); // 该对象可设置一些地图手势操作
+        mMapOptions.setSkewEnabled(false);//关闭俯仰
+        mMapView = new MapView("default", mContext); //初始化MapView
+        mMapViewFrame.addView(mMapView);
+        mMapView.setMapOptions(mMapOptions);
+        mMapView.setBackgroundColor(0xffebebeb);
+        mMapView.initRatio(1.0F);
+//    mMapView.setMaxZoomLevel(MAX_ZOOM);//不起作用
+//    mMapView.setMinZoomLevel(MIN_ZOOM);//不起作用
 
+
+
+        mMapView.setOverlayContainer(mContext.mMapContainer);
+//    mMapView.setBackgroundResource(android.R.color.transparent);
+        mMapView.setBackgroundResource(R.color.map_bg);
+        mMapView.setMinAngle(45);
+
+        featureLayer = new FeatureLayer("poi");
+        mMapView.addLayer(featureLayer);
+        mMapView.setLayerOffset(featureLayer);
+
+        loadMap(FLOOR_ID_F1);
     }
 
 
@@ -1820,12 +1830,12 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         });
     }
 
-    private void addOverlaysByMarks(List<Mark> markList) {
-        mMapView.removeAllOverlay();
-        for (Mark mark : markList) {
-            mMapView.addOverlay(mark);
-        }
-    }
+//    private void addOverlaysByMarks(List<Mark> markList) {
+//        mMapView.removeAllOverlay();
+//        for (Mark mark : markList) {
+//            mMapView.addOverlay(mark);
+//        }
+//    }
 
 
     private void addOverlaysByFeatures(List<Feature> featureList) {
