@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,7 +60,19 @@ public class PoiInfoActivity extends BaseActivity {
     } else if (type == POI_FOOT) {
       title.setVisibility(View.GONE);
       detail.setVisibility(View.GONE);
-      imageView.setImageResource(R.drawable.c_footprint);
+
+      imageView.post(new Runnable() {
+        @Override
+        public void run() {
+          ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+          layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+          layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+          imageView.setLayoutParams(layoutParams);
+          imageView.setImageResource(R.drawable.c_footprint);
+        }
+      });
+
+
     }else if (type == POI_OFFICE) {
       title.setText("ICS办公区");
       detail.setText("华为ICS包括交付、开发、MKT、销售、产品等各领域在内一支经验丰富的专家队伍，总人数超过300人。");
