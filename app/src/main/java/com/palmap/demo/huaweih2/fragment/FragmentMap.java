@@ -78,6 +78,7 @@ import com.palmaplus.nagrand.io.FileCacheMethod;
 import com.palmaplus.nagrand.navigate.NavigateManager;
 import com.palmaplus.nagrand.view.MapOptions;
 import com.palmaplus.nagrand.view.MapView;
+import com.palmaplus.nagrand.view.gestures.OnDoubleTapListener;
 import com.palmaplus.nagrand.view.gestures.OnSingleTapListener;
 import com.palmaplus.nagrand.view.gestures.OnZoomListener;
 import com.palmaplus.nagrand.view.layer.FeatureLayer;
@@ -541,6 +542,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //        }
 
                 currentMapZoom = mMapView.getZoomLevel();
+            }
+        });
+
+        mMapView.setOnDoubleTapListener(new OnDoubleTapListener() {
+            @Override
+            public boolean onDoubleTap(MapView mapView, float v, float v1) {
+                if (mScale != null) {
+                    mScale.postInvalidate();
+                }
+                return true;
             }
         });
 
