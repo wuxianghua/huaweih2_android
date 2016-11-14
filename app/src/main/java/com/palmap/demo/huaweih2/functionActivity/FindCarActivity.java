@@ -16,7 +16,7 @@ public class FindCarActivity extends BaseActivity {
         setContentView(R.layout.activity_foot_print);
 
         titleBar = (TitleBar) findViewById(R.id.titleBar);
-        titleBar.show(null, "找车", null);
+        titleBar.show(null, "寻车", null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {

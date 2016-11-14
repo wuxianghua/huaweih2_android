@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity{
         /*hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
-        titleBar.show(null, "找车", null);
+        titleBar.show(null, "寻车", null);
         hideMap();
 //            if (fragmentPark == null) {
         fragmentPark = new FragmentPark();
@@ -540,7 +540,7 @@ public class MainActivity extends BaseActivity{
     transaction.commit();
     showTabMenu();
     tabMenu.setVisibility(View.GONE);
-    titleBar.show(null, "找车", null);
+    titleBar.show(null, "寻车", null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {

@@ -19,7 +19,7 @@ public class PeripheryActivity extends BaseActivity {
         setContentView(R.layout.activity_periphery);
 
         titleBar = (TitleBar) findViewById(R.id.titleBar);
-        titleBar.show(null, "周边", null);
+        titleBar.show(null, "附近", null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {
