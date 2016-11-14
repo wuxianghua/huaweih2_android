@@ -207,4 +207,5 @@ public class FragmentPark extends BaseFragment {
     isFindCarJumpF1 = FragmentMap.mCurrentFloor==Constant.FLOOR_ID_F1;
     super.onResume();
   }
+
 }

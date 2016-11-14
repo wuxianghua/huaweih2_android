@@ -235,7 +235,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   private GestureDetector gestureDetector;
 
   RelativeLayout footInfo;
-  FrameLayout footDown;
+  ImageView footDown;
+
   private GestureDetector.OnGestureListener onGestureListener =
       new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -318,7 +319,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     btn_exit.setOnClickListener(this);
     btn_tol.setOnClickListener(this);
 
-    footDown = (FrameLayout) fragmentView.findViewById(R.id.foot_down);
+    footDown = (ImageView) fragmentView.findViewById(R.id.foot_down);
     gestureDetector = new GestureDetector(mContext,onGestureListener);
     footDown.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -602,7 +603,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         footInfo.clearAnimation();
         footInfo.invalidate();
 
-        mContext.foot_up.setVisibility(View.VISIBLE);
+//        mContext.foot_up.setVisibility(View.VISIBLE);
         footInfo.setVisibility(View.GONE);
       }
 
@@ -620,7 +621,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   }
 
   public void showFootInfo() {
-    mContext.foot_up.setVisibility(View.GONE);
+//    mContext.foot_up.setVisibility(View.GONE);
+    if (footInfo.getVisibility()==View.VISIBLE)
+      return;
+
+
     footInfo.setVisibility(View.VISIBLE);
     /*
                 AnimationSet相当于一个动画的集合，true表示使用Animation的interpolator
@@ -672,17 +677,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     if (imPush.getVisibility()==View.GONE && canPush){
       imPush.setVisibility(View.VISIBLE);
       canPush = false;
-      return;
+
+      mHandler.postDelayed(new Runnable() {
+        public void run() {
+          //execute the task
+          hidePush();
+        }
+      }, 10000);
 
     }
 
-
-    mHandler.postDelayed(new Runnable() {
-      public void run() {
-        //execute the task
-        hidePush();
-      }
-    }, 10000);
   }
 
   public void showRedPoiMark(String name, double x, double y) {
@@ -1602,7 +1606,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
 
 
-        if (!hasShowArriveEnd&&navigateManager.getMinDistanceByPoint(co)<Constant.NAV_MIN_DISTANCE){
+        if (!hasShowArriveEnd&&calDistence(endX, endY,co.getX(),co.getY())<Constant.NAV_MIN_DISTANCE){
           hasShowArriveEnd = true;
           DialogUtils.showLongToast("您已到达终点附近");
         }
@@ -1618,6 +1622,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
   }
 
+  private double calDistence(double x1,double y1,double x2,double y2){
+    return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+  }
+
   private void checkPoiPush(String name) {
     if (isNavigating&&(!isShowFootPrint))
       return;
@@ -1628,12 +1636,19 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     if (H2大厅.equals(name)) {
       if (!isShowFootPrint)
         showPush(Constant.H2大厅);
+
       showRedPoiMark(Constant.H2大厅, x[0], y[0]);
+
     } else if (name.contains(ICS实验室)) {
       if (!isShowFootPrint)
         showPush(Constant.ICS实验室);
+
       showRedPoiMark(Constant.ICS实验室, x[2], y[2]);
+
     } else if (会议室.equals(name)) {
+      if (!isShowFootPrint)
+        showPush(Constant.H2大厅);
+
       showRedPoiMark(Constant.会议室, x[1], y[1]);
     } else if (ICS办公区.equals(name)) {
       showRedPoiMark(Constant.ICS办公区, x[3], y[3]);
@@ -2164,8 +2179,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
   }
 
   public void setFootPrint() {
+
     startNavigateInFoot();
-    mContext.foot_up.setVisibility(View.GONE);
+//    mContext.foot_up.setVisibility(View.GONE);
     footInfo.setVisibility(View.VISIBLE);
 
     initMapScale();
@@ -2186,7 +2202,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       public void onRight() {
       }
     });
-
+    mContext.titleBar.setRightIcoImageRes(R.drawable.ico_line_list);
+    mContext.titleBar.setEnableRight(true);
+    mContext.titleBar.setRightIcoClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showFootInfo();
+      }
+    });
 
 //    int foot_room = 0xff0196d0;
 //    for (int i = 0; i < xxx.length; i++) {
@@ -2230,6 +2253,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     int foot_road = 0xff75d4ea;
     setFeatureColor(1270023, foot_road);
     closeProgress();
+
+    checkPoiPush(LocateTimerService.getCurrentLocationArea());
 //      }
 //    });
 //    thread.start();
@@ -2274,7 +2299,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       showSearch4Fliter(mCurrentPoiFilter);
 
     endNavigateInFootAndPark();
-    mContext.foot_up.setVisibility(View.GONE);
+//    mContext.foot_up.setVisibility(View.GONE);
     footInfo.setVisibility(View.GONE);
     isShowFootPrint = false;
     mMapView.removeAllOverlay();

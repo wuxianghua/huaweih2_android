@@ -150,18 +150,29 @@
             android:background="@drawable/c_line"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/foot_down"
-                android:layout_width="match_parent"
-                android:layout_height="30dp">
+            <!--<FrameLayout-->
+                <!--android:id="@+id/foot_down"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="30dp">-->
 
-                <ImageView
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ico_line_down"
-                    android:layout_gravity="center"
-                    android:layout_width="27dp"
-                    android:layout_height="9dp"/>
-            </FrameLayout>
+                <!--<ImageView-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:src="@drawable/ico_line_down"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_width="27dp"-->
+                    <!--android:layout_height="9dp"/>-->
+            <!--</FrameLayout>-->
+
+
+            <ImageView
+                android:id="@+id/foot_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="35dp"
+                android:src="@drawable/btn_line_open"/>
 
         </RelativeLayout>
 

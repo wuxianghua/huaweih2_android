@@ -16,7 +16,8 @@ import com.palmap.demo.huaweih2.R;
 public class FootPrintItemView extends LinearLayout {
 
     private ImageView image1;
-    private TextView tvName, tvCount;
+//    private TextView tvName;
+    private TextView tvCount;
 
     public FootPrintItemView(Context context) {
         this(context, null);
@@ -30,7 +31,7 @@ public class FootPrintItemView extends LinearLayout {
 
     private void bindView() {
         image1 = (ImageView) findViewById(R.id.image1);
-        tvName = (TextView) findViewById(R.id.tv_name);
+//        tvName = (TextView) findViewById(R.id.tv_name);
         tvCount = (TextView) findViewById(R.id.tv_count);
     }
 
@@ -38,9 +39,9 @@ public class FootPrintItemView extends LinearLayout {
         image1.setImageResource(res);
     }
 
-    public void setName(String text) {
-        tvName.setText(text);
-    }
+//    public void setName(String text) {
+//        tvName.setText(text);
+//    }
 
     public void setCount(int count) {
         tvCount.setText("" + count);

@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -35,6 +34,7 @@ import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
+import com.palmaplus.nagrand.core.Types;
 import com.palmaplus.nagrand.data.Feature;
 import com.palmaplus.nagrand.view.MapView;
 
@@ -59,7 +59,7 @@ import static com.palmaplus.nagrand.position.ble.BeaconUtils.TAG;
 public class MainActivity extends BaseActivity{
   //  public FullScreenDialog dialog;
   public RelativeLayout dialog;
-  public FrameLayout foot_up;
+//  public FrameLayout foot_up;
   LinearLayout btn_map;
   LinearLayout btn_foot;
   public RelativeLayout mMapContainer; // 地图上覆盖物容器
@@ -233,14 +233,14 @@ public class MainActivity extends BaseActivity{
     poiInfoBar = (RelativeLayout) findViewById(R.id.poi_info);
     mMapContainer = (RelativeLayout) findViewById(R.id.map_container);
 
-    foot_up = (FrameLayout)findViewById(R.id.foot_up);
-    foot_up.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        fragmentMap.showFootInfo();
-      }
-    });
-    foot_up.setVisibility(View.GONE);
+//    foot_up = (FrameLayout)findViewById(foot_up);
+//    foot_up.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        fragmentMap.showFootInfo();
+//      }
+//    });
+//    foot_up.setVisibility(View.GONE);
     dialog = (RelativeLayout) findViewById(R.id.dialog);
     btn_map = (LinearLayout) findViewById(R.id.btn_map);
     btn_map.setOnClickListener(new View.OnClickListener() {
@@ -728,34 +728,34 @@ public class MainActivity extends BaseActivity{
 
 
         if (fragmentMap.hasLocated) {//有定位点
-          showSelectStartPoint(feature);
+//          showSelectStartPoint(feature);
 
 
-//          double x= LocateTimerService.curX;
-//          double y =LocateTimerService.curY;
-//          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
-//          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
-//          if (f==null){
-//            showSelectStartPoint(feature);
-//            return;
-//          }
-//          String name = MapParamUtils.getName(f);
-//          if ( name==null||"".equals(name)) {
-//            showSelectStartPoint(feature);
-//            return;
-//          }
-//
-//          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
-//            String addr = MapParamUtils.getAddress(feature)==null?"":MapParamUtils.getAddress(feature);
-//            name = name + addr;
-//          }
-//
-//          fragmentMap.startX = x;
-//          fragmentMap.startY = y;
-//          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
-//          fragmentMap.startName =name;
-//
-//          fragmentMap.startNavigate();
+          double x= LocateTimerService.curX;
+          double y =LocateTimerService.curY;
+          Types.Point point =  fragmentMap.mMapView.converToScreenCoordinate(x,y);
+          Feature f = fragmentMap.mMapView.selectFeature((float) point.x,(float)point.y);
+          if (f==null){
+            showSelectStartPoint(feature);
+            return;
+          }
+          String name = MapParamUtils.getName(f);
+          if ( name==null||"".equals(name)) {
+            showSelectStartPoint(feature);
+            return;
+          }
+
+          if ("办公室".equals(name)||"会议室".equals(name)||"办公区".equals(name)){//加门牌号
+            String addr = MapParamUtils.getAddress(feature)==null?"":MapParamUtils.getAddress(feature);
+            name = name + addr;
+          }
+
+          fragmentMap.startX = x;
+          fragmentMap.startY = y;
+          fragmentMap.startFloorID =LocateTimerService.curFloorID;//LocateTimerService.curFloorID;
+          fragmentMap.startName =name;
+
+          fragmentMap.startNavigate();
 
 
 

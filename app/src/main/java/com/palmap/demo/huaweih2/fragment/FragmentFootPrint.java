@@ -131,16 +131,16 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     footprintView_meetingRoom = (FootPrintItemView) view.findViewById(R.id.footprintView_meetingRoom);
     footprintView_h2_hall = (FootPrintItemView) view.findViewById(R.id.footprintView_h2_hall);
 
-    footprintView_office.setImageResource(R.drawable.office_min_2);
-    footprintView_office.setName("ICS办公区");
-    footprintView_lab.setImageResource(R.drawable.laboratory_min_1);
-    footprintView_lab.setName("ICS实验室");
-    footprintView_h2.setImageResource(R.drawable.h2_foyer_min_1);
-    footprintView_h2.setName("H2大楼");
-    footprintView_meetingRoom.setImageResource(R.drawable.boardroom_min_1);
-    footprintView_meetingRoom.setName("会议室");
-    footprintView_h2_hall.setImageResource(R.drawable.h2_foyer_min_3);
-    footprintView_h2_hall.setName("ICS大厅");
+    footprintView_office.setImageResource(R.drawable.icon_foot_office);
+//    footprintView_office.setName("ICS办公区");
+    footprintView_lab.setImageResource(R.drawable.icon_foot_board);
+//    footprintView_lab.setName("ICS实验室");
+    footprintView_h2.setImageResource(R.drawable.icon_foot_build);
+//    footprintView_h2.setName("H2大楼");
+    footprintView_meetingRoom.setImageResource(R.drawable.icon_foot_meet);
+//    footprintView_meetingRoom.setName("会议室");
+    footprintView_h2_hall.setImageResource(R.drawable.icon_foot_hall);
+//    footprintView_h2_hall.setName("ICS大厅");
 
 
     registerFootPrintItemViewClickEvent(footprintView_office
