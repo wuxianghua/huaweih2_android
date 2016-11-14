@@ -1,16 +1,12 @@
 package com.palmap.demo.huaweih2;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.palmap.demo.huaweih2.json.PoiInfo;
-import com.palmap.demo.huaweih2.util.DialogUtils;
-
-import java.net.URL;
 
 public class PoiInfoActivity extends BaseActivity {
   public static final int YYY = 0;//摇一摇
@@ -50,36 +46,7 @@ public class PoiInfoActivity extends BaseActivity {
       title.setText(poiInfo.getTitle());
       detail.setText(poiInfo.getText());
 
-
-      Thread thread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            URL picUrl = new URL(poiInfo.getImage());
-
-            final Bitmap pngBM = BitmapFactory.decodeStream(picUrl.openStream());
-
-            runOnUiThread(new Runnable() {
-              @Override
-              public void run() {
-                imageView.setImageBitmap(pngBM);
-              }
-            });
-
-
-          } catch (final Exception e) {
-            runOnUiThread(new Runnable() {
-              @Override
-              public void run() {
-                DialogUtils.showShortToast(e.getMessage());
-              }
-            });
-
-          }
-        }
-      });
-      thread.start();
-
+      Glide.with(this).load(poiInfo.getImage()).into(imageView);
 
     } else if (type == POI_HALL) {
       title.setText("H2大厅");

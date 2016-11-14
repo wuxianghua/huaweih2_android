@@ -80,7 +80,7 @@ FragmentShake extends BaseFragment {
     shakeShow.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(getMainActivity(), PoiInfoActivity.class);
+        Intent intent = new Intent(getActivity(), PoiInfoActivity.class);
         intent.putExtra("poiinfo", poiInfo);
         intent.putExtra("type", 0);
         shakeShow.setVisibility(View.GONE);
@@ -362,23 +362,5 @@ FragmentShake extends BaseFragment {
 
 
   }
-
-
-  /**
-   * 创建本地MP3
-   * @return
-   */
-  public MediaPlayer createLocalMp3(){
-    /**
-     * 创建音频文件的方法：
-     * 1、播放资源目录的文件：MediaPlayer.create(MainActivity.this,R.raw.beatit);//播放res/raw 资源目录下的MP3文件
-     * 2:播放sdcard卡的文件：mediaPlayer=new MediaPlayer();
-     *   mediaPlayer.setDataSource("/sdcard/beatit.mp3");//前提是sdcard卡要先导入音频文件
-     */
-
-    return mediaPlayer;
-  }
-
-
 
 }

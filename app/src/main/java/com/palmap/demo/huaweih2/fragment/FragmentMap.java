@@ -1,12 +1,15 @@
 package com.palmap.demo.huaweih2.fragment;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -823,15 +826,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 rotataToNorth();
                 break;
             case R.id.shoot:
-                if (!Constant.isDebug) {
-                    String lo = LocateTimerService.getCurrentLocationArea();
-                    if (lo.equals(Constant.其它)) {
-                        DialogUtils.showShortToast("没有获取到当前位置，不能拍照", Gravity.CENTER);
-                    } else {
-                        mContext.openCameraActivity();
-                    }
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    DialogUtils.showShortToast("请在设置中开启相机权限", Gravity.CENTER);
+                    return;
                 }
-
+                String lo = LocateTimerService.getCurrentLocationArea();
+                if (lo.equals(Constant.其它)) {
+                    DialogUtils.showShortToast("没有获取到当前位置，不能拍照", Gravity.CENTER);
+                } else {
+                    mContext.openCameraActivity();
+                }
                 break;
             case R.id.locate:
                 if (hasLocated) {

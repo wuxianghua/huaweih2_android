@@ -1,18 +1,18 @@
 [
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_top.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_out_to_top.xml"
+        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_bottom.xml",
+        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_out_to_bottom.xml"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_top.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_in_from_top.xml"
+        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_bottom.xml",
+        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_in_from_bottom.xml"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_bottom.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_in_from_bottom.xml"
+        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_top.xml",
+        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_out_to_top.xml"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_bottom.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_out_to_bottom.xml"
+        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_top.xml",
+        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\anim\\slide_in_from_top.xml"
     }
 ]
