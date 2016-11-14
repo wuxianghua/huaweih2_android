@@ -1,7 +1,12 @@
 package com.palmap.demo.huaweih2;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -35,14 +40,15 @@ public class WelcomeActivity extends BaseActivity {
     initView();
 
   }
-  private void initView(){
+
+  private void initView() {
     viewpager = (ViewPager) findViewById(R.id.viewpager_welcome);
     list = new ArrayList<View>();
-    list.add(getLayoutInflater().inflate(R.layout.welcome_tab1, null));
-    list.add(getLayoutInflater().inflate(R.layout.welcome_tab2, null));
-    list.add(getLayoutInflater().inflate(R.layout.welcome_tab3, null));
+    list.add(createImageView(R.drawable.welcome_tab1));
+    list.add(createImageView(R.drawable.welcome_tab2));
+    list.add(createImageView(R.drawable.welcome_tab3));
 
-    btn_ok = (Button)findViewById(R.id.btn_ok);
+    btn_ok = (Button) findViewById(R.id.btn_ok);
     btn_ok.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -68,7 +74,7 @@ public class WelcomeActivity extends BaseActivity {
         img[i].setBackgroundResource(R.drawable.page_indicator);
       }
 
-      LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(23,23);
+      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(23, 23);
       lp.setMargins(9, 0, 9, 0);
       img[i].setLayoutParams(lp);
       layout.addView(img[i]);
@@ -77,7 +83,15 @@ public class WelcomeActivity extends BaseActivity {
     viewpager.setOnPageChangeListener(new ViewPagerPageChangeListener());
   }
 
-
+  private ImageView createImageView(int resId) {
+    ImageView imageView = new ImageView(this.getApplication());
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inScaled = false;
+    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resId, options);
+    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+    imageView.setImageBitmap(bitmap);
+    return imageView;
+  }
 
   public void onOKClick(View view) {
     finish();
