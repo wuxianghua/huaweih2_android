@@ -14,7 +14,6 @@ import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.ShopListAdapter;
 import com.palmap.demo.huaweih2.model.Shop;
 import com.palmap.demo.huaweih2.model.ShopList;
-import com.palmap.demo.huaweih2.view.TitleBar;
 
 /**
  * Created by eric3 on 2016/10/8.
@@ -22,11 +21,6 @@ import com.palmap.demo.huaweih2.view.TitleBar;
 
 public class FragmentAround extends BaseFragment {
   ListView shopListView;
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    // TODO Auto-generated method stub
-    super.onCreate(savedInstanceState);
-  }
 
   @Override
   public View onCreateView(LayoutInflater inflater,
@@ -53,21 +47,18 @@ public class FragmentAround extends BaseFragment {
       }
     });
     shopListView.setAdapter(shopListAdapter);
-    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-      @Override
-      public void onLeft() {
-        getMainActivity().showFragmentMap();
-      }
-
-      @Override
-      public void onRight() {
-
-      }
-    });
+//    getMainActivity().titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
+//      @Override
+//      public void onLeft() {
+//        getMainActivity().showFragmentMap();
+//      }
+//
+//      @Override
+//      public void onRight() {
+//
+//      }
+//    });
     return fragmentView;
   }
 
-//  private MainActivity getMainActivity() {
-//    return (MainActivity)getActivity();
-//  }
 }

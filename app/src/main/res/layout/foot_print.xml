@@ -1,62 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-
-    android:id="@+id/refreshScrollView"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    android:fadingEdge="vertical">
-    <!--<ScrollView-->
+    android:background="@android:color/white"
+    android:fadingEdge="vertical"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:id="@+id/activity_da_ting"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:background="@drawable/bg_zuji"
             android:layout_width="match_parent"
-            android:layout_height="270dp">
+            android:layout_height="270dp"
+            android:background="@drawable/bg_zuji">
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_office"
-                android:layout_marginLeft="9dp"
-                android:layout_marginTop="177dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="177dp" />
 
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_lab"
-                android:layout_marginLeft="56dp"
-                android:layout_marginTop="55dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="56dp"
+                android:layout_marginTop="55dp" />
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_h2"
-                android:layout_marginLeft="110dp"
-                android:layout_marginTop="110dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="110dp"
+                android:layout_marginTop="110dp" />
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_meetingRoom"
-                android:layout_marginLeft="165dp"
-                android:layout_marginTop="50dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="165dp"
+                android:layout_marginTop="50dp" />
 
             <com.palmap.demo.huaweih2.view.FootPrintItemView
                 android:id="@+id/footprintView_h2_hall"
-                android:layout_marginTop="63dp"
-                android:layout_marginRight="59dp"
-                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="59dp"
+                android:layout_marginTop="63dp" />
 
         </RelativeLayout>
 
@@ -69,33 +67,34 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:text="访客留言"
                 android:textColor="#2f3336"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <ImageView
 
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ico_tab_message"
-                />
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ico_tab_message" />
         </RelativeLayout>
 
         <LinearLayout
+            android:visibility="gone"
+            android:background="@android:color/white"
             android:id="@+id/com_list"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
 
-
-        </LinearLayout>
-
-
+        <com.palmap.demo.huaweih2.view.MyListView
+            android:id="@+id/com_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 </com.handmark.pulltorefresh.library.PullToRefreshScrollView>

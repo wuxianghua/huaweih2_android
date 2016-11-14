@@ -37,7 +37,7 @@ public class ParkInfoList {
   public List<ParkInfo> getParkInfoListByKey(String key) {
     List<ParkInfo> parkInfos = new ArrayList<>();
     for (ParkInfo parkInfo : parkInfoList) {
-      if (parkInfo.getCarNum().contains(key))
+      if (parkInfo.getCarNum().toUpperCase().contains(key))
         parkInfos.add(parkInfo);
     }
 

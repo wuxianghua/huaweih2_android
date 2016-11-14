@@ -22,6 +22,10 @@ import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.fragment.FragmentMap;
 import com.palmap.demo.huaweih2.fragment.FragmentPark;
 import com.palmap.demo.huaweih2.fragment.FragmentShake;
+import com.palmap.demo.huaweih2.functionActivity.FindCarActivity;
+import com.palmap.demo.huaweih2.functionActivity.FootPrintActivity;
+import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
+import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
 import com.palmap.demo.huaweih2.model.ParkInfo;
 import com.palmap.demo.huaweih2.model.PoiImg;
 import com.palmap.demo.huaweih2.model.PoiImgList;
@@ -268,7 +272,7 @@ public class MainActivity extends BaseActivity{
       @Override
       public void onClick(View v) {
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideAllFragments();
+        /*hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
         titleBar.show(null, "找车", null);
@@ -276,7 +280,10 @@ public class MainActivity extends BaseActivity{
 //            if (fragmentPark == null) {
         fragmentPark = new FragmentPark();
         transaction.add(R.id.main_content, fragmentPark);
-        transaction.commit();
+        transaction.commit();*/
+
+        startActivity(new Intent(MainActivity.this, FindCarActivity.class));
+
       }
     });
     foot = (RadioButton) findViewById(R.id.footprint);
@@ -284,7 +291,7 @@ public class MainActivity extends BaseActivity{
       @Override
       public void onClick(View v) {
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideAllFragments();
+        /*hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
         titleBar.show(null, "足迹", null);
@@ -292,7 +299,8 @@ public class MainActivity extends BaseActivity{
 //            if (fragmentFootPrint == null) {
         fragmentFootPrint = new FragmentFootPrint();
         transaction.add(R.id.main_content, fragmentFootPrint);
-        transaction.commit();
+        transaction.commit();*/
+        startActivity(new Intent(MainActivity.this, FootPrintActivity.class));
       }
     });
     around = (RadioButton) findViewById(R.id.around);
@@ -300,15 +308,15 @@ public class MainActivity extends BaseActivity{
       @Override
       public void onClick(View v) {
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideAllFragments();
+       /* hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
         titleBar.show(null, "附近", null);
         hideMap();
-//            if (fragmentAround == null) {
         fragmentAround = new FragmentAround();
         transaction.add(R.id.main_content, fragmentAround);
-        transaction.commit();
+        transaction.commit();*/
+        startActivity(new Intent(MainActivity.this, PeripheryActivity.class));
       }
     });
     shake = (ImageView) findViewById(R.id.shake);
@@ -316,7 +324,7 @@ public class MainActivity extends BaseActivity{
       @Override
       public void onClick(View v) {
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideAllFragments();
+/*        hideAllFragments();
         titleBar.hide();
         transaction = getFragmentManager().beginTransaction();
         hideMap();
@@ -324,7 +332,9 @@ public class MainActivity extends BaseActivity{
 //            if (fragmentShake == null) {
         fragmentShake = new FragmentShake();
         transaction.add(R.id.main_content, fragmentShake);
-        transaction.commit();
+        transaction.commit();*/
+
+        startActivity(new Intent(MainActivity.this, ShakeActivity.class));
       }
     });
     rout = (RadioButton) findViewById(R.id.route);

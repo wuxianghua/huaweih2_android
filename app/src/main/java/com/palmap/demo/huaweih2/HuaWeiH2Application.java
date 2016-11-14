@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.bugtags.library.Bugtags;
 import com.bugtags.library.BugtagsOptions;
-import com.bumptech.glide.Glide;
+import com.facebook.stetho.Stetho;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.data.PlanarGraph;
@@ -31,19 +31,20 @@ public class HuaWeiH2Application extends Application {
     copyPalmapFile();
 
 
-
-
-
-
-
 //    initImageLoader();
     if (BuildConfig.DEBUG) {
-      new Thread(new Runnable() {
-        @Override
-        public void run() {
-          Glide.get(HuaWeiH2Application.this).clearDiskCache();
-        }
-      }).start();
+//      new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//          Glide.get(HuaWeiH2Application.this).clearDiskCache();
+//        }
+//      }).start();
+
+      Stetho.initialize(
+              Stetho.newInitializerBuilder(this)
+                      .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                      .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                      .build());
     }
 
     //Bugtags在这里初始化
