@@ -48,7 +48,9 @@ public class ImageAlbumAdapter extends RecyclerView.Adapter<ImageAlbumAdapter.Vi
         ));
 
         Glide.with(context).load(imageUrl.get(position))
-                .override(DeviceUtils.getWidth(context) / 2 -10, DeviceUtils.dip2px(context, 220 + position % 2 * 20))
+                .override(DeviceUtils.getWidth(context) / 2 - 10, DeviceUtils.dip2px(context, 220 + position % 2 * 20))
+                .placeholder(R.mipmap.c_foot_nopic)
+                .error(R.mipmap.c_foot_fail)
                 .into(holder.imageView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
