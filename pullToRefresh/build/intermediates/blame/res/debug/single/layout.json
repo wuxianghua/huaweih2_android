@@ -4,15 +4,7 @@
         "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\layout\\pull_to_refresh_header_vertical.xml"
     },
     {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\layout\\pull_to_refresh_header_horizontal.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\layout\\pull_to_refresh_header_horizontal.xml"
-    },
-    {
         "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\layout\\pull_to_refresh_header_horizontal.xml",
         "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\layout\\pull_to_refresh_header_horizontal.xml"
-    },
-    {
-        "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\layout\\pull_to_refresh_header_vertical.xml",
-        "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\layout\\pull_to_refresh_header_vertical.xml"
     }
 ]

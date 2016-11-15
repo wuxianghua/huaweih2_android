@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.json.CommentDown;
+import com.palmap.demo.huaweih2.util.VisitorHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +63,8 @@ public class FootComListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         CommentDown commentDown = getItem(position);
-        holder.com_name.setText("访客" + commentDown.getId());
+//        holder.com_name.setText("访客" + commentDown.getId());
+        holder.com_name.setText(VisitorHelper.createName(commentDown.getId()));
         holder.com_time.setText(sdf.format(new Date(commentDown.getComTime())));
         holder.loc.setText(commentDown.getLocation());
         holder.com_text.setText(commentDown.getComment());

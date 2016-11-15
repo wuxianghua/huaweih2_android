@@ -1,22 +1,12 @@
-package com.palmap.demo.huaweih2;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+package com.palmap.demo.huaweih2.util;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Created by 王天明 on 2016/11/15.
+ * 访客名字获取
  */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
+public class VisitorHelper {
 
-
-    String[] names = {
+    final static String[] names = new String[]{
             "舒凝芙", "李念烟", "李白山", "何从灵", "邓尔芙",
             "李迎蓉", "徐念寒", "张翠绿", "张翠芙", "刘靖儿",
             "张妙柏", "谢千凝", "谢小珍", "李雪枫", "王夏菡",
@@ -30,5 +20,20 @@ public class ExampleUnitTest {
             "蔡旭尧", "丁鸿涛", "车伟祺", "叶荣轩", "龙越泽",
             "叶浩宇", "刘瑾瑜", "吴皓轩", "江擎苍", "温擎宇"
     };
+
+    public final static String createName(int position) {
+        if (position < names.length) {
+            position += 3306;
+        }
+        return names[position % names.length];
+    }
+
+    public static void main(String[] args) {
+        int pos = 0;
+        while (pos < 1000) {
+            System.out.println(createName(pos));
+            pos++;
+        }
+    }
 
 }

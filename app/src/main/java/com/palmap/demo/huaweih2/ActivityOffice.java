@@ -46,9 +46,12 @@ public class ActivityOffice extends BaseActivity {
 
     PeopleGridAdapter nameGridViewAdapter;
 
-    static String[] names = new String[]{"梁世铭", "毛爱华",
-            "祝宏东"
-            , "王维", "陈尚元"
+    static String[] names = new String[]{
+            "梁世铭",
+            "毛爱华",
+            "祝宏东",
+            "王维",
+            "陈尚元"
             , "刘聚"
             , "黄维恒"
             , "磨昆"
@@ -67,14 +70,14 @@ public class ActivityOffice extends BaseActivity {
             , "屈鹏"
             , "许海堤", "林瑞宏"
             , "陈玉婷"
-            , "赖志铂", "陈启煌", "付江", "王萍", "陈立军"};
+            , "赖志铂", "陈启煌", "付江", "王萍", "陈立军" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_office);
 
-        isRoute = getIntent().getBooleanExtra("isRoute",false);
+        isRoute = getIntent().getBooleanExtra("isRoute", false);
         nameGridView = (GridView) findViewById(R.id.nameGridView);
         addPeople();
         titleBar = (TitleBar) findViewById(R.id.title_bar);
@@ -168,18 +171,18 @@ public class ActivityOffice extends BaseActivity {
 
     private void addPeople() {
 
-        nameGridViewAdapter = new PeopleGridAdapter(names,this);
+        nameGridViewAdapter = new PeopleGridAdapter(names, this);
         nameGridView.setAdapter(nameGridViewAdapter);
         nameGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
-                    bundle.putString("peopleName", nameGridViewAdapter.getItem(position));//给 bundle 写入数据
-                bundle.putString("isRoute",isRoute==true ? "true" : "false");
-                    Intent mIntent = new Intent();
-                    mIntent.putExtras(bundle);
-                    setResult(RESULT_OK, mIntent);
-                    finish();
+                bundle.putString("peopleName", nameGridViewAdapter.getItem(position));//给 bundle 写入数据
+                bundle.putString("isRoute", isRoute == true ? "true" : "false");
+                Intent mIntent = new Intent();
+                mIntent.putExtras(bundle);
+                setResult(RESULT_OK, mIntent);
+                finish();
             }
         });
     }

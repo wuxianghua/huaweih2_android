@@ -1981,7 +1981,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                         || navigateState == NavigateManager.NavigateState.SWITCH_NAVIGATE_SUCCESS) {
 
                     if (navigateLayer!=null&&navigateLayer.getRef_Count()>0)
-                    navigateLayer.clearFeatures();  //先把之前的导航线清理掉
+                        navigateLayer.clearFeatures();  //先把之前的导航线清理掉
 
 
 //          //无效，舍弃
@@ -2493,32 +2493,32 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //        mMapView.setOnChangePlanarGraph(new MapView.OnChangePlanarGraph() {
 //            @Override
 //            public void onChangePlanarGraph(PlanarGraph planarGraph, PlanarGraph planarGraph1, long l, long l1) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                        Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
-                        mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
+                Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
+                mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
 
-                        mMapView.getOverlayController().refresh();
+                mMapView.getOverlayController().refresh();
 
-                        Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
+                Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
 
 
-                        final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
-                        mContext.setPoiInfoBar(feature);
-                        mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
-                        mSearch.setVisibility(View.GONE);
-                        mShoot.setVisibility(View.GONE);
-                        mF1.setVisibility(View.GONE);
-                        mB1.setVisibility(View.GONE);
-                        mLocation.setVisibility(View.GONE);
+                final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
+                mContext.setPoiInfoBar(feature);
+                mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
+                mSearch.setVisibility(View.GONE);
+                mShoot.setVisibility(View.GONE);
+                mF1.setVisibility(View.GONE);
+                mB1.setVisibility(View.GONE);
+                mLocation.setVisibility(View.GONE);
 
-                        startNavigateInPark();
-                        closeProgress();
-                    }
-                },delay);
+                startNavigateInPark();
+                closeProgress();
             }
+        },delay);
+    }
 
 //        });
 //    }

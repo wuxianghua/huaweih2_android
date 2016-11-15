@@ -21,6 +21,7 @@ import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
+import com.palmap.demo.huaweih2.util.VisitorHelper;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.text.SimpleDateFormat;
@@ -174,7 +175,10 @@ public class ActivityMeeting extends BaseActivity {
           view.setLayoutParams(lp);
           TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
-          tn.setText("访客"+list.get(i).getId());
+//          tn.setText("访客"+list.get(i).getId());
+          tn.setText(VisitorHelper.createName(list.get(i).getId()));
+
+
           TextView tc = (TextView) view.findViewById(R.id.com_text);
           tc.setText(list.get(i).getComment());
           TextView tt = (TextView) view.findViewById(R.id.com_time);
