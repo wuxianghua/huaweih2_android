@@ -593,6 +593,7 @@ public class MainActivity extends BaseActivity {
 //        im_go.setVisibility(View.VISIBLE);
     }
 
+
     public MapView getMapView() {
         return fragmentMap.mMapView;
     }
@@ -1045,6 +1046,13 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
+//            if (isSearchCar) {
+//                isSearchCar = false;
+//                parkInfo = null;
+//            }
+
+
             if (fragmentShake != null && fragmentShake.isVisible()) {
                 LogUtils.i("onKeyDown->stopShakeSensor");
                 fragmentShake.stopShakeSensor();
@@ -1061,7 +1069,17 @@ public class MainActivity extends BaseActivity {
                 } else if (fragmentMap.isShowFootPrint) {
                     fragmentMap.resetFootPrint();
                 } else if (isSearchCar) {
+
+                    fragmentMap.endNavigateInFootAndPark();
+
+                    showTabMenu();
+
+
                     isSearchCar = false;
+                    parkInfo = null;
+                    startActivity(new Intent(MainActivity.this, FindCarActivity.class));
+
+                    /*isSearchCar = false;
 
                     if (isNavigateCar) {
                         isNavigateCar = false;
@@ -1073,7 +1091,7 @@ public class MainActivity extends BaseActivity {
                         fragmentMap.mMapView.removeAllOverlay();
                         fragmentMap.resetFeatureStyle(fragmentMap.markFeatureID);
                         fragmentMap.mMapView.getOverlayController().refresh();
-                    }
+                    }*/
                 } else {
                     if (isFindCarJumpF1) {
                         isFindCarJumpF1 = false;

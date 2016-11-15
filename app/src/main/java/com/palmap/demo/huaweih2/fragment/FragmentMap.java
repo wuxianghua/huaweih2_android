@@ -2081,7 +2081,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
 
     public void endNavigateInFootAndPark() {
-
         mSearch.setVisibility(View.VISIBLE);
         mShoot.setVisibility(View.VISIBLE);
         mF1.setVisibility(View.VISIBLE);
@@ -2089,11 +2088,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mLocation.setVisibility(View.VISIBLE);
 
         if (navigateLayer != null && navigateManager != null) {
-            navigateLayer.clearFeatures();  //先把之前的导航线清理掉
-            navigateManager.clear();
-//            navigateManager.drop();
-//            navigateManager = null;
-            mMapView.removeLayer(navigateLayer);
+            if (navigateManager.getRef_Count() > 0) {
+                navigateManager.clear();
+            }
+            if (navigateLayer.getRef_Count() > 0) {
+                navigateLayer.clearFeatures();  //先把之前的导航线清理掉
+                mMapView.removeLayer(navigateLayer);
+            }
         } else {
             navigateManager = new NavigateManager();
         }
@@ -2102,7 +2103,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             startFeatureID = -1;
         }
         mMapView.removeAllOverlay();
+
         mMapView.getOverlayController().refresh();
+
         isNavigating = false;
 
         startMark = null;
@@ -2506,8 +2509,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //    mF1.setVisibility(View.VISIBLE);
 //    mB1.setVisibility(View.VISIBLE);
         if (mCurrentFloor == Constant.FLOOR_ID_B1) {
-            if (isSearchCar)
+            if (isSearchCar){
                 findCar(1000);
+            }
         } else {
             loadMap(Constant.FLOOR_ID_B1);
         }
@@ -2516,37 +2520,44 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(findCarTask);
+    }
+
+    private Runnable findCarTask = new Runnable() {
+        @Override
+        public void run() {
+
+            Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
+            mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
+
+            mMapView.getOverlayController().refresh();
+
+            Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
+
+
+            final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
+            mContext.setPoiInfoBar(feature);
+            mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
+            mSearch.setVisibility(View.GONE);
+            mShoot.setVisibility(View.GONE);
+            mF1.setVisibility(View.GONE);
+            mB1.setVisibility(View.GONE);
+            mLocation.setVisibility(View.GONE);
+
+            startNavigateInPark();
+            closeProgress();
+        }
+    };
 
     private void findCar(long delay) {
 
 //        mMapView.setOnChangePlanarGraph(new MapView.OnChangePlanarGraph() {
 //            @Override
 //            public void onChangePlanarGraph(PlanarGraph planarGraph, PlanarGraph planarGraph1, long l, long l1) {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
-                mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
-
-                mMapView.getOverlayController().refresh();
-
-                Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
-
-
-                final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
-                mContext.setPoiInfoBar(feature);
-                mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
-                mSearch.setVisibility(View.GONE);
-                mShoot.setVisibility(View.GONE);
-                mF1.setVisibility(View.GONE);
-                mB1.setVisibility(View.GONE);
-                mLocation.setVisibility(View.GONE);
-
-                startNavigateInPark();
-                closeProgress();
-            }
-        }, delay);
+        mHandler.postDelayed(findCarTask, delay);
     }
 
 //        });
