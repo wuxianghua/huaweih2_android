@@ -2,7 +2,6 @@ package com.palmap.demo.huaweih2;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -15,13 +14,14 @@ import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PictureJson;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
-import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import static com.palmap.demo.huaweih2.LocateTimerService.getCurrentLocationArea;
@@ -46,9 +46,10 @@ public class UploadActivity extends BaseActivity {
     tv_message = (EditText) findViewById(R.id.message);
     im_upload = (ImageView)findViewById(R.id.image_upload);
 
-    File file = new File(Constant.PATH_PICTURE_UPLOAD);
-    Uri uri = Uri.fromFile(file);
-    im_upload.setImageURI(uri);
+//    File file = new File(Constant.PATH_PICTURE_UPLOAD);
+//    Uri uri = Uri.fromFile(file);
+//    im_upload.setImageURI(uri);
+
 
     // TODO: 2016/11/4 节省创建bitMap的内存
     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -60,15 +61,33 @@ public class UploadActivity extends BaseActivity {
     options.outHeight = options.outHeight * options.outWidth / outWidth;
     options.outWidth = outWidth;
     options.inJustDecodeBounds = false;
-    bitmap= BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD,options);
 
-    if (bitmap==null) {
+    options.inTempStorage = new byte[100 * 1024];
+
+    try {
+      bitmap=  BitmapFactory.decodeStream(new FileInputStream(Constant.PATH_PICTURE_UPLOAD),null,options);
+      im_upload.setImageBitmap(bitmap);
+      if (bitmap==null) {
+        finish();
+        return;
+      }
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+
       finish();
       return;
     }
 
+//    bitmap= BitmapFactory.decodeFile(Constant.PATH_PICTURE_UPLOAD,options);
+//
+//    if (bitmap==null) {
+//      finish();
+//      return;
+//    }
 
-    bitmap = FileUtils.comp(bitmap);
+
+//    bitmap = FileUtils.comp(bitmap);
     System.gc();
     titleBar.show("取消","","确定");
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
@@ -101,7 +120,6 @@ public class UploadActivity extends BaseActivity {
       return;
     }
 
-//    bitmap = comp(bitmap);//压缩
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
     System.gc();

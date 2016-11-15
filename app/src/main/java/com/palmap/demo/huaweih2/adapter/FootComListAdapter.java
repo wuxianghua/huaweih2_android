@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.json.CommentDown;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,10 +23,13 @@ public class FootComListAdapter extends BaseAdapter {
 
     private List<CommentDown> data;
     private Context context;
+    private SimpleDateFormat sdf;
 
     public FootComListAdapter(Context context) {
         this.data = new ArrayList<>();
         this.context = context;
+
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -42,7 +47,7 @@ public class FootComListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void addAll(List<CommentDown> data){
+    public void addAll(List<CommentDown> data) {
         this.data.addAll(data);
         notifyDataSetChanged();
     }
@@ -57,11 +62,16 @@ public class FootComListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         CommentDown commentDown = getItem(position);
-        holder.com_name.setText("访客:" + commentDown.getId());
-        holder.com_time.setText("" + commentDown.getComTime());
+        holder.com_name.setText("访客" + commentDown.getId());
+        holder.com_time.setText(sdf.format(new Date(commentDown.getComTime())));
         holder.loc.setText(commentDown.getLocation());
         holder.com_text.setText(commentDown.getComment());
         return convertView;
+    }
+
+    public void clear() {
+        data.clear();
+        notifyDataSetChanged();
     }
 
     private class ViewHolder {

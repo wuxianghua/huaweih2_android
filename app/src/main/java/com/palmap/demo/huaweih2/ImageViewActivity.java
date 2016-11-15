@@ -80,7 +80,7 @@ public class ImageViewActivity extends Activity {
         imgPager = (CustomerViewPager) findViewById(R.id.imgPager);
         mAdapter = new ImageAdapter();
         imgPager.setAdapter(mAdapter);
-        imgPager.setCurrentItem(currentPos);
+
         imgPager.setOnPageChangeListener(new CustomerViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -103,8 +103,7 @@ public class ImageViewActivity extends Activity {
 
             }
         });
-
-        imgPager.setCurrentItem(0);
+        imgPager.setCurrentItem(currentPos);
         titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
 
         titleBar.setRightIcoClickListener(new View.OnClickListener() {

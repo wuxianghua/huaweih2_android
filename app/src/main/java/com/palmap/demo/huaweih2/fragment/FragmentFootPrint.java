@@ -36,8 +36,6 @@ import com.palmap.demo.huaweih2.view.FootPrintItemView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by eric3 on 2016/10/8.
  */
@@ -119,6 +117,16 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
             mContext.startActivity(intent);
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.startUploadText && resultCode == Activity.RESULT_OK) {
+            footComListAdapter.clear();
+            start = 0;
+            loadComments();
+        }
     }
 
     @Override
@@ -345,28 +353,26 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     }
 
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case Constant.startUploadText:
-                if (commentList == null) {
-                    break;
-                }
-                if (resultCode == RESULT_OK) {
-                    commentList.removeAllViews();
-                    start = 0;
-                    loadComments();
-                }
-                break;
-
-            default:
-                break;
-        }
-
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case Constant.startUploadText:
+//                if (commentList == null) {
+//                    break;
+//                }
+//                if (resultCode == RESULT_OK) {
+//                    commentList.removeAllViews();
+//                    start = 0;
+//                    loadComments();
+//                }
+//                break;
+//
+//            default:
+//                break;
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//    }
 
 }

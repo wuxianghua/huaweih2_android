@@ -121,7 +121,7 @@ public class Constant {
 
   public static String testIp = "10.1.137.118";
 
-  public static long LOCATE_FRESH_TIME = 2000;//定位间隔时间
+  public static long LOCATE_FRESH_TIME = 5000;//定位间隔时间
 
   public static final double NAV_MIN_DISTANCE = 2.0;
 
