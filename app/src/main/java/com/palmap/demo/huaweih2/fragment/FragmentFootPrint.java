@@ -189,7 +189,6 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
 //                });
 
 
-
             }
         });
 
@@ -304,7 +303,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
                     start++;
                     commentList.addView(view);
                 }*/
-                start++;
+                start += list.size();
                 footComListAdapter.addAll(list);
                 refreshScrollView.onRefreshComplete();
             }
@@ -351,28 +350,5 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
             }
         });
     }
-
-
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case Constant.startUploadText:
-//                if (commentList == null) {
-//                    break;
-//                }
-//                if (resultCode == RESULT_OK) {
-//                    commentList.removeAllViews();
-//                    start = 0;
-//                    loadComments();
-//                }
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//    }
 
 }
