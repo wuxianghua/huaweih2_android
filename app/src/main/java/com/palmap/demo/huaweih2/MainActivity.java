@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
     ImageView shake;
     RadioButton foot;
     RadioButton around;
-    RelativeLayout poiInfoBar;
+    public RelativeLayout poiInfoBar;
     FragmentAround fragmentAround;
     FragmentPark fragmentPark;
     public FragmentMap fragmentMap;

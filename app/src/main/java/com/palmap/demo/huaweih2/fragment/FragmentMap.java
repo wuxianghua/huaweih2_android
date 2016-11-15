@@ -2088,7 +2088,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         isNavigating = true;
 
 
-        if (navigateLayer != null) {
+        if (navigateLayer!=null&&navigateLayer.getRef_Count()>0) {
             mMapView.removeLayer(navigateLayer);
         }
         if (navigateManager != null) {
@@ -2144,26 +2144,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     public void startNavigateInPark() {//
         isNavigating = true;
 
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mSearch.setVisibility(View.GONE);
-                mShoot.setVisibility(View.GONE);
-                mF1.setVisibility(View.GONE);
-                mB1.setVisibility(View.GONE);
-                mLocation.setVisibility(View.GONE);
-            }
-        });
 
-
-        if (navigateLayer != null) {
+        if (navigateLayer!=null&&navigateLayer.getRef_Count()>0) {
             mMapView.removeLayer(navigateLayer);
         }
         if (navigateManager != null) {
             navigateManager.clear();
-//            navigateManager.drop();
-//            navigateManager = null;
-        }else{
+        }else {
             navigateManager = new NavigateManager();
         }
         navigateLayer = new FeatureLayer("navigate");
@@ -2368,7 +2355,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
         String[] name = new String[]{Constant.H2大厅, Constant.会议室, Constant.ICS实验室, Constant.ICS办公区};
         for (int i = 0; i < x.length; i++) {
-            //Types.Point point = mMapView.converToScreenCoordinate(x[i], y[i]);
+            Types.Point point = mMapView.converToScreenCoordinate(x[i], y[i]);
             PoiGreyMark p = new PoiGreyMark(mContext, name[i], new PoiGreyMark.OnClickListenerForMark() {
                 @Override
                 public void onMarkSelect(PoiGreyMark mark) {

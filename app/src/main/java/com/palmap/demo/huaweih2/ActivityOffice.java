@@ -46,7 +46,7 @@ public class ActivityOffice extends BaseActivity {
 
     PeopleGridAdapter nameGridViewAdapter;
 
-    static String[] names = new String[]{"范丽", "毛爱华",
+    static String[] names = new String[]{"梁世铭", "毛爱华",
             "祝宏东"
             , "王维", "陈尚元"
             , "刘聚"
