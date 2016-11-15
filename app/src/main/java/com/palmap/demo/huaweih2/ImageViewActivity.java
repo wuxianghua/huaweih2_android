@@ -31,14 +31,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by 王天明 on 2016/10/22
  */
 public class ImageViewActivity extends Activity {
 
-//    private ArrayList<String> imgList = new ArrayList<String>();
+    //    private ArrayList<String> imgList = new ArrayList<String>();
     private List<PictureModel> pictureModelList = new ArrayList<PictureModel>();
     private CustomerViewPager imgPager;
     private PagerAdapter mAdapter;
@@ -47,8 +46,12 @@ public class ImageViewActivity extends Activity {
     private TitleBar titleBar;
 
     private int currentPos = 0;
-    private TextView tvTime,tvDetails,tvLocation;
+    private TextView tvTime, tvDetails, tvLocation;
 //    private Bitmap currentBmp;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat(
+            "yyyy年MM月dd日 HH:mm"
+    );
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +67,8 @@ public class ImageViewActivity extends Activity {
         pictureModelList = JsonUtils.getPictureModel(content);
         currentPos = intent.getIntExtra("itemIndex", 0);
 
-        titleBar=(TitleBar)findViewById(R.id.title_bar);
-        titleBar.show(null,pictureModelList.get(0).getLocation(),null);
+        titleBar = (TitleBar) findViewById(R.id.title_bar);
+        titleBar.show(null, pictureModelList.get(0).getLocation(), null);
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {
@@ -90,9 +93,6 @@ public class ImageViewActivity extends Activity {
             @Override
             public void onPageSelected(int position) {
                 currentPos = position;
-                SimpleDateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy年MM月dd日 HH:mm"
-                );
                 tvTime.setText(dateFormat.format(new Date(pictureModelList.get(position).getUpdtime())));
                 tvDetails.setText(pictureModelList.get(position).getAppendix());
                 tvLocation.setText(pictureModelList.get(position).getLocation());
@@ -104,6 +104,13 @@ public class ImageViewActivity extends Activity {
             }
         });
         imgPager.setCurrentItem(currentPos);
+
+        if (currentPos == 0) {
+            tvTime.setText(dateFormat.format(new Date(pictureModelList.get(currentPos).getUpdtime())));
+            tvDetails.setText(pictureModelList.get(currentPos).getAppendix());
+            tvLocation.setText(pictureModelList.get(currentPos).getLocation());
+        }
+
         titleBar.setRightIcoImageRes(R.drawable.ico_tab_share);
 
         titleBar.setRightIcoClickListener(new View.OnClickListener() {
@@ -114,24 +121,22 @@ public class ImageViewActivity extends Activity {
                     public void run() {
                         Looper.prepare();
 
-                        if (Constant.useSystemShare){
-                            ShareUtils.shareText(ImageViewActivity.this,"我在华为ICS实验室参观："+pictureModelList.get(currentPos).getAppendix()+"  快来看看我拍的照片吧："+
-                                pictureModelList.get(currentPos).getPhoto());
-                        }else {
+                        if (Constant.useSystemShare) {
+                            ShareUtils.shareText(ImageViewActivity.this, "我在华为ICS实验室参观：" + pictureModelList.get(currentPos).getAppendix() + "  快来看看我拍的照片吧：" +
+                                    pictureModelList.get(currentPos).getPhoto());
+                        } else {
                             SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
 
                             shareModel.imgUrl = pictureModelList.get(imgPager.getCurrentItem()).getPhoto();
                             Bitmap myBitmap = null;
                             try {
                                 myBitmap = Glide.with(ImageViewActivity.this)
-                                    .load(shareModel.imgUrl)
-                                    .asBitmap() //必须
-                                    .centerCrop()
-                                    .into(500, 500)
-                                    .get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
+                                        .load(shareModel.imgUrl)
+                                        .asBitmap() //必须
+                                        .centerCrop()
+                                        .into(500, 500)
+                                        .get();
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             shareModel.urlBmp = myBitmap;
