@@ -53,6 +53,7 @@ public class MapParamUtils {
     return DISPLAY.get(dataElement);
   }
   public static String getAddress(DataElement dataElement) {
+    if (dataElement == null) return "H2大楼";
     return address.get(dataElement);
   }
   public static String getEnglishName(DataElement dataElement) {
