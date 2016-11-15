@@ -85,7 +85,7 @@ public class ErrorCode {
             String ipType = IpUtils.getCurrentNetType(HuaWeiH2Application.instance);
             if (!TextUtils.isEmpty(ipType) && !"4g".equals(ipType) && !"中国移动".equals(IpUtils.getCurrentNetType(HuaWeiH2Application.instance))) {
 //                DialogUtils.showShortToast("当前不在移动4G环境下,无法体验定位功能");
-                DialogUtils.showShortToast("请在移动4G环境下体验");
+                LogUtils.e("请在移动4G环境下体验");
             }else{
                 DialogUtils.showShortToast(HuaWeiH2Application.userIp + "无定位数据");
             }

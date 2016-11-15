@@ -980,6 +980,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mSearchBg.setVisibility(View.GONE);
         mCompass.setVisibility(View.VISIBLE);
         mSearch.setVisibility(View.VISIBLE);
+        mContext.showTabMenu();
         //判断切换楼层
         if (Constant.FLOOR_ID_F1 != mCurrentFloor) {
             isSearch4Poi = index;
@@ -1252,6 +1253,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                             mContext.hideTabMenu();
                         }
 
+                        if (mCompass!=null) {
+                            mCompass.setRotation(-BigDecimal.valueOf(mMapView.getRotate()).floatValue());
+                            mCompass.invalidate();
+                        }
                     }
                 });
 
@@ -2237,6 +2242,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 
 //    mMapView.zoom(initScale);
+
 
         mMapView.visibleLayerAllFeature("Area_text", false);
         mMapView.moveToRect(12697080.571, 2588843.728, 12697195.929, 2588958.557);//不能加动画，否则地图不见

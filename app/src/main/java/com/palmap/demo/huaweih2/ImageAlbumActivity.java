@@ -12,7 +12,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
@@ -168,6 +167,8 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
 
 //                        intent.putExtra("imgListJson", content.toString());
                         intent.putExtra("imgListJson", JSONArray.toJSON(pictureModelList).toString());
+                        intent.putExtra("itemIndex", position);
+                        intent.putExtra("imgListJson", content.toString());
                         intent.putExtra("itemIndex", position);
 
 //                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
