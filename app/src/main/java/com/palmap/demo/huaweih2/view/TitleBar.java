@@ -98,6 +98,10 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
     im_back.setVisibility(i);
   }
 
+  public void enableRight(boolean enable){
+    right.setEnabled(enable);
+  }
+
   public void hide(){
     setVisibility(View.GONE);
   }

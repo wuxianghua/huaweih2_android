@@ -64,6 +64,7 @@ public class ActivityUploadCom extends BaseActivity {
 
             @Override
             public void onRight() {
+
                 KeyBoardUtils.closeKeybord(textView, ActivityUploadCom.this);
 
                 if (TextUtils.isEmpty(edit_name.getText().toString())) {
@@ -75,6 +76,7 @@ public class ActivityUploadCom extends BaseActivity {
                     return;
                 }
 
+                titleBar.enableRight(false);
 
                 String name = edit_name.getText().toString();
                 saveName(name);
@@ -87,6 +89,7 @@ public class ActivityUploadCom extends BaseActivity {
                     @Override
                     public void onError(int errorCode) {
                         ErrorCode.showError(errorCode);
+                        titleBar.enableRight(true);
                     }
 
                     @Override
@@ -100,6 +103,8 @@ public class ActivityUploadCom extends BaseActivity {
 
             }
         });
+
+
         commentList = (LinearLayout) findViewById(R.id.com_list);
         location = getIntent().getStringExtra("location");
         refreshScrollView = (PullToRefreshScrollView) findViewById(R.id.refreshScrollView);
