@@ -490,7 +490,7 @@ CONFIG = {
 
 --                            [1263037] = Set2dColor('0xfffffff8', '0x00fffff8', 0); --走廊
 
-                            ['1263037'] = {--走廊
+                            ['1490708'] = {--走廊
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -498,7 +498,7 @@ CONFIG = {
                                         enable_alpha = false,
                                     },
                                     outline = {
-                                        color = '0xffaf967e',
+                                        color = '0xffA7C2D3',
                                         width = 0.5,
                                         alignment = 'AlignLeft',
                                     },
@@ -513,7 +513,7 @@ CONFIG = {
                                         enable_alpha = false,
                                     },
                                     outline = {
-                                        color = '0xffaf967e',
+                                        color = '0xffA7C2D3',
                                         width = 0.5,
                                         alignment = 'AlignLeft',
                                     },
@@ -528,7 +528,7 @@ CONFIG = {
                                         enable_alpha = false,
                                     },
                                     outline = {
-                                        color = '0xffaf967e',
+                                        color = '0xffA7C2D3',
                                         width = 0.5,
                                         alignment = 'AlignLeft',
                                     },
@@ -543,7 +543,7 @@ CONFIG = {
                                         enable_alpha = false,
                                     },
                                     outline = {
-                                        color = '0xffaf967e',
+                                        color = '0xffA7C2D3',
                                         width = 0.5,
                                         alignment = 'AlignLeft',
                                     },
@@ -573,7 +573,7 @@ CONFIG = {
                                         enable_alpha = false,
                                     },
                                     outline = {
-                                        color = '0xffaf967e',
+                                        color = '0xffA7C2D3',
                                         width = 0.5,
                                         alignment = 'AlignLeft',
                                     },

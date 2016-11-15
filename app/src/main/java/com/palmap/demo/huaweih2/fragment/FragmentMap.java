@@ -1451,7 +1451,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 return false;
         }
         long id = MapParamUtils.getId(feature);
-        if (id == 1284127 || id == 1263037 || id == 1270023 || id == Constant.空地_POI_ID) {
+        if (id == 1284127 || id == 1490708 || id == 1270023 || id == Constant.空地_POI_ID) {
             return false;
         }
 
