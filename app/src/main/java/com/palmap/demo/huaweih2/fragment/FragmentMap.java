@@ -1928,6 +1928,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         isSelectStartPoint = false;
     }
 
+    /**
+     * 导航的楼层ID
+     */
+    private long navigateFloorId;
+
     public void startNavigate() {//final Feature startFeatureID, final double toX, final double toY, final long toFloorID
         isNavigating = true;
         hasShowArriveEnd = false;
@@ -1972,13 +1977,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //
 //            return;
 //          }
-                    if (Long.parseLong(featureCollection.getName()) != mCurrentFloor) {
-                        Log.w("palmap", "featureCollection.name = " + featureCollection.getName());
-                        if (navigateManager != null) {
-                            navigateManager.switchPlanarGraph(mCurrentFloor);
-                        }
-                        return;
-                    }
+
+//                    if (Long.parseLong(featureCollection.getName()) != mCurrentFloor) {
+//                        Log.w("palmap", "featureCollection.name = " + featureCollection.getName());
+//                        if (navigateManager != null) {
+//                            navigateManager.switchPlanarGraph(mCurrentFloor);
+//                        }
+//                        return;
+//                    }
 
                     navigateLayer.addFeatures(featureCollection); //重新添加新的导航线
                     Feature s = featureCollection.getFirstFeature();
@@ -2039,9 +2045,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         resetFeatureStyle(startFeatureID);
 
 //          long toFloorId = LocationModel.parent.get(locationModel);
-
-        navigateManager.navigation(startX, startY, startFloorID, endX, endY, toFloorID); // TODO 请求导航线
-
+        navigateFloorId = mCurrentFloor;
+        // TODO 请求导航线
+        navigateManager.navigation(startX, startY, startFloorID, endX, endY, toFloorID, navigateFloorId);
 
     }
 
@@ -2143,7 +2149,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         });
 
 
-
         if (navigateLayer != null) {
             mMapView.removeLayer(navigateLayer);
         }
@@ -2159,7 +2164,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
         navigateManager.setOnNavigateComplete(new NavigateManager.OnNavigateComplete() {
             @Override
-            public void onNavigateComplete(final NavigateManager.NavigateState navigateState,final FeatureCollection featureCollection) {
+            public void onNavigateComplete(final NavigateManager.NavigateState navigateState, final FeatureCollection featureCollection) {
 
                 mContext.runOnUiThread(new Runnable() {
                     @Override
@@ -2484,7 +2489,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
 //    mMapView.zoom(3);//放大
 
-     //   initMapScale();
+        //   initMapScale();
 
         mMapView.getOverlayController().refresh();
 
