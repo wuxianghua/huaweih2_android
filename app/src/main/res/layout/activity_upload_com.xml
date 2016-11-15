@@ -25,6 +25,21 @@
         </com.palmap.demo.huaweih2.view.TitleBar>
 
         <EditText
+            android:id="@+id/edit_name"
+            android:padding="@dimen/margin_large"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@color/white"
+            android:hint="请输入您的昵称"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <EditText
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="200dp"

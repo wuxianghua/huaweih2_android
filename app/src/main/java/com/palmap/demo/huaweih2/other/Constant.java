@@ -92,6 +92,8 @@ public class Constant {
   public static Boolean useCash = true;
 
 
+  public static final String commont_split = "_<(";
+
 
   public static boolean onSingleTap_changeColor =true;//是否变色
 

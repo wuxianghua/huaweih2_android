@@ -76,6 +76,7 @@
                         android:layout_toRightOf="@+id/B"
                         android:gravity="center_vertical"
                         android:hint="如810HP"
+                        android:text="810HP"
                         android:background="@null"
                         android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ"
                         android:maxLength="5"

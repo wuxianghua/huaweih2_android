@@ -1,6 +1,7 @@
 package com.palmap.demo.huaweih2.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.json.CommentDown;
-import com.palmap.demo.huaweih2.util.VisitorHelper;
+import com.palmap.demo.huaweih2.other.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,10 +65,33 @@ public class FootComListAdapter extends BaseAdapter {
         }
         CommentDown commentDown = getItem(position);
 //        holder.com_name.setText("访客" + commentDown.getId());
-        holder.com_name.setText(VisitorHelper.createName(commentDown.getId()));
+//        holder.com_name.setText(VisitorHelper.createName(commentDown.getId()));
+
+        String name;
+        String comment = commentDown.getComment();
+        String splite = Constant.commont_split;
+
+        String msg = commentDown.getComment();
+
+        if(msg.contains(splite)){
+            msg = msg.substring(0,msg.indexOf(splite));
+        }
+
+        if (!TextUtils.isEmpty(comment)) {
+            if(comment.contains(splite)){
+                name = comment.substring(comment.indexOf(splite) + splite.length(),comment.length());
+            }else{
+                name = "访客";
+            }
+        }else{
+            name = "访客";
+        }
+
+        holder.com_name.setText(name);
+
         holder.com_time.setText(sdf.format(new Date(commentDown.getComTime())));
         holder.loc.setText(commentDown.getLocation());
-        holder.com_text.setText(commentDown.getComment());
+        holder.com_text.setText(msg);
         return convertView;
     }
 

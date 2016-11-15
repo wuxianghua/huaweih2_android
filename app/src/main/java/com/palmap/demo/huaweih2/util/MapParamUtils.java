@@ -24,6 +24,9 @@ public class MapParamUtils {
     //englishName
     //english_name
     public static long getId(DataElement dataElement) {
+        if (dataElement == null || dataElement.getRef_Count() <= 0) {
+            return -1;
+        }
         return ID.get(dataElement);
     }
 
@@ -43,7 +46,7 @@ public class MapParamUtils {
     }
 
     public static String getName(DataElement dataElement) {
-        if (dataElement == null)
+        if (dataElement == null || dataElement.getRef_Count() <= 0)
             return "";
 //    if (Config.language == Config.Language.ENGLISH) {
 //      String name =  getEnglishName(dataElement);
@@ -59,6 +62,8 @@ public class MapParamUtils {
     }
 
     public static String getDisplay(DataElement dataElement) {
+        if (dataElement == null || dataElement.getRef_Count() <= 0)
+            return "";
         return DISPLAY.get(dataElement);
     }
 
