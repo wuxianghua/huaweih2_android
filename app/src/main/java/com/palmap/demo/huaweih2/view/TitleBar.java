@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
   private boolean enableRight =true;
   private ImageView ico_right;
 
+  private LinearLayout layout_extend_right;
 
   private void initView(){
     LayoutInflater.from(mContext).inflate(R.layout.layout_title_bar,this);
@@ -39,6 +41,8 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
     im_back = (ImageView)findViewById(R.id.title_bar_back);
     im_back.setOnClickListener(this);
 
+
+    layout_extend_right = (LinearLayout) findViewById(R.id.layout_extend_right);
 
     ico_right = (ImageView) findViewById(R.id.ico_right);
   }
@@ -55,6 +59,12 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
     this.mContext = context;
 
     initView();
+  }
+
+  public void addRightExtendView(View v){
+    if (null != layout_extend_right) {
+      layout_extend_right.addView(v);
+    }
   }
 
   public void setOnTitleClickListener(OnTitleClickListener onTitleClickListener){

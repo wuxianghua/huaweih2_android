@@ -1,17 +1,20 @@
 package com.palmap.demo.huaweih2.functionActivity;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.io.File;
@@ -50,6 +53,23 @@ public class FootPrintActivity extends BaseActivity {
         });
         fragmentFootPrint = (FragmentFootPrint) getFragmentManager().findFragmentById(R.id.layout_fragment);
 
+
+        ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.drawable.ico_nav_share);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                WXShareUtils.sendToWeChat(BitmapFactory.decodeResource(getResources(), R.drawable.share_img),
+//                        null,
+//                        );
+                SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
+                shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
+                SharePopView.showSharePop(FootPrintActivity.this,
+                        shareModel);
+            }
+        });
+        titleBar.addRightExtendView(imageView);
+
     }
 
     public void openCameraActivity() {
@@ -57,7 +77,7 @@ public class FootPrintActivity extends BaseActivity {
         // 指定开启系统相机的Action
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT,400*200);
+        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 400 * 200);
         //如果路径不存在，则创建
         // 创建文件夹
         File file = new File(Constant.DIR_PICTURE_UPLOAD);
