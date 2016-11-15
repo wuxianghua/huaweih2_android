@@ -302,7 +302,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
-
         View fragmentView = inflater.inflate(R.layout.map, container, false);
         // 初始化view
         imPush = (ImageView) fragmentView.findViewById(R.id.push);
@@ -2048,6 +2047,12 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     public void endNavigateInFootAndPark() {
 
+        mSearch.setVisibility(View.VISIBLE);
+        mShoot.setVisibility(View.VISIBLE);
+        mF1.setVisibility(View.VISIBLE);
+        mB1.setVisibility(View.VISIBLE);
+        mLocation.setVisibility(View.VISIBLE);
+
         if (navigateLayer != null && navigateManager != null) {
             navigateLayer.clearFeatures();  //先把之前的导航线清理掉
             navigateManager.clear();
@@ -2125,6 +2130,19 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     public void startNavigateInPark() {//
         isNavigating = true;
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mSearch.setVisibility(View.GONE);
+                mShoot.setVisibility(View.GONE);
+                mF1.setVisibility(View.GONE);
+                mB1.setVisibility(View.GONE);
+                mLocation.setVisibility(View.GONE);
+            }
+        });
+
+
 
         if (navigateLayer != null) {
             mMapView.removeLayer(navigateLayer);
@@ -2273,14 +2291,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             public void onRight() {
             }
         });
-        mContext.titleBar.setRightIcoImageRes(R.drawable.ico_line_list);
-        mContext.titleBar.setEnableRight(true);
-        mContext.titleBar.setRightIcoClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFootInfo();
-            }
-        });
+//        mContext.titleBar.setRightIcoImageRes(R.drawable.ico_line_list);
+//        mContext.titleBar.setEnableRight(true);
+//        mContext.titleBar.setRightIcoClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showFootInfo();
+//            }
+//        });
 
 //    int foot_room = 0xff0196d0;
 //    for (int i = 0; i < xxx.length; i++) {

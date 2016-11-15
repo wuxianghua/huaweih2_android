@@ -62,11 +62,9 @@ public class BaseFragment extends Fragment {
   *  关闭进度条
   * */
   protected void closeProgress(){
-    Log.e("exp", "BaseFragment->closeProgress()");
+    Log.i("exp", "BaseFragment->closeProgress()");
     if (progressDialog != null && progressDialog.isShowing()){
-
            progressDialog.dismiss();
-
     }
   }
 

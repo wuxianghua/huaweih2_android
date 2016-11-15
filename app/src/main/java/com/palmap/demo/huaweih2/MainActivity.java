@@ -50,6 +50,7 @@ import java.util.TimerTask;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigateCar;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigating;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isSearchCar;
+import static com.palmap.demo.huaweih2.fragment.FragmentMap.isShowFootPrint;
 import static com.palmap.demo.huaweih2.fragment.FragmentPark.isFindCarJumpF1;
 import static com.palmap.demo.huaweih2.other.Constant.FLOOR_ID_F1;
 import static com.palmap.demo.huaweih2.other.Constant.H2大厅;
@@ -157,7 +158,7 @@ public class MainActivity extends BaseActivity {
             showCarOnMap();
         } else {
 //            showTabMenu();
-            if (isNavigating && !isSearchCar) {
+            if (isNavigating && !isSearchCar && !isShowFootPrint) {
                 fragmentMap.endNavigateInFootAndPark();
 //        fragmentMap.loadMap(FLOOR_ID_F1);
             }
@@ -578,11 +579,10 @@ public class MainActivity extends BaseActivity {
                 intent.putExtras(args);
                 startActivityForResult(intent, Constant.startPay);
 
-
             }
         });
         //反向寻车
-        im_go.setVisibility(View.VISIBLE);
+//        im_go.setVisibility(View.VISIBLE);
     }
 
     public MapView getMapView() {
@@ -590,7 +590,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setPayed() {
-        titleBar.show(null, "找车", "已缴费");
+        titleBar.show(null, "寻车", "已缴费");
         titleBar.setEnableRight(false);
     }
 
