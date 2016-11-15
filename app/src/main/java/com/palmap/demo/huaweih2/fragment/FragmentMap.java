@@ -894,7 +894,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //
 ////              JSONObject jo1 = JSON.parseObject(content.toString());
 ////              JSONObject jo2 = jo1.getJSONObject("geometry");
-////              JSONArray jo3 = jo2.getJSONArray("coordinates");
+////      1        JSONArray jo3 = jo2.getJSONArray("coordinates");
 ////              double x = jo3.getDoubleValue(0);
 ////              double y = jo3.getDoubleValue(1);
 //
@@ -1316,13 +1316,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
      */
     public void initFootPlanarGraph(final PlanarGraph planarGraph) {
         refeshPoiFilter(0);
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                refeshFloorView(FLOOR_ID_F1);
-                setFootPrint();
-            }
-        });
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1331,6 +1325,15 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
                 mMapView.visibleLayerFeature("Area_text", "display", new Value("ICS办公区"), false);
                 isLoadingMap = false;
+
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refeshFloorView(FLOOR_ID_F1);
+                        setFootPrint();
+                    }
+                });
+
             }
         });
         thread.start();
@@ -1908,8 +1911,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         if (navigateLayer != null && navigateManager != null) {
             navigateLayer.clearFeatures();  //先把之前的导航线清理掉
             navigateManager.clear();
-            navigateManager.drop();
-            navigateManager = null;
+//            navigateManager.drop();
+//            navigateManager = null;
             mMapView.removeLayer(navigateLayer);
             navigateLayer = null;
         }
@@ -1946,10 +1949,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mShoot.setVisibility(View.GONE);
         if (navigateManager != null) {
             navigateManager.clear();
-            navigateManager.drop();
-            navigateManager = null;
+//            navigateManager.drop();
+//            navigateManager = null;
+        } else {
+            navigateManager = new NavigateManager();
         }
-        navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
@@ -2062,11 +2066,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         if (navigateLayer != null && navigateManager != null) {
             navigateLayer.clearFeatures();  //先把之前的导航线清理掉
             navigateManager.clear();
-            navigateManager.drop();
-            navigateManager = null;
+//            navigateManager.drop();
+//            navigateManager = null;
             mMapView.removeLayer(navigateLayer);
-            navigateManager = null;
-            navigateLayer = null;
+        }else{
+            navigateManager = new NavigateManager();
         }
         if (startFeatureID != -1) {
             resetFeatureStyle(startFeatureID);
@@ -2089,10 +2093,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
         if (navigateManager != null) {
             navigateManager.clear();
-            navigateManager.drop();
-            navigateManager = null;
+//            navigateManager.drop();
+//            navigateManager = null;
+        }else{
+            navigateManager = new NavigateManager();
         }
-        navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
@@ -2156,10 +2161,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
         if (navigateManager != null) {
             navigateManager.clear();
-            navigateManager.drop();
-            navigateManager = null;
+//            navigateManager.drop();
+//            navigateManager = null;
+        }else{
+            navigateManager = new NavigateManager();
         }
-        navigateManager = new NavigateManager();
         navigateLayer = new FeatureLayer("navigate");
         mMapView.addLayer(navigateLayer);
         mMapView.setLayerOffset(navigateLayer);
@@ -2362,7 +2368,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
         String[] name = new String[]{Constant.H2大厅, Constant.会议室, Constant.ICS实验室, Constant.ICS办公区};
         for (int i = 0; i < x.length; i++) {
-            Types.Point point = mMapView.converToScreenCoordinate(x[i], y[i]);
+            //Types.Point point = mMapView.converToScreenCoordinate(x[i], y[i]);
             PoiGreyMark p = new PoiGreyMark(mContext, name[i], new PoiGreyMark.OnClickListenerForMark() {
                 @Override
                 public void onMarkSelect(PoiGreyMark mark) {
@@ -2481,30 +2487,16 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 
     private void findCar() {
-//    List<Feature> features = mMapView.searchFeature(Constant.AREA_LAYER, "display", new Value(parkInfo.getCarPosition()));//
-//
-//    if (features == null)
-//      return;
-
-//    final Coordinate c = features.get(0).getCentroid();
-        Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
-        mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
-//    mMapView.zoom(3);//放大
-
-     //   initMapScale();
-
-        mMapView.getOverlayController().refresh();
-
-//   mHandler.postDelayed(new Runnable() {
-//      public void run() {
-//        Types.Point p = mMapView.converToScreenCoordinate(c.getX(), c.getY());
-//        searchPOIByPoint((float) p.x, (float) p.y);
-//      }
-//    }, 500);
 
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
+                mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
+
+                mMapView.getOverlayController().refresh();
+
                 Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
                 final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
                 mContext.setPoiInfoBar(feature);
@@ -2514,12 +2506,10 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 mF1.setVisibility(View.GONE);
                 mB1.setVisibility(View.GONE);
                 mLocation.setVisibility(View.GONE);
+
+                startNavigateInPark();
+                closeProgress();
             }
         });
-
-        startNavigateInPark();
-        closeProgress();
-
-//    addMark(c.getX(), c.getY());
     }
 }
