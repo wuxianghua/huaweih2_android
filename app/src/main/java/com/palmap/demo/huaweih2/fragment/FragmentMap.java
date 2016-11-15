@@ -1225,7 +1225,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
           findCar(3000);
 
         if (mCurrentFloor == FLOOR_ID_F1) {
-          mMapView.visibleLayerFeature("Area_text", "display", new Value("ICS办公区"), false);
+//          [_mapView visibleLayerFeature:@"Area_text" key:@"category" value:@(24002000) isVisible:false];
+//          [_mapView visibleLayerFeature:@"Area_text" key:@"id" value:@(1284130) isVisible:true];
+
           initMapScale();
         }
 
@@ -1633,6 +1635,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //    mMapView.removeAllOverlay();
     if (currentClickMark != null)
       mMapView.removeOverlay(currentClickMark);
+
+    if (currentPoiMarks != null) {
+      for (int i = 0; i < currentPoiMarks.size(); i++)
+        mMapView.removeOverlay(currentPoiMarks.get(i));
+    }
     Mark mark = new Mark(mContext);
     mark.init(new double[]{x, y});
     currentClickMark = mark;
@@ -2229,7 +2236,14 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
       public void run() {
         mMapView.doCollisionDetection();
         mMapView.visibleLayerAllFeature("Area_text", true);
+        mMapView.visibleLayerFeature("Area_text", "category", new Value(24002000L), false);
+        mMapView.visibleLayerFeature("Area_text", "id", new Value(1284130L), true);
+        mMapView.visibleLayerFeature("Area_text", "display", new Value("ICS办公区"), false);
+//        mMapView.visibleLayerFeature("Area_text", "name", new Value("ICS办公区"), false);
+
+
         mMapView.getOverlayController().refresh();
+
       }
     }, 150);
   }
@@ -2284,6 +2298,23 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
   }
 
+  public void hideSomeIcon(){
+    if (mSearch!=null&&mShoot!=null&&mF1!=null&&mB1!=null) {
+      mSearch.setVisibility(View.GONE);
+      mShoot.setVisibility(View.GONE);
+      mF1.setVisibility(View.GONE);
+      mB1.setVisibility(View.GONE);
+    }
+  }
+
+  public void showSomeIcon(){
+    if (mSearch!=null&&mShoot!=null&&mF1!=null&&mB1!=null) {
+      mSearch.setVisibility(View.VISIBLE);
+      mShoot.setVisibility(View.VISIBLE);
+      mF1.setVisibility(View.VISIBLE);
+      mB1.setVisibility(View.VISIBLE);
+    }
+  }
   public void setFootPrint() {
 
     startNavigateInFoot();
@@ -2293,10 +2324,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     initMapScale();
     isShowFootPrint = true;
     mContext.hideTabMenu();
-    mSearch.setVisibility(View.GONE);
-    mShoot.setVisibility(View.GONE);
-    mF1.setVisibility(View.GONE);
-    mB1.setVisibility(View.GONE);
+    hideSomeIcon();
     mContext.titleBar.show(null, "行程", null);
     mContext.titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
@@ -2410,10 +2438,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     isShowFootPrint = false;
     mMapView.removeAllOverlay();
 
-    mSearch.setVisibility(View.VISIBLE);
-    mShoot.setVisibility(View.VISIBLE);
-    mF1.setVisibility(View.VISIBLE);
-    mB1.setVisibility(View.VISIBLE);
+    showSomeIcon();
     mContext.titleBar.hide();
     mContext.showTabMenu();
 

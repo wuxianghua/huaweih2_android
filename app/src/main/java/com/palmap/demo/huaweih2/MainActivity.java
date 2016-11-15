@@ -924,6 +924,8 @@ public class MainActivity extends BaseActivity {
     //显示导航栏，隐藏title
     public void showTabMenu() {
         isShowPoiInfoBar = false;
+
+        fragmentMap.showSomeIcon();
         poiInfoBar.setVisibility(View.GONE);
 //    im_share.setVisibility(View.VISIBLE);
         im_go.setVisibility(View.VISIBLE);

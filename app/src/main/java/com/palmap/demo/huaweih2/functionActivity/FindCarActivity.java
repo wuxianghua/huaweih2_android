@@ -35,4 +35,14 @@ public class FindCarActivity extends BaseActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(FindCarActivity.this, MainActivity.class);
+        intent.putExtra("onFindCarBack", true);
+        startActivity(intent);
+        finish();
+
+    }
 }
