@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.palmap.demo.huaweih2.BaseActivity;
+import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
@@ -207,7 +209,22 @@ public class FootPrintActivity extends BaseActivity {
             cobitmap.recycle();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {

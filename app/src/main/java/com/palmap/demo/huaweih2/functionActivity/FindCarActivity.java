@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2.functionActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.MainActivity;
@@ -34,6 +35,16 @@ public class FindCarActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
