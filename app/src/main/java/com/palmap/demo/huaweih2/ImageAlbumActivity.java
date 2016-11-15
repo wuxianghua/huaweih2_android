@@ -154,8 +154,7 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
                         Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
 //                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
                         intent.putExtra("imgListJson", content.toString());
-                        intent.putExtra("itemIndex",
-                                position);
+                        intent.putExtra("itemIndex", position);
 
 //                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
 //
