@@ -117,7 +117,7 @@ public class Constant {
 
   public static boolean useTestServer = false;//是否使用内网测试服务器
 //  public static boolean openLocateTest = false;//开启本地定位测试
-  public static boolean openLocateTest = false;//开启本地定位测试
+  public static boolean openLocateTest = true;//开启本地定位测试
 
   public static boolean usePhoneIp = true;
 

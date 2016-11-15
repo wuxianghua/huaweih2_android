@@ -71,12 +71,6 @@ public class FootComListAdapter extends BaseAdapter {
         String comment = commentDown.getComment();
         String splite = Constant.commont_split;
 
-        String msg = commentDown.getComment();
-
-        if(msg.contains(splite)){
-            msg = msg.substring(0,msg.indexOf(splite));
-        }
-
         if (!TextUtils.isEmpty(comment)) {
             if(comment.contains(splite)){
                 name = comment.substring(comment.indexOf(splite) + splite.length(),comment.length());
@@ -87,11 +81,15 @@ public class FootComListAdapter extends BaseAdapter {
             name = "访客";
         }
 
+        if(comment.contains(splite)){
+            comment = comment.substring(0,comment.indexOf(splite));
+        }
+
         holder.com_name.setText(name);
 
         holder.com_time.setText(sdf.format(new Date(commentDown.getComTime())));
         holder.loc.setText(commentDown.getLocation());
-        holder.com_text.setText(msg);
+        holder.com_text.setText(comment);
         return convertView;
     }
 

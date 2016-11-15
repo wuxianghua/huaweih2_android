@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import com.palmap.demo.huaweih2.json.CommentDown;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
-import com.palmap.demo.huaweih2.util.VisitorHelper;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.text.SimpleDateFormat;
@@ -225,10 +225,28 @@ public class ActivityOffice extends BaseActivity {
                     TextView tn = (TextView) view.findViewById(R.id.com_name);
 //              tn.setText(list.get(i).getUserId());
 //                    tn.setText("访客" + list.get(i).getId());
-                    tn.setText(VisitorHelper.createName(list.get(i).getId()));
+                    String name;
+                    String comment = list.get(i).getComment();
+                    String splite = Constant.commont_split;
+
+                    if (!TextUtils.isEmpty(comment)) {
+                        if(comment.contains(splite)){
+                            name = comment.substring(comment.indexOf(splite) + splite.length(),comment.length());
+                        }else{
+                            name = "访客";
+                        }
+                    }else{
+                        name = "访客";
+                    }
+
+                    if(comment.contains(splite)){
+                        comment = comment.substring(0,comment.indexOf(splite));
+                    }
+
+                    tn.setText(name);
 
                     TextView tc = (TextView) view.findViewById(R.id.com_text);
-                    tc.setText(list.get(i).getComment());
+                    tc.setText(comment);
                     TextView tt = (TextView) view.findViewById(R.id.com_time);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(list.get(i).getComTime());
