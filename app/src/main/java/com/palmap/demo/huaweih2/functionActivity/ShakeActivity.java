@@ -36,12 +36,14 @@ public class ShakeActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
