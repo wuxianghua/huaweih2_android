@@ -6,7 +6,7 @@ package com.palmap.demo.huaweih2.util;
  */
 public class VisitorHelper {
 
-    final static String[] names = new String[]{
+    private final static String[] names = new String[]{
             "舒凝芙", "李念烟", "李白山", "何从灵", "邓尔芙",
             "李迎蓉", "徐念寒", "张翠绿", "张翠芙", "刘靖儿",
             "张妙柏", "谢千凝", "谢小珍", "李雪枫", "王夏菡",
@@ -21,19 +21,11 @@ public class VisitorHelper {
             "叶浩宇", "刘瑾瑜", "吴皓轩", "江擎苍", "温擎宇"
     };
 
-    public final static String createName(int position) {
+    public static String createName(int position) {
         if (position < names.length) {
             position += 3306;
         }
         return names[position % names.length];
-    }
-
-    public static void main(String[] args) {
-        int pos = 0;
-        while (pos < 1000) {
-            System.out.println(createName(pos));
-            pos++;
-        }
     }
 
 }
