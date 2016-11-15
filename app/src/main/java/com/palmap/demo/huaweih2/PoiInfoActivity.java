@@ -77,6 +77,8 @@ public class PoiInfoActivity extends BaseActivity {
 
                 SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
                 shareModel.urlBmp = cobitmap;
+                shareModel.text = "华为ICS实验室室内定位解决方案";
+                shareModel.title = "华为ICS实验室";
                 shareModel.imgUrl = bitmapPath;
 
                 SharePopView.showSharePop(PoiInfoActivity.this, shareModel, QQShareUtils.TYPE_LOCAL);

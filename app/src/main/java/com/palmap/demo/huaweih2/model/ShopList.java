@@ -27,8 +27,7 @@ public class ShopList {
     Shop shop33 = new Shop("美食","","龙岗区坂田街道（华为H2基地）","",213);
 
     shopList = new ArrayList<>();
-    shopList.add(shop11);
-    shopList.add(shop4);
+
     shopList.add(shop22);
     shopList.add(shop10);
     shopList.add(shop33);
@@ -40,7 +39,8 @@ public class ShopList {
     shopList.add(shop6);
     shopList.add(shop3);
     shopList.add(shop1);
-
+    shopList.add(shop11);
+    shopList.add(shop4);
 
 
 
