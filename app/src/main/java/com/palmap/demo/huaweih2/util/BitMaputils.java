@@ -3,6 +3,9 @@ package com.palmap.demo.huaweih2.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 /**
  * Created by 王天明 on 2016/11/15.
  */
@@ -60,6 +63,22 @@ public class BitMaputils {
         options.inJustDecodeBounds = false;
 
         return BitmapFactory.decodeFile(filePath, options);
+    }
+
+
+    public static void saveBitmap(Bitmap bitmap,String path) {
+        File f = new File(path);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 65, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

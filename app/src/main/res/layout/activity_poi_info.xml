@@ -53,11 +53,29 @@
 
     </RelativeLayout>
 
+
+    <View
+        android:id="@+id/center"
+        android:layout_centerHorizontal="true"
+        android:layout_width="1dp"
+        android:layout_height="match_parent" />
+
     <ImageView
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/center"
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/co"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/ico_infor_close"/>
+        android:src="@drawable/ico_infor_close"/>
+
+    <ImageView
+        android:id="@+id/share"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/center"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_below="@+id/co"
+        android:src="@mipmap/shake_share_icon"/>
+
 </RelativeLayout>

@@ -117,9 +117,6 @@
         android:layout_alignParentStart="true">
 
 
-
-
-
         <RelativeLayout
             android:layout_centerHorizontal="true"
             android:clipChildren="false"
