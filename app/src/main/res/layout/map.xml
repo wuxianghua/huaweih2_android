@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/infor_welcome_2"/>
+            android:background="@drawable/infor_welcome_2"/>
 
 
         <RelativeLayout

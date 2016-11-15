@@ -776,7 +776,7 @@ public class MainActivity extends BaseActivity {
             name = PoiImgList.getName(MapParamUtils.getCategoryId(feature));
 
         if (isSearchCar) {
-            tv_poi_name.setText("您的爱车" + fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H152"));
+            tv_poi_name.setText("请您行至大楼中心电梯处至B1层\n您的爱车" + fragmentMap.parkInfo.getCarNum() + "停在" + (name == null ? "未知位置" : "H152"));
             im_go.setVisibility(View.GONE);
         } else {
             tv_poi_name.setText(name == null ? "H2大楼" : name);
@@ -826,9 +826,8 @@ public class MainActivity extends BaseActivity {
                 fragmentMap.toFloorID = Feature.planar_graph.get(feature);
 
 
-                if (fragmentMap.hasLocated) {//有定位点
-//          showSelectStartPoint(feature);
-
+                if (fragmentMap.hasLocated&&FragmentMap.mCurrentFloor==FLOOR_ID_F1) {//有定位点
+//                  showSelectStartPoint(feature);
 
                     double x = LocateTimerService.curX;
                     double y = LocateTimerService.curY;

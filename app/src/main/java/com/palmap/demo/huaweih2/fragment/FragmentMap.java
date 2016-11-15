@@ -1223,24 +1223,35 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                     closeProgress();
 
                 if (isSearchCar && !isNavigateCar)
-                    findCar();
+                    findCar(3000);
 
                 if (mCurrentFloor == FLOOR_ID_F1) {
                     mMapView.visibleLayerFeature("Area_text", "display", new Value("ICS办公区"), false);
                     initMapScale();
                 }
 
-                if (!hasChoosenFootPrint) {
-                    mContext.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+
+
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (!hasChoosenFootPrint) {
                             if (mContext.shouldShow2choose1) {
-//                mContext.dialog.setVisibility(View.VISIBLE);
                                 hasChoosenFootPrint = true;
                             }
                         }
-                    });
-                }
+
+                        if (isNavigating){
+                            mContext.poiInfoBar.setVisibility(View.VISIBLE);
+                            mContext.hideTabMenu();
+                        }
+
+                    }
+                });
+
+
+
 
                 if (isShowSearchResult) {
                     isShowSearchResult = false;
@@ -1256,6 +1267,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                         }
                     }, 1000);
                 }
+
+
 
                 isLoadingMap = false;
             }
@@ -1699,8 +1712,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             showRedPoiMark(Constant.ICS实验室, x[2], y[2]);
 
         } else if (会议室.equals(name)) {
-            if (!isShowFootPrint)
-                showPush(Constant.H2大厅);
+//            if (!isShowFootPrint)
+//                showPush(Constant.H2大厅);
 
             showRedPoiMark(Constant.会议室, x[1], y[1]);
         } else if (ICS办公区.equals(name)) {
@@ -1966,6 +1979,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 if (navigateState == NavigateManager.NavigateState.ok
                         || navigateState == NavigateManager.NavigateState.CLIP_NAVIGATE_SUCCESS
                         || navigateState == NavigateManager.NavigateState.SWITCH_NAVIGATE_SUCCESS) {
+
+                    if (navigateLayer!=null&&navigateLayer.getRef_Count()>0)
                     navigateLayer.clearFeatures();  //先把之前的导航线清理掉
 
 
@@ -2463,7 +2478,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //    mB1.setVisibility(View.VISIBLE);
         if (mCurrentFloor == Constant.FLOOR_ID_B1) {
             if (isSearchCar)
-                findCar();
+                findCar(1000);
         } else {
             loadMap(Constant.FLOOR_ID_B1);
         }
@@ -2473,30 +2488,38 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
 
 
-    private void findCar() {
+    private void findCar(long delay) {
 
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+//        mMapView.setOnChangePlanarGraph(new MapView.OnChangePlanarGraph() {
+//            @Override
+//            public void onChangePlanarGraph(PlanarGraph planarGraph, PlanarGraph planarGraph1, long l, long l1) {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
-                mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
+                        Coordinate c = new Coordinate(12697135.554500, 2588880.529500);
+                        mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
 
-                mMapView.getOverlayController().refresh();
+                        mMapView.getOverlayController().refresh();
 
-                Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
-                final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
-                mContext.setPoiInfoBar(feature);
-                mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
-                mSearch.setVisibility(View.GONE);
-                mShoot.setVisibility(View.GONE);
-                mF1.setVisibility(View.GONE);
-                mB1.setVisibility(View.GONE);
-                mLocation.setVisibility(View.GONE);
+                        Types.Point point = mMapView.converToScreenCoordinate(12697134.8545d, 2588907.3669d);
 
-                startNavigateInPark();
-                closeProgress();
+
+                        final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
+                        mContext.setPoiInfoBar(feature);
+                        mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
+                        mSearch.setVisibility(View.GONE);
+                        mShoot.setVisibility(View.GONE);
+                        mF1.setVisibility(View.GONE);
+                        mB1.setVisibility(View.GONE);
+                        mLocation.setVisibility(View.GONE);
+
+                        startNavigateInPark();
+                        closeProgress();
+                    }
+                },delay);
             }
-        });
-    }
+
+//        });
+//    }
 }
