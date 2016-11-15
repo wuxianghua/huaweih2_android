@@ -115,13 +115,13 @@ public class Constant {
 
   public static boolean useTestServer = false;//是否使用内网测试服务器
 //  public static boolean openLocateTest = false;//开启本地定位测试
-  public static boolean openLocateTest = true;//开启本地定位测试
+  public static boolean openLocateTest = false;//开启本地定位测试
 
   public static boolean usePhoneIp = true;
 
   public static String testIp = "10.1.137.118";
 
-  public static long LOCATE_FRESH_TIME = 6000;//定位间隔时间
+  public static long LOCATE_FRESH_TIME = 2000;//定位间隔时间
 
   public static final double NAV_MIN_DISTANCE = 2.0;
 

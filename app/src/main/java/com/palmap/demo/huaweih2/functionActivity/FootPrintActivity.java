@@ -55,7 +55,7 @@ public class FootPrintActivity extends BaseActivity {
 
 
         ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.drawable.ico_nav_share);
+        imageView.setImageResource(R.drawable.ico_tab_share);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +64,8 @@ public class FootPrintActivity extends BaseActivity {
 //                        );
                 SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
                 shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
+                shareModel.imgUrl = "http://www.wandoujia.com/apps/com.palmap.demo.huaweih2";
+                shareModel.title = "华为ICS实验室室内定位解决方案";
                 SharePopView.showSharePop(FootPrintActivity.this,
                         shareModel);
             }

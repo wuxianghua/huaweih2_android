@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#292c2d">
+    android:background="#F0F5F8">
+    <!--292c2d-->
 
     <!--<FrameLayout-->
     <!--android:layout_width="match_parent"-->
@@ -132,7 +133,7 @@
                 android:scaleType="fitXY"
                 android:layout_marginTop="128dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/shakeit_map" />
+                android:src="@drawable/shakeit_map_old" />
 
             <ImageView
                 android:id="@+id/img_up"

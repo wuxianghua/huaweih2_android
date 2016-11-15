@@ -33,9 +33,11 @@ public class QQShareUtils {
     params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     params.putString(QQShare.SHARE_TO_QQ_TITLE, shareModel.title);
     params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");
-    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  "https://www.pgyer.com/nkee");
+    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  "http://www.wandoujia.com/apps/com.palmap.demo.huaweih2");
     params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,shareModel.imgUrl);
     params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "ICS室内定位");
+    params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,  shareModel.imgUrl);
+
 //    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,"其他附加功能");
     mTencent.shareToQQ(context, params, new BaseUiListener());
   }
