@@ -538,6 +538,9 @@ public class MainActivity extends BaseActivity {
 
     public void showCarOnMap() {
 //    showMap();
+        if (fragmentMap == null) {
+            return;
+        }
         hideTabMenu();
 //    fragmentMap.mMapView.setVisibility(View.VISIBLE);
 //    mMapContainer.setVisibility(View.VISIBLE);
