@@ -264,7 +264,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     private boolean canPush = true;//是否显示欢迎信息
     private int isSearch4Poi = -1;
     private boolean hasShowArriveEnd = false;//
-
+    private boolean hasAddRedMark = true;//地图切行程是否添加红气泡
 
     public void doResult(int action) {
 
@@ -279,7 +279,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             case UP:
                 break;
             case DOWN:
-                hideFootInfo();
+//                hideFootInfo();
                 break;
         }
     }
@@ -689,8 +689,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     public void showRedPoiMark(String name, double x, double y) {
         if (currentRedMark != null) {
-            if (currentRedMark.getName().equals(name))
-                return;
+            if (currentRedMark.getName().equals(name)) {
+                if (isShowFootPrint&&!hasAddRedMark) {
+                    hasAddRedMark = true;
+                }else {
+                    return;
+                }
+            }
             else
                 mMapView.removeOverlay(currentRedMark);
         }
@@ -2322,12 +2327,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     public void setFootPrint() {
 
+        hasAddRedMark = false;
+        isShowFootPrint = true;
         startNavigateInFoot();
 //    mContext.foot_up.setVisibility(View.GONE);
         footInfo.setVisibility(View.VISIBLE);
 
         initMapScale();
-        isShowFootPrint = true;
         mContext.hideTabMenu();
         hideSomeIcon();
         mContext.titleBar.show(null, "行程", null);

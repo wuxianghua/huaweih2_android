@@ -1,7 +1,7 @@
 package com.palmap.demo.huaweih2.functionActivity;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +15,7 @@ import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.BitMaputils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
@@ -28,6 +29,8 @@ public class FootPrintActivity extends BaseActivity {
 
     private TitleBar titleBar;
     FragmentFootPrint fragmentFootPrint;
+    Bitmap temBitmap;
+    Bitmap cobitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,6 @@ public class FootPrintActivity extends BaseActivity {
         });
         fragmentFootPrint = (FragmentFootPrint) getFragmentManager().findFragmentById(R.id.layout_fragment);
 
-
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.drawable.ico_tab_share);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -65,15 +67,74 @@ public class FootPrintActivity extends BaseActivity {
 //                        null,
 //                        );
                 SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
-                shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
-                shareModel.imgUrl = Environment.getExternalStorageDirectory()+"/"+Constant.LUR_NAME+"/share_img.jpg";
-                shareModel.title = "华为ICS实验室室内定位解决方案";
+//                shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
+
+
+                View coView = fragmentFootPrint.getBitMapView();
+                coView.setDrawingCacheEnabled(true);
+                cobitmap = coView.getDrawingCache();
+                // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
+                cobitmap = Bitmap.createBitmap(cobitmap);
+                coView.setDrawingCacheEnabled(false);
+                String bitmapPath = Environment.getExternalStorageDirectory() + File.separator
+                    + "coBitmap";
+                BitMaputils.saveBitmap(cobitmap,bitmapPath);
+
+                shareModel.imgUrl = bitmapPath;
+                shareModel.urlBmp = cobitmap;
+                shareModel.text = "华为ICS实验室室内定位解决方案";
+                shareModel.title = "华为ICS实验室";
                 SharePopView.showSharePop(FootPrintActivity.this,shareModel, QQShareUtils.TYPE_LOCAL);
             }
         });
         titleBar.addRightExtendView(imageView);
 
     }
+
+
+//    private Bitmap getScreenShoot(){
+//        View coView = fragmentFootPrint.getBitMapView();
+//        coView.setDrawingCacheEnabled(true);
+//        cobitmap = coView.getDrawingCache();
+//        // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
+//        cobitmap = Bitmap.createBitmap(cobitmap);
+//        coView.setDrawingCacheEnabled(false);
+//        String bitmapPath = Environment.getExternalStorageDirectory() + File.separator
+//            + "coBitmap";
+//        BitMaputils.saveBitmap(cobitmap,bitmapPath);
+//
+//
+////        //获取当前屏幕的大小
+////        int width = getWindow().getDecorView().getRootView().getWidth();
+////        int height = getWindow().getDecorView().getRootView().getHeight();
+////        //生成相同大小的图片
+////        temBitmap = Bitmap.createBitmap( width, height, Bitmap.Config.RGB_565);
+////        //找到当前页面的跟布局
+////        View view =  getWindow().getDecorView().getRootView();
+////        //设置缓存
+////        view.setDrawingCacheEnabled(true);
+////        view.buildDrawingCache();
+////        //从缓存中获取当前屏幕的图片
+////        temBitmap = view.getDrawingCache();
+//
+////        //输出到sd卡
+////        if (FileIOUtil.getExistStorage()) {
+////            FileIOUtil.GetInstance().onFolderAnalysis(FileIOUtil.GetInstance().getFilePathAndName());
+////            File file = new File(FileIOUtil.GetInstance().getFilePathAndName());
+////            try {
+////                if (!file.exists()) {
+////                    file.createNewFile();
+////                }
+////                FileOutputStream foStream = new FileOutputStream(file);
+////                temBitmap.compress(Bitmap.CompressFormat.PNG, 100, foStream);
+////                foStream.flush();
+////                foStream.close();
+////            } catch (Exception e) {
+////                Log.i("Show", e.toString());
+////            }
+////        }
+//        return temBitmap;
+//    }
 
     public void openCameraActivity() {
         Intent intent = new Intent();
@@ -137,8 +198,18 @@ public class FootPrintActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (temBitmap!=null&&!temBitmap.isRecycled())
+            temBitmap.recycle();
+        if (cobitmap!=null&&!cobitmap.isRecycled())
+            cobitmap.recycle();
+    }
 
-//    @Override
+
+
+    //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        switch (requestCode) {
 //

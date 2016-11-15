@@ -59,6 +59,10 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
     private FootComListAdapter footComListAdapter;
 
 
+    public View getBitMapView(){
+        return refreshScrollView;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
