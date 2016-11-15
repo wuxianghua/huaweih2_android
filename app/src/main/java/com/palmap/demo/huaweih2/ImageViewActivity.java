@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -94,7 +93,13 @@ public class ImageViewActivity extends Activity {
             @Override
             public void onPageSelected(int position) {
                 currentPos = position;
-                tvTime.setText(dateFormat.format(new Date(pictureModelList.get(position).getUpdtime())));
+
+                if (pictureModelList.get(position).getUpdtime() == -1) {
+                    tvTime.setText(null);
+                } else {
+                    tvTime.setText(dateFormat.format(new Date(pictureModelList.get(position).getUpdtime())));
+                }
+
                 tvDetails.setText(pictureModelList.get(position).getAppendix());
                 tvLocation.setText(pictureModelList.get(position).getLocation());
             }
@@ -107,7 +112,11 @@ public class ImageViewActivity extends Activity {
         imgPager.setCurrentItem(currentPos);
 
         if (currentPos == 0) {
-            tvTime.setText(dateFormat.format(new Date(pictureModelList.get(currentPos).getUpdtime())));
+            if (pictureModelList.get(currentPos).getUpdtime() == -1) {
+                tvTime.setText(null);
+            } else {
+                tvTime.setText(dateFormat.format(new Date(pictureModelList.get(currentPos).getUpdtime())));
+            }
             tvDetails.setText(pictureModelList.get(currentPos).getAppendix());
             tvLocation.setText(pictureModelList.get(currentPos).getLocation());
         }
@@ -142,7 +151,7 @@ public class ImageViewActivity extends Activity {
                             }
                             shareModel.urlBmp = myBitmap;
                             shareModel.title = "ICS足迹分享";
-                            shareModel.imgUrl =  pictureModelList.get(currentPos).getPhoto();
+                            shareModel.imgUrl = pictureModelList.get(currentPos).getPhoto();
                             shareModel.text = pictureModelList.get(currentPos).getAppendix();
 
                             SharePopView.showSharePop(ImageViewActivity.this, shareModel, QQShareUtils.TYPE_NET);
@@ -173,7 +182,9 @@ public class ImageViewActivity extends Activity {
 //            String text = imgList.get(position);
             String url = pictureModelList.get(position).getPhoto();
             RecyclableImageView img = new RecyclableImageView(ImageViewActivity.this);
-            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+//            img.setScaleType(ImageView.ScaleType.FIT_XY);
+//            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             getBM(url, img, container, position);
             return img;
         }
@@ -184,42 +195,75 @@ public class ImageViewActivity extends Activity {
         }
 
         private void getBM(final String url, final RecyclableImageView img, final ViewGroup container, final int position) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Looper.prepare();
-                    myHandler.post(new Runnable() {
+            switch (url) {
+                case Constant.ICS办公区:
+                    Glide.with(ImageViewActivity.this).load(R.mipmap.ics_office)
+                            .into(img);
+                    container.addView(img, 0);
+                    break;
+                case Constant.ICS实验室:
+                    Glide.with(ImageViewActivity.this).load(R.mipmap.ics_laboratory)
+                            .into(img);
+                    container.addView(img, 0);
+                    break;
+
+                case Constant.H2大楼:
+                    Glide.with(ImageViewActivity.this).load(R.mipmap.ics_building)
+                            .into(img);
+                    container.addView(img, 0);
+                    break;
+
+                case Constant.会议室:
+                    Glide.with(ImageViewActivity.this).load(R.mipmap.ics_meeting_room)
+                            .into(img);
+                    container.addView(img, 0);
+                    break;
+
+                case Constant.H2大厅:
+                    Glide.with(ImageViewActivity.this).load(R.mipmap.ics_h2_dating)
+                            .into(img);
+                    container.addView(img, 0);
+                    break;
+
+                default:
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //开始加载的时候执行
-                            starProgressDialog();
+                            Looper.prepare();
+                            myHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //开始加载的时候执行
+                                    starProgressDialog();
 
-                            Glide.with(ImageViewActivity.this).load(url).centerCrop()
-                                    .into(new SimpleTarget<GlideDrawable>() {
-                                        @Override
-                                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                                            img.setImageDrawable(resource);
-                                            closeProgressDialog();
-                                        }
+                                    Glide.with(ImageViewActivity.this).load(url).centerCrop()
+                                            .into(new SimpleTarget<GlideDrawable>() {
+                                                @Override
+                                                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                                    img.setImageDrawable(resource);
+                                                    closeProgressDialog();
+                                                }
 
+                                                @Override
+                                                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                                    super.onLoadFailed(e, errorDrawable);
+                                                    closeProgressDialog();
+                                                }
+                                            });
+                                    img.setOnClickListener(new View.OnClickListener() {
                                         @Override
-                                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                            super.onLoadFailed(e, errorDrawable);
-                                            closeProgressDialog();
+                                        public void onClick(View v) {
+                                            ImageViewActivity.this.finish();
                                         }
                                     });
-                            img.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    ImageViewActivity.this.finish();
+                                    container.addView(img, 0);
                                 }
                             });
-                            container.addView(img, 0);
+                            Looper.loop();
                         }
-                    });
-                    Looper.loop();
-                }
-            }).start();
+                    }).start();
+                    break;
+            }
         }
 
         private void starProgressDialog() {

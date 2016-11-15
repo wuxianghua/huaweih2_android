@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
 import com.palmap.demo.huaweih2.adapter.ImageAlbumAdapter;
@@ -131,12 +132,21 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
             @Override
             public void onComplete(final Object content) {
 
-                pictureModelList = JsonUtils.getPictureModel(content);
-                if (pictureModelList == null || pictureModelList.size() <= 0) {
+                ArrayList<PictureModel> pictureModels  = (ArrayList<PictureModel>) JsonUtils.getPictureModel(content);
+                if (pictureModels == null || pictureModels.size() <= 0) {
                     DialogUtils.showShortToast("没有照片");
                     return;
                 }
 
+                PictureModel pictureModel = new PictureModel();
+                pictureModel.setLocation(location);
+                pictureModel.setPhoto(location);
+                pictureModel.setUpdtime(-1);
+                pictureModel.setAppendix(null);
+
+                pictureModelList = new ArrayList<>();
+                pictureModelList.add(pictureModel);
+                pictureModelList.addAll(pictureModels);
 
                 int current = start;
                 for (; start < (Constant.EACH_TIME_PICTURE_NUM + current) && start < pictureModelList.size(); start++) {
@@ -153,9 +163,12 @@ public class ImageAlbumActivity extends BaseActivity implements PullToRefreshBas
 
                         Intent intent = new Intent(ImageAlbumActivity.this, ImageViewActivity.class);
 //                intent.putStringArrayListExtra("imgList",  imageAlbumAdapter.getImageUrl());
-                        intent.putExtra("imgListJson", content.toString());
-                        intent.putExtra("itemIndex",
-                                position);
+
+
+
+//                        intent.putExtra("imgListJson", content.toString());
+                        intent.putExtra("imgListJson", JSONArray.toJSON(pictureModelList).toString());
+                        intent.putExtra("itemIndex", position);
 
 //                        Intent intent = new Intent(ImageAlbumActivity.this, FootprintDetailsActivity.class);
 //
