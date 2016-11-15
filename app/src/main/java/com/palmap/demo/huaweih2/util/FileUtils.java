@@ -33,7 +33,6 @@ public class FileUtils {
  * */
   public static boolean checkoutSDCard() {
     boolean MOUNTED = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-
 //    boolean HASDIR = Environment.getExternalStorageDirectory().exists();
 
     return MOUNTED;//||HASDIR;

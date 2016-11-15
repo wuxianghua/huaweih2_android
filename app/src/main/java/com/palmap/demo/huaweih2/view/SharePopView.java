@@ -22,6 +22,7 @@ import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 public class SharePopView {
 
     private static Activity mContext = null;
+    private static int type = 0;
     public static class ShareModel{
         public String title;
         public String text;
@@ -29,7 +30,7 @@ public class SharePopView {
         public Bitmap urlBmp;
     }
 
-    public static void showSharePop(Activity context,ShareModel shareModel) {
+    public static void showSharePop(Activity context,ShareModel shareModel,int t) {
 
         ContentPopWindow popupWindow = new ContentPopWindow(context,shareModel);
 
@@ -37,6 +38,7 @@ public class SharePopView {
                 Gravity.BOTTOM, 0, 0);
 
         mContext = context;
+        type = t;
     }
 
     private static class ContentPopWindow extends PopupWindow implements View.OnClickListener{
@@ -117,7 +119,7 @@ public class SharePopView {
 
                 case R.id.layout_share_qq:
                     //分享到QQ
-                    QQShareUtils.getInstance().shareToQQ(mContext,shareModel);
+                    QQShareUtils.getInstance().shareToQQ(mContext,shareModel,type);
 //                    QQShareUtils.getInstance().shareToQzone(mContext,shareModel);
                     break;
             }

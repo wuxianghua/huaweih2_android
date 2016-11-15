@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
@@ -64,10 +66,9 @@ public class FootPrintActivity extends BaseActivity {
 //                        );
                 SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
                 shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
-                shareModel.imgUrl = "http://www.wandoujia.com/apps/com.palmap.demo.huaweih2";
+                shareModel.imgUrl = Environment.getExternalStorageDirectory()+"/"+Constant.LUR_NAME+"/share_img.jpg";
                 shareModel.title = "华为ICS实验室室内定位解决方案";
-                SharePopView.showSharePop(FootPrintActivity.this,
-                        shareModel);
+                SharePopView.showSharePop(FootPrintActivity.this,shareModel, QQShareUtils.TYPE_LOCAL);
             }
         });
         titleBar.addRightExtendView(imageView);

@@ -1637,6 +1637,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             mMapView.removeOverlay(currentClickMark);
 
         if (currentPoiMarks != null) {
+            refeshPoiFilter(0);
             for (int i = 0; i < currentPoiMarks.size(); i++)
                 mMapView.removeOverlay(currentPoiMarks.get(i));
         }

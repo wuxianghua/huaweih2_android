@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.palmap.demo.huaweih2.json.PictureModel;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.JsonUtils;
+import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.ShareUtils;
 import com.palmap.demo.huaweih2.view.CustomerViewPager;
 import com.palmap.demo.huaweih2.view.MyProgressDialog;
@@ -141,9 +142,10 @@ public class ImageViewActivity extends Activity {
                             }
                             shareModel.urlBmp = myBitmap;
                             shareModel.title = "ICS足迹分享";
+                            shareModel.imgUrl =  pictureModelList.get(currentPos).getPhoto();
                             shareModel.text = pictureModelList.get(currentPos).getAppendix();
 
-                            SharePopView.showSharePop(ImageViewActivity.this, shareModel);
+                            SharePopView.showSharePop(ImageViewActivity.this, shareModel, QQShareUtils.TYPE_NET);
                         }
                         Looper.loop();
                     }

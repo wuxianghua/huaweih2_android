@@ -17,6 +17,9 @@ public class QQShareUtils {
   private static final String APP_ID = "1105764370";
   private static Tencent mTencent;
   static QQShareUtils instance = new QQShareUtils();
+  public static int TYPE_LOCAL = 0;
+  public static int TYPE_NET = 1;
+
 
   public static QQShareUtils getInstance() {
     return instance;
@@ -26,19 +29,25 @@ public class QQShareUtils {
     mTencent = Tencent.createInstance(APP_ID, context);
   }
 
-  public void shareToQQ(Activity context, SharePopView.ShareModel shareModel)
+  public void shareToQQ(Activity context, SharePopView.ShareModel shareModel,int type)
   {
 //    String imgUrl = Environment.getExternalStorageDirectory() + File.separator + Constant.LUR_NAME+"/applogo.png";
     final Bundle params = new Bundle();
-    params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-    params.putString(QQShare.SHARE_TO_QQ_TITLE, shareModel.title);
-    params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");
-    params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  "http://www.wandoujia.com/apps/com.palmap.demo.huaweih2");
-    params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,shareModel.imgUrl);
-    params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "ICS室内定位");
-    params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,  shareModel.imgUrl);
 
-//    params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,"其他附加功能");
+    if (type == TYPE_LOCAL){
+      params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
+      params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");
+      params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,shareModel.imgUrl);
+      params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "ICS室内定位");
+    }
+    else{
+      params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+      params.putString(QQShare.SHARE_TO_QQ_TITLE, shareModel.title);
+      params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  "华为ICS实验室");
+      params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  shareModel.imgUrl);
+      params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,shareModel.imgUrl);
+      params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  "ICS室内定位");
+    }
     mTencent.shareToQQ(context, params, new BaseUiListener());
   }
 
