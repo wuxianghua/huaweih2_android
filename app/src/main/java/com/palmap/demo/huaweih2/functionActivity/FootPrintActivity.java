@@ -95,6 +95,16 @@ public class FootPrintActivity extends BaseActivity {
                 if (fragmentFootPrint != null)
                     fragmentFootPrint.loadPicNum();
                 break;
+//            case Constant.startUploadText:
+//                if (fragmentFootPrint.commentList == null) {
+//                    break;
+//                }
+//                if (resultCode == RESULT_OK) {
+//                    fragmentFootPrint.commentList.removeAllViews();
+//                    fragmentFootPrint.start = 0;
+//                    fragmentFootPrint.loadComments();
+//                }
+//                break;
             default:
                 break;
         }
@@ -104,4 +114,18 @@ public class FootPrintActivity extends BaseActivity {
 
     }
 
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//
+//
+//            default:
+//                break;
+//        }
+//
+//
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//    }
 }

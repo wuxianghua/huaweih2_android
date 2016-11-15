@@ -2065,6 +2065,8 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
             navigateManager.drop();
             navigateManager = null;
             mMapView.removeLayer(navigateLayer);
+            navigateManager = null;
+            navigateLayer = null;
         }
         if (startFeatureID != -1) {
             resetFeatureStyle(startFeatureID);
@@ -2489,7 +2491,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapView.moveToPoint(c);//不能加动画否则converToScreenCoordinate不对
 //    mMapView.zoom(3);//放大
 
-        //   initMapScale();
+     //   initMapScale();
 
         mMapView.getOverlayController().refresh();
 
@@ -2507,6 +2509,11 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 final Feature feature = mMapView.selectFeature((float) point.x, (float) point.y);
                 mContext.setPoiInfoBar(feature);
                 mContext.showPoiInfoBar(MapParamUtils.getCategoryId(feature), endName);
+                mSearch.setVisibility(View.GONE);
+                mShoot.setVisibility(View.GONE);
+                mF1.setVisibility(View.GONE);
+                mB1.setVisibility(View.GONE);
+                mLocation.setVisibility(View.GONE);
             }
         });
 

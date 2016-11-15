@@ -164,7 +164,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-
     }
 
     private void checkFirstRun() {
