@@ -9,12 +9,15 @@ import android.util.Log;
 public class LogUtils {
 
   public static void i(String msg){
+    if (msg!=null)
     Log.i("palmap",msg);
   }
   public static void d(String msg){
+    if (msg!=null)
     Log.d("palmap",msg);
   }
   public static void e(String msg){
+    if (msg!=null)
     Log.e("palmap",msg);
   }
 }

@@ -240,7 +240,7 @@ public class FragmentShake extends BaseFragment {
                     startAnim();
                     playMp3();
                     poiInfo = new PoiInfo();
-                    poiInfo.setText("华为ICS实验室成立于2010年，2016年完成改造升级。整个实验室分成两个部分，外部为展厅，主要展示华为ICS方案；后侧为设备去，已搭建完善的测试环境，实现各种应用场景、各种移动应用业务、多厂商、多系统解决方案的端到端预集成及测试验证。");
+                    poiInfo.setText("华为ICS实验室成立于2010年，2016年完成改造升级。整个实验室分成两个部分，外部为展厅，主要展示华为ICS方案；后侧为设备区，已搭建完善的测试环境，实现各种应用场景、各种移动应用业务、多厂商、多系统解决方案的端到端预集成及测试验证。");
                     poiInfo.setImage("http://106.75.7.212:9001/photo/laboratory@2x.png");
                     poiInfo.setTitle("ICS实验室");
                     LogUtils.e("直接加载实验室的摇一摇数据");

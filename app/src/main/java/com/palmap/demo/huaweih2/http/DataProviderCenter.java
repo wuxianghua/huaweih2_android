@@ -202,6 +202,10 @@ public class DataProviderCenter {
 * 接口：上传评论
 * */
   public void postFormDATA(File file, String jsonData, HttpDataCallBack callBack) {
-    mDataProvider.postFormDataProvider(URL_UPLOAD_IMAGE, file, jsonData == null ? null : jsonData, callBack);
+    if (Constant.useOkHttp){
+      OkHttpUtils.postFormData(URL_UPLOAD_IMAGE,file,jsonData,callBack);
+    }else {
+      mDataProvider.postFormDataProvider(URL_UPLOAD_IMAGE, file, jsonData == null ? null : jsonData, callBack);
+    }
   }
 }

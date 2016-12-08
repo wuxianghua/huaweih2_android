@@ -1,23 +1,29 @@
 package com.palmap.demo.huaweih2.functionActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.palmap.demo.huaweih2.BaseActivity;
+import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.BitMaputils;
+import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
@@ -55,7 +61,17 @@ public class FootPrintActivity extends BaseActivity {
         titleBar.setRightIcoClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openCameraActivity();
+                if (ActivityCompat.checkSelfPermission(FootPrintActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    DialogUtils.showShortToast("请在设置中开启相机权限", Gravity.CENTER);
+                    return;
+                }
+                String lo = LocateTimerService.getCurrentLocationArea();
+                if (lo.equals(Constant.其它)) {
+                    DialogUtils.showShortToast("没有获取到当前位置，不能拍照", Gravity.CENTER);
+                } else {
+                    openCameraActivity();
+                }
+
             }
         });
         fragmentFootPrint = (FragmentFootPrint) getFragmentManager().findFragmentById(R.id.layout_fragment);

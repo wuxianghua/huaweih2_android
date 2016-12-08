@@ -22,11 +22,16 @@ public class SearchResultAdapter extends BaseAdapter {
   private Context mContext;
   private List<LocationModel> mLocationList;
   private OnItemClickListener onItemClickListener;
+  private boolean canScroll = false;//排序结束前不能滑动
 
   public SearchResultAdapter(Context context, List<LocationModel> locationModels, OnItemClickListener onItemClickListener) {
     this.mContext = context;
     this.mLocationList = locationModels;
     this.onItemClickListener = onItemClickListener;
+  }
+
+  public void setCanScroll(boolean canScroll) {
+    this.canScroll = canScroll;
   }
 
   @Override
@@ -61,10 +66,16 @@ public class SearchResultAdapter extends BaseAdapter {
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
     }
+    if (mLocationList.get(position).getRef_Count()==1){//引用计数加一
+      mLocationList.get(position).obtain();
+    }
 
     // 设置控件内容
     String poiName = LocationModel.display.get(mLocationList.get(position));
-    if ("办公室".equals(poiName) || "会议室".equals(poiName)) {//加门牌号
+    if (poiName==null)
+      poiName = "H2大楼";
+
+    if ("办公室".equals(poiName) || "会议室".equals(poiName)||poiName.contains("办公区")) {//加门牌号
       String add = LocationModel.address.get(mLocationList.get(position));
       if (add!=null)
             poiName = poiName + "  " + add;
@@ -80,11 +91,10 @@ public class SearchResultAdapter extends BaseAdapter {
       viewHolder.floor.setText("H2");
     }
 
-
     viewHolder.item.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        onItemClickListener.onClicked(mLocationList.get(position));
+          onItemClickListener.onClicked(mLocationList.get(position));
       }
     });
 

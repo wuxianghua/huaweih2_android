@@ -3,6 +3,8 @@ package com.palmap.demo.huaweih2.http;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.palmap.demo.huaweih2.other.Constant;
+
 import org.apache.http.NameValuePair;
 
 import java.io.File;
@@ -19,34 +21,59 @@ public class DataProvider {
   /*
   * get请求
   * */
-  public void getProvider(String url, Map<String, String> heads, final HttpDataCallBack<Object> callBack){
-    AsyncHttp.getInstance().getRequest(url, heads, new HttpDataCallBack<Object>() {
-      @Override
-      public void onError(final int errorCode) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onError(errorCode);
-          }
-        });
-      }
+  public void getProvider(String url, Map<String, String> heads, final HttpDataCallBack<Object> callBack) {
+    if (Constant.useOkHttp) {
+      OkHttpUtils.get(url, new HttpDataCallBack<Object>() {
+        @Override
+        public void onError(final int errorCode) {
+          mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callBack.onError(errorCode);
+            }
+          });
+        }
 
-      @Override
-      public void onComplete(final Object content) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onComplete(content);
-          }
-        });
-      }
-    });
+        @Override
+        public void onComplete(final Object content) {
+          mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callBack.onComplete(content);
+            }
+          });
+        }
+      });
+    } else {
+
+      AsyncHttp.getInstance().getRequest(url, heads, new HttpDataCallBack<Object>() {
+        @Override
+        public void onError(final int errorCode) {
+          mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callBack.onError(errorCode);
+            }
+          });
+        }
+
+        @Override
+        public void onComplete(final Object content) {
+          mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+              callBack.onComplete(content);
+            }
+          });
+        }
+      });
+    }
   }
 
   /*
   * post请求
   * */
-  public void postProvider(String url, Map<String, String> heads, List<NameValuePair> pairList, final HttpDataCallBack callBack){
+  public void postProvider(String url, Map<String, String> heads, List<NameValuePair> pairList, final HttpDataCallBack callBack) {
     AsyncHttp.getInstance().postRequest(url, heads, pairList, new HttpDataCallBack<Object>() {
       @Override
       public void onError(final int errorCode) {
@@ -73,7 +100,7 @@ public class DataProvider {
   /*
   * post请求传递数据
   * */
-  public void postDataProvider(String url, Map<String,String> heads, byte[] data, final HttpDataCallBack callBack){
+  public void postDataProvider(String url, Map<String, String> heads, byte[] data, final HttpDataCallBack callBack) {
     AsyncHttp.getInstance().sendDataByPost(url, data, heads, new HttpDataCallBack() {
       @Override
       public void onError(final int errorCode) {
@@ -100,34 +127,8 @@ public class DataProvider {
   /*
   * post formdata数据
   * */
-  public void postFormDataProvider(String url, final File file, final String jsonData, final HttpDataCallBack callBack){
-    AsyncHttp.getInstance().uploadFile(url,file,jsonData,  new HttpDataCallBack() {
-      @Override
-      public void onError(final int errorCode) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onError(errorCode);
-          }
-        });
-      }
-
-      @Override
-      public void onComplete(final Object content) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onComplete(content);
-          }
-        });
-      }
-    });
-  }
-  /*
-  * put请求传递数据
-  * */
-  public void putDataProvider(String url, Map<String,String> heads, byte[] data, final HttpDataCallBack callBack){
-    AsyncHttp.getInstance().sendDataByPut(url, data, heads, new HttpDataCallBack() {
+  public void postFormDataProvider(String url, final File file, final String jsonData, final HttpDataCallBack callBack) {
+    AsyncHttp.getInstance().uploadFile(url, file, jsonData, new HttpDataCallBack() {
       @Override
       public void onError(final int errorCode) {
         mHandler.post(new Runnable() {
@@ -150,31 +151,7 @@ public class DataProvider {
     });
   }
 
-  /*
-  * delete请求
-  * */
-  public void deleteProvider(String url, Map<String,String> heads, final HttpDataCallBack callBack){
-    AsyncHttp.getInstance().deleteRequest(url, heads, new HttpDataCallBack() {
-      @Override
-      public void onError(final int errorCode) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onError(errorCode);
-          }
-        });
-      }
 
-      @Override
-      public void onComplete(final Object content) {
-        mHandler.post(new Runnable() {
-          @Override
-          public void run() {
-            callBack.onComplete(content);
-          }
-        });
-      }
-    });
-  }
+
 
 }

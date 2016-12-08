@@ -158,10 +158,23 @@ public class MainActivity extends BaseActivity {
             showCarOnMap();
         } else {
 //            showTabMenu();
-            if (isNavigating && !isSearchCar && !isShowFootPrint) {
-                fragmentMap.endNavigateInFootAndPark();
-//        fragmentMap.loadMap(FLOOR_ID_F1);
-            }
+//            if (isNavigating && !isSearchCar && !isShowFootPrint ) {
+//                fragmentMap.endNavigateInFootAndPark();
+////        fragmentMap.loadMap(FLOOR_ID_F1);
+//            }
+
+//            if (isSearchCar || isShowFootPrint) {
+//                fragmentMap.endNavigateInFootAndPark();
+//            }
+
+//            if (isShowFootPrint) {
+//                fragmentMap.resetFootPrint();
+//            }
+//
+//            if (isSearchCar) {
+//                fragmentMap.endNavigateInFootAndPark();
+//            }
+
         }
 
     }
@@ -287,9 +300,10 @@ public class MainActivity extends BaseActivity {
 
     public void initView() {
         if (!HuaWeiH2Application.firstRun) {
-            fragmentMap = new FragmentMap();
-            transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_content, fragmentMap).commit();
+//            fragmentMap = new FragmentMap();
+//            transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.main_content, fragmentMap).commit();'
+            initMapFragment();
         }
         poiInfoBar = (RelativeLayout) findViewById(R.id.poi_info);
         mMapContainer = (RelativeLayout) findViewById(R.id.map_container);
@@ -398,7 +412,7 @@ public class MainActivity extends BaseActivity {
         rout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fragmentMap.isShowFootPrint) {
+                if (isShowFootPrint) {
                     fragmentMap.resetFootPrint();
                 } else {
                     if (fragmentMap.mCurrentFloor == Constant.FLOOR_ID_B1) {//B1
@@ -561,6 +575,7 @@ public class MainActivity extends BaseActivity {
             public void onLeft() {
                 isSearchCar = false;
                 parkInfo = null;
+                fragmentMap.endNavigateInFootAndPark();
 //              finish();
                 startActivity(new Intent(MainActivity.this, FindCarActivity.class));
 //               showFragmentPark();
@@ -1064,9 +1079,9 @@ public class MainActivity extends BaseActivity {
                 exitBy2Click(); //调用双击退出函数
 
             } else {
-                if (isNavigating && !isSearchCar && !fragmentMap.isShowFootPrint) {
+                if (isNavigating && !isSearchCar && !isShowFootPrint) {
                     fragmentMap.endNavigate();
-                } else if (fragmentMap.isShowFootPrint) {
+                } else if (isShowFootPrint) {
                     fragmentMap.resetFootPrint();
                 } else if (isSearchCar) {
 

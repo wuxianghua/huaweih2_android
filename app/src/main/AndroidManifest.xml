@@ -34,9 +34,9 @@
         android:required="true" />
 
     <application
+        android:icon="@drawable/applogo"
         android:name=".HuaWeiH2Application"
         android:allowBackup="true"
-        android:icon="@drawable/applogo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

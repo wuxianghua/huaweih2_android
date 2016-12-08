@@ -100,10 +100,15 @@ public class ActivityPay extends BaseActivity implements View.OnClickListener {
             public void onRight() {
             }
         });
-        tv_car_num.setText(mParkInfo.getCarNum());
-        tv_car_pos.setText(mParkInfo.getArea() + "-" + mParkInfo.getCarPosition());
-        tv_car_hour.setText(mParkInfo.getHour());
-        tv_car_money.setText(mParkInfo.getMoney());
+
+        try {
+            tv_car_num.setText(mParkInfo.getCarNum());
+            tv_car_pos.setText(mParkInfo.getArea() + "-" + mParkInfo.getCarPosition());
+            tv_car_hour.setText(mParkInfo.getHour());
+            tv_car_money.setText(mParkInfo.getMoney());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

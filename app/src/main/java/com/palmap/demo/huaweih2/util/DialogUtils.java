@@ -3,6 +3,8 @@ package com.palmap.demo.huaweih2.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
@@ -17,18 +19,39 @@ import static android.widget.Toast.makeText;
  */
 
 public class DialogUtils {
-  public static void showShortToast(String msg){
-    makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
+  public static void showShortToast(final String msg){
+    Handler handler=new Handler(Looper.getMainLooper());
+    handler .post(new Runnable() {
+      @Override
+      public void run() {
+        makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
+      }
+    });
+
   }
 
-  public static void showShortToast(String msg,int locate){
-    Toast toast = Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT);
-    toast.setGravity(locate,0,-10);
-    toast.show();
+  public static void showShortToast(final String msg, final int locate){
+    Handler handler=new Handler(Looper.getMainLooper());
+    handler .post(new Runnable() {
+      @Override
+      public void run() {
+        Toast toast = Toast.makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(locate,0,-10);
+        toast.show();
+      }
+    });
+
   }
 
-  public static void showLongToast(String msg){
-    makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_LONG).show();
+  public static void showLongToast(final String msg){
+    Handler handler=new Handler(Looper.getMainLooper());
+    handler .post(new Runnable() {
+      @Override
+      public void run() {
+        makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
   // 定义一个显示消息的对话框,通过反射方式调用方法，目前只支持无参方法

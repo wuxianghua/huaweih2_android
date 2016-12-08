@@ -1,5 +1,6 @@
 package com.palmap.demo.huaweih2.http;
 
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
@@ -44,53 +45,59 @@ public class ErrorCode {
 
     public static void showError(final int code) {
 
-        if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
-            return;
-        }
+//        if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
+//            return;
+//        }
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                LogUtils.e("HTTP ErrorCode:" + code);
+                long during = System.currentTimeMillis() - timeStamp;
 
+                if (during < 20000)
+                    return;
 
-        LogUtils.e("HTTP ErrorCode:" + code);
-        long during = System.currentTimeMillis() - timeStamp;
+                timeStamp = System.currentTimeMillis();
 
-        if (during < 20000)
-            return;
+                if (code == CODE_NO_INTERNET) {
+                    DialogUtils.showShortToast("无网络连接");
+                    return;
+                }
+                if (code == CODE_EXCEPTION) {
+                    DialogUtils.showShortToast("网络错误");
+                    return;
 
-        timeStamp = System.currentTimeMillis();
+                }
+                if (code == CODE_REQUEST_ERROR) {
+                    DialogUtils.showShortToast("请求出错");
+                    return;
 
-        if (code == CODE_NO_INTERNET) {
-            DialogUtils.showShortToast("无网络连接");
-            return;
-        }
-        if (code == CODE_EXCEPTION) {
-            DialogUtils.showShortToast("网络错误");
-            return;
+                }
 
-        }
-        if (code == CODE_REQUEST_ERROR) {
-            DialogUtils.showShortToast("请求出错");
-            return;
+                if (code == CODE_IP_EEEOR) {
+                    DialogUtils.showShortToast("当前不在移动4G环境下,无法体验定位功能");
+                    return;
+                }
 
-        }
+                if (code == 204) {
+                    //      count++;
+                    //      if (count>15) {
+                    //        count = 0;
 
-        if (code == CODE_IP_EEEOR) {
-            DialogUtils.showShortToast("当前不在移动4G环境下,无法体验定位功能");
-            return;
-        }
-
-        if (code == 204) {
-            //      count++;
-            //      if (count>15) {
-            //        count = 0;
-
-            String ipType = IpUtils.getCurrentNetType(HuaWeiH2Application.instance);
-            if (!TextUtils.isEmpty(ipType) && !"4g".equals(ipType) && !"中国移动".equals(IpUtils.getCurrentNetType(HuaWeiH2Application.instance))) {
+                    String ipType = IpUtils.getCurrentNetType(HuaWeiH2Application.instance);
+                    if (!TextUtils.isEmpty(ipType) && !"4g".equals(ipType) && !"中国移动".equals(IpUtils.getCurrentNetType(HuaWeiH2Application.instance))) {
 //                DialogUtils.showShortToast("当前不在移动4G环境下,无法体验定位功能");
-                LogUtils.e("请在移动4G环境下体验");
-            }else{
-                DialogUtils.showShortToast(HuaWeiH2Application.userIp + "无定位数据");
+                        LogUtils.e("请在移动4G环境下体验");
+                    }else{
+                        DialogUtils.showShortToast(HuaWeiH2Application.userIp + "无定位数据");
+                    }
+                    return;
+                    //      }
+                }
             }
-            return;
-            //      }
-        }
+        });
+
+
     }
 }

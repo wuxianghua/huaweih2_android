@@ -1,13 +1,5 @@
 [
     {
-        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable\\indicator_bg_bottom.xml",
-        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable\\indicator_bg_bottom.xml"
-    },
-    {
-        "merged": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable\\indicator_bg_top.xml",
-        "source": "E:\\palmap\\h2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable\\indicator_bg_top.xml"
-    },
-    {
         "merged": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\debug\\drawable\\indicator_bg_top.xml",
         "source": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable\\indicator_bg_top.xml"
     },

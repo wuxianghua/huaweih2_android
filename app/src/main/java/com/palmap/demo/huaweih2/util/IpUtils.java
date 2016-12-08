@@ -16,13 +16,14 @@ import java.util.Enumeration;
  */
 
 public class IpUtils {
+
     public static String getIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    LogUtils.e("ip地址为:" + inetAddress.getHostAddress().toString());
+//                    LogUtils.e("ip地址为:" + inetAddress.getHostAddress().toString());
                     if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
                         //if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet6Address) {
                         return inetAddress.getHostAddress().toString();

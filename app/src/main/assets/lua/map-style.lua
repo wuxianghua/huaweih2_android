@@ -482,7 +482,8 @@ CONFIG = {
 
                             [1284129] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
                             [1284127] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
-
+                            [1583138]= Set2dColor('0x00fffff8', '0x00fffff8', 0);
+--                            [1583138]= Set2dColor('0xfff9cb9c', '0xfff9cb9c', 0);
 
                             [24002000] = Set2dColor('0xffc8dedc', '0xffe6f0ef', 0.05);
 

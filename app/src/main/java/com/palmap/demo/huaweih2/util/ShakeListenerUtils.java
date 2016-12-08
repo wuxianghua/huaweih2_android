@@ -54,8 +54,6 @@ public class ShakeListenerUtils implements SensorEventListener {
                             }
                         }, 3000);
                     }
-
-
                     return;
                 }
 

@@ -7,8 +7,7 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
  */
 
 public class Constant {
-//
-//
+
   public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统一
   // public static final String APP_KEY = "30497ca93a3b47bd841db8dced24878f";//h2
   public static final long MAP_ID = 1430L;
@@ -19,6 +18,12 @@ public class Constant {
 //  public static final long FLOOR_ID_F1 = 1003497L;//21楼
 //  public static final long FLOOR_ID_B1 = 1261980L;
 //  public static final long MAP_ID = 6L;
+
+
+//  public static final String APP_KEY = "f2f45191d86f4c55ae5de55eee12a83b";//江苏大剧院  好大
+//  public static final long FLOOR_ID_F1 = 1161159L;//1楼
+//  public static final long FLOOR_ID_B1 = 1162403L;
+//  public static final long MAP_ID = 1297L;
 
 
 
@@ -128,4 +133,5 @@ public class Constant {
   public static final double NAV_MIN_DISTANCE = 2.0;
 
   public static boolean useSystemShare = false;//是否使用系统分享
+  public static boolean useOkHttp = true;
 }

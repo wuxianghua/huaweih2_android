@@ -257,18 +257,6 @@ public class LocateTimerService extends Service {
             poiName = Constant.会议室;
 
 
-//    if (H2大厅.equals(poiName)) {
-//      poiName
-//    }else if (name.contains(ICS实验室)) {
-//      showPush(Constant.ICS实验室);
-//      showRedPoiMark(Constant.ICS实验室,x,y);
-//    } else if (会议室.equals(name)) {
-////      showPush(Constant.会议室);
-//      showRedPoiMark(Constant.会议室,x,y);
-//    } else if (ICS办公区.equals(name)) {
-////      showPush(Constant.ICS办公区);
-//      showRedPoiMark(Constant.ICS办公区,x,y);
-//    }
 
         return poiName;
     }
