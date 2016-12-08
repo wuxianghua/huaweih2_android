@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-fi\\values-fi.xml",
+        "outputFile": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-fi/values-fi.xml",
         "map": [
             {
                 "to": {
@@ -11,13 +11,13 @@
                     "endOffset": 141
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
-                        "startOffset": 412,
+                        "startOffset": 404,
                         "endColumn": 90,
-                        "endOffset": 498
+                        "endOffset": 490
                     }
                 }
             },
@@ -30,13 +30,13 @@
                     "endOffset": 255
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
-                        "startOffset": 613,
+                        "startOffset": 603,
                         "endColumn": 113,
-                        "endOffset": 722
+                        "endOffset": 712
                     }
                 }
             },
@@ -49,13 +49,13 @@
                     "endOffset": 363
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
-                        "startOffset": 504,
+                        "startOffset": 495,
                         "endColumn": 107,
-                        "endOffset": 607
+                        "endOffset": 598
                     }
                 }
             },
@@ -68,13 +68,13 @@
                     "endOffset": 442
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
-                        "startOffset": 59,
+                        "startOffset": 56,
                         "endColumn": 78,
-                        "endOffset": 133
+                        "endOffset": 130
                     }
                 }
             },
@@ -87,13 +87,13 @@
                     "endOffset": 516
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 221,
+                        "startOffset": 216,
                         "endColumn": 73,
-                        "endOffset": 290
+                        "endOffset": 285
                     }
                 }
             },
@@ -106,13 +106,13 @@
                     "endOffset": 597
                 },
                 "from": {
-                    "file": "D:\\gitCode\\huaweiH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\values-fi\\pull_refresh_strings.xml",
+                    "file": "/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/res/values-fi/pull_refresh_strings.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
-                        "startOffset": 139,
+                        "startOffset": 135,
                         "endColumn": 80,
-                        "endOffset": 215
+                        "endOffset": 211
                     }
                 }
             }

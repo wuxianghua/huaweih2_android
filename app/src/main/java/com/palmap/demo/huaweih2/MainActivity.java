@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.palmap.demo.huaweih2.fragment.FragmentAround;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
@@ -44,8 +43,6 @@ import com.palmaplus.nagrand.view.MapView;
 
 import java.io.File;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigateCar;
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.isNavigating;
@@ -109,11 +106,16 @@ public class MainActivity extends BaseActivity {
     ParkInfo parkInfo;
 //  private boolean showFindCar = false;
 
+    boolean isTrip = false;
+
+    public static MainActivity instance ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        instance = this;
 
         LocateTimerService.setmMainActivity(this);
         initStatusBar(R.color.black);
@@ -126,9 +128,13 @@ public class MainActivity extends BaseActivity {
             startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
         } else
             checkFirstRun();
-
+        Intent intent = getIntent();
+        if (null != intent.getExtras() && intent.getExtras().getBoolean("isTrip")) {
+            isTrip = true;
+        }
 
         initView();
+
     }
 
     @Override
@@ -233,6 +239,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         LocateTimerService.stop(this);
+        instance = null;
     }
 
     @Override
@@ -294,6 +301,7 @@ public class MainActivity extends BaseActivity {
 
     private void initMapFragment() {
         fragmentMap = new FragmentMap();//fang
+        fragmentMap.setIsTrip(isTrip);
         transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.main_content, fragmentMap).commit();
     }
@@ -851,7 +859,7 @@ public class MainActivity extends BaseActivity {
                 fragmentMap.toFloorID = Feature.planar_graph.get(feature);
 
 
-                if (fragmentMap.hasLocated&&FragmentMap.mCurrentFloor==FLOOR_ID_F1) {//有定位点
+                if (fragmentMap.hasLocated && FragmentMap.mCurrentFloor == FLOOR_ID_F1) {//有定位点
 //                  showSelectStartPoint(feature);
 
                     double x = LocateTimerService.curX;
@@ -1128,7 +1136,7 @@ public class MainActivity extends BaseActivity {
     private static Boolean isExit = false;
 
     private void exitBy2Click() {
-        Timer tExit = null;
+        /*Timer tExit = null;
         if (isExit == false) {
             isExit = true; // 准备退出
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -1143,7 +1151,8 @@ public class MainActivity extends BaseActivity {
         } else {
             finish();
             System.exit(0);
-        }
+        }*/
+        startActivity(new Intent(this,H2MainActivity.class));
     }
 
 

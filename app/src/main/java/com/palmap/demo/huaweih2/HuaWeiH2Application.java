@@ -8,6 +8,7 @@ import com.bugtags.library.BugtagsOptions;
 import com.facebook.stetho.Stetho;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
+import com.palmaplus.nagrand.core.Engine;
 import com.palmaplus.nagrand.data.PlanarGraph;
 
 /**
@@ -30,7 +31,7 @@ public class HuaWeiH2Application extends Application {
     instance = this;
     copyPalmapFile();
 
-
+    Engine.getInstance();
     if (BuildConfig.DEBUG) {
 
       Stetho.initialize(

@@ -44,7 +44,12 @@
         <activity
             android:name=".WelcomeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".H2MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
 
+        </activity>
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -55,6 +60,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
         <activity
             android:launchMode="singleInstance"
             android:name=".MainActivity"
@@ -157,6 +165,9 @@
         <activity
             android:name=".functionActivity.PeripheryActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".functionActivity.CommentActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ICSInfoActivity" android:screenOrientation="portrait" />
 
     </application>
 
