@@ -2,17 +2,15 @@ package com.palmap.demo.huaweih2.functionActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.R;
+import com.palmap.demo.huaweih2.adapter.FootComListAdapter;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
 import com.palmap.demo.huaweih2.http.ErrorCode;
 import com.palmap.demo.huaweih2.http.HttpDataCallBack;
@@ -22,16 +20,17 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.JsonUtils;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CommentActivity extends BaseActivity {
 
-    private PullToRefreshScrollView refreshScrollView;
+//    private PullToRefreshScrollView refreshScrollView;
     public LinearLayout commentList;
     public int start = 0;//开始加载
+
+    private FootComListAdapter adapter;
+    private PullToRefreshListView refreshListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +55,27 @@ public class CommentActivity extends BaseActivity {
 
         commentList = (LinearLayout) findViewById(R.id.com_list);
 
-        refreshScrollView = (PullToRefreshScrollView) findViewById(R.id.refreshScrollView);
-        refreshScrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        refreshListView = (PullToRefreshListView) findViewById(R.id.refreshListView);
+        refreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
 
-        refreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+        refreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 refreshView.onRefreshComplete();
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 //网络请求
                 loadComments();
                 refreshView.onRefreshComplete();
             }
         });
         loadComments();
+
+
+        adapter = new FootComListAdapter(this);
+        refreshListView.setAdapter(adapter);
     }
 
     public void loadComments() {
@@ -99,6 +102,10 @@ public class CommentActivity extends BaseActivity {
                     return;
                 }
 
+                adapter.addAll(list);
+                start+=list.size();
+
+                /*
                 for (int i = 0; i < list.size(); i++) {
                     //显示评论
                     // TODO 动态添加布局(xml方式)
@@ -108,7 +115,6 @@ public class CommentActivity extends BaseActivity {
                     View view = inflater.inflate(R.layout.com_list_item, commentList, false);
                     view.setLayoutParams(lp);
                     TextView tn = (TextView) view.findViewById(R.id.com_name);
-//              tn.setText(list.get(i).getUserId());
                     tn.setText("访客" + list.get(i).getId());
                     TextView tc = (TextView) view.findViewById(R.id.com_text);
                     tc.setText(list.get(i).getComment());
@@ -117,12 +123,9 @@ public class CommentActivity extends BaseActivity {
                     Date date = new Date(list.get(i).getComTime());
                     tt.setText(sdf.format(date));
                     TextView tl = (TextView) view.findViewById(R.id.loc);
-
-//          view.setBackgroundResource(R.drawable.commentbar_short);
-
                     start++;
                     commentList.addView(view);
-                }
+                }*/
             }
         });
     }
