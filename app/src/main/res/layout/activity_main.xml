@@ -313,7 +313,7 @@
             android:elevation="15dp"
             android:orientation="horizontal"
             android:translationZ="15dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RadioButton
                 android:id="@+id/route"

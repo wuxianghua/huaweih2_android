@@ -68,12 +68,14 @@ public class H2MainActivity extends BaseActivity {
     public void functionClick(View view) {
         switch (view.getId()) {
             case R.id.layout_map: //点击地图
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent1 = new Intent(this,MainActivity.class);
+                intent1.putExtra("isTrip", false);
+                startActivity(intent1);
                 break;
             case R.id.layout_trip: //点击行程
-                Intent intent = new Intent(this,MainActivity.class);
-                intent.putExtra("isTrip", true);
-                startActivity(intent);
+                Intent intent2 = new Intent(this,MainActivity.class);
+                intent2.putExtra("isTrip", true);
+                startActivity(intent2);
 //                startActivity(new Intent(this,tripa));
                 break;
             case R.id.layout_shake:

@@ -128,6 +128,7 @@ public class MainActivity extends BaseActivity {
             startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
         } else
             checkFirstRun();
+
         Intent intent = getIntent();
         if (null != intent.getExtras() && intent.getExtras().getBoolean("isTrip")) {
             isTrip = true;
@@ -141,8 +142,15 @@ public class MainActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         parkInfo = intent.getParcelableExtra("parkInfo");
-        if (intent.getExtras() != null && intent.getExtras().getBoolean("onFindCarBack", false)) {
+        if (null != intent.getExtras() && intent.getExtras().getBoolean("onFindCarBack", false)) {
             showTabMenu();
+        }
+        if (null != intent.getExtras() && intent.getExtras().getBoolean("isTrip")) {
+            isTrip = true;
+            fragmentMap.setFootPrint();
+        }else{
+            isTrip = false;
+            fragmentMap.resetFootPrint();
         }
     }
 
@@ -350,16 +358,6 @@ public class MainActivity extends BaseActivity {
         park.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        /*hideAllFragments();
-        titleBar.hide();
-        transaction = getFragmentManager().beginTransaction();
-        titleBar.show(null, "寻车", null);
-        hideMap();
-//            if (fragmentPark == null) {
-        fragmentPark = new FragmentPark();
-        transaction.add(R.id.main_content, fragmentPark);
-        transaction.commit();*/
 
                 startActivity(new Intent(MainActivity.this, FindCarActivity.class));
 
@@ -369,16 +367,7 @@ public class MainActivity extends BaseActivity {
         foot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        /*hideAllFragments();
-        titleBar.hide();
-        transaction = getFragmentManager().beginTransaction();
-        titleBar.show(null, "足迹", null);
-        hideMap();
-//            if (fragmentFootPrint == null) {
-        fragmentFootPrint = new FragmentFootPrint();
-        transaction.add(R.id.main_content, fragmentFootPrint);
-        transaction.commit();*/
+
                 startActivity(new Intent(MainActivity.this, FootPrintActivity.class));
             }
         });
@@ -386,15 +375,7 @@ public class MainActivity extends BaseActivity {
         around.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-       /* hideAllFragments();
-        titleBar.hide();
-        transaction = getFragmentManager().beginTransaction();
-        titleBar.show(null, "附近", null);
-        hideMap();
-        fragmentAround = new FragmentAround();
-        transaction.add(R.id.main_content, fragmentAround);
-        transaction.commit();*/
+
                 startActivity(new Intent(MainActivity.this, PeripheryActivity.class));
             }
         });
@@ -402,16 +383,6 @@ public class MainActivity extends BaseActivity {
         shake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-/*        hideAllFragments();
-        titleBar.hide();
-        transaction = getFragmentManager().beginTransaction();
-        hideMap();
-        titleBar.show(null, "摇一摇", null);
-//            if (fragmentShake == null) {
-        fragmentShake = new FragmentShake();
-        transaction.add(R.id.main_content, fragmentShake);
-        transaction.commit();*/
 
                 startActivity(new Intent(MainActivity.this, ShakeActivity.class));
             }
@@ -558,7 +529,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showMap() {
-        tabMenu.setVisibility(View.VISIBLE);
+//        tabMenu.setVisibility(View.VISIBLE);
         fragmentMap.mMapView.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.VISIBLE);
         fragmentMap.mMapView.setOverlayContainer(mMapContainer);
@@ -962,7 +933,7 @@ public class MainActivity extends BaseActivity {
         poiInfoBar.setVisibility(View.GONE);
 //    im_share.setVisibility(View.VISIBLE);
         im_go.setVisibility(View.VISIBLE);
-        tabMenu.setVisibility(View.VISIBLE);
+//        tabMenu.setVisibility(View.VISIBLE);
         im_nav_end.setVisibility(View.GONE);
         im_nav_start.setVisibility(View.GONE);
 //    tv_nav_len.setVisibility(View.GONE);
@@ -1048,6 +1019,8 @@ public class MainActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
+
+
         HuaWeiH2Application.userIp = IpUtils.getIpAddress();
         if (isDebug)
             DialogUtils.showLongToast(HuaWeiH2Application.userIp);
@@ -1082,7 +1055,8 @@ public class MainActivity extends BaseActivity {
             }
 
 
-            if (tabMenu.getVisibility() == View.VISIBLE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true && !isNavigating)) {//只有在首页才退出
+//            if (tabMenu.getVisibility() == View.VISIBLE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true && !isNavigating)) {//只有在首页才退出
+            if (fragmentMap.mSearchBg.getVisibility() == View.GONE || (poiInfoBar.getVisibility() == View.VISIBLE && fragmentMap.isVisible() == true && !isNavigating)) {//只有在首页才退出
 
                 exitBy2Click(); //调用双击退出函数
 

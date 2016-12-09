@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/main/jniLibs"/></dataSet><dataSet config="release"><source path="/Users/wtm/dev/android/palmap/newH2/huaweih2_android/pullToRefresh/src/release/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\gitCode\huaweiH2_with_homepage\huaweih2_android\pullToRefresh\src\main\jniLibs"/></dataSet><dataSet config="release"><source path="D:\gitCode\huaweiH2_with_homepage\huaweih2_android\pullToRefresh\src\release\jniLibs"/></dataSet></merger>

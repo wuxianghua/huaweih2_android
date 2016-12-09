@@ -16,8 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.palmap.demo.huaweih2.BaseActivity;
+import com.palmap.demo.huaweih2.H2MainActivity;
 import com.palmap.demo.huaweih2.LocateTimerService;
-import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.UploadActivity;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
@@ -228,14 +228,14 @@ public class FootPrintActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, H2MainActivity.class));
         finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, H2MainActivity.class));
             finish();
             return true;
         }
