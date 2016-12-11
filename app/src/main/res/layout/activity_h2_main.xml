@@ -27,7 +27,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/bg"/>
             <ImageView
-                android:layout_width="300dp"
+                android:layout_width="260dp"
                 android:layout_marginLeft="20dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -70,6 +70,7 @@
                         <ImageView
                             android:layout_width="42dp"
                             android:layout_height="42dp"
+                            android:layout_marginLeft="1dp"
                             android:src="@mipmap/icon_main_map"/>
 
                         <TextView
@@ -78,6 +79,7 @@
                             android:layout_centerHorizontal="true"
                             android:text="地图"
                             android:layout_marginTop="1dp"
+                            android:layout_marginLeft="1dp"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/main_textSize"/>
                     </LinearLayout>
