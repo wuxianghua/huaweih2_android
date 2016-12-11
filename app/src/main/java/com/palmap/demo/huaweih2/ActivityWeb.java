@@ -9,8 +9,10 @@ import android.webkit.WebViewClient;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 public class ActivityWeb extends BaseActivity {
+  public static final String TITLE = "title";
+  public static final String URL = "url";
   String url;
-  String shopName;
+  String title;
   WebView webView ;
   TitleBar titleBar;
   @Override
@@ -19,10 +21,10 @@ public class ActivityWeb extends BaseActivity {
     setContentView(R.layout.activity_web);
 
 
-    url = getIntent().getStringExtra("text");
-    shopName = getIntent().getStringExtra("shopName");
+    url = getIntent().getStringExtra(URL);
+    title = getIntent().getStringExtra(TITLE);
     titleBar = (TitleBar)findViewById(R.id.title_bar);
-    titleBar.show(null,shopName==null?"点餐":shopName,null);
+    titleBar.show(null, title ==null?"点餐": title,null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
       public void onLeft() {

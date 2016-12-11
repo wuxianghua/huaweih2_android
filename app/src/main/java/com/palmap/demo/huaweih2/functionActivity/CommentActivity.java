@@ -1,14 +1,20 @@
 package com.palmap.demo.huaweih2.functionActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.palmap.demo.huaweih2.ActivityUploadCom;
 import com.palmap.demo.huaweih2.BaseActivity;
+import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.adapter.FootComListAdapter;
 import com.palmap.demo.huaweih2.http.DataProviderCenter;
@@ -23,11 +29,14 @@ import com.palmap.demo.huaweih2.view.TitleBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.palmap.demo.huaweih2.R.id.btn_com;
+
 public class CommentActivity extends BaseActivity {
 
 //    private PullToRefreshScrollView refreshScrollView;
     public LinearLayout commentList;
     public int start = 0;//开始加载
+    RelativeLayout btn_write;
 
     private FootComListAdapter adapter;
     private PullToRefreshListView refreshListView;
@@ -36,6 +45,15 @@ public class CommentActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        btn_write = (RelativeLayout) findViewById(btn_com);
+        btn_write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CommentActivity.this, ActivityUploadCom.class);
+                intent.putExtra("location", LocateTimerService.getCurrentLocationArea());
+                startActivityForResult(intent, Constant.startUploadText);
+            }
+        });
 
         TitleBar titleBar = (TitleBar) findViewById(R.id.titleBar);
 
@@ -78,6 +96,15 @@ public class CommentActivity extends BaseActivity {
         refreshListView.setAdapter(adapter);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.startUploadText && resultCode == Activity.RESULT_OK) {
+            adapter.clear();
+            start = 0;
+            loadComments();
+        }
+    }
     public void loadComments() {
         //加载评论
 

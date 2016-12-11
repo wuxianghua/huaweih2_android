@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.hasLocated;
+import static com.palmap.demo.huaweih2.http.ErrorCode.CODE_NO_LOCATE_DATA;
 
 /**
  * Created by eric3 on 2016/10/23.
@@ -150,8 +151,9 @@ public class LocateTimerService extends Service {
 
                     }
                     count = ++count % (x.length);
-                } else
-                    ErrorCode.showError(errorCode);
+                } else {
+                    ErrorCode.showError(CODE_NO_LOCATE_DATA);
+                }
             }
 
             @Override

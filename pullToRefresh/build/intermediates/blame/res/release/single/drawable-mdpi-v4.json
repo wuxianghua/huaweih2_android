@@ -1,23 +1,11 @@
 [
     {
-        "merged": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_rotate.png",
-        "source": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-mdpi\\default_ptr_rotate.png"
-    },
-    {
-        "merged": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\indicator_arrow.png",
-        "source": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-mdpi\\indicator_arrow.png"
-    },
-    {
         "merged": "D:\\gitCode\\huaweiH2_with_homepage\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_rotate.png",
         "source": "D:\\gitCode\\huaweiH2_with_homepage\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-mdpi\\default_ptr_rotate.png"
     },
     {
         "merged": "D:\\gitCode\\huaweiH2_with_homepage\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_flip.png",
         "source": "D:\\gitCode\\huaweiH2_with_homepage\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-mdpi\\default_ptr_flip.png"
-    },
-    {
-        "merged": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\default_ptr_flip.png",
-        "source": "D:\\Users\\wtm\\dev\\android\\palmap\\newH2\\huaweih2_android\\pullToRefresh\\src\\main\\res\\drawable-mdpi\\default_ptr_flip.png"
     },
     {
         "merged": "D:\\gitCode\\huaweiH2_with_homepage\\huaweih2_android\\pullToRefresh\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\indicator_arrow.png",

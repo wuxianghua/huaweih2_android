@@ -6,7 +6,6 @@ import android.view.KeyEvent;
 
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.H2MainActivity;
-import com.palmap.demo.huaweih2.MainActivity;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
@@ -25,8 +24,8 @@ public class FindCarActivity extends BaseActivity {
             @Override
             public void onLeft() {
 
-                Intent intent = new Intent(FindCarActivity.this, MainActivity.class);
-                intent.putExtra("onFindCarBack", true);
+                Intent intent = new Intent(FindCarActivity.this, H2MainActivity.class);
+//                intent.putExtra("onFindCarBack", true);
                 startActivity(intent);
                 finish();
             }
@@ -52,7 +51,7 @@ public class FindCarActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(FindCarActivity.this, H2MainActivity.class);
-        intent.putExtra("onFindCarBack", true);
+//        intent.putExtra("onFindCarBack", true);
         startActivity(intent);
         finish();
 

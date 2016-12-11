@@ -36,8 +36,8 @@ public class FragmentAround extends BaseFragment {
           return;
 
         Intent intent = new Intent(getActivity(), ActivityWeb.class);
-        intent.putExtra("text",shop.getUrl());
-        intent.putExtra("shopName",shop.getName());
+        intent.putExtra(ActivityWeb.URL,shop.getUrl());
+        intent.putExtra(ActivityWeb.TITLE,shop.getName());
         startActivity(intent);
 
 //调用系统浏览器

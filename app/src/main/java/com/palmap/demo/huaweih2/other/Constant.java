@@ -104,7 +104,7 @@ public class Constant {
 
 
 
-  public static final int EACH_TIME_COMMENT_NUM = 5;
+  public static final int EACH_TIME_COMMENT_NUM = 10;
   public static final int EACH_TIME_PICTURE_NUM = 10;
 
   //startActivityForResult

@@ -12,6 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <RelativeLayout
+        android:id="@+id/btn_com"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/commentbar_long">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="访客留言"
+            android:textColor="#2f3336"
+            android:textSize="20sp" />
+
+        <ImageView
+
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ico_tab_message" />
+    </RelativeLayout>
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/refreshListView"
         android:layout_width="match_parent"

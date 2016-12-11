@@ -571,6 +571,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                             setFootPrint();
 //                            mContext.hidePoiInfoBar();
                             isTrip = false;
+
                         }
                     });
                 }

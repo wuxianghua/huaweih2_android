@@ -41,6 +41,10 @@ public class ErrorCode {
     public static final int CODE_EXCEPTION = 1005;
 
     public static final int CODE_IP_EEEOR = 1006;
+    /**
+     * 无定位数据
+     */
+    public static final int CODE_NO_LOCATE_DATA = 1007;
 
 
     public static void showError(final int code) {
@@ -94,6 +98,10 @@ public class ErrorCode {
                     }
                     return;
                     //      }
+                }
+
+                if (code == CODE_NO_LOCATE_DATA){
+//                    DialogUtils.showShortToast("无定位数据");
                 }
             }
         });
