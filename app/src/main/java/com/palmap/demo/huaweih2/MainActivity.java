@@ -32,8 +32,6 @@ import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
 import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
-import com.palmap.demo.huaweih2.util.QQShareUtils;
-import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.demo.huaweih2.view.Mark;
 import com.palmap.demo.huaweih2.view.TitleBar;
 import com.palmaplus.nagrand.core.Types;
@@ -120,8 +118,7 @@ public class MainActivity extends BaseActivity {
     LocateTimerService.setmMainActivity(this);
     initStatusBar(R.color.black);
 
-    WXShareUtils.regToWeChat(this);
-    QQShareUtils.getInstance().regToQQ(this);
+
 
 //        if (Constant.isDebug) {
 //            HuaWeiH2Application.firstRun = true;

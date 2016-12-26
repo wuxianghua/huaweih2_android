@@ -3,6 +3,7 @@ package com.palmap.demo.huaweih2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +19,9 @@ import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
 import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
 import com.palmap.demo.huaweih2.model.ICSModel;
 import com.palmap.demo.huaweih2.other.Constant;
+import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.QQShareUtils;
+import com.palmap.demo.huaweih2.util.WXShareUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,9 @@ public class H2MainActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_h2_main);
+    WXShareUtils.regToWeChat(this);
+    QQShareUtils.getInstance().regToQQ(this);
+
     initView();
     checkFirstRun();
   }
@@ -153,17 +160,26 @@ public class H2MainActivity extends BaseActivity {
   }
 
   public void functionClick(View view) {
+    Intent intent;
     switch (view.getId()) {
       case R.id.layout_map: //点击地图
-        Intent intent1 = new Intent(this, MainActivity.class);
-        intent1.putExtra("isTrip", false);
-        startActivity(intent1);
+        intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isTrip", false);
+        startActivity(intent);
         break;
+
       case R.id.layout_trip: //点击行程
-        Intent intent2 = new Intent(this, MainActivity.class);
-        intent2.putExtra("isTrip", true);
-        startActivity(intent2);
+        intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isTrip", true);
+        startActivity(intent);
 //                startActivity(new Intent(this,tripa));
+        break;
+
+      case R.id.layout_heat: //点击客流分析
+        intent = new Intent(this, ActivityWeb.class);
+        intent.putExtra(ActivityWeb.URL, "http://bi.palmap.cn/hw2");
+        intent.putExtra(ActivityWeb.TITLE, "客流分析");
+        startActivity(intent);
         break;
       case R.id.layout_shake:
         startActivity(new Intent(this, ShakeActivity.class));
@@ -179,6 +195,9 @@ public class H2MainActivity extends BaseActivity {
         break;
       case R.id.layout_periphery://周边
         startActivity(new Intent(this, PeripheryActivity.class));
+        break;
+      case R.id.layout_ar://AR
+        DialogUtils.showShortToast("敬请期待！", Gravity.CENTER);
         break;
       default:
         break;

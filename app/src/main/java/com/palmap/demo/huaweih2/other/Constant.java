@@ -27,10 +27,10 @@ public class Constant {
 
 
 
-//  public static final String APP_KEY = "543c0c5266fe4d30a561c3cc3d12ba97";//无锡海岸城
-//  public static final long MAP_ID = 1444L;
-//  public static final long FLOOR_ID_F1 = 1272847L;
-//  public static final long FLOOR_ID_B1 = 0L;
+//  public static final String APP_KEY = "f17b48fd2093468582a462c2f4a9c0ad";//
+//  public static final long MAP_ID = 1536L;
+//  public static final long FLOOR_ID_F1 = 1361007L;
+//  public static final long FLOOR_ID_B1 = 1361007L;
 
 
 

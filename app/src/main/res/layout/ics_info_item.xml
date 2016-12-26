@@ -31,6 +31,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="15dp"
+        android:textColor="#94999d"
         android:text="xxxxx方案"/>
 
 </LinearLayout>

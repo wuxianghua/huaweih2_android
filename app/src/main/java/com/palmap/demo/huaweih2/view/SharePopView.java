@@ -85,7 +85,6 @@ public class SharePopView {
             rootView.findViewById(R.id.tv_cancel).setOnClickListener(disMissClick);
             rootView.setOnClickListener(disMissClick);
 
-
             layout_share_weChat = (ViewGroup) rootView.findViewById(R.id.layout_share_weChat);
             layout_share_weiChat_friends = (ViewGroup) rootView.findViewById(R.id.layout_share_weiChat_friends);
             layout_share_weibo = (ViewGroup) rootView.findViewById(R.id.layout_share_weibo);
@@ -95,7 +94,6 @@ public class SharePopView {
             layout_share_weiChat_friends.setOnClickListener(this);
             layout_share_weibo.setOnClickListener(this);
             layout_share_qq.setOnClickListener(this);
-
         }
 
         @Override

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/activity_h2_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#e9f3f7"
-            tools:context="com.palmap.demo.huaweih2.H2MainActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_h2_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#e9f3f7"
+              tools:context="com.palmap.demo.huaweih2.H2MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,21 +17,22 @@
 
         <RelativeLayout
             android:id="@+id/item1"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:src="@drawable/bg"/>
+
             <ImageView
                 android:layout_width="260dp"
-                android:layout_marginLeft="20dp"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/bg_content"/>
         </RelativeLayout>
@@ -39,10 +40,20 @@
 
         <LinearLayout
             android:id="@+id/item2"
-            android:layout_below="@+id/item1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/item1"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#aad2d1"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="15dp"
+                android:background="@color/white"
+                android:textSize="16dp"
+                android:text="H2区"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,42 +61,82 @@
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:paddingTop="15dp">
+                android:paddingTop="5dp">
 
-                <RelativeLayout
-                    android:id="@+id/layout_map"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_cir_map"
-                    android:onClick="functionClick">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
+                        android:id="@+id/layout_map"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_cir_map"
+                        android:onClick="functionClick">
 
-                        <ImageView
-                            android:layout_width="42dp"
-                            android:layout_height="42dp"
-                            android:layout_marginLeft="1dp"
-                            android:src="@mipmap/icon_main_map"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/main_height"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="地图"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginLeft="1dp"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/main_textSize"/>
-                    </LinearLayout>
+                            <ImageView
+                                android:layout_width="@dimen/main_imageSize"
+                                android:layout_height="@dimen/main_imageSize"
+                                android:layout_marginLeft="1dp"
+                                android:src="@mipmap/icon_main_map"/>
 
-                </RelativeLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="1dp"
+                                android:layout_marginTop="1dp"
+                                android:text="室内导航"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/main_textSize"/>
+                        </LinearLayout>
 
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layout_heat"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_cir_heat"
+                        android:onClick="functionClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/main_height"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="@dimen/main_imageSize"
+                                android:src="@mipmap/icon_main_heat"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="1dp"
+                                android:layout_marginTop="1dp"
+                                android:text="客流分析"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/main_textSize"/>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -107,7 +158,7 @@
                             android:layout_height="@dimen/main_height"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <ImageView
                                 android:layout_width="@dimen/main_imageSize"
@@ -118,7 +169,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:text="行程"
+                                android:text="行程规划"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/main_textSize"/>
                         </LinearLayout>
@@ -138,7 +189,7 @@
                             android:layout_height="@dimen/main_height"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <ImageView
                                 android:layout_width="@dimen/main_imageSize"
@@ -149,7 +200,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:text="摇一摇"
+                                android:text=" 摇一摇 "
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/main_textSize"/>
                         </LinearLayout>
@@ -179,7 +230,7 @@
                         android:layout_height="@dimen/main_height"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="@dimen/main_imageSize"
@@ -190,7 +241,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="足迹"
+                            android:text="    足迹    "
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/main_textSize"/>
                     </LinearLayout>
@@ -211,7 +262,7 @@
                         android:layout_height="@dimen/main_height"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="@dimen/main_imageSize"
@@ -222,7 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="评论"
+                            android:text=" 留言板 "
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/main_textSize"/>
                     </LinearLayout>
@@ -252,7 +303,7 @@
                         android:layout_height="@dimen/main_height"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="@dimen/main_imageSize"
@@ -263,7 +314,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="停车"
+                            android:text="停车找车"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/main_textSize"/>
                     </LinearLayout>
@@ -281,10 +332,10 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/main_height"
                         android:layout_centerInParent="true"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imageView3"
@@ -296,7 +347,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="周边"
+                            android:text="   周边   "
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/main_textSize"/>
                     </LinearLayout>
@@ -306,13 +357,90 @@
             </LinearLayout>
 
 
-        </LinearLayout>
+
+
+            <!--h1-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#aad2d1"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="15dp"
+                android:background="@color/white"
+                android:textSize="16dp"
+                android:text="H1区"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_ar"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_cir_map"
+                        android:onClick="functionClick">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/main_height"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="wrap_content"
+                                android:src="@mipmap/icon_main_ar"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="1dp"
+                                android:layout_marginTop="1dp"
+                                android:text=" AR导航"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/main_textSize"/>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         <LinearLayout
             android:id="@+id/item3"
-            android:layout_below="@id/item2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_below="@id/item2"
             android:layout_marginTop="7dp"
             android:background="#e9f3f7"
             android:orientation="horizontal">
@@ -333,18 +461,19 @@
                 android:textColor="#565c60"
                 android:textSize="15sp"/>
         </LinearLayout>
-        
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/white">
+
             <cn.bingoogolapple.bgabanner.BGABanner
                 android:id="@+id/banner_guide_content"
+                style="@style/BannerDefaultStyle"
+                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/item3"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_alignParentBottom="true"
-                style="@style/BannerDefaultStyle"
                 app:banner_pageChangeDuration="1000"
                 app:banner_pointAutoPlayAble="true"
                 app:banner_pointContainerBackground="@android:color/transparent"
@@ -352,7 +481,6 @@
                 app:banner_pointTopBottomMargin="5dp"
                 app:banner_transitionEffect="alpha"/>
         </FrameLayout>
-
 
 
         <LinearLayout
@@ -386,4 +514,5 @@
         </LinearLayout>
 
     </LinearLayout>
+</LinearLayout>
 </LinearLayout>

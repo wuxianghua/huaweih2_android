@@ -57,7 +57,7 @@ public class CommentActivity extends BaseActivity {
 
         TitleBar titleBar = (TitleBar) findViewById(R.id.titleBar);
 
-        titleBar.show(null,"评论",null);
+        titleBar.show(null,"留言板",null);
 
         titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override

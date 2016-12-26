@@ -815,7 +815,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapOptions = new MapOptions(); // 该对象可设置一些地图手势操作
         mMapOptions.setSkewEnabled(false);//关闭俯仰
         mMapView = new MapView("default", mContext); //初始化MapView
-        mMapViewFrame.addView(mMapView);
+        if (mMapViewFrame!=null)
+          mMapViewFrame.addView(mMapView);
+
         mMapView.setMapOptions(mMapOptions);
         mMapView.setBackgroundColor(0xffebebeb);
         mMapView.initRatio(1.0F);
@@ -2404,7 +2406,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         initMapScale();
         mContext.hideTabMenu();
         hideSomeIcon();
-        mContext.titleBar.show(null, "行程", null);
+        mContext.titleBar.show(null, "行程规划", null);
         mContext.titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
             @Override
             public void onLeft() {

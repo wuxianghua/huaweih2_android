@@ -35,23 +35,23 @@
 
     <application
         android:icon="@drawable/applogo"
-        android:name=".HuaWeiH2Application"
+        android:name="com.palmap.demo.huaweih2.HuaWeiH2Application"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.palmap.demo.huaweih2.WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".H2MainActivity"
+            android:name="com.palmap.demo.huaweih2.H2MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
 
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="com.palmap.demo.huaweih2.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppStartLoadTranslucent"
             android:windowSoftInputMode="adjustResize|stateHidden">
@@ -65,12 +65,12 @@
 
         <activity
             android:launchMode="singleInstance"
-            android:name=".MainActivity"
+            android:name="com.palmap.demo.huaweih2.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".UploadActivity"
+            android:name="com.palmap.demo.huaweih2.UploadActivity"
             android:screenOrientation="portrait" />
 
         <!-- qq分享 -->
@@ -94,80 +94,80 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityPay"
+            android:name="com.palmap.demo.huaweih2.ActivityPay"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityHall"
+            android:name="com.palmap.demo.huaweih2.ActivityHall"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityMeeting"
+            android:name="com.palmap.demo.huaweih2.ActivityMeeting"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityOffice"
+            android:name="com.palmap.demo.huaweih2.ActivityOffice"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityLab"
+            android:name="com.palmap.demo.huaweih2.ActivityLab"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityUploadCom"
+            android:name="com.palmap.demo.huaweih2.ActivityUploadCom"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ImageAlbumActivity"
+            android:name="com.palmap.demo.huaweih2.ImageAlbumActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ImageViewActivity"
+            android:name="com.palmap.demo.huaweih2.ImageViewActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".FootprintDetailsActivity"
+            android:name="com.palmap.demo.huaweih2.FootprintDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ActivityShopDetail"
+            android:name="com.palmap.demo.huaweih2.ActivityShopDetail"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <service
-            android:name=".LocateTimerService"
+            android:name="com.palmap.demo.huaweih2.LocateTimerService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name=".PoiInfoActivity"
+            android:name="com.palmap.demo.huaweih2.PoiInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
-            android:name=".ActivityWeb"
+            android:name="com.palmap.demo.huaweih2.ActivityWeb"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".functionActivity.ShakeActivity"
+            android:name="com.palmap.demo.huaweih2.functionActivity.ShakeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".functionActivity.FindCarActivity"
+            android:name="com.palmap.demo.huaweih2.functionActivity.FindCarActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".functionActivity.FootPrintActivity"
+            android:name="com.palmap.demo.huaweih2.functionActivity.FootPrintActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".functionActivity.PeripheryActivity"
+            android:name="com.palmap.demo.huaweih2.functionActivity.PeripheryActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".functionActivity.CommentActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ICSInfoActivity" android:screenOrientation="portrait" />
+        <activity android:name="com.palmap.demo.huaweih2.functionActivity.CommentActivity" android:screenOrientation="portrait" />
+        <activity android:name="com.palmap.demo.huaweih2.ICSInfoActivity" android:screenOrientation="portrait" />
 
     </application>
 
