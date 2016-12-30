@@ -56,6 +56,7 @@ import static com.palmap.demo.huaweih2.other.Constant.会议室;
 import static com.palmaplus.nagrand.position.ble.BeaconUtils.TAG;
 
 public class MainActivity extends BaseActivity {
+
   //  public FullScreenDialog dialog;
   public RelativeLayout dialog;
   //  public FrameLayout foot_up;
@@ -216,6 +217,7 @@ public class MainActivity extends BaseActivity {
 //            }
 
     }
+
 
   }
 
@@ -1030,13 +1032,14 @@ public class MainActivity extends BaseActivity {
 
     HuaWeiH2Application.userIp = IpUtils.getIpAddress();
     if (isDebug)
-      DialogUtils.showLongToast(HuaWeiH2Application.userIp);
+      DialogUtils.showLongToast("IP："+HuaWeiH2Application.userIp);
 
   }
 
   @Override
   protected void onPause() {
     super.onPause();
+
 
   }
 

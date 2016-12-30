@@ -19,7 +19,7 @@ import com.palmap.demo.huaweih2.util.SystemBarTintManager;
  * Created by eric3 on 2016/9/27.
  */
 public class BaseActivity extends FragmentActivity {
-
+    private static boolean isActivityVisible = false;
     private ProgressDialog progressDialog = null;
 
     @Override
@@ -34,6 +34,8 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isActivityVisible = true;
+
         //注：Bugtags回调 1
         Bugtags.onResume(this);
     }
@@ -41,6 +43,8 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        isActivityVisible = false;
+
         //注：Bugtags回调 2
         Bugtags.onPause(this);
     }
@@ -159,5 +163,9 @@ public class BaseActivity extends FragmentActivity {
         return findViewById(android.R.id.content);
     }
 
+
+    public static boolean isVisible(){
+        return isActivityVisible;
+    }
 
 }

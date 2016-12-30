@@ -42,8 +42,6 @@ public class LocationMark extends LinearLayout implements OverlayCell {
   private void initView() {
     LayoutInflater.from(getContext()).inflate(R.layout.location_mark, this);
     mIconView = (ImageView) findViewById(R.id.location_img);
-
-
   }
 
   public void setMark(int id, double x, double y){

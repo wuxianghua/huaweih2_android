@@ -17,29 +17,30 @@ import com.palmap.demo.huaweih2.http.HttpDataCallBack;
 import com.palmap.demo.huaweih2.json.PositionJson;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.palmap.demo.huaweih2.fragment.FragmentMap.hasLocated;
-import static com.palmap.demo.huaweih2.http.ErrorCode.CODE_NO_LOCATE_DATA;
 
 /**
  * Created by eric3 on 2016/10/23.
  */
 
 public class LocateTimerService extends Service {
-    public static double curX;
+    public static double curX;//当前定位点坐标，可能是gps和lampsite的结果
     public static double curY;
     public static long curFloorID;//当前定位点floor
     static Context mContext;
     static MainActivity mMainActivity;
     private boolean pushthread = false;
     private static LocateTimerService instance;
+    private boolean isUseGpsLocation;//是否在室外，使用gps数据
     //地理围栏
     static double[] hall = new double[]{12697136.696, 12697172.696, 2588890.655, 2588917.384
-    };//  x左,x右,y上,y下
+    };//  x小,x大,y小,y大
     static double[] meeting = new double[]{12697125.262, 12697133.136, 2588900.784, 2588917.194
     };
     static double[] lab = new double[]{12697094.209, 12697102.759, 2588900.784, 2588912.914
@@ -47,6 +48,8 @@ public class LocateTimerService extends Service {
     static double[] office = new double[]{12697081.767, 12697093.989, 2588868.311, 2588890.293
     };
     static double[] h2 = new double[]{12697080.571, 12697195.929, 2588843.728, 2588958.557
+    };
+    static double[] h2_out = new double[]{12697149.692, 12697171.838, 2588912.244,2588957.663
     };
 
     //6个定位参测试点坐标
@@ -137,11 +140,12 @@ public class LocateTimerService extends Service {
 
         HuaWeiH2Application.userIp = IpUtils.getIpAddress();
 
-
-        DataProviderCenter.getInstance().getPosition("", new HttpDataCallBack() {
+        DataProviderCenter.getInstance().getPosition( new HttpDataCallBack() {
             @Override
             public void onError(int errorCode) {
-                if (Constant.openLocateTest) {
+                isUseGpsLocation = true;//没有lampsite数据，只能使用gps
+
+                if (Constant.openLocateTest) {//测试代码，虚拟定位点
                     curX = x[count];
                     curY = y[count];
                     curFloorID = Constant.FLOOR_ID_F1;
@@ -152,7 +156,25 @@ public class LocateTimerService extends Service {
                     }
                     count = ++count % (x.length);
                 } else {
-                    ErrorCode.showError(CODE_NO_LOCATE_DATA);
+
+                    if (mMainActivity == null || mMainActivity.fragmentMap == null)
+                        return;
+                    //没有定位数据，查看是否有gps
+
+                    curFloorID = Constant.FLOOR_ID_F1;
+                    curX = GpsUtils.getCurX();
+                    curY = GpsUtils.getCurY();
+
+                    // TODO: 2016/12/29 室外hasLocated=true怎么办
+                    hasLocated = false;
+
+                    addLocationMark();
+//                    if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1) {
+//                        mMainActivity.fragmentMap.addLocationMark(curX, curY);
+//                        if (Constant.isDebug)
+//                            ErrorCode.showError(ErrorCode.CODE_GPS);
+//                    }
+//                    ErrorCode.showError(CODE_NO_LOCATE_DATA);
                 }
             }
 
@@ -177,14 +199,30 @@ public class LocateTimerService extends Service {
                         curY = jo3.getDoubleValue(1);
                         hasLocated = true;
 
-//            Types.Point point = mMapView.converToScreenCoordinate(x,y);
-                        if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1)
-                            mMainActivity.fragmentMap.addLocationMark(curX, curY);
+                        if (GpsUtils.hasExactGpsData||(curX > h2_out[0] && curX < h2_out[1] && curY > h2_out[2] && curY < h2_out[3])){
+                            /*如果最近 EXP_SECONDS s内有精度小于18m的gps数据，就强制用gps
+                               避免lampsite在室外也能获取不准确的定位点*/
+                            isUseGpsLocation = true;
+                            curX = GpsUtils.getCurX();
+                            curY = GpsUtils.getCurY();
+                            hasLocated = false;
+                        }else {
+                            isUseGpsLocation = false;//使用lampsite数据
+                        }
+
+
+
+
+                        addLocationMark();
+//                        if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1) {
+//                            mMainActivity.fragmentMap.addLocationMark(curX, curY);
+//                            if (Constant.isDebug)
+//                                ErrorCode.showError(ErrorCode.CODE_HUAWEI);
+//                        }
                     }
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -261,5 +299,28 @@ public class LocateTimerService extends Service {
 
 
         return poiName;
+    }
+
+
+
+    /**
+    * @Author: eric3
+    * @Description: 根据gps和lampsite状态选择有效的定位点，添加到地图
+    * @Time 2016/12/29 12:14
+    */
+    private void addLocationMark(){
+
+        if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1)
+            mMainActivity.fragmentMap.addLocationMark(curX, curY);
+
+        if (Constant.isDebug){
+            if (isUseGpsLocation){
+                ErrorCode.showError(ErrorCode.CODE_GPS);
+            }else{
+                ErrorCode.showError(ErrorCode.CODE_HUAWEI);
+            }
+        }
+
+
     }
 }

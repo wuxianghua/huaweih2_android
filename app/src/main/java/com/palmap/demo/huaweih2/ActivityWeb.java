@@ -2,6 +2,7 @@ package com.palmap.demo.huaweih2;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -24,6 +25,7 @@ public class ActivityWeb extends BaseActivity {
     url = getIntent().getStringExtra(URL);
     title = getIntent().getStringExtra(TITLE);
     titleBar = (TitleBar)findViewById(R.id.title_bar);
+
     titleBar.show(null, title ==null?"点餐": title,null);
     titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
       @Override
@@ -36,6 +38,10 @@ public class ActivityWeb extends BaseActivity {
 
       }
     });
+
+    if (title.equals("客流分析"))
+      titleBar.setVisibility(View.GONE);
+
     webView = (WebView) findViewById(R.id.web_view);
     webView.setWebViewClient(new WebViewClient(){
       @Override

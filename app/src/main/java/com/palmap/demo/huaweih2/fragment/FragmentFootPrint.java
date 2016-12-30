@@ -300,7 +300,7 @@ public class FragmentFootPrint extends BaseFragment implements View.OnClickListe
                     Date date = new Date(list.get(i).getComTime());
                     tt.setText(sdf.format(date));
                     TextView tl = (TextView) view.findViewById(R.id.loc);
-                    tl.setText(list.get(i).getLocation());
+                    tl.setText(list.get(i).startGetLocation());
 
 //          view.setBackgroundResource(R.drawable.commentbar_short);
 

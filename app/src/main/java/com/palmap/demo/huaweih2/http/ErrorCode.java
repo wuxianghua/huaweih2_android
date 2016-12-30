@@ -5,7 +5,9 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
+import com.palmap.demo.huaweih2.LocateTimerService;
 import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
 import com.palmap.demo.huaweih2.util.LogUtils;
 
@@ -47,6 +49,9 @@ public class ErrorCode {
     public static final int CODE_NO_LOCATE_DATA = 1007;
 
 
+    public static final int CODE_HUAWEI = 1008;
+    public static final int CODE_GPS = 1009;
+
     public static void showError(final int code) {
 
 //        if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
@@ -59,11 +64,27 @@ public class ErrorCode {
                 LogUtils.e("HTTP ErrorCode:" + code);
                 long during = System.currentTimeMillis() - timeStamp;
 
-                if (during < 20000)
+                if (during < 10000)
                     return;
 
                 timeStamp = System.currentTimeMillis();
 
+                if (code == CODE_HUAWEI) {
+                    DialogUtils.showShortToast("LampSite定位中...\nip:"+HuaWeiH2Application.userIp+
+                        "\nx="+ LocateTimerService.curX+"\ny="+ LocateTimerService.curY+
+                        "\n当前GPS精度："+ GpsUtils.curAccuracy+"m");
+                    return;
+                }
+                if (code == CODE_GPS) {
+                    if (!GpsUtils.isGPSOpen()){
+                        DialogUtils.showShortToast("没有开启gps");
+                        return;
+                    }
+
+                    DialogUtils.showShortToast("GPS定位中...\n精度："+ GpsUtils.curAccuracy+"m"+
+                        "\nx="+ LocateTimerService.curX+"\ny="+ LocateTimerService.curY);
+                    return;
+                }
                 if (code == CODE_NO_INTERNET) {
                     DialogUtils.showShortToast("无网络连接");
                     return;

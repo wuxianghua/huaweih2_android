@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +21,9 @@ import static android.widget.Toast.makeText;
 
 public class DialogUtils {
   public static void showShortToast(final String msg){
+    if (!BaseActivity.isVisible())
+      return;
+
     Handler handler=new Handler(Looper.getMainLooper());
     handler .post(new Runnable() {
       @Override
@@ -31,6 +35,9 @@ public class DialogUtils {
   }
 
   public static void showShortToast(final String msg, final int locate){
+    if (!BaseActivity.isVisible())
+      return;
+
     Handler handler=new Handler(Looper.getMainLooper());
     handler .post(new Runnable() {
       @Override
@@ -44,6 +51,9 @@ public class DialogUtils {
   }
 
   public static void showLongToast(final String msg){
+    if (!BaseActivity.isVisible())
+      return;
+
     Handler handler=new Handler(Looper.getMainLooper());
     handler .post(new Runnable() {
       @Override
@@ -105,7 +115,6 @@ public class DialogUtils {
       }
     });
 
-
     builder.create().show();
   }
 
@@ -120,8 +129,8 @@ public class DialogUtils {
     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int which) {
-        dialog.dismiss();
         callBack.onCancel();
+        dialog.dismiss();
       }
     });
 
@@ -129,8 +138,8 @@ public class DialogUtils {
     {
       @Override
       public void onClick(DialogInterface dialog, int which) {
-        dialog.dismiss();
         callBack.onComplete();
+        dialog.dismiss();
       }
     });
 
@@ -142,4 +151,28 @@ public class DialogUtils {
     public void onComplete();
     public void onCancel();
   }
+
+//  /**
+//   * 判断某个界面是否在前台
+//   *
+//   * @param context
+//   * @param className
+//   *            某个界面名称
+//   */
+//  private static boolean isForeground(Context context, String className) {
+//    if (context == null || TextUtils.isEmpty(className)) {
+//      return false;
+//    }
+//
+//    ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//    List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
+//    if (list != null && list.size() > 0) {
+//      ComponentName cpn = list.get(0).topActivity;
+//      if (className.equals(cpn.getClassName())) {
+//        return true;
+//      }
+//    }
+//
+//    return false;
+//  }
 }

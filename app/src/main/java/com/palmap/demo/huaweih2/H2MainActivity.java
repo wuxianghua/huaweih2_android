@@ -20,6 +20,7 @@ import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
 import com.palmap.demo.huaweih2.model.ICSModel;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
+import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 
@@ -45,6 +46,8 @@ public class H2MainActivity extends BaseActivity {
 
     initView();
     checkFirstRun();
+    GpsUtils.startGetLocation(this);
+
   }
 
   private void initBinner() {

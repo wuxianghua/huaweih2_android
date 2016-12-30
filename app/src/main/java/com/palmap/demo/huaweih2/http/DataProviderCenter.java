@@ -68,7 +68,7 @@ public class DataProviderCenter {
   /*
   * 接口：获取定位点
   * */
-  public void getPosition(String IP, HttpDataCallBack callBack) {
+  public void getPosition(HttpDataCallBack callBack) {
     Map<String, String> heads = new HashMap<String, String>();
     heads.put("Accept", "application/json");
     heads.put("Content-Type", "application/json");

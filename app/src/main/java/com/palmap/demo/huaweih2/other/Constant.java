@@ -8,7 +8,7 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
 
 public class Constant {
 
-  public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2统一
+  public static final String APP_KEY = "e8493b3ac8ee4ac9b99b98e63b8fcc8b";//h2与ios统一key
   // public static final String APP_KEY = "30497ca93a3b47bd841db8dced24878f";//h2
   public static final long MAP_ID = 1430L;
   public static final long FLOOR_ID_F1 = 1262934L;
@@ -102,8 +102,6 @@ public class Constant {
 
   public static boolean onSingleTap_changeColor =true;//是否变色
 
-
-
   public static final int EACH_TIME_COMMENT_NUM = 10;
   public static final int EACH_TIME_PICTURE_NUM = 10;
 
@@ -115,8 +113,7 @@ public class Constant {
   public static final int startUploadText=4;
   public static final int startUploadPic=5;
 
-  //测试参数，控制
-  public static Boolean isDebug = false;
+
 
   public static boolean openLocateService = true;//开启自动循环查询定位,本地测试也要开启
 
@@ -134,4 +131,7 @@ public class Constant {
 
   public static boolean useSystemShare = false;//是否使用系统分享
   public static boolean useOkHttp = true;
+
+  //测试参数，控制
+  public static Boolean isDebug = true;
 }

@@ -88,6 +88,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import static com.palmap.demo.huaweih2.R.id.search_null_tv;
 import static com.palmap.demo.huaweih2.R.layout.map;
@@ -1510,9 +1511,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         long poiID = 0;
         if (feature != null)
             poiID = MapParamUtils.getId(feature);
-        if (Constant.isDebug) {
-            DialogUtils.showShortToast("poiID=" + poiID);
-        }
+//        if (Constant.isDebug) {
+//            DialogUtils.showShortToast("poiID=" + poiID);
+//        }
         if (!hasInfo(feature)) {
             mContext.showTabMenu();
             return;
@@ -1866,22 +1867,24 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
 
 // Collator 类是用来执行区分语言环境的 String 比较的，这里选择使用CHINA
-        Comparator comparator = Collator.getInstance(java.util.Locale.CHINA);
+        Comparator comparator = Collator.getInstance(Locale.CHINESE);
 //    List<String> arrStrings = new ArrayList<>();
         String[] sl = new String[data.getSize()];
         int size = 0;
         for (int i = 0; i < data.getSize(); i++) {
-            if (LocationModel.display.get(data.getPOI(i)) != null && !"".equals(LocationModel.display.get(data.getPOI(i)))) {
+            if (LocationModel.display.get(data.getPOI(i)) != null && !"".equals(LocationModel.display.get(data.getPOI(i)))
+                &&LocationModel.address.get(data.getPOI(i)) != null && !"".equals(LocationModel.address.get(data.getPOI(i)))) {
                 sl[size++] = LocationModel.display.get(data.getPOI(i)) + LocationModel.address.get(data.getPOI(i));
             }
         }
 
         // 使根据指定比较器产生的顺序对指定对象数组进行排序。
-        Arrays.sort(sl, comparator);
+        String[] sl_sort = Arrays.copyOf(sl,size);
+        Arrays.sort(sl_sort, comparator);
         List<LocationModel> lol = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < data.getSize(); j++) {
-                if (sl[i].equals(LocationModel.display.get(data.getPOI(j)) + LocationModel.address.get(data.getPOI(j)))) {
+                if (sl_sort[i].equals(LocationModel.display.get(data.getPOI(j)) + LocationModel.address.get(data.getPOI(j)))) {
                     lol.add(data.getPOI(j));
                     break;
                 }
