@@ -19,7 +19,7 @@ import java.util.TimerTask;
  */
 
 public class GpsUtils {
-  private static final int EXP_SECONDS = 7;//curXY有效期，用于避免lampsite在室外定位
+  private static final int EXP_SECONDS = 12;//curXY有效期，用于避免lampsite在室外定位
   private static double curX = 0;
   private static double curY = 0;
   public static boolean hasExactGpsData = false;//EXP_SECONDS s内是否有精确度<10m的GPS数据

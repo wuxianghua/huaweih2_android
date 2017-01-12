@@ -19,6 +19,7 @@ import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
+import com.palmap.demo.huaweih2.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ import static com.palmap.demo.huaweih2.fragment.FragmentMap.hasLocated;
  */
 
 public class LocateTimerService extends Service {
+    private boolean isReceived;//上次发送定位请求后是否收到返回
+    private long timestampRec;//上次收到定位数据时间戳
     public static double curX;//当前定位点坐标，可能是gps和lampsite的结果
     public static double curY;
     public static long curFloorID;//当前定位点floor
@@ -138,11 +141,18 @@ public class LocateTimerService extends Service {
     //请求网络获取数据
     private void getHttp() {
 
+        LogUtils.i(""+(System.currentTimeMillis()-timestampRec));
+        if (!isReceived&&System.currentTimeMillis()-timestampRec<10000)
+            return;
+
+        isReceived = false;
         HuaWeiH2Application.userIp = IpUtils.getIpAddress();
 
         DataProviderCenter.getInstance().getPosition( new HttpDataCallBack() {
             @Override
             public void onError(int errorCode) {
+                isReceived = true;
+                timestampRec = System.currentTimeMillis();
                 isUseGpsLocation = true;//没有lampsite数据，只能使用gps
 
                 if (Constant.openLocateTest) {//测试代码，虚拟定位点
@@ -180,6 +190,8 @@ public class LocateTimerService extends Service {
 
             @Override
             public void onComplete(Object content) {
+                isReceived = true;
+                timestampRec = System.currentTimeMillis();
                 if (mMainActivity == null || mMainActivity.fragmentMap == null)
                     return;
                 try {

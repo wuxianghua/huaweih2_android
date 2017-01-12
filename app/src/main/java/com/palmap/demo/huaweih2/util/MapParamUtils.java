@@ -12,7 +12,6 @@ import com.palmaplus.nagrand.data.Param;
 public class MapParamUtils {
     private static final Param<String> LOCATION_TYPE = new Param<>("location_type", String.class);
     private static final Param<Long> ID = new Param<>("id", Long.class);
-    private static final Param<Long> OBJECT_ID = new Param<>("object_id", Long.class);
     private static final Param<Long> POI = new Param<>("poi", Long.class);
     private static final Param<String> NAME = new Param<>("name", String.class);
     private static final Param<String> DISPLAY = new Param<>("display", String.class);
@@ -30,9 +29,6 @@ public class MapParamUtils {
         return ID.get(dataElement);
     }
 
-    public static long getObjectId(DataElement dataElement) {
-        return OBJECT_ID.get(dataElement);
-    }
 
     public static long getPOI(DataElement dataElement) {
         return POI.get(dataElement);

@@ -6,16 +6,25 @@ android {
     buildToolsVersion '24.0.2'
 
     sourceSets.main.jniLibs.srcDirs = ['libs']
+    allprojects {
+        repositories {
+            jcenter()
+            flatDir{
+               dirs 'libs'
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.palmap.demo.huaweih2"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 21
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的 SO 库构架，一般而言，取你所有的库支持的构架的`交集`。
-            abiFilters 'armeabi';'armeabi-v7a'; 'x86'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            abiFilters 'armeabi-v7a'; 'x86'// 'armeabi';'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
     }
     buildTypes {
@@ -26,6 +35,7 @@ android {
         }
     }
 }
+
 
 //应用 Bugtags 插件
 apply plugin: 'com.bugtags.library.plugin'
@@ -42,27 +52,29 @@ bugtags {
 }
 
 dependencies {
-    compile 'com.bugtags.library:bugtags-lib:latest.integration'
-//    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile project(':pullToRefresh')
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:24.1.1'
     compile files('libs/fastjson-1.2.4.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/open_sdk_r5756_lite.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
-    //compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile project(':pullToRefresh')
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile files('libs/httpmime-4.2.5.jar')
     compile files('libs/nagrand-jar-with-dependencies28.jar')
-
     compile 'com.squareup.okhttp3:okhttp:3.4.2'
     compile 'com.facebook.stetho:stetho:1.3.1'
-
-//    compile 'com.android.support:support-v4:2.1.4'
     compile 'cn.bingoogolapple:bga-banner:2.1.4@aar'
+    compile 'com.xiaosu:VerticalRollingTextView:1.2.0'
+    compile 'com.zhy:autolayout:1.4.3'
+    compile 'com.squareup:otto:1.3.7'
+
+    compile(name: 'jassist-1.3.0', ext: 'aar')
+    compile(name: 'lxq', ext: 'aar')
 }

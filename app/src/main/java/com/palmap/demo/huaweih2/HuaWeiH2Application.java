@@ -1,6 +1,5 @@
 package com.palmap.demo.huaweih2;
 
-import android.app.Application;
 import android.content.Intent;
 
 import com.bugtags.library.Bugtags;
@@ -11,11 +10,13 @@ import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
 import com.palmaplus.nagrand.data.PlanarGraph;
 
+import org.xq.com.xiaoqian.application.XiaoqianApplication;
+
 /**
  * Created by eric3 on 2016/10/8.
  */
 
-public class HuaWeiH2Application extends Application {
+public class HuaWeiH2Application extends XiaoqianApplication {
   public static boolean firstRun = false;//第一次启动
   public static boolean startWelcomeAct = false;//启动欢迎界面
   public static HuaWeiH2Application instance;

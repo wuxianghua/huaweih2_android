@@ -3,7 +3,6 @@ package com.palmap.demo.huaweih2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,10 +18,11 @@ import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
 import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
 import com.palmap.demo.huaweih2.model.ICSModel;
 import com.palmap.demo.huaweih2.other.Constant;
-import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
+
+import org.xq.com.xiaoqian.util.HUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,8 @@ public class H2MainActivity extends BaseActivity {
 
     initView();
     checkFirstRun();
+
+    if (Constant.openGps)
     GpsUtils.startGetLocation(this);
 
   }
@@ -200,7 +202,11 @@ public class H2MainActivity extends BaseActivity {
         startActivity(new Intent(this, PeripheryActivity.class));
         break;
       case R.id.layout_ar://AR
-        DialogUtils.showShortToast("敬请期待！", Gravity.CENTER);
+
+//        HUtil.getIns().d = true;
+        startActivity(new Intent(H2MainActivity.this, HUtil.getIns().GoAr()));
+
+//        DialogUtils.showShortToast("敬请期待！", Gravity.CENTER);
         break;
       default:
         break;

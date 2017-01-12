@@ -132,6 +132,15 @@ public class Constant {
   public static boolean useSystemShare = false;//是否使用系统分享
   public static boolean useOkHttp = true;
 
+
+
+
+
+
   //测试参数，控制
-  public static Boolean isDebug = true;
+  public static Boolean isDebug = false;
+
+  public static Boolean openGps = false;
+
+
 }

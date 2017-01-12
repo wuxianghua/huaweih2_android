@@ -91,7 +91,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.palmap.demo.huaweih2.R.id.search_null_tv;
-import static com.palmap.demo.huaweih2.R.layout.map;
 import static com.palmap.demo.huaweih2.other.Constant.FLOOR_ID_F1;
 import static com.palmap.demo.huaweih2.other.Constant.H2大厅;
 import static com.palmap.demo.huaweih2.other.Constant.ICS办公区;
@@ -308,7 +307,7 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
-        View fragmentView = inflater.inflate(map, container, false);
+        View fragmentView = inflater.inflate(R.layout.map, container, false);
         // 初始化view
         imPush = (ImageView) fragmentView.findViewById(R.id.push);
         imPush.setVisibility(View.GONE);
@@ -2191,7 +2190,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 
     public void startNavigateInFoot() {//
         isNavigating = true;
-
 
         if (navigateLayer != null && navigateLayer.getRef_Count() > 0) {
             mMapView.removeLayer(navigateLayer);
