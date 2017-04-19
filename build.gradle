@@ -8,9 +8,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.2.2'
 
         //**bugtags**
-        classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
+        //classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.tencent.bugly:symtabfileuploader:latest.release'
     }
 }
 

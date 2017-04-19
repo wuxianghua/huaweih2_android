@@ -160,7 +160,6 @@ public class H2MainActivity extends BaseActivity {
         startActivity(intent);
       }
     });
-
     initBinner();
   }
 

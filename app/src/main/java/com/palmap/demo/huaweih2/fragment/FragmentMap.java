@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.SensorEvent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -50,6 +51,7 @@ import com.palmap.demo.huaweih2.model.RoutePoi;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.KeyBoardUtils;
+import com.palmap.demo.huaweih2.util.LocationSensorDelegate;
 import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
 import com.palmap.demo.huaweih2.view.LocationMarkAnim;
@@ -290,12 +292,13 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    private LocationSensorDelegate locationSensorDelegate;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-
         mHandler = new Handler(Looper.getMainLooper());
         mContext = (MainActivity) getActivity();
         initEngine();
@@ -474,7 +477,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         mMapView.setOnSingleTapListener(new OnSingleTapListener() {
             @Override
             public void onSingleTap(MapView mapView, float x, float y) {
-
                 if (isTapTooShort())
                     return;
 
@@ -579,6 +581,62 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
         });
 
         return fragmentView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getActivity() != null) {
+            locationSensorDelegate = new LocationSensorDelegate(getActivity());
+            locationSensorDelegate.setListener(new LocationSensorDelegate.AcceleroListener() {
+                private long timestamp;
+                private double oldMapRotate = 0;
+
+                @Override
+                public void onSensorChanged(SensorEvent event, double angle) {
+                    if (mMapView == null || locationMarkAnim == null) {
+                        return;
+                    }
+                    if (timestamp == 0) {
+                        timestamp = System.currentTimeMillis();
+                        return;
+                    }
+                    if (System.currentTimeMillis() - timestamp < 20) {
+                        return;
+                    }
+                    double currentMapRotate = mMapView.getRotate();
+                    if (currentMapRotate == 0) {
+                        currentMapRotate = oldMapRotate;
+                    } else {
+                        oldMapRotate = currentMapRotate;
+                    }
+                    float rotate = (float) (angle - currentMapRotate);
+                    locationMarkAnim.setRotation(rotate);
+                    timestamp = System.currentTimeMillis();
+                }
+            });
+
+
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(findCarTask);
+        if (locationSensorDelegate != null) {
+            locationSensorDelegate.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (locationSensorDelegate != null) {
+            locationSensorDelegate.onResume();
+        }
     }
 
     private void hideFootInfo() {
@@ -1690,53 +1748,40 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
     }
 
     public void addLocationMark(double x, double y) {//wgs84坐标
-//    mMapView.removeAllOverlay();
         if (mCurrentFloor == Constant.FLOOR_ID_B1 || isLoadingMap)
             return;
 
         checkPoiPush(LocateTimerService.getCurrentLocationArea());
-//    if (Constant.isDebug)
-//      DialogUtils.showLongToast("location:" + x + " " + y);
-
-//    LocationMark mark = new LocationMark(mContext);
-//    mark.init(new double[]{x, y});
-        //
-//    mMapView.addOverlay(mark);
-//    mMapView.getOverlayController().refresh();
-
 
         if (isNavigating && navigateManager != null && navigateManager.getRef_Count() > 0) {//将定位点放到导航线上
             Coordinate co = new Coordinate(x, y);
-            navigateManager.switchPlanarGraph(mCurrentFloor);
+            //navigateManager.switchPlanarGraph(mCurrentFloor);
             double dis = navigateManager.getMinDistanceByPoint(co);
-            if (dis < 3.0) {
-//      Types.Point point = mMapView.converToScreenCoordinate(x,y);
-//      Feature feature = mMapView.selectFeature((float) point.x,(float) point.y);
-//      if (feature!=null) {
+            if (dis < 10.0) {
                 Coordinate coordinate = navigateManager.getPointOfIntersectioanByPoint(co);
                 if (!Double.isNaN(coordinate.getX()) && !Double.isNaN(coordinate.getY())) {
                     x = coordinate.getX();
                     y = coordinate.getY();
                     LogUtils.d("addLocationMark->getPointOfIntersectioanByPoint x=" + x + " y=" + y);
                 }
-
-
                 if (!hasShowArriveEnd && calDistence(endX, endY, co.getX(), co.getY()) < Constant.NAV_MIN_DISTANCE) {
                     hasShowArriveEnd = true;
                     DialogUtils.showLongToast("您已到达终点附近");
+                    if (isNavigating) {
+                        if (isSearchCar) {
+                            isSearchCar = false;
+                            isNavigateCar = false;
+                        }
+                        getMainActivity().showTabMenu();
+                        endNavigate();
+                    }
                 }
             }
-
-
-//      }
-
         }
-
         if (locationMarkAnim != null) {
             locationMarkAnim.init(new double[]{x, y});
             locationMarkAnim.animTo(x, y);
         }
-
     }
 
     private double calDistence(double x1, double y1, double x2, double y2) {
@@ -2595,12 +2640,6 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
 //    mCurrentFloor = 0;
 
 
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mHandler.removeCallbacks(findCarTask);
     }
 
     private Runnable findCarTask = new Runnable() {

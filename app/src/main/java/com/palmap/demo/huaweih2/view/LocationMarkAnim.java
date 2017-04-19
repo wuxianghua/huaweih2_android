@@ -118,11 +118,11 @@ public class LocationMarkAnim extends LinearLayout implements OverlayCell{//} ,S
   }
 
 
-  @Override
-  public void setRotation(float rotation) {
-    int angle = (int) (180 * rotation / Math.PI);
-    super.setRotation(angle);
-  }
+//  @Override
+//  public void setRotation(float rotation) {
+//    int angle = (int) (180 * rotation / Math.PI);
+//    super.setRotation(angle);
+//  }
 
   @Override
   public double[] getGeoCoordinate() {

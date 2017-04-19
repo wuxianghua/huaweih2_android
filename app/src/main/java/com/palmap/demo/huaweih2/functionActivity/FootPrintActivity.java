@@ -24,8 +24,6 @@ import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.BitMaputils;
 import com.palmap.demo.huaweih2.util.DialogUtils;
-import com.palmap.demo.huaweih2.util.QQShareUtils;
-import com.palmap.demo.huaweih2.view.SharePopView;
 import com.palmap.demo.huaweih2.view.TitleBar;
 
 import java.io.File;
@@ -81,13 +79,6 @@ public class FootPrintActivity extends BaseActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                WXShareUtils.sendToWeChat(BitmapFactory.decodeResource(getResources(), R.drawable.share_img),
-//                        null,
-//                        );
-                SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
-//                shareModel.urlBmp = BitmapFactory.decodeResource(getResources(), R.drawable.share_img);
-
-
                 View coView = fragmentFootPrint.getBitMapView();
                 coView.setDrawingCacheEnabled(true);
                 cobitmap = coView.getDrawingCache();
@@ -95,14 +86,24 @@ public class FootPrintActivity extends BaseActivity {
                 cobitmap = Bitmap.createBitmap(cobitmap);
                 coView.setDrawingCacheEnabled(false);
                 String bitmapPath = Environment.getExternalStorageDirectory() + File.separator
-                    + "coBitmap";
+                    + "coBitmap.jpg";
                 BitMaputils.saveBitmap(cobitmap,bitmapPath);
 
-                shareModel.imgUrl = bitmapPath;
-                shareModel.urlBmp = cobitmap;
-                shareModel.text = "华为ICS实验室室内定位解决方案";
-                shareModel.title = "华为ICS实验室";
-                SharePopView.showSharePop(FootPrintActivity.this,shareModel, QQShareUtils.TYPE_LOCAL);
+//                SharePopView.ShareModel shareModel =  new SharePopView.ShareModel();
+//                shareModel.imgUrl = bitmapPath;
+//                shareModel.urlBmp = cobitmap;
+//                shareModel.text = "华为ICS实验室室内定位解决方案";
+//                shareModel.title = "华为ICS实验室";
+//                SharePopView.showSharePop(FootPrintActivity.this,shareModel, QQShareUtils.TYPE_LOCAL);
+
+                Uri uri = Uri.fromFile(new File(bitmapPath));
+                Intent share_intent = new Intent();
+                share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+                share_intent.setType("image/*");
+                share_intent.putExtra(Intent.EXTRA_STREAM, uri);
+                //创建分享的Dialog
+                share_intent = Intent.createChooser(share_intent, "华为ICS实验室");
+                startActivity(share_intent);
             }
         });
         titleBar.addRightExtendView(imageView);

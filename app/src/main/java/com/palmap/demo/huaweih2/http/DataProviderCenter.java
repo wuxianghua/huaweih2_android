@@ -45,7 +45,8 @@ public class DataProviderCenter {
   private static final String URL_UPLOAD_COMMENT_TEST = URL_SERVER_TEST + "insertCom"; // 评论上传
   private static final String URL_UPLOAD_COMMENT = URL_SERVER + "insertCom"; // 评论上传
 
-  private static final String URL_LOCATE_TEST_h2_half = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData="; // H2定位
+//  private static final String URL_LOCATE_TEST_h2_half = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData="; // H2定位
+  private static final String URL_LOCATE_TEST_h2_half = "https://h2.ipalmap.com/pos?idData="; // H2定位
 
   private static DataProviderCenter instance = null;
   private DataProvider mDataProvider;
@@ -84,9 +85,12 @@ public class DataProviderCenter {
       mDataProvider.postDataProvider("", heads, jsonString == null ? null : jsonString.getBytes(), callBack);
     else {
       if (!Constant.usePhoneIp) {
-        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&sceneId=11672", heads, callBack);
+//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&sceneId=11672", heads, callBack);
+        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&appKey=" + Constant.APP_KEY, heads, callBack);
       }else {
-        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + HuaWeiH2Application.userIp + "&sceneId=11672", heads, callBack);
+//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + HuaWeiH2Application.userIp + "&sceneId=11672", heads, callBack);
+        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + HuaWeiH2Application.userIp+"&appKey=" + Constant.APP_KEY, heads, callBack);
+//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + "10.14.147.134"+"&appKey=" + Constant.APP_KEY, heads, callBack);
       }
     }
 //      mDataProvider.postDataProvider(URL_LOCATE, heads,jsonString==null?null:jsonString.getBytes(),callBack);

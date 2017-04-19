@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.bugtags.library.Bugtags;
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
 
 /**
@@ -35,27 +34,13 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         isActivityVisible = true;
-
-        //注：Bugtags回调 1
-        Bugtags.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isActivityVisible = false;
-
-        //注：Bugtags回调 2
-        Bugtags.onPause(this);
     }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        //注：Bugtags回调 3
-        Bugtags.onDispatchTouchEvent(this, ev);
-        return super.dispatchTouchEvent(ev);
-    }
-
     /*
           *  显示进度条
           * */

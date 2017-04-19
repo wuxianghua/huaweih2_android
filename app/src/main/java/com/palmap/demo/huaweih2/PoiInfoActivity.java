@@ -1,6 +1,8 @@
 package com.palmap.demo.huaweih2;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -11,8 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.palmap.demo.huaweih2.json.PoiInfo;
 import com.palmap.demo.huaweih2.util.BitMaputils;
-import com.palmap.demo.huaweih2.util.QQShareUtils;
-import com.palmap.demo.huaweih2.view.SharePopView;
 
 import java.io.File;
 
@@ -71,17 +71,24 @@ public class PoiInfoActivity extends BaseActivity {
                 coView.setDrawingCacheEnabled(false);
 
                 String bitmapPath = Environment.getExternalStorageDirectory() + File.separator
-                        + "coBitmap";
+                        + "coBitmap.jpg";
 
                 BitMaputils.saveBitmap(cobitmap,bitmapPath);
+//                SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
+//                shareModel.urlBmp = cobitmap;
+//                shareModel.text = "华为ICS实验室室内定位解决方案";
+//                shareModel.title = "华为ICS实验室";
+//                shareModel.imgUrl = bitmapPath;
+//                SharePopView.showSharePop(PoiInfoActivity.this, shareModel, QQShareUtils.TYPE_LOCAL);
 
-                SharePopView.ShareModel shareModel = new SharePopView.ShareModel();
-                shareModel.urlBmp = cobitmap;
-                shareModel.text = "华为ICS实验室室内定位解决方案";
-                shareModel.title = "华为ICS实验室";
-                shareModel.imgUrl = bitmapPath;
-
-                SharePopView.showSharePop(PoiInfoActivity.this, shareModel, QQShareUtils.TYPE_LOCAL);
+                Uri uri = Uri.fromFile(new File(bitmapPath));
+                Intent share_intent = new Intent();
+                share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+                share_intent.setType("image/*");
+                share_intent.putExtra(Intent.EXTRA_STREAM, uri);
+                //创建分享的Dialog
+                share_intent = Intent.createChooser(share_intent, "华为ICS实验室");
+                startActivity(share_intent);
             }
         });
 

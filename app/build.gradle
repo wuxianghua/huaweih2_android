@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'bugly'
 
 android {
     useLibrary 'org.apache.http.legacy'
@@ -36,19 +37,9 @@ android {
     }
 }
 
-
-//应用 Bugtags 插件
-apply plugin: 'com.bugtags.library.plugin'
-
-//Bugtags 插件配置
-bugtags {
-    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "267921bb8c8c795df7f7ffa41ac5d307"  //这里是你的 appKey
-    appSecret "d0d30381cc1af5d046caf69654749862"    //这里是你的 appSecret，管理员在设置页可以查看
-    mappingUploadEnabled true
-
-    //网络跟踪功能配置(企业版)
-    trackingNetworkEnabled false
+bugly {
+    appId = "d0fd96e1a6"
+    appKey = "fc5175a9-3187-4c49-95a5-eaa4f41cf587"
 }
 
 dependencies {
@@ -57,7 +48,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':pullToRefresh')
-    compile 'com.bugtags.library:bugtags-lib:latest.integration'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:24.1.1'
     compile files('libs/fastjson-1.2.4.jar')
@@ -77,4 +67,7 @@ dependencies {
 
     compile(name: 'jassist-1.3.0', ext: 'aar')
     compile(name: 'lxq', ext: 'aar')
+
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
 }

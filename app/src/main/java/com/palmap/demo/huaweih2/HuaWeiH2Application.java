@@ -2,13 +2,12 @@ package com.palmap.demo.huaweih2;
 
 import android.content.Intent;
 
-import com.bugtags.library.Bugtags;
-import com.bugtags.library.BugtagsOptions;
 import com.facebook.stetho.Stetho;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
 import com.palmaplus.nagrand.data.PlanarGraph;
+import com.tencent.bugly.Bugly;
 
 import org.xq.com.xiaoqian.application.XiaoqianApplication;
 
@@ -28,30 +27,17 @@ public class HuaWeiH2Application extends XiaoqianApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-
     instance = this;
     copyPalmapFile();
-
+    Bugly.init(getApplicationContext(), "d0fd96e1a6", false);
     Engine.getInstance();
     if (BuildConfig.DEBUG) {
-
       Stetho.initialize(
               Stetho.newInitializerBuilder(this)
                       .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                       .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                       .build());
     }
-
-    //Bugtags在这里初始化
-    BugtagsOptions options = new BugtagsOptions.Builder().
-        trackingLocation(true).//是否获取位置，默认 true
-        trackingCrashLog(true).//是否收集crash，默认 true
-        trackingConsoleLog(true).//是否收集console log，默认 true
-        trackingUserSteps(true).//是否收集用户操作步骤，默认 true
-        trackingNetworkURLFilter("(.*)").//自定义网络请求跟踪的 text 规则，默认 null
-        build();
-    Bugtags.start("267921bb8c8c795df7f7ffa41ac5d307", this, Bugtags.BTGInvocationEventNone,options);
-
   }
 
   private void copyPalmapFile(){
