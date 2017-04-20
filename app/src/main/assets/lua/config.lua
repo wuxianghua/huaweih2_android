@@ -48,7 +48,11 @@ local function LoadIconStyle(config, _3d)
 	local style = _3d and CreateStyle('icon_3d') or CreateStyle('icon_2d')
 
 	local unit = config.unit
+	local level = config.level
+
   	if unit then style.unit = unit end
+  	if level then style.level = level end
+
 	if not _3d then
 		local width = config.width
 		local height = config.height
@@ -101,9 +105,11 @@ local function LoadAnnotationStyle(config, _3d)
 
   local height = config.height
   local unit = config.unit
+  local level = config.level
 
   if height then style.height = height end
   if unit then style.unit = unit end
+  if level then style.level = level end
 
   if not _3d then
     local color = config.color
@@ -237,7 +243,6 @@ local function LoadLineStringStyle(config, _3d)
 	local enable_alpha = config.enable_alpha
 	local automatic_scale = config.automatic_scale
 	local alignment = config.alignment
-	local enable_width = config.enable_width
 	local line_style = config.line_style
 	local has_arrow = config.has_arrow
 
@@ -249,7 +254,6 @@ local function LoadLineStringStyle(config, _3d)
 	if enable_alpha ~= nil then style.enable_alpha = enable_alpha end
 	if automatic_scale ~= nil then style.automatic_scale = automatic_scale end
 	if alignment then style.alignment = alignment end
-	if enable_width ~= nil then style.enable_width = enable_width end
     if line_style then style.line_style = line_style end
 	if has_arrow ~= nil then style.has_arrow = has_arrow end
 

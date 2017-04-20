@@ -19,23 +19,20 @@ public class Mark extends LinearLayout implements OverlayCell {
   public final static int START = 1;
   public final static int END = 2;
   private int type ;
-//  private TextView mPosX;
-//  private TextView mPosY;
-//  private TextView mPosId;l
 
   private double[] mGeoCoordinate;
-//  private int mId;
 
-  public Mark(Context context) {
+  private long floorId;
+
+//  public Mark(Context context,long floorId) {
+//    super(context);
+//    this.floorId = floorId;
+//    initView();
+//  }
+
+  public Mark(Context context,long floorId,int type) {
     super(context);
-
-    initView();
-  }
-
-  public Mark(Context context,int type) {
-    super(context);
-
-//    this.mId = id;
+    this.floorId = floorId;
     this.type=type;
     initView();
   }
@@ -90,6 +87,11 @@ public class Mark extends LinearLayout implements OverlayCell {
   public void position(double[] doubles) {
     setX((float) doubles[0] - getWidth() / 2);
     setY((float) doubles[1] - getHeight());
+  }
+
+  @Override
+  public long getFloorId() {
+    return floorId;
   }
 
 }

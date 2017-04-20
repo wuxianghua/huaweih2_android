@@ -34,18 +34,20 @@ public class PoiGreyMark extends LinearLayout implements OverlayCell {
 //  private TextView mPosId;l
 
   private double[] mGeoCoordinate;
+  private long floorId;
 //  private int mId;
 
-  public PoiGreyMark(Context context) {
+  public PoiGreyMark(Context context,long floorId) {
     super(context);
 
     this.context = context;
+    this.floorId = floorId;
     initView();
   }
 
-  public PoiGreyMark(Context context, String name,OnClickListenerForMark onClickListenerForMark) {
+  public PoiGreyMark(Context context,long floorId, String name,OnClickListenerForMark onClickListenerForMark) {
     super(context);
-
+    this.floorId = floorId;
     this.onClickListenerForMark = onClickListenerForMark;
     this.context=context;
     this.name = name;
@@ -109,6 +111,11 @@ public class PoiGreyMark extends LinearLayout implements OverlayCell {
   public void position(double[] doubles) {
     setX((float) doubles[0] - getWidth() / 2);
     setY((float) doubles[1] - getHeight() );
+  }
+
+  @Override
+  public long getFloorId() {
+    return this.floorId;
   }
 
 

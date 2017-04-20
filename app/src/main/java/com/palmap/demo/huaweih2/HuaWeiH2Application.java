@@ -6,7 +6,6 @@ import com.facebook.stetho.Stetho;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
-import com.palmaplus.nagrand.data.PlanarGraph;
 import com.tencent.bugly.Bugly;
 
 import org.xq.com.xiaoqian.application.XiaoqianApplication;
@@ -21,8 +20,8 @@ public class HuaWeiH2Application extends XiaoqianApplication {
   public static HuaWeiH2Application instance;
   public static String userIp = "00000000";
 
-  public static PlanarGraph planarGraphF1 = null;//缓存楼层数据
-  public static PlanarGraph planarGraphB1= null;
+  //public static PlanarGraph planarGraphF1 = null;//缓存楼层数据
+  //public static PlanarGraph planarGraphB1= null;
 
   @Override
   public void onCreate() {

@@ -25,40 +25,21 @@ public class PoiRedMark extends LinearLayout implements OverlayCell{
   private String name;
   private Context context;
   private OnClickListenerForMark onClickListenerForMark;
-  double[] x={12697150.114,
-      12697129.354,
-      12697098.453,
-      12697087.313
 
-  };
-  double[] y={
-      2588909.271,
-      2588909.813,
-      2588907.851,
-      2588875.184
-
-  };
-//  public final static int NORMAL = 0;
-//  public final static int START = 1;
-//  public final static int END = 2;
-//  private int type ;
-//  private TextView mPosX;
-//  private TextView mPosY;
-//  private TextView mPosId;l
+  private long floorId;
 
   private double[] mGeoCoordinate;
-//  private int mId;
 
-  public PoiRedMark(Context context) {
+  public PoiRedMark(Context context,long floorId) {
     super(context);
-
+    this.floorId = floorId;
     this.context = context;
     initView();
   }
 
-  public PoiRedMark(Context context, String name,OnClickListenerForMark onClickListenerForMark) {
+  public PoiRedMark(Context context,long floorId, String name,OnClickListenerForMark onClickListenerForMark) {
     super(context);
-
+    this.floorId = floorId;
     this.onClickListenerForMark = onClickListenerForMark;
     this.context=context;
     this.name = name;
@@ -92,17 +73,9 @@ public class PoiRedMark extends LinearLayout implements OverlayCell{
   }
 
   public void setMark(int id, double x, double y){
-//    mId = id;
-//    mPosId.setText(String.valueOf(id));
-//    mPosX.setText("x: " + x);
-//    mPosY.setText("y: " + y);
   }
 
   public void setMark(int id, double x, double y, int resId) {
-//    mId = id;
-//    mPosId.setText(String.valueOf(id));
-//    mPosX.setText("x: " + x);
-//    mPosY.setText("y: " + y);
     mIconView.setBackgroundResource(resId);
   }
 
@@ -116,15 +89,16 @@ public class PoiRedMark extends LinearLayout implements OverlayCell{
     return mGeoCoordinate;
   }
 
-
-  //用于定位覆盖物位置，这个接口会由SDK调用，
-//最终参数是覆盖物添加世界坐标转换后的屏幕坐标，
-//这个接口在做地图交互是会一直调用，如果你想自己控制覆盖物的显示位置，可以自己自定义这个接口
   @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public void position(double[] doubles) {
     setX((float) doubles[0] - getWidth() / 2);
     setY((float) doubles[1] - getHeight() );
+  }
+
+  @Override
+  public long getFloorId() {
+    return this.floorId;
   }
 
 
