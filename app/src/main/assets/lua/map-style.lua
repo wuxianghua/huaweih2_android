@@ -27,8 +27,7 @@ end
 
 local function Set3dColorWith(color, widthColor, topcolor, sidecolor, temph)
 
-    if (temph == 0)
-    then
+    if (temph == 0) then
         temph = 10.0
     end
     return {
@@ -446,27 +445,18 @@ CONFIG = {
                             [24097000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [23024000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [23063000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
-
                             [23059000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
-
                             [23024000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [23025000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
                             [23018000] = Set2dColor('0xfffbebee', '0xfff3bdc8', 0.15);
                             [15000000] = Set2dColor('0xfffbebee', '0xfff3bdc8', 0.15);
                             [17004000] = Set2dColor('0xfffffff8', '0xffaf967e', 0.15);
-
                             [22001000] = Set2dColor('0xffe6edf6', '0xffb2c8e4', 0.15);
-                            --              [23027000] = Set2dColor('0xffef1e8f6','0xffd1b5e2',1);
                             [23001000] = Set2dColor('0xffe6f2e7', '0xffb5d9b8', 0.15);
                             [23027000] = Set2dColor('0xfff1e8f6', '0xffd1b5e2', 0.15);
-
                             [24007000] = Set2dColor('0xffcce0de', '0xffcce0de', 0.15);
                             [24008000] = Set2dColor('0xffc7c7c7', '0xffc7c7c7', 0.15);
-
                             [23040000] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15); --饮水间
-                            --              [37000000] = Set2dColor('0xfffcf2b4','0xfffcf2b4',0);
-                            --              [23026000] = Set2dColor('0xffffffff','0xffffffff',0);
-
                             ['\\冲之大道'] = Set2dColor('0xfffcf2b4', '0xfffcf2b4', 0);
                             ['\\五和大道'] = Set2dColor('0xfffcf2b4', '0xfffcf2b4', 0);
                             ['\\贝尔路'] = Set2dColor('0xfffcf2b4', '0xfffcf2b4', 0);
@@ -479,19 +469,13 @@ CONFIG = {
                             ['\\办公楼'] = Set2dColor('0xfffffff8', '0xfffffff8', 0.15);
                             ['\\接待处'] = Set2dColor('0xfffffff8', '0xfffffff8', 0.15);
                             ['\\H2办公楼'] = Set2dColor('0xfffcf2e2', '0xfff7d4a3', 0.15);
-
                             [1284129] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
                             [1284127] = Set2dColor('0x00fffff8', '0x00fffff8', 0.15);
-                            [1583138]= Set2dColor('0x00fffff8', '0x00fffff8', 0);
---                            [1583138]= Set2dColor('0xfff9cb9c', '0xfff9cb9c', 0);
-
+                            [1583138] = Set2dColor('0x00fffff8', '0x00fffff8', 0);
                             [24002000] = Set2dColor('0xffc8dedc', '0xffe6f0ef', 0.05);
-
                             [24005000] = Set2dColor('0xffcce0de', '0xffcce0de', 0);
-
---                            [1263037] = Set2dColor('0xfffffff8', '0x00fffff8', 0); --走廊
-
-                            ['1490708'] = {--走廊
+                            ['1490708'] = {
+                                --走廊
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -506,7 +490,8 @@ CONFIG = {
                                     left_side = {}
                                 }
                             },
-                            ['1270158'] = {--H1
+                            ['1270158'] = {
+                                --H1
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -521,7 +506,8 @@ CONFIG = {
                                     left_side = {}
                                 }
                             },
-                            ['1270162'] = {--H3
+                            ['1270162'] = {
+                                --H3
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -536,7 +522,8 @@ CONFIG = {
                                     left_side = {}
                                 }
                             },
-                            ['1270166'] = {--H4
+                            ['1270166'] = {
+                                --H4
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -551,22 +538,8 @@ CONFIG = {
                                     left_side = {}
                                 }
                             },
---                            ['1261981'] = {--H2 B1
---                                ['2d'] = {
---                                    style = 'polygon',
---                                    face = {
---                                        color = '0x00e6edf6',
---                                        enable_alpha = true,
---                                    },
---                                    outline = {
---                                        color = '0xffaf967e',
---                                        width = 0.5,
---                                        alignment = 'AlignLeft',
---                                    },
---                                    left_side = {}
---                                }
---                            },
-                            ['1284122'] = {--H 停车场
+                            ['1284122'] = {
+                                --H 停车场
                                 ['2d'] = {
                                     style = 'polygon',
                                     face = {
@@ -581,511 +554,6 @@ CONFIG = {
                                     left_side = {}
                                 }
                             },
---                            [1263037] = Set2dColor('0xfffffff8', '0xfffffff8', 0); --走廊
-
-                            --              ['\\ICS'] = Set2dColor('0xfffffff8','0xfffffff8',0.15);
-                            --              ['\\ICS'] = Set2dColor('0xfffffff8','0xfffffff8',0.15);
-
-                            --              ['\\H2办公楼'] = Set2dColor('0xff00000000','0xfff7d4a3',1);
-                            --              --商场
-                            --              [13032000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13035000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13062000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13105000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13111000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13101000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13076000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff97a8d4', 5.0),
-                            --              [13152010] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff7e8acf', 5.0),
-                            --              [15003000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff7e8acf', 5.0),
-                            --              [12005000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff7e8acf', 5.0),
-                            --              [15028000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff7e8acf', 5.0),
-                            --              [15008000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff7e8acf', 5.0),
-                            --              [11405001] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xffe3c394', 5.0),
-                            --              [11405003] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xffe3c394', 5.0),
-                            --              [11471000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xffe3c394', 5.0),
-                            --              [11454000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xffe3c394', 5.0),
-                            --              [23004000] = Set3dColorWith('0xffffe6f7', '0xff8a8aae', '0xffffe6f7', '0xffeabcdb', 3.0),
-                            --              --分割线
-                            --              [23006000] = Set3dColorWith('0xffdce8f5', '0xff8a8aae', '0xffdce8f5', '0xffdce8f5', 5.0),
-                            --              [24097000] = Set3dColorWith('0xffc0e5a8', '0xff8a8aae', '0xffc0e5a8', '0xffa9d18f', 1.0),
-                            --              [24091000] = Set3dColorWith('0xffc0e5a8', '0xff8a8aae', '0xffc0e5a8', '0xffa9d18f', 1.0),
-                            --              [23024000] = Set3dColorWith('0xffc0e5a8', '0xff8a8aae', '0xffc0e5a8', '0xffa9d18f', 1.0),
-                            --              [23025000] = Set3dColorWith('0xffc0e5a8', '0xff8a8aae', '0xffc0e5a8', '0xffa9d18f', 1.0),
-                            --              [24093000] = Set3dColorWith('0xffc0e5a8', '0xff8a8aae', '0xffc0e5a8', '0xffa9d18f', 1.0),
-                            --              [24000000] = Set2dColorWith('0xffd3d9e2', '0xff8a8aad'),
-                            --              --爆炸
-                            --              [11001000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11002000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11003000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11004000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11005000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11006000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11007000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11008000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11009000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11010000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11011000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11012000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11013000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11014000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11015000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11016000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11017000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11018000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11019000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11020000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11021000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11022000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11023000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11201000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11202000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11203000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11204000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11205000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11206000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11207000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11208000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11209000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11210000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11211000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11212000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11213000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11214000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11215000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11216000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11217000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11401000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11402000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11403000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11404000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11405000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11451000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11452000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11453000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11454000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11471000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11472000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11473000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [11491000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [13001000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13002000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13003000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13004000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13005000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13006000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13007000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13008000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13009000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13010000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13011000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13031000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13032000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13033000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13034000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13035000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13036000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13037000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [13051000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13052000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13053000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13054000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13061000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13062000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13063000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13071000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13072000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13073000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13074000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13075000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13076000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13091000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13092000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13093000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13094000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13095000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13096000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13101000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13102000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13103000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13104000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13105000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13111000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13112000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13113000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13114000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13115000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13116000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13117000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13121000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13122000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13123000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13124000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13125000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13126000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13127000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13128000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13129000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13141000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13142000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13143000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13144000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13151000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13152000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13153000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13154000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13155000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13156000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13161000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13162000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13163000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13164000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13165000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13166000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13167000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13168000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13169000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [13170000] = Set3dColorWith('0xffa5b1f2', '0xff8a8aae', '0xffa5b1f2', '0xff8d9be8', 5.0),
-                            --              [12001000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12002000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12003000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12004000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12005000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12006000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12007000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12008000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12009000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12010000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12011000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12012000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12013000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12014000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [12015000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14001000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14002000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14003000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14004000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14005000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14006000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14007000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14008000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14009000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14010000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14011000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14012000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14013000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14014000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14015000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15001000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15002000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15003000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15004000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15005000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15006000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15007000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15008000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15009000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15010000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15011000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15012000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15013000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15014000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15015000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15016000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15017000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15018000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15019000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15020000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15021000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15022000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15023000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15024000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15025000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15026000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15027000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15028000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15029000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15030000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15031000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15032000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15033000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15034000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15035000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15036000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15037000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15038000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15039000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15040000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15041000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15042000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15043000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15044000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15045000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15046000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [16001000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16002000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16003000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16004000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16005000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16006000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16007000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16008000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16009000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16010000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16011000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16012000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16013000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16014000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16015000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [16016000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21042000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21023000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21043000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21044000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21045000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21046000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21047000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21048000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21049000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21001000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21002000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21003000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21004000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21005000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21006000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21007000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21008000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21009000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21051000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21010000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21011000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21012000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21013000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21014000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21015000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21016000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21017000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21018000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21019000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21020000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21021000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21022000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21024000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21025000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21026000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21027000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21028000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21029000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21030000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21031000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21032000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21050000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21033000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21034000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21035000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21036000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21037000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21038000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21039000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21040000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [21041000] = Set3dColorWith('0xffd4edff', '0xff8a8aae', '0xffd4edff', '0xffd4e2ff', 5.0),
-                            --              [17001000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17002000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17003000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17004000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17005000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17006000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17007000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [17008000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22001000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22002000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22003000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22004000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22006000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22018000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22019000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22020000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22031000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22032000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22039000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22040000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22051000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22011000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22012000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22005000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22013000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22014000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22015000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22016000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22017000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22021000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22022000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22023000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22033000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22034000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22035000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22036000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22037000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22038000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22052000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22053000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22054000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [22055000] = Set3dColorWith('0xfffdebd8', '0xff8a8aae', '0xfffdebd8', '0xfffedebc', 5.0),
-                            --              [23001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23003000] = Set3dColorWith('0xffdeefff','0xff8a8aae', '0xffdeefff', '0xffdeefff', 5.0),
-                            --              [23004000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23005000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23006000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23007000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23008000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23009000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23010000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23011000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23012000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23013000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23014000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23015000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23016000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23017000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23018000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23019000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23020000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23021000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23022000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23023000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23024000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23025000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23026000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23027000] = Set3dColorWith('0xffeef9ff','0xff8a8aae', '0xffeef9ff', '0xffeef9ff', 5.0),
-                            --              [23028000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23029000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23030000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23031000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23032000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23033000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23034000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23035000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23036000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23037000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23038000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23039000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23040000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23041000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23042000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23043000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23044000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23045000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23046000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23047000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23048000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23049000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23050000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23051000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23052000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23053000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23054000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23055000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23056000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23057000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23058000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23059000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23060000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23061000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [23062000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24001000] = Set3dColorWith('0xff99ccff','0xff8a8aae', '0xff99ccff', '0xff99ccff', 5.0),
-                            --              [24002000] = Set3dColorWith('0xff99ccff','0xff8a8aae', '0xff99ccff', '0xff99ccff', 5.0),
-                            --              [24003000] = Set3dColorWith('0xff99ccff','0xff8a8aae', '0xff99ccff', '0xff99ccff', 5.0),
-                            --              [24004000] = Set3dColorWith('0xffbbe0ff','0xff8a8aae', '0xffbbe0ff', '0xffbbe0ff', 5.0),
-                            --              [24005000] = Set3dColorWith('0xffbbe0ff','0xff8a8aae', '0xffbbe0ff', '0xffbbe0ff', 5.0),
-                            --              [24006000] = Set3dColorWith('0xffbbe0ff','0xff8a8aae', '0xffbbe0ff', '0xffbbe0ff', 5.0),
-                            --              [24007000] = Set3dColorWith('0xffbbe0ff','0xff8a8aae', '0xffbbe0ff', '0xffbbe0ff', 5.0),
-                            --              [24008000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24009000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24010000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24011000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24012000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24013000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24014000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24041000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24042000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24043000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24044000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24061000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24062000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24063000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24091000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24092000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24093000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24094000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24095000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24096000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24097000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24098000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24099000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24100000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24111000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24112000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24113000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24114000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24115000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24116000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24117000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24118000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24119000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24120000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24121000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24122000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24141000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24142000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24151000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24152000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24161000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24162000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24163000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [31001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [31002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [31003000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [31004000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [32001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [32002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [32003000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [32021000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33021000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33022000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33041000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33042000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [34001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [34002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [34021000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [35001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [35002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [35003000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [36001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [36002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [37001000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [37002000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              --大类配色
-                            --              [11000000] = Set3dColorWith('0xfff7e9d5', '0xff8a8aae', '0xfff7e9d5', '0xfff9dcb3', 5.0),
-                            --              [13000000] = Set3dColorWith('0xffb7c0ef', '0xff8a8aae', '0xffb7c0ef', '0xffa1adec', 5.0),
-                            --              [12000000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [14000000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [15000000] = Set3dColorWith('0xffb9cbf9', '0xff8a8aae', '0xffb9cbf9', '0xff9faaf9', 5.0),
-                            --              [16000000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [21000000] = Set3dColorWith('0xff92c4ff', '0xff8a8aae', '0xff92c4ff', '0xff9ab5fb', 5.0),
-                            --              [17000000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [22000000] = Set3dColorWith('0xffffcaa6', '0xff8a8aae', '0xffffcaa6', '0xfff9bc92', 5.0),
-                            --              [23000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [24000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [31000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [32000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [33000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [34000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [35000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [36000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              [37000000] = Set3dColorWith('0xffe0ffcc', '0xff8a8aae', '0xffe0ffcc', '0xffd3f8bc', 5.0),
-                            --              --爆炸
                         }
                     }
                 },
@@ -1108,92 +576,65 @@ CONFIG = {
                             height = 5.0,
                             aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
                         },
---                        key = {
---                            'category',
---                            'display',
---                        },
---                        default = DEFAULT_TEXT(),
---                        styles = {
---
---                            ['null'] = {
---                                ['2d'] = {
---                                    style = 'annotation',
---                                    color = '0x00ffffff',
---                                    field = 'display',
---                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
---                                    size = 6,
---                                    outline_color = '0x00ffffff',
---                                    outline_width = 0.5,
---                                    anchor_x = 0.5,
---                                    anchor_y = 0.5,
---                                    height = 5.0,
---                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
---                                }
---                            },
---                            ['ICS办公区'] = {
---                                ['2d'] = {
---                                    style = 'annotation',
---                                    color = '0x00ffffff',
---                                    field = 'display',
---                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
---                                    size = 6,
---                                    outline_color = '0x00ffffff',
---                                    outline_width = 0.5,
---                                    anchor_x = 0.5,
---                                    anchor_y = 0.5,
---                                    height = 5.0,
---                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
---                                }
---                            }
---                            [24005000] = {  --假设匹配到了category为4018000000的Feature，那么使用下面设置的样式
---                                           ['2d'] = {
---                             style='nullstyle',
---                             }
+                        --                        key = {
+                        --                            'category',
+                        --                            'display',
+                        --                        },
+                        --                        default = DEFAULT_TEXT(),
+                        --                        styles = {
+                        --
+                        --                            ['null'] = {
+                        --                                ['2d'] = {
+                        --                                    style = 'annotation',
+                        --                                    color = '0x00ffffff',
+                        --                                    field = 'display',
+                        --                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+                        --                                    size = 6,
+                        --                                    outline_color = '0x00ffffff',
+                        --                                    outline_width = 0.5,
+                        --                                    anchor_x = 0.5,
+                        --                                    anchor_y = 0.5,
+                        --                                    height = 5.0,
+                        --                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+                        --                                }
+                        --                            },
+                        --                            ['ICS办公区'] = {
+                        --                                ['2d'] = {
+                        --                                    style = 'annotation',
+                        --                                    color = '0x00ffffff',
+                        --                                    field = 'display',
+                        --                                    unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+                        --                                    size = 6,
+                        --                                    outline_color = '0x00ffffff',
+                        --                                    outline_width = 0.5,
+                        --                                    anchor_x = 0.5,
+                        --                                    anchor_y = 0.5,
+                        --                                    height = 5.0,
+                        --                                    aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+                        --                                }
+                        --                            }
+                        --                            [24005000] = {  --假设匹配到了category为4018000000的Feature，那么使用下面设置的样式
+                        --                                           ['2d'] = {
+                        --                             style='nullstyle',
+                        --                             }
 
---                             ['2d'] = {
---                             style = 'annotation',
---                             color = '0x00343434',
---                             field = 'display',
---                             unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
---                             size = 6,
---                             outline_color = '0x00ffffff',
---                             outline_width = 0.5,
---                             anchor_x = 0.5,
---                             anchor_y = 0.5,
---                             height = 5.0,
---                             aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
---                             }
---                             },
---                        }
+                        --                             ['2d'] = {
+                        --                             style = 'annotation',
+                        --                             color = '0x00343434',
+                        --                             field = 'display',
+                        --                             unit = 'pt', -- 大小(width、height)使用的单位,"px"表示像素,"pt"表示1/72英寸
+                        --                             size = 6,
+                        --                             outline_color = '0x00ffffff',
+                        --                             outline_width = 0.5,
+                        --                             anchor_x = 0.5,
+                        --                             anchor_y = 0.5,
+                        --                             height = 5.0,
+                        --                             aabbox_extend = 15, --外包盒扩大像素数，用于扩大碰撞检测范围
+                        --                             }
+                        --                             },
+                        --                        }
                     }
                 },
-                -- icon_text
-                --        Area_text = {
-                --          collision_detection = true,
-                --          font_path = GET_FONT_PATH(),
-                --          renderer = {
-                --            type = 'simple',
-                --            ['2d'] = {
-                --              anchor_style = {
-                --                style = 'icon',
-                --                icon_url = 'http://api.ipalmap.com/logo/64/', -- 设置服务器图标下载地址
-                --                icon_cache = GET_CACHE_PATH() .. "/icon/", -- 设置图标缓存地址
-                --                icon_online = 'logo', -- 使用哪个字段的名称作为图标资源名称
-                --                use_texture_origin_size = true, -- 是否按照原始尺寸显示图标，如果为true，则下面宽高无效
-                --                width = 45,
-                --                height = 45,
-                --              },
-                --              style = 'annotation', -- 参照上面
-                --              color = '0xFF3c3f45',
-                --              field = 'name',
-                --              size = 25,
-                --              outline_color = '0xFFffffff',
-                --              outline_width = 0.5,
-                --              anchor_x = 0.5,
-                --              anchor_y = 0.5,
-                --            },
-                --          }
-                --        },
                 Facility = {
                     height_offset = -0.2;
                     collision_detection = true,
@@ -1313,8 +754,6 @@ CONFIG = {
                             [34002000] = ICON('icons/34002000.png'),
                             [35001000] = ICON('icons/35001000.png'),
                             [22006000] = ICON('icons/22006000.png'),
-
-
                             [23063000] = ICON('icons/23063000.png'),
                         }
                     }
@@ -1363,17 +802,6 @@ CONFIG = {
                         }
                     }
                 },
-
-                --          poi = {
-                --            height_offset = 0,
-                --            renderer = {
-                --              type = 'unique',
-                --              key = {
-                --                'id',
-                --                'name',
-                --                'category',
-                --              },
-                --            default = DEFAULT_STYLE_MY()}},
             }
         },
     }

@@ -1734,8 +1734,9 @@ public class FragmentMap extends BaseFragment implements View.OnClickListener {
                 }
             }
         }
-        if (locationMarkAnim != null) {
+        if (locationMarkAnim != null&& locationMarkAnim.check()) {
             locationMarkAnim.init(new double[]{x, y});
+            locationMarkAnim.setFloorId(mCurrentFloor);
             locationMarkAnim.animTo(x, y);
         }
     }

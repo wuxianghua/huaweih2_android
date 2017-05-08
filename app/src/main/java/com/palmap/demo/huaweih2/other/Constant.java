@@ -123,7 +123,7 @@ public class Constant {
 
   public static boolean usePhoneIp = true;
 
-  public static String testIp = "10.1.137.118";
+  public static String testIp = "10.55.92.234";
 
   public static long LOCATE_FRESH_TIME = 1000;//定位间隔时间
 

@@ -63,8 +63,10 @@ public class LocationMarkAnim extends LinearLayout implements OverlayCell{//} ,S
   public void init(double[] doubles) {
     position = doubles;
     Types.Point point = mapView.converToScreenCoordinate(doubles[0],doubles[1]);
-    x = (float) point.x;
-    y = (float) point.y;
+    if (point != null) {
+      x = (float) point.x;
+      y = (float) point.y;
+    }
   }
 
 //  /**
@@ -198,5 +200,10 @@ public class LocationMarkAnim extends LinearLayout implements OverlayCell{//} ,S
 //  public void onAccuracyChanged(Sensor sensor, int accuracy) {
 //
 //  }
+
+  public boolean check(){
+    return !(this.mapView == null);
+  }
+
 }
 
