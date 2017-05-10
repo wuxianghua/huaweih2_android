@@ -16,6 +16,15 @@ android {
         }
     }
 
+    signingConfigs {
+        debugConfig {
+            keyAlias 'palmap'
+            keyPassword '123456'
+            storeFile file('../wtm.jks')
+            storePassword '123456'
+        }
+    }
+
     defaultConfig {
         applicationId "com.palmap.demo.huaweih2"
         minSdkVersion 16
@@ -29,6 +38,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debugConfig
+        }
         release {
 //            shrinkResources true
             minifyEnabled false
@@ -70,4 +82,5 @@ dependencies {
 
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    compile files('libs/AMap_Location_V3.3.0_20170118.jar')
 }

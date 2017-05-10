@@ -24,7 +24,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
-
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature
@@ -44,6 +45,12 @@
         tools:replace="icon"
         >
 
+        <service android:name="com.amap.api.location.APSService"></service>
+
+        <!-- 高德地图key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="6870c729e98b03acfa17584d23193fcd"/>
 
         <activity
             android:name="com.palmap.demo.huaweih2.WelcomeActivity"

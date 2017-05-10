@@ -140,7 +140,7 @@ public class Constant {
   //测试参数，控制
   public static Boolean isDebug = false;
 
-  public static Boolean openGps = false;
+  public static Boolean openGps = true;
 
 
 }
