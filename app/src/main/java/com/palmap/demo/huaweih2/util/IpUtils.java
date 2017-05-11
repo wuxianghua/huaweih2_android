@@ -76,7 +76,8 @@ public class IpUtils {
                 }
             }
         } catch (Exception e) {
-            DialogUtils.showShortToast(e.getMessage());
+            //DialogUtils.showShortToast(e.getMessage());
+            return "";
         }
         return "";
     }

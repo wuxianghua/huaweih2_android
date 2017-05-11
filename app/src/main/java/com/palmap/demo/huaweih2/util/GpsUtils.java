@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -29,6 +30,8 @@ public class GpsUtils {
   public static int curAccuracy = 99999;//精度,单位m
 
   private static Timer mTimer;
+
+  private static final String TAG = "GpsUtils";
 
   //  private static List<LocationListener> listeners = new ArrayList<>();
   private static List<AMapLocationListener> listeners = new ArrayList<>();
@@ -211,9 +214,12 @@ public class GpsUtils {
 
 //        DialogUtils.showShortToast("纬度：" + latitude + " x=" + curX + "\n经度" + longitude + " y=" + curY + "\ntype:" + amapLocation.getLocationType());
       } else {
-        DialogUtils.showShortToast("location Error, ErrCode:"
+        Log.e(TAG, "updateToNewLocationByAmap: " + "location Error, ErrCode:"
                 + amapLocation.getErrorCode() + ", errInfo:"
                 + amapLocation.getErrorInfo());
+       /* DialogUtils.showShortToast("location Error, ErrCode:"
+                + amapLocation.getErrorCode() + ", errInfo:"
+                + amapLocation.getErrorInfo());*/
       }
     }
   }

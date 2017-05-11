@@ -25,7 +25,6 @@ import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
 import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.IpUtils;
-import com.palmap.demo.huaweih2.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import static com.palmap.demo.huaweih2.fragment.FragmentMap.hasLocated;
  */
 
 public class LocateTimerService extends Service {
-    private boolean isReceived;//上次发送定位请求后是否收到返回
+    private boolean isReceived = true;//上次发送定位请求后是否收到返回
     private long timestampRec;//上次收到定位数据时间戳
     public static double curX;//当前定位点坐标，可能是gps和lampsite的结果
     public static double curY;
@@ -250,14 +249,14 @@ public class LocateTimerService extends Service {
 
     //请求网络获取数据
     private void getHttp() {
-
-        LogUtils.i("" + (System.currentTimeMillis() - timestampRec));
-        if (!isReceived && System.currentTimeMillis() - timestampRec < 10000)
-            return;
-
+//        LogUtils.i("" + (System.currentTimeMillis() - timestampRec));
+//        if (!isReceived && System.currentTimeMillis() - timestampRec > 10000)
+//            return;
         isReceived = false;
         HuaWeiH2Application.userIp = IpUtils.getIpAddress();
-
+        if ("".equals(HuaWeiH2Application.userIp)) {
+            return;
+        }
 //    curX = 12697148.213;
 //    curY = 2588906.09;
 //    hasLocated = true;
