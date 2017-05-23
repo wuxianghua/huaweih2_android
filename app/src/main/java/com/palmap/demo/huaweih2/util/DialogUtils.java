@@ -20,6 +20,9 @@ import static android.widget.Toast.makeText;
  */
 
 public class DialogUtils {
+
+  private static Toast toast = makeText(HuaWeiH2Application.instance, "", Toast.LENGTH_SHORT);
+
   public static void showShortToast(final String msg){
     if (!BaseActivity.isVisible())
       return;
@@ -28,7 +31,9 @@ public class DialogUtils {
     handler .post(new Runnable() {
       @Override
       public void run() {
-        makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
+        toast.setText(msg);
+        toast.show();
+//        makeText(HuaWeiH2Application.instance, msg, Toast.LENGTH_SHORT).show();
       }
     });
 

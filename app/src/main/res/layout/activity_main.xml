@@ -402,4 +402,21 @@
         </FrameLayout>
     </LinearLayout>
 
+    <ScrollView
+        android:layout_marginTop="100dp"
+        android:layout_width="120dp"
+        android:layout_height="300dp">
+
+        <LinearLayout
+            android:background="#66000000"
+            android:id="@+id/layoutLog"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
 </RelativeLayout>

@@ -130,7 +130,7 @@ public class Constant {
   public static final double NAV_MIN_DISTANCE = 5.0;
 
   public static boolean useSystemShare = false;//是否使用系统分享
-  public static boolean useOkHttp = true;
+  public static boolean useOkHttp = false;
 
 
 

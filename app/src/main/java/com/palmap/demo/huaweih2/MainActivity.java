@@ -2,7 +2,11 @@ package com.palmap.demo.huaweih2;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.fragment.FragmentAround;
@@ -29,7 +34,6 @@ import com.palmap.demo.huaweih2.model.PoiImg;
 import com.palmap.demo.huaweih2.model.PoiImgList;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.DialogUtils;
-import com.palmap.demo.huaweih2.util.IpUtils;
 import com.palmap.demo.huaweih2.util.LogUtils;
 import com.palmap.demo.huaweih2.util.MapParamUtils;
 import com.palmap.demo.huaweih2.view.Mark;
@@ -120,7 +124,6 @@ public class MainActivity extends BaseActivity {
     initStatusBar(R.color.black);
 
 
-
 //        if (Constant.isDebug) {
 //            HuaWeiH2Application.firstRun = true;
 //            startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
@@ -134,8 +137,53 @@ public class MainActivity extends BaseActivity {
     }
 
     initView();
-
   }
+
+  private BroadcastReceiver locationBroadcastReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context,Intent intent) {
+      if (intent.getAction().equals(LocateTimerService.ACTION_LocateTimerService)) {
+        final String msg = intent.getExtras().getString(LocateTimerService.DATA_MSG);
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            showLog(msg);
+          }
+        });
+      }
+    }
+  };
+
+  private LinearLayout layoutLog;
+
+  private void showLog(String msg) {
+    if (layoutLog == null) {
+      layoutLog = (LinearLayout) findViewById(R.id.layoutLog);
+    }
+    if (layoutLog == null) {
+      return;
+    }
+    TextView textView = new TextView(this);
+    textView.setText(msg);
+    textView.setTextColor(Color.WHITE);
+    layoutLog.addView(textView);
+    try{
+      ScrollView scrollView = (ScrollView) layoutLog.getParent();
+      scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+  }
+
+  private void registerLocationReceiver() {
+    IntentFilter intentFilter = new IntentFilter(LocateTimerService.ACTION_LocateTimerService);
+    registerReceiver(locationBroadcastReceiver,intentFilter);
+  }
+
+  private void unRegisterLocationReceiver(){
+    unregisterReceiver(locationBroadcastReceiver);
+  }
+
 //    private void checkFirstRun() {
 //        SharedPreferences setting = getSharedPreferences(Constant.IS_FIRST_RUN, 0);
 //        Boolean user_first = setting.getBoolean("FIRST", true);
@@ -183,7 +231,7 @@ public class MainActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
-
+    registerLocationReceiver();
 //        if (HuaWeiH2Application.startWelcomeAct) {
 //            HuaWeiH2Application.startWelcomeAct = false;
 //            startActivityForResult(new Intent(MainActivity.this, WelcomeActivity.class), Constant.startWelcome);
@@ -1029,8 +1077,7 @@ public class MainActivity extends BaseActivity {
   public void onStart() {
     super.onStart();
 
-
-    HuaWeiH2Application.userIp = IpUtils.getIpAddress();
+    //HuaWeiH2Application.userIp = IpUtils.getIp3(this);
     if (isDebug)
       DialogUtils.showLongToast("IP："+HuaWeiH2Application.userIp);
 
@@ -1040,7 +1087,7 @@ public class MainActivity extends BaseActivity {
   protected void onPause() {
     super.onPause();
 
-
+    unRegisterLocationReceiver();
   }
 
   //  @Override

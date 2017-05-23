@@ -3,13 +3,20 @@ package com.palmap.demo.huaweih2.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+
+import org.apache.http.conn.util.InetAddressUtils;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 
 /**
@@ -20,14 +27,15 @@ public class IpUtils {
 
     /**
      * 多IP处理，可以得到最终ip
+     *
      * @return
      */
-    public static String getIpAddres() {
+    public static String getFinalIpAddres() {
         String localip = null;// 本地IP，如果没有配置外网IP则返回它
         String netip = null;// 外网IP
         try {
             Enumeration<NetworkInterface> netInterfaces = NetworkInterface
-                .getNetworkInterfaces();
+                    .getNetworkInterfaces();
             InetAddress ip = null;
             boolean finded = false;// 是否找到外网IP
             while (netInterfaces.hasMoreElements() && !finded) {
@@ -41,13 +49,13 @@ public class IpUtils {
 //                          + ";ip.isLoopbackAddress()="
 //                          + ip.isLoopbackAddress());
                     if (!ip.isSiteLocalAddress() && !ip.isLoopbackAddress()
-                        && ip.getHostAddress().indexOf(":") == -1) {// 外网IP
+                            && ip.getHostAddress().indexOf(":") == -1) {// 外网IP
                         netip = ip.getHostAddress();
                         finded = true;
                         break;
                     } else if (ip.isSiteLocalAddress()
-                        && !ip.isLoopbackAddress()
-                        && ip.getHostAddress().indexOf(":") == -1) {// 内网IP
+                            && !ip.isLoopbackAddress()
+                            && ip.getHostAddress().indexOf(":") == -1) {// 内网IP
                         localip = ip.getHostAddress();
                     }
                 }
@@ -132,6 +140,54 @@ public class IpUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+
+    private static String getLocalIpAddress() {
+        try {
+            String ipv4;
+            ArrayList<NetworkInterface> nilist = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface ni : nilist) {
+                ArrayList<InetAddress> ialist = Collections.list(ni.getInetAddresses());
+                for (InetAddress address : ialist) {
+                    if (!address.isLoopbackAddress() && InetAddressUtils.isIPv4Address(ipv4 = address.getHostAddress())) {
+                        return ipv4;
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e("localip", ex.toString());
+        }
+        return null;
+    }
+
+    public static String getIp3(Context context) {
+        String ip = "";
+        try {
+            ConnectivityManager conMann = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mobileNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo wifiNetworkInfo = conMann.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (mobileNetworkInfo.isConnected()) {
+                ip = getLocalIpAddress();
+            } else if (wifiNetworkInfo.isConnected()) {
+                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                int ipAddress = wifiInfo.getIpAddress();
+                ip = intToIp(ipAddress);
+            }
+        } catch (Exception e) {
+        }
+        return ip;
+    }
+
+    private static String intToIp(int ipInt) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ipInt & 0xFF).append(".");
+        sb.append((ipInt >> 8) & 0xFF).append(".");
+        sb.append((ipInt >> 16) & 0xFF).append(".");
+        sb.append((ipInt >> 24) & 0xFF);
+        return sb.toString();
     }
 
 }

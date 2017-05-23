@@ -1,9 +1,6 @@
 package com.palmap.demo.huaweih2.http;
 
 
-import com.alibaba.fastjson.JSON;
-import com.palmap.demo.huaweih2.HuaWeiH2Application;
-import com.palmap.demo.huaweih2.json.IpList;
 import com.palmap.demo.huaweih2.other.Constant;
 
 import java.io.File;
@@ -69,35 +66,16 @@ public class DataProviderCenter {
   /*
   * 接口：获取定位点
   * */
-  public void getPosition(HttpDataCallBack callBack) {
+  public void getPosition(String ip,HttpDataCallBack callBack) {
     Map<String, String> heads = new HashMap<String, String>();
     heads.put("Accept", "application/json");
     heads.put("Content-Type", "application/json");
 
-    IpList ipList = new IpList();
-    ipList.setUserIP("****0ddf");
-
-    String jsonString = JSON.toJSONString(ipList);
-//    jsonString = "[" +jsonString + "]";
-    //URL_LOCATE
-//    String text = "http://location.palmap.cn:28099/comet/pos?idType=ip&idData=10.209.206.66";
-    if (Constant.openLocateTest)
-      mDataProvider.postDataProvider("", heads, jsonString == null ? null : jsonString.getBytes(), callBack);
-    else {
-      if (!Constant.usePhoneIp) {
-//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&sceneId=11672", heads, callBack);
-        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&appKey=" + Constant.APP_KEY, heads, callBack);
-      }else {
-//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + HuaWeiH2Application.userIp + "&sceneId=11672", heads, callBack);
-        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + HuaWeiH2Application.userIp+"&appKey=" + Constant.APP_KEY, heads, callBack);
-//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + "10.14.147.134"+"&appKey=" + Constant.APP_KEY, heads, callBack);
-      }
-    }
-//      mDataProvider.postDataProvider(URL_LOCATE, heads,jsonString==null?null:jsonString.getBytes(),callBack);
-//    mDataProvider.postDataProvider(URL_LOCATE_TEST_h2, heads,jsonString==null?null:jsonString.getBytes(),callBack);
-//
-
-    //10.85.139.58
+//      if (!Constant.usePhoneIp) {
+//        mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + Constant.testIp+"&appKey=" + Constant.APP_KEY, heads, callBack);
+//      }else {
+    mDataProvider.getProvider(URL_LOCATE_TEST_h2_half + ip+"&appKey=" + Constant.APP_KEY, heads, callBack);
+//      }
   }
 
   /*

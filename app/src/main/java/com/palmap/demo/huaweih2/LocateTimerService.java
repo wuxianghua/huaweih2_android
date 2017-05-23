@@ -118,6 +118,7 @@ public class LocateTimerService extends Service {
             public void onLocationChanged(AMapLocation aMapLocation) {
                 curX = GpsUtils.getCurX();
                 curY = GpsUtils.getCurY();
+                accuracy = aMapLocation.getAccuracy();
                 Message message = locationHandler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("obj", aMapLocation);
@@ -126,7 +127,6 @@ public class LocateTimerService extends Service {
                 message.what = GPS;
                 message.setData(bundle);
                 message.sendToTarget();
-//        hasLocated = false;
             }
         });
         locationHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -146,70 +146,23 @@ public class LocateTimerService extends Service {
                         break;
                 }
                 if (locationModel == what) {
+                    if (what == 1) {
+                        dumpLog("use SVA !");
+                    }else{
+                        dumpLog("use GPS ! accuracy:" + accuracy);
+                    }
                     addLocationMark(x, y);
                 }
-
-//        LogToFile.w("=========\nCurrent: ", locationModel == GPS ? "GPS" : "DataHub" + " \n=========\n");
-//        if (locationModel == DATAHUB) {
-//          addLocationMark(x, y);
-//        } else {
-//          addLocationMark2(x, y);
-//        }
-
+                /*if (accuracy < 10) {
+                    dumpLog("use GPS ! accuracy:" + accuracy);
+                    addLocationMark(curX, curY);
+                }else{
+                    dumpLog("use SVA !");
+                    addLocationMark(x, y);
+                }*/
                 return false;
             }
         });
-
-//    GpsUtils.addListener(new LocationListener() {
-//      @Override
-//      public void onLocationChanged(Location location) {
-//        curX = GpsUtils.getCurX();
-//        curY = GpsUtils.getCurY();
-//        Message message = locationHandler.obtainMessage();
-//        Bundle bundle = new Bundle();
-//        bundle.putDouble("x", curX);
-//        bundle.putDouble("y", curY);
-//        message.what = GPS;
-//        message.setData(bundle);
-//        message.sendToTarget();
-//        hasLocated = false;
-//      }
-//
-//      @Override
-//      public void onStatusChanged(String s, int i, Bundle bundle) {
-//      }
-//
-//      @Override
-//      public void onProviderEnabled(String s) {
-//      }
-//
-//      @Override
-//      public void onProviderDisabled(String s) {
-//      }
-//    });
-//    locationHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-//      @Override
-//      public boolean handleMessage(Message message) {
-//        int what = message.what;
-//        Bundle data = message.getData();
-//        double x = data.getDouble("x");
-//        double y = data.getDouble("y");
-//        switch (what) {
-//          case 1:
-//            processDataHub(x, y);
-//            break;
-//          case 2:
-//            processGPS(x, y);
-//            break;
-//        }
-//
-//        if (locationModel == what) {
-//          addLocationMark(x, y);
-//        }
-//
-//        return false;
-//      }
-//    });
 
         Log.d("TimerService", "onStartCommand");
         String ext = intent.getStringExtra("flags");
@@ -247,34 +200,47 @@ public class LocateTimerService extends Service {
         }).start();
     }
 
+    public static final String ACTION_LocateTimerService = "action_locateTimerService";
+    public static final String DATA_MSG = "msg";
+
+    private static final String TAG = "LocateTimerService";
+    private void dumpLog(String msg){
+        //Log.d(TAG, "dumpLog() : " + msg);
+        //DialogUtils.showShortToast(msg);
+        Log.e(TAG,msg);
+        Intent intent = new Intent();
+        intent.setAction(ACTION_LocateTimerService);
+        intent.putExtra(DATA_MSG, msg);
+        sendBroadcast(intent);
+    }
+
     //请求网络获取数据
     private void getHttp() {
-//        LogUtils.i("" + (System.currentTimeMillis() - timestampRec));
-//        if (!isReceived && System.currentTimeMillis() - timestampRec > 10000)
-//            return;
-        isReceived = false;
-        HuaWeiH2Application.userIp = IpUtils.getIpAddress();
-        if ("".equals(HuaWeiH2Application.userIp)) {
+        /*if(!isReceived){
             return;
         }
-//    curX = 12697148.213;
-//    curY = 2588906.09;
-//    hasLocated = true;
-//    Message message = locationHandler.obtainMessage();
-//    Bundle bundle = new Bundle();
-//    bundle.putDouble("x", curX);
-//    bundle.putDouble("y", curY);
-//    message.what = DATAHUB;
-//    message.setData(bundle);
-//    message.sendToTarget();
+        isReceived = false;*/
+        dumpLog("================");
+        //HuaWeiH2Application.userIp = IpUtils.getIp3(this);
 
-        DataProviderCenter.getInstance().getPosition(new HttpDataCallBack() {
+        String ipStr = IpUtils.getIp3(this);
+//        String ipStr = "10.11.17.210";
+//        if ("wifi".equals(IpUtils.getCurrentNetType(this))) {
+//            ipStr = IpUtils.getIp3(this);
+//        }
+        HuaWeiH2Application.userIp = ipStr;
+        if ("".equals(ipStr)) {
+            dumpLog("获取IP失败");
+            return;
+        }
+        dumpLog("request :" + ipStr);
+
+        DataProviderCenter.getInstance().getPosition(ipStr,new HttpDataCallBack() {
             @Override
             public void onError(int errorCode) {
                 isReceived = true;
                 timestampRec = System.currentTimeMillis();
                 isUseGpsLocation = true;//没有lampsite数据，只能使用gps
-
                 if (Constant.openLocateTest) {//测试代码，虚拟定位点
                     curX = x[count];
                     curY = y[count];
@@ -286,9 +252,10 @@ public class LocateTimerService extends Service {
                     }
                     count = ++count % (x.length);
                 } else {
-
-                    if (mMainActivity == null || mMainActivity.fragmentMap == null)
+                    dumpLog("SVA error，use GPS");
+                    if (mMainActivity == null || mMainActivity.fragmentMap == null) {
                         return;
+                    }
                     //没有定位数据，查看是否有gps
 
                     curFloorID = Constant.FLOOR_ID_F1;
@@ -298,13 +265,7 @@ public class LocateTimerService extends Service {
                     // TODO: 2016/12/29 室外hasLocated=true怎么办
                     hasLocated = false;
 
-                    addLocationMark();
-//                    if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1) {
-//                        mMainActivity.fragmentMap.addLocationMark(curX, curY);
-//                        if (Constant.isDebug)
-//                            ErrorCode.showError(ErrorCode.CODE_GPS);
-//                    }
-//                    ErrorCode.showError(CODE_NO_LOCATE_DATA);
+                    addLocationMark(curX,curY);
                 }
             }
 
@@ -312,6 +273,7 @@ public class LocateTimerService extends Service {
             public void onComplete(Object content) {
                 isReceived = true;
                 timestampRec = System.currentTimeMillis();
+                dumpLog("SVA Success!");
                 if (mMainActivity == null || mMainActivity.fragmentMap == null)
                     return;
                 try {
@@ -338,29 +300,10 @@ public class LocateTimerService extends Service {
                         message.what = DATAHUB;
                         message.setData(bundle);
                         message.sendToTarget();
-
-//            if (GpsUtils.hasExactGpsData || (curX > h2_out[0] && curX < h2_out[1] && curY > h2_out[2] && curY < h2_out[3])) {
-//                            /*如果最近 EXP_SECONDS s内有精度小于18m的gps数据，就强制用gps
-//                               避免lampsite在室外也能获取不准确的定位点*/
-//              isUseGpsLocation = true;
-//              curX = GpsUtils.getCurX();
-//              curY = GpsUtils.getCurY();
-//              hasLocated = false;
-//            } else {
-//              isUseGpsLocation = false;//使用lampsite数据
-//            }
-
-
-//            addLocationMark();
-
-//                        if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1) {
-//                            mMainActivity.fragmentMap.addLocationMark(curX, curY);
-//                            if (Constant.isDebug)
-//                                ErrorCode.showError(ErrorCode.CODE_HUAWEI);
-//                        }
                     }
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
+                    dumpLog("SVA Success!数据解析错误!!!!");
                 }
             }
         });
@@ -420,10 +363,6 @@ public class LocateTimerService extends Service {
 
         String poiName = Constant.其它;
 
-
-//    Types.Point point = mContext.fragmentMap.mMapView.converToScreenCoordinate(curX,curY);
-//    poiName=mContext.fragmentMap.getPOINameByPoint((float) point.x,(float)point.y);
-
         if (curX > h2[0] && curX < h2[1] && curY > h2[2] && curY < h2[3])
             poiName = Constant.H2大楼;
         if (curX > hall[0] && curX < hall[1] && curY > hall[2] && curY < hall[3])
@@ -444,16 +383,10 @@ public class LocateTimerService extends Service {
             locationModel = DATAHUB;
             accuracyCount = 0;
         }
-//    isUseGpsLocation = false;
-//    if (!GpsUtils.hasExactGpsData) {
-//      locationModel = DATAHUB;
-//      isUseGpsLocation = false;
-//    }
     }
 
     private int accuracyCount = 0;
     private float accuracy = 0;
-
 
     private void processGPS(AMapLocation aMapLocation) {
         accuracy = aMapLocation.getAccuracy();
@@ -463,13 +396,6 @@ public class LocateTimerService extends Service {
         } else {
             accuracyCount = 0;
         }
-//    if (isUseGpsLocation) {
-//      locationModel = GPS;
-//    }
-//    if (GpsUtils.hasExactGpsData) {
-//      locationModel = GPS;
-//      isUseGpsLocation = true;
-//    }
     }
 
     private void addLocationMark(double x, double y) {
@@ -490,7 +416,7 @@ public class LocateTimerService extends Service {
      * @Description: 根据gps和lampsite状态选择有效的定位点，添加到地图
      * @Time 2016/12/29 12:14
      */
-    private void addLocationMark() {
+    /*private void addLocationMark() {
         if (mMainActivity.fragmentMap.mCurrentFloor == Constant.FLOOR_ID_F1)
             mMainActivity.fragmentMap.addLocationMark(curX, curY);
 
@@ -501,5 +427,5 @@ public class LocateTimerService extends Service {
                 ErrorCode.showError(ErrorCode.CODE_HUAWEI);
             }
         }
-    }
+    }*/
 }
