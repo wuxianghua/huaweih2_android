@@ -147,7 +147,7 @@ public class LocateTimerService extends Service {
                 }
                 if (locationModel == what) {
                     if (what == 1) {
-                        dumpLog("use SVA !");
+                        dumpLog("use SVA !accuracy:" + accuracy);
                     }else{
                         dumpLog("use GPS ! accuracy:" + accuracy);
                     }
@@ -273,7 +273,7 @@ public class LocateTimerService extends Service {
             public void onComplete(Object content) {
                 isReceived = true;
                 timestampRec = System.currentTimeMillis();
-                dumpLog("SVA Success!");
+                dumpLog("SVA Success! accuracy:" + accuracy);
                 if (mMainActivity == null || mMainActivity.fragmentMap == null)
                     return;
                 try {
@@ -390,7 +390,14 @@ public class LocateTimerService extends Service {
 
     private void processGPS(AMapLocation aMapLocation) {
         accuracy = aMapLocation.getAccuracy();
-        if (isUseGpsLocation || accuracy < 10) {
+        //判断gps强度
+        int accuracyOffset;
+        if (locationModel == DATAHUB) {//从室内出室外
+            accuracyOffset = 23;
+        }else{//从室外进入室内
+            accuracyOffset = 13;
+        }
+        if (isUseGpsLocation || accuracy < accuracyOffset) {
             accuracyCount = 1;
             locationModel = GPS;
         } else {
