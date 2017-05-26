@@ -97,6 +97,11 @@ public class LocateTimerService extends Service {
     private final byte GPS = DATAHUB << 1;
     private final byte MULTI = DATAHUB << 2;
 
+    private int beginUseGPS = 0;
+    private int beginUseSVA = 0;
+    private static int GPS_Accuracy = 23;
+    private static int SVA_Accuracy = 14;
+
     public LocateTimerService() {
     }
 
@@ -145,13 +150,25 @@ public class LocateTimerService extends Service {
                         processGPS(aMapLocation);
                         break;
                 }
+
+                if(what == GPS && accuracy < SVA_Accuracy){
+                    beginUseGPS++;
+                }
                 if (locationModel == what) {
                     if (what == 1) {
-                        dumpLog("use SVA !accuracy:" + accuracy);
+                        beginUseSVA++;
+                        if(beginUseSVA > 1){
+                            dumpLog("use SVA !accuracy:" + accuracy);
+                            beginUseGPS = 0;
+                            addLocationMark(x, y);
+                        }
                     }else{
-                        dumpLog("use GPS ! accuracy:" + accuracy);
+                        if (beginUseGPS > 1) {
+                            beginUseSVA = 0;
+                            dumpLog("use GPS ! accuracy:" + accuracy);
+                            addLocationMark(x, y);
+                        }
                     }
-                    addLocationMark(x, y);
                 }
                 /*if (accuracy < 10) {
                     dumpLog("use GPS ! accuracy:" + accuracy);
@@ -393,9 +410,9 @@ public class LocateTimerService extends Service {
         //判断gps强度
         int accuracyOffset;
         if (locationModel == DATAHUB) {//从室内出室外
-            accuracyOffset = 23;
+            accuracyOffset = GPS_Accuracy;
         }else{//从室外进入室内
-            accuracyOffset = 13;
+            accuracyOffset = SVA_Accuracy;
         }
         if (isUseGpsLocation || accuracy < accuracyOffset) {
             accuracyCount = 1;
