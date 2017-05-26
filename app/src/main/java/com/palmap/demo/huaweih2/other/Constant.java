@@ -132,6 +132,7 @@ public class Constant {
   public static boolean useSystemShare = false;//是否使用系统分享
   public static boolean useOkHttp = false;
 
+  public static boolean useOldService = false;
 
 
 

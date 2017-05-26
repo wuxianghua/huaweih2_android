@@ -44,8 +44,15 @@
         android:theme="@style/AppTheme"
         tools:replace="icon"
         >
+        <service android:name="com.amap.api.location.APSService"/>
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name=".LampSiteLocationService" android:enabled="true"
+                 android:exported="true"/>
+
+        <service
+            android:name="com.palmap.demo.huaweih2.LocateTimerService"
+            android:enabled="true"
+            android:exported="true"/>
 
         <!-- 高德地图key -->
         <meta-data
@@ -148,11 +155,6 @@
             android:name="com.palmap.demo.huaweih2.ActivityShopDetail"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <service
-            android:name="com.palmap.demo.huaweih2.LocateTimerService"
-            android:enabled="true"
-            android:exported="true"/>
 
         <activity
             android:name="com.palmap.demo.huaweih2.PoiInfoActivity"
