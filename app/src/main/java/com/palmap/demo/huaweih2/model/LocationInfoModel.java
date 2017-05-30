@@ -16,6 +16,7 @@ public class LocationInfoModel implements Parcelable {
     private PropertiesBean properties;
     private GeometryBean geometry;
     private boolean isSVA = true;
+    private double rsrp;
 
     public LocationInfoModel() {
     }
@@ -54,6 +55,14 @@ public class LocationInfoModel implements Parcelable {
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    public double getRsrp() {
+        return rsrp;
+    }
+
+    public void setRsrp(double rsrp) {
+        this.rsrp = rsrp;
     }
 
     public boolean isSVA() {
@@ -262,6 +271,7 @@ public class LocationInfoModel implements Parcelable {
         };
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -273,6 +283,7 @@ public class LocationInfoModel implements Parcelable {
         dest.writeParcelable(this.properties, flags);
         dest.writeParcelable(this.geometry, flags);
         dest.writeByte(this.isSVA ? (byte) 1 : (byte) 0);
+        dest.writeDouble(this.rsrp);
     }
 
     protected LocationInfoModel(Parcel in) {
@@ -280,6 +291,7 @@ public class LocationInfoModel implements Parcelable {
         this.properties = in.readParcelable(PropertiesBean.class.getClassLoader());
         this.geometry = in.readParcelable(GeometryBean.class.getClassLoader());
         this.isSVA = in.readByte() != 0;
+        this.rsrp = in.readDouble();
     }
 
     public static final Creator<LocationInfoModel> CREATOR = new Creator<LocationInfoModel>() {

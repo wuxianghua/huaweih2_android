@@ -9,6 +9,7 @@ import com.facebook.stetho.common.LogUtil;
 import com.palmap.demo.huaweih2.factory.LocationService;
 import com.palmap.demo.huaweih2.factory.ServiceFactory;
 import com.palmap.demo.huaweih2.model.LocationInfoModel;
+import com.palmap.demo.huaweih2.model.SvaLocationRsrpModel;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.repo.LocationListener;
 import com.palmap.demo.huaweih2.repo.LocationRepo;
@@ -69,6 +70,22 @@ public class LocationRepoImpl implements LocationRepo {
         LogUtil.e("ip:" + IpUtils.getIpAddress());
         apiSubscription =
                 requestLocation()
+                       /* .zipWith(requestSignalInfo(), new Func2<LocationInfoModel, SvaLocationRsrpModel, LocationInfoModel>() {
+                            @Override
+                            public LocationInfoModel call(LocationInfoModel locationInfoModel, SvaLocationRsrpModel rsrpModel) {
+                                if (rsrpModel!=null && rsrpModel.getPrrusignal()!=null && rsrpModel.getPrrusignal().size()>0){
+                                    double minRsrp = 10000;
+                                    for (int i = 0; i < rsrpModel.getPrrusignal().size(); i++) {
+                                        double rsrp = rsrpModel.getPrrusignal().get(i).getRsrp();
+                                        if(rsrp < minRsrp){
+                                            minRsrp = rsrp;
+                                        }
+                                    }
+                                    locationInfoModel.setRsrp(minRsrp);
+                                }
+                                return locationInfoModel;
+                            }
+                        })*/
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.computation())
                         .repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
@@ -104,7 +121,6 @@ public class LocationRepoImpl implements LocationRepo {
             @Override
             public void call(final Subscriber<? super LocationInfoModel> subscriber) {
                 String ip = IpUtils.getIp3(context);
-                //Logger.dumpLog(context,"request SVA:" + ip);
                 locationService.requestLocation(Constant.APP_KEY, "ip", ip).subscribe(new Action1<LocationInfoModel>() {
                     @Override
                     public void call(LocationInfoModel locationInfoModel) {
@@ -119,7 +135,27 @@ public class LocationRepoImpl implements LocationRepo {
                 });
             }
         });
+    }
 
+    private Observable<SvaLocationRsrpModel> requestSignalInfo() {
+        return Observable.create(new Observable.OnSubscribe<SvaLocationRsrpModel>() {
+            @Override
+            public void call(final Subscriber<? super SvaLocationRsrpModel> subscriber) {
+                String ip = IpUtils.getIp3(context);
+                locationService.requestSignalInfo(Constant.APP_KEY, ip).subscribe(new Action1<SvaLocationRsrpModel>() {
+                    @Override
+                    public void call(SvaLocationRsrpModel locationInfoModel) {
+                        subscriber.onNext(locationInfoModel);
+                        subscriber.onCompleted();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        subscriber.onError(throwable);
+                    }
+                });
+            }
+        });
     }
 
     @Override

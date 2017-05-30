@@ -8,15 +8,28 @@ import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
+import com.palmap.demo.huaweih2.factory.LocationService;
+import com.palmap.demo.huaweih2.factory.ServiceFactory;
+import com.palmap.demo.huaweih2.fragment.FragmentMap;
 import com.palmap.demo.huaweih2.model.LocationInfoModel;
+import com.palmap.demo.huaweih2.model.SvaLocationRsrpModel;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.repo.LocationListener;
 import com.palmap.demo.huaweih2.repo.LocationRepo;
 import com.palmap.demo.huaweih2.repo.impl.LocationRepoImpl;
 import com.palmap.demo.huaweih2.util.GpsUtils;
+import com.palmap.demo.huaweih2.util.IpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class LampSiteLocationService extends Service implements LocationListener {
 
@@ -69,6 +82,44 @@ public class LampSiteLocationService extends Service implements LocationListener
         locationRepo.addListener(this);
         locationRepo.stopLocation();
         locationRepo.startLocation();
+
+        requestSignalInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Void> observable) {
+                        return observable.delay(2000L, TimeUnit.MILLISECONDS);
+                    }
+                })
+                .retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Throwable> observable) {
+                        return observable.delay(2000L, TimeUnit.MILLISECONDS);
+                    }
+                })
+                .subscribe(new Action1<SvaLocationRsrpModel>() {
+                    @Override
+                    public void call(SvaLocationRsrpModel rsrpModel) {
+                        if (rsrpModel!=null && rsrpModel.getPrrusignal()!=null && rsrpModel.getPrrusignal().size()>0){
+                            double minRsrp = 10000;
+                            for (int i = 0; i < rsrpModel.getPrrusignal().size(); i++) {
+                                double rsrp = rsrpModel.getPrrusignal().get(i).getRsrp();
+                                if(rsrp < minRsrp){
+                                    minRsrp = rsrp;
+                                }
+                            }
+                            Logger.dumpLog2(LampSiteLocationService.this,"sva rsrp:" + minRsrp);
+                        }else{
+                            Logger.dumpLog2(LampSiteLocationService.this,"获取 rsrp失败 null");
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        Logger.dumpLog2(LampSiteLocationService.this,"获取 rsrp失败");
+                    }
+                });
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -90,6 +141,7 @@ public class LampSiteLocationService extends Service implements LocationListener
     @Override
     public void onComplete(LocationInfoModel locationInfoModel, long timeStamp) {
         Log.e(TAG, "onComplete: 定位成功");
+
         LocationInfoModel sendModel = null;
         errorCount = 0;
         if (currentGpsLocation == null) {
@@ -120,12 +172,12 @@ public class LampSiteLocationService extends Service implements LocationListener
             Logger.dumpLog(this,"SVA ++ " + svaCout);
         }
         if (isSVALocation) {
-            if(gpsCount > 2){
+            if(gpsCount > 1){
                 Logger.dumpLog(this,"切换到GPS:");
                 sendModel = createWithGPS();
             }
         }else{
-            if (svaCout > 2) {
+            if (svaCout > 1) {
                 Logger.dumpLog(this,"切换到SVA:");
                 sendModel = locationInfoModel;
             }
@@ -145,6 +197,12 @@ public class LampSiteLocationService extends Service implements LocationListener
         intent.putExtra(STATE_TAG, STATE_COMPLETE);
         intent.putExtra(TIMESTAMP, timeStamp);
         sendBroadcast(intent);
+
+
+        LocateTimerService.curFloorID = (long) sendModel.getZ();
+        LocateTimerService.curX = sendModel.getX();
+        LocateTimerService.curY = sendModel.getY();
+        FragmentMap.hasLocated = true;
     }
 
     @Override
@@ -156,7 +214,7 @@ public class LampSiteLocationService extends Service implements LocationListener
         if (errorCount < 2){
             return;
         }
-        Logger.dumpLog(this,"SVA请求失败连续3次了!");
+        Logger.dumpLog(this,"SVA请求失败连续2次了!");
         if (currentGpsLocation != null) {
             Logger.dumpLog(this,"SVA请求失败~ GPS!");
             /*
@@ -174,6 +232,7 @@ public class LampSiteLocationService extends Service implements LocationListener
             intent.putExtra(EXCEPTION, ex);
             intent.putExtra(ERROR_MSG, msg);
             sendBroadcast(intent);
+            FragmentMap.hasLocated = false;
         }
     }
 
@@ -202,4 +261,29 @@ public class LampSiteLocationService extends Service implements LocationListener
     public static void stop(Context context) {
         context.stopService(new Intent(context, LampSiteLocationService.class));
     }
+
+    private Observable<SvaLocationRsrpModel> requestSignalInfo() {
+        return Observable.create(new Observable.OnSubscribe<SvaLocationRsrpModel>() {
+            @Override
+            public void call(final Subscriber<? super SvaLocationRsrpModel> subscriber) {
+                String ip = IpUtils.getIp3(LampSiteLocationService.this);
+//                String ip = "10.32.161.99";
+                ServiceFactory.create(LocationService.class)
+                        .requestSignalInfo(Constant.APP_KEY,ip)
+                        .subscribe(new Action1<SvaLocationRsrpModel>() {
+                    @Override
+                    public void call(SvaLocationRsrpModel locationInfoModel) {
+                        subscriber.onNext(locationInfoModel);
+                        subscriber.onCompleted();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        subscriber.onError(throwable);
+                    }
+                });
+            }
+        });
+    }
+
 }
