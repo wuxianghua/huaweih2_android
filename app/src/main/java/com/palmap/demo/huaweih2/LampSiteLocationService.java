@@ -22,14 +22,10 @@ import com.palmap.demo.huaweih2.util.IpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class LampSiteLocationService extends Service implements LocationListener {
 
@@ -83,7 +79,7 @@ public class LampSiteLocationService extends Service implements LocationListener
         locationRepo.stopLocation();
         locationRepo.startLocation();
 
-        requestSignalInfo().observeOn(AndroidSchedulers.mainThread())
+        /*requestSignalInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.computation())
                 .repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
                     @Override
@@ -119,7 +115,7 @@ public class LampSiteLocationService extends Service implements LocationListener
                         throwable.printStackTrace();
                         Logger.dumpLog2(LampSiteLocationService.this,"获取 rsrp失败");
                     }
-                });
+                });*/
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.facebook.stetho.common.LogUtil;
@@ -184,7 +182,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout layoutLog;
 
     private void showLog(String msg) {
-        if (layoutLog == null) {
+        /*if (layoutLog == null) {
             layoutLog = (LinearLayout) findViewById(R.id.layoutLog);
         }
         if (layoutLog == null) {
@@ -199,7 +197,7 @@ public class MainActivity extends BaseActivity {
             scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void registerLocationReceiver() {
