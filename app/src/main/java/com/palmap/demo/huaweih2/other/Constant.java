@@ -38,6 +38,7 @@ public class Constant {
   public static final String TAG_ACCESS_TOKEN = "access_token";
 
   public static final String LUR_NAME = "Nagrand/lua";
+  public static final String H = "data/H";
   public static final String FONT_NAME = "Nagrand/font";
 
 //  public static final String APP_DATA_PATH = Environment.getExternalStorageDirectory()+"/huaweih2";

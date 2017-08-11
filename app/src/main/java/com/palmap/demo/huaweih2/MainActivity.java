@@ -24,7 +24,7 @@ import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.fragment.FragmentMap;
 import com.palmap.demo.huaweih2.fragment.FragmentPark;
 import com.palmap.demo.huaweih2.fragment.FragmentShake;
-import com.palmap.demo.huaweih2.functionActivity.FindCarActivity;
+import com.palmap.huawei.FindCarActivity;
 import com.palmap.demo.huaweih2.functionActivity.FootPrintActivity;
 import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
 import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;

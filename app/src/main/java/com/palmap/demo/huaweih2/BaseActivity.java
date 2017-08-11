@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -11,8 +12,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.palmap.demo.huaweih2.util.SystemBarTintManager;
+
+import java.security.Policy;
 
 /**
  * Created by eric3 on 2016/9/27.
@@ -44,6 +50,9 @@ public class BaseActivity extends FragmentActivity {
     /*
           *  显示进度条
           * */
+    ScrollView scrollView;
+    LinearLayout linearLayout;
+    TextView textView;
     protected void showProgress(String title, String msg) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
@@ -54,11 +63,43 @@ public class BaseActivity extends FragmentActivity {
         }
 
         progressDialog.setTitle(title);
-        progressDialog.setMessage(msg);
-
+        if (scrollView == null) {
+            scrollView = new ScrollView(this);
+        }
+        if (linearLayout == null) {
+            linearLayout = new LinearLayout(this);
+            scrollView.addView(linearLayout);
+        }
+        scrollToBottom(scrollView,linearLayout);
+        if (textView == null) {
+            textView = new TextView(this);
+            linearLayout.addView(textView);
+        }
+        textView.setText(msg);
+        progressDialog.setContentView(scrollView);
         if (!progressDialog.isShowing()) {
             progressDialog.show();
         }
+    }
+
+    public void scrollToBottom(final View scroll, final View inner) {
+
+        Handler mHandler = new Handler();
+
+        mHandler.post(new Runnable() {
+            public void run() {
+                if (scroll == null || inner == null) {
+                    return;
+                }
+
+                int offset = inner.getMeasuredHeight() - scroll.getHeight();
+                if (offset < 0) {
+                    offset = 0;
+                }
+
+                scroll.scrollTo(0, offset);
+            }
+        });
     }
 
     /*

@@ -68,7 +68,7 @@ public class LampSiteLocationService extends Service implements LocationListener
             public void onLocationChanged(AMapLocation aMapLocation) {
                 Log.e(TAG, "onLocationChanged: " + aMapLocation.getAddress());
                 currentGpsLocation = aMapLocation;
-                Logger.dumpLog(LampSiteLocationService.this, "GPS Accuracy :" + aMapLocation.getAccuracy());
+                //Logger.dumpLog(LampSiteLocationService.this, "GPS Accuracy :" + aMapLocation.getAccuracy());
             }
         });
     }
@@ -161,20 +161,20 @@ public class LampSiteLocationService extends Service implements LocationListener
         if (canUseGPS) {
             gpsCount++;
             svaCout = 0;
-            Logger.dumpLog(this,"GPS ++ " + gpsCount);
+            //Logger.dumpLog(this,"GPS ++ " + gpsCount);
         } else { //不通过GPS精度判断
             gpsCount = 0;
             svaCout++;
-            Logger.dumpLog(this,"SVA ++ " + svaCout);
+            //Logger.dumpLog(this,"SVA ++ " + svaCout);
         }
         if (isSVALocation) {
             if(gpsCount > 1){
-                Logger.dumpLog(this,"切换到GPS:");
+                //Logger.dumpLog(this,"切换到GPS:");
                 sendModel = createWithGPS();
             }
         }else{
             if (svaCout > 1) {
-                Logger.dumpLog(this,"切换到SVA:");
+                //Logger.dumpLog(this,"切换到SVA:");
                 sendModel = locationInfoModel;
             }
         }
@@ -186,7 +186,7 @@ public class LampSiteLocationService extends Service implements LocationListener
             return;
         }
         currentLocation = sendModel;
-        Logger.dumpLog(this,"使用" + (currentLocation.isSVA() ? "SVA":"GPS")+ "点位");
+        //Logger.dumpLog(this,"使用" + (currentLocation.isSVA() ? "SVA":"GPS")+ "点位");
         isSVALocation = currentLocation.isSVA();
         Intent intent = new Intent(LOCATION_ACTION);
         intent.putExtra(MODEL_LOCATIONINFO, sendModel);
@@ -206,13 +206,13 @@ public class LampSiteLocationService extends Service implements LocationListener
         Log.e(TAG, "onFailed: 定位失败");
         //定位失败使用GPS
         errorCount++;
-        Logger.dumpLog(this,"SVA请求失败~ 次数:" + errorCount);
+        //Logger.dumpLog(this,"SVA请求失败~ 次数:" + errorCount);
         if (errorCount < 2){
             return;
         }
-        Logger.dumpLog(this,"SVA请求失败连续2次了!");
+        //Logger.dumpLog(this,"SVA请求失败连续2次了!");
         if (currentGpsLocation != null) {
-            Logger.dumpLog(this,"SVA请求失败~ GPS!");
+            //Logger.dumpLog(this,"SVA请求失败~ GPS!");
             /*
             Intent intent = new Intent(LOCATION_ACTION);
             intent.putExtra(MODEL_LOCATIONINFO, withGPS);

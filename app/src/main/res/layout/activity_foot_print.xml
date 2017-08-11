@@ -6,16 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.palmap.demo.huaweih2.functionActivity.ShakeActivity">
-
-    <com.palmap.demo.huaweih2.view.TitleBar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <fragment
-        android:name="com.palmap.demo.huaweih2.fragment.FragmentPark"
-        android:id="@+id/layout_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+    <com.github.lzyzsd.jsbridge.BridgeWebView
+        android:id="@+id/find_car_web_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </com.github.lzyzsd.jsbridge.BridgeWebView>
 </LinearLayout>

@@ -1,2 +1,2 @@
-include ':app', ':pullToRefresh'
+include ':app', ':pullToRefresh', ':jsBridge'
 //, ':test'

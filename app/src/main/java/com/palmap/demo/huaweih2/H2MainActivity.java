@@ -10,9 +10,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.CsvFormatStrategy;
+import com.orhanobut.logger.DiskLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.adapter.ICSListViewAdapter;
 import com.palmap.demo.huaweih2.functionActivity.CommentActivity;
-import com.palmap.demo.huaweih2.functionActivity.FindCarActivity;
+import com.palmap.huawei.FindCarActivity;
 import com.palmap.demo.huaweih2.functionActivity.FootPrintActivity;
 import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
 import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
@@ -43,7 +48,11 @@ public class H2MainActivity extends BaseActivity {
         setContentView(R.layout.activity_h2_main);
         WXShareUtils.regToWeChat(this);
         QQShareUtils.getInstance().regToQQ(this);
+        FormatStrategy formatStrategy = CsvFormatStrategy.newBuilder()
+                .tag("custom")
+                .build();
 
+        Logger.addLogAdapter(new DiskLogAdapter(formatStrategy));
         initView();
         checkFirstRun();
 

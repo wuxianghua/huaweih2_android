@@ -4,7 +4,7 @@ apply plugin: 'bugly'
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '26'
 
     sourceSets.main.jniLibs.srcDirs = ['libs']
     allprojects {
@@ -33,8 +33,9 @@ android {
         versionName "2.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            // 设置支持的 SO 库构架，一般而言，取你所有的库支持的构架的`交集`。
-            abiFilters 'armeabi-v7a'; 'x86'// 'armeabi';'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+//            // 设置支持的 SO 库构架，一般而言，取你所有的库支持的构架的`交集`。
+////            abiFilters 'armeabi-v7a'; 'x86'// 'armeabi';'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            abiFilters 'armeabi-v7a'; 'x86';'armeabi'
         }
     }
     buildTypes {
@@ -46,6 +47,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+//        sourceSets {
+//            main {
+//                jni.srcDirs = ['jniLibs']
+//            }
+//        }
     }
     lintOptions {
         abortOnError false
@@ -59,11 +65,12 @@ bugly {
 }
 
 dependencies {
-    //    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':pullToRefresh')
+    compile project(':jsBridge')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:24.1.1'
     compile files('libs/fastjson-1.2.4.jar')
@@ -74,20 +81,18 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile files('libs/httpmime-4.2.5.jar')
     compile files('libs/nagrand-jar-with-dependencies.jar')
-//    compile 'com.squareup.okhttp3:okhttp:3.4.2'
+    //    compile 'com.squareup.okhttp3:okhttp:3.4.2'
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'cn.bingoogolapple:bga-banner:2.1.4@aar'
     compile 'com.xiaosu:VerticalRollingTextView:1.2.0'
     compile 'com.zhy:autolayout:1.4.3'
     compile 'com.squareup:otto:1.3.7'
-
     compile(name: 'jassist-1.3.0', ext: 'aar')
     compile(name: 'lxq', ext: 'aar')
-
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')
-
+    compile 'com.orhanobut:logger:2.1.1'
     def dependencies = rootProject.ext.libDependencies
     compile dependencies.rxJava
     compile dependencies.rxAndroid
