@@ -70,7 +70,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':pullToRefresh')
-    compile project(':jsBridge')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:24.1.1'
     compile files('libs/fastjson-1.2.4.jar')
@@ -99,4 +98,5 @@ dependencies {
     compile dependencies.retrofit
     compile dependencies.retrofitRx
     compile dependencies.retrofitConverter_gson
+    compile files('libs/x5_webkit.jar')
 }

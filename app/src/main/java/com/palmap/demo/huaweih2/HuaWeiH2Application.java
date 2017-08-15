@@ -8,6 +8,7 @@ import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
 import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
 
 import org.xq.com.xiaoqian.application.XiaoqianApplication;
@@ -30,7 +31,8 @@ public class HuaWeiH2Application extends XiaoqianApplication {
     super.onCreate();
     instance = this;
     copyPalmapFile();
-    Bugly.init(getApplicationContext(), "d0fd96e1a6", false);
+    //Bugly.init(getApplicationContext(), "5319dd5ea7", false);
+    CrashReport.initCrashReport(getApplicationContext(), "5319dd5ea7", true);
     Engine.getInstance();
     if (BuildConfig.DEBUG) {
       Stetho.initialize(

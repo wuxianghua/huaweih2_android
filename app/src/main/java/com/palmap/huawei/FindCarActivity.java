@@ -15,11 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
-import com.github.lzyzsd.jsbridge.BridgeWebView;
-import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.R;
@@ -36,13 +32,15 @@ import com.palmap.demo.huaweih2.model.SensorModel;
 import com.palmap.demo.huaweih2.model.WifiData;
 import com.palmap.demo.huaweih2.model.WifiPositionData;
 import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FindCarActivity extends BaseActivity implements SensorEventListener {
     private static final String TAG = "FindCarActivity";
-    private BridgeWebView findCarWebView;
+    private WebView findCarWebView;
     private WebSettings settings;
     private ApData apData;
     private WifiData mWifiData;
@@ -71,7 +69,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             count1++;
-            // 要做的事情
             if (accelerometerModels == null) {
                 accelerometerModels = new ArrayList<>();
             }
@@ -85,7 +82,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
             gyroModels.add(gyroModel);
             accelerometerModels.add(accelerometerModel);
             Message message = Message.obtain();
-            handler.sendMessageDelayed(message,7);
+            handler.sendMessageDelayed(message,10);
             if (count1 == 10) {
                 if (gyroModels == null||magnetometerModels == null || accelerometerModels == null|| wifiLocationManager == null) {
                     return;
@@ -114,13 +111,13 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        findCarWebView = (BridgeWebView) findViewById(R.id.find_car_web_view);
-        findCarWebView.setWebViewClient(new BridgeWebViewClient(findCarWebView));
+        findCarWebView = (WebView) findViewById(R.id.find_car_web_view);
+        findCarWebView.setWebViewClient(new WebViewClient());
         settings = findCarWebView.getSettings();
         this.settings.setJavaScriptEnabled(true);
         this.settings.setDomStorageEnabled(true);
         this.settings.setUseWideViewPort(true);
-        mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.settings.setLoadWithOverviewMode(true);
         findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
         //findCarWebView.loadUrl("http://html5test.com/");
@@ -183,9 +180,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         }
 
     }
-
-    int count;
-    StringBuffer sb;
     public void sendPositionDataToJS(List<ScanResult> list) {
         apDatas.clear();
         for (int i = 0; i < list.size(); i++) {
@@ -276,48 +270,5 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         values[0] = values[0] < 0 ? 360+values[0]:values[0];
         degree = (int) values[0];
         findCarWebView.loadUrl("javascript: angleOfNorth('" + degree + "')");
-        //webView.setOrientationDegree(degree);
     }
-
-    /*titleBar = (TitleBar) findViewById(R.id.titleBar);
-        titleBar.show(null, "停车找车", null);
-        titleBar.setOnTitleClickListener(new TitleBar.OnTitleClickListener() {
-            @Override
-            public void onLeft() {
-
-                Intent intent = new Intent(FindCarActivity.this, H2MainActivity.class);
-//                intent.putExtra("onFindCarBack", true);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onRight() {
-            }
-        });*//*
-
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (findCarWebView.canGoBack()) {
-                findCarWebView.goBack();
-                return true;
-            }else{
-                return super.onKeyDown(keyCode, event);
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    *//*@Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(FindCarActivity.this, H2MainActivity.class);
-//        intent.putExtra("onFindCarBack", true);
-        startActivity(intent);
-        finish();
-
-    }*/
 }
