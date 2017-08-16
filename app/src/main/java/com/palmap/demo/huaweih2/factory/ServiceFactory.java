@@ -12,8 +12,6 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 
 /**
  * Created by 王天明 on 2015/12/18 0018.
@@ -38,7 +36,6 @@ public class ServiceFactory {
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(endpoint)
-                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }

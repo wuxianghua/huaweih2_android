@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.palmap.demo.huaweih2.functionActivity.ShakeActivity">
-    <com.tencent.smtt.sdk.WebView
+    <WebView
         android:id="@+id/find_car_web_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-    </com.tencent.smtt.sdk.WebView>
+    </WebView>
 </LinearLayout>

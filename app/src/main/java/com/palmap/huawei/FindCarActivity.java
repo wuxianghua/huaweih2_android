@@ -15,6 +15,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.BaseActivity;
@@ -31,14 +35,15 @@ import com.palmap.demo.huaweih2.model.PositionProperty;
 import com.palmap.demo.huaweih2.model.SensorModel;
 import com.palmap.demo.huaweih2.model.WifiData;
 import com.palmap.demo.huaweih2.model.WifiPositionData;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class FindCarActivity extends BaseActivity implements SensorEventListener {
+import cn.bupt.sse309.locsdk.DefaultLocClient;
+import cn.bupt.sse309.locsdk.LocClient;
+
+public class FindCarActivity extends BaseActivity {
     private static final String TAG = "FindCarActivity";
     private WebView findCarWebView;
     private WebSettings settings;
@@ -58,7 +63,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     private Sensor mAccelerometer;
     private Sensor mGyroscope;
     private Sensor mField;
-    private WifiScanReceiver mWifiScanReceiver;
+    //private WifiScanReceiver mWifiScanReceiver;
     private WifiManager mWifiManager;
     private List<AccelerometerModel> accelerometerModels;
     private List<GyroModel> gyroModels;
@@ -66,7 +71,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     private float[] accelerometerValues = new float[3];
     private float[] magneticFieldValues = new float[3];
     private int count1 = 0;
-    Handler handler = new Handler() {
+    /*Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             count1++;
             if (accelerometerModels == null) {
@@ -101,7 +106,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                 count1 = 0;
             }
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +136,55 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         positionData.features = new ArrayList<>();
         gson = new Gson();
         wifiLocationManager = new WifiLocationManager();
-        Message msg = Message.obtain();
-        handler.sendMessageDelayed(msg,200);
+        LocClient client = new DefaultLocClient(this, "YmVjZjUwY2YtNWU0NC00YWYyLWE0OTAtMmVhMmIxNzcxYmNi", "dHvznqyla4vhZ19zmVKqkH77nQi2skk5hgphkSpCLqg");
+        client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
+            @Override
+            public void OnSuccess(int type, Map<String, String> result) {
+                //楼宇ID
+                String buildingId = result.get("building_id");
+                //楼层
+                int floor = Integer.parseInt(result.get("floor"));
+                //发送报文时的时间戳
+                long timestamp = Long.parseLong(result.get("timestamp"));
+
+                switch (type) {
+                    case LocClient.TYPE_FLOOR:
+                        //楼层切换时的结果
+                        break;
+                    case LocClient.TYPE_LOC:
+                        //定位成功返回的结果
+                        float x = Float.parseFloat(result.get("x"));
+                        float y = Float.parseFloat(result.get("y"));
+                        x = (float) (12697074.245 + x);
+                        y = (float) (2588966.542 - y);
+                        positionProperty.floor_id = 1261980;
+                        positionGeometry.coordinates = new double[]{x, y};
+                        positionFeature.geometry = positionGeometry;
+                        positionFeature.properties = positionProperty;
+                        positionData.features.clear();
+                        positionData.features.add(positionFeature);
+                        String s = gson.toJson(positionData);
+                        Logger.d("positionData"+s);
+                        findCarWebView.loadUrl("javascript: locatePoint('" + s + "')");
+                        break;
+                }
+            }
+
+            @Override
+            public void OnFailed(String code, String message) {
+                Logger.d("positionFail"+message);
+                Log.e(TAG,message);
+                //定位出错的返回
+                //code 错误码
+                //message 错误消息
+            }
+        });
+        client.start();
+        /*Message msg = Message.obtain();
+        handler.sendMessageDelayed(msg,200);*/
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         doStart();
@@ -270,5 +319,5 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         values[0] = values[0] < 0 ? 360+values[0]:values[0];
         degree = (int) values[0];
         findCarWebView.loadUrl("javascript: angleOfNorth('" + degree + "')");
-    }
+    }*/
 }
