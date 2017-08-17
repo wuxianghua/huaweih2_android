@@ -43,7 +43,7 @@ import java.util.Map;
 import cn.bupt.sse309.locsdk.DefaultLocClient;
 import cn.bupt.sse309.locsdk.LocClient;
 
-public class FindCarActivity extends BaseActivity {
+public class FindCarActivity extends BaseActivity implements SensorEventListener{
     private static final String TAG = "FindCarActivity";
     private WebView findCarWebView;
     private WebSettings settings;
@@ -155,8 +155,9 @@ public class FindCarActivity extends BaseActivity {
                         //定位成功返回的结果
                         float x = Float.parseFloat(result.get("x"));
                         float y = Float.parseFloat(result.get("y"));
-                        x = (float) (12697074.245 + x);
-                        y = (float) (2588966.542 - y);
+                        Logger.d("positionData"+"x"+x+""+"y"+y);
+                        x = (float) (12697074.245 + x/10);
+                        y = (float) (2588966.542 - y/10);
                         positionProperty.floor_id = 1261980;
                         positionGeometry.coordinates = new double[]{x, y};
                         positionFeature.geometry = positionGeometry;
@@ -194,7 +195,7 @@ public class FindCarActivity extends BaseActivity {
         mWifiScanReceiver = new WifiScanReceiver();
         registerReceiver(mWifiScanReceiver, new IntentFilter("android.net.wifi.SCAN_RESULTS"));
         mWifiManager.startScan();
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -210,16 +211,16 @@ public class FindCarActivity extends BaseActivity {
         mSensorManager.unregisterListener(this);
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         super.onStop();
         if (mWifiScanReceiver != null) {
             unregisterReceiver(mWifiScanReceiver);
             mWifiScanReceiver = null;
         }
-    }
+    }*/
 
-    class WifiScanReceiver extends BroadcastReceiver {
+    /*class WifiScanReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context arg0, Intent arg1) {
@@ -228,8 +229,8 @@ public class FindCarActivity extends BaseActivity {
             mWifiManager.startScan();
         }
 
-    }
-    public void sendPositionDataToJS(List<ScanResult> list) {
+    }*/
+    /*public void sendPositionDataToJS(List<ScanResult> list) {
         apDatas.clear();
         for (int i = 0; i < list.size(); i++) {
             apData = new ApData();
@@ -245,9 +246,9 @@ public class FindCarActivity extends BaseActivity {
         mWifiPositonData.wifi_data = mWifiData;
         wifiLocationManager.setWifiData(gson.toJson(mWifiPositonData));
         Log.e(TAG,gson.toJson(mWifiPositonData));
-    }
+    }*/
 
-    private void getPositionData() {
+    /*private void getPositionData() {
         Logger.d("wifi data finish");
         pos=wifiLocationManager.getPos();
         Logger.d("get data wifi"+pos);
@@ -266,38 +267,21 @@ public class FindCarActivity extends BaseActivity {
             e.printStackTrace();
             Logger.d("error"+e);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
-    }
-    AccelerometerModel accelerometerModel;
-    GyroModel gyroModel;
-    MagnetometerModel magnetometerModel;
+    }*/
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelerometerModel = new AccelerometerModel();
             accelerometerValues = event.values;
-            accelerometerModel.time = System.currentTimeMillis();
-            accelerometerModel.x = event.values[0];
-            accelerometerModel.y = event.values[1];
-            accelerometerModel.z = event.values[2];
         }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            gyroModel = new GyroModel();
-            gyroModel.time = System.currentTimeMillis();
-            gyroModel.x = event.values[0];
-            gyroModel.y = event.values[1];
-            gyroModel.z = event.values[2];
         }else {
-            magnetometerModel = new MagnetometerModel();
             magneticFieldValues = event.values;
-            magnetometerModel.time = System.currentTimeMillis();
-            magnetometerModel.x = event.values[0];
-            magnetometerModel.y = event.values[1];
-            magnetometerModel.z = event.values[2];
         }
         //Log.e(TAG,gson.toJson(sensorModel));
         calculateOrientation();
@@ -318,6 +302,7 @@ public class FindCarActivity extends BaseActivity {
         values[0] = (float) Math.toDegrees(values[0]);
         values[0] = values[0] < 0 ? 360+values[0]:values[0];
         degree = (int) values[0];
+        Log.e(TAG,degree+"");
         findCarWebView.loadUrl("javascript: angleOfNorth('" + degree + "')");
-    }*/
+    }
 }
