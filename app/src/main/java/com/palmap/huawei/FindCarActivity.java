@@ -125,7 +125,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.settings.setLoadWithOverviewMode(true);
         findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
-        //findCarWebView.loadUrl("http://html5test.com/");
         positionFeature = new PositionFeature();
         positionGeometry = new PositionGeometry();
         positionProperty = new PositionProperty();
@@ -156,8 +155,8 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                         float x = Float.parseFloat(result.get("x"));
                         float y = Float.parseFloat(result.get("y"));
                         Logger.d("positionData"+"x"+x+""+"y"+y);
-                        x = (float) (12697074.245 + x/10);
-                        y = (float) (2588966.542 - y/10);
+                        x = (float) (12697074.245 + (x*12.3)/100);
+                        y = (float) (2588966.542 - (y*12.3)/100);
                         positionProperty.floor_id = 1261980;
                         positionGeometry.coordinates = new double[]{x, y};
                         positionFeature.geometry = positionGeometry;
