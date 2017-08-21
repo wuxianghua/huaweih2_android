@@ -15,9 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -35,6 +32,9 @@ import com.palmap.demo.huaweih2.model.PositionProperty;
 import com.palmap.demo.huaweih2.model.SensorModel;
 import com.palmap.demo.huaweih2.model.WifiData;
 import com.palmap.demo.huaweih2.model.WifiPositionData;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.util.ArrayList;
 import java.util.List;

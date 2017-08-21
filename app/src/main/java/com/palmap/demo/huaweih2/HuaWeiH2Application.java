@@ -1,6 +1,8 @@
 package com.palmap.demo.huaweih2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -8,6 +10,7 @@ import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.smtt.sdk.QbSdk;
 
 import org.xq.com.xiaoqian.application.XiaoqianApplication;
 
@@ -39,7 +42,33 @@ public class HuaWeiH2Application extends XiaoqianApplication {
                       .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                       .build());
     }
+
+    QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+
+      @Override
+      public void onViewInitFinished(boolean arg0) {
+        // TODO Auto-generated method stub
+        //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+        Log.d("app", " onViewInitFinished is " + arg0);
+      }
+
+      @Override
+      public void onCoreInitFinished() {
+        // TODO Auto-generated method stub
+      }
+    };
+    //x5内核初始化接口
+    QbSdk.initX5Environment(getApplicationContext(),  cb);
   }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    // 在这里调用Context的方法会崩溃
+    super.attachBaseContext(base);
+    // 在这里可以正常调用Context的方法
+    MultiDex.install(this);
+  }
+
 
   private void copyPalmapFile(){
     // copy字体文件和lur配置文件
