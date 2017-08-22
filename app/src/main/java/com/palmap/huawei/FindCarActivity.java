@@ -14,7 +14,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.BaseActivity;
@@ -38,7 +37,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindCarActivity extends BaseActivity {
+public class FindCarActivity extends BaseActivity implements SensorEventListener {
     private static final String TAG = "FindCarActivity";
     private WebView findCarWebView;
     private WebSettings settings;
@@ -66,10 +65,10 @@ public class FindCarActivity extends BaseActivity {
     private float[] accelerometerValues = new float[3];
     private float[] magneticFieldValues = new float[3];
     private int count1 = 0;
-    private SensorEventListener sensorEventListener;
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             count1++;
+            // 要做的事情
             if (accelerometerModels == null) {
                 accelerometerModels = new ArrayList<>();
             }
@@ -131,50 +130,16 @@ public class FindCarActivity extends BaseActivity {
         apDatas = new ArrayList<ApData>();
         positionData.features = new ArrayList<>();
         gson = new Gson();
-        thread.start();
         wifiLocationManager = new WifiLocationManager();
         Message msg = Message.obtain();
         handler.sendMessageDelayed(msg,200);
     }
 
-    Thread thread=new Thread(){
-        @Override
-        public void run() {
-            sensorEventListener = new SensorEventListener() {
-                @Override
-                public void onSensorChanged(SensorEvent event) {
-                    if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                        accelerometerModel = new AccelerometerModel();
-                        accelerometerValues = event.values;
-                        accelerometerModel.time = System.currentTimeMillis();
-                        accelerometerModel.x = event.values[0];
-                        accelerometerModel.y = event.values[1];
-                        accelerometerModel.z = event.values[2];
-                    }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-                        gyroModel = new GyroModel();
-                        gyroModel.time = System.currentTimeMillis();
-                        gyroModel.x = event.values[0];
-                        gyroModel.y = event.values[1];
-                        gyroModel.z = event.values[2];
-                    }else {
-                        magnetometerModel = new MagnetometerModel();
-                        magneticFieldValues = event.values;
-                        magnetometerModel.time = System.currentTimeMillis();
-                        magnetometerModel.x = event.values[0];
-                        magnetometerModel.y = event.values[1];
-                        magnetometerModel.z = event.values[2];
-                    }
-                    calculateOrientation();
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                }
-            };
-            doStart();
-        }
-    };
+    @Override
+    protected void onStart() {
+        super.onStart();
+        doStart();
+    }
 
     private void doStart() {
         mWifiScanReceiver = new WifiScanReceiver();
@@ -185,15 +150,15 @@ public class FindCarActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(sensorEventListener, mAccelerometer, 0);
-        mSensorManager.registerListener(sensorEventListener, mGyroscope, 0);
-        mSensorManager.registerListener(sensorEventListener, mField, 0);
+        mSensorManager.registerListener(this, mAccelerometer, 0);
+        mSensorManager.registerListener(this, mGyroscope, 0);
+        mSensorManager.registerListener(this, mField, 0);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(sensorEventListener);
+        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -215,6 +180,9 @@ public class FindCarActivity extends BaseActivity {
         }
 
     }
+
+    int count;
+    StringBuffer sb;
     public void sendPositionDataToJS(List<ScanResult> list) {
         apDatas.clear();
         for (int i = 0; i < list.size(); i++) {
@@ -261,6 +229,37 @@ public class FindCarActivity extends BaseActivity {
     AccelerometerModel accelerometerModel;
     GyroModel gyroModel;
     MagnetometerModel magnetometerModel;
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerometerModel = new AccelerometerModel();
+            accelerometerValues = event.values;
+            accelerometerModel.time = System.currentTimeMillis();
+            accelerometerModel.x = event.values[0];
+            accelerometerModel.y = event.values[1];
+            accelerometerModel.z = event.values[2];
+        }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            gyroModel = new GyroModel();
+            gyroModel.time = System.currentTimeMillis();
+            gyroModel.x = event.values[0];
+            gyroModel.y = event.values[1];
+            gyroModel.z = event.values[2];
+        }else {
+            magnetometerModel = new MagnetometerModel();
+            magneticFieldValues = event.values;
+            magnetometerModel.time = System.currentTimeMillis();
+            magnetometerModel.x = event.values[0];
+            magnetometerModel.y = event.values[1];
+            magnetometerModel.z = event.values[2];
+        }
+        //Log.e(TAG,gson.toJson(sensorModel));
+        calculateOrientation();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 
     int degree;
     private void calculateOrientation() {
