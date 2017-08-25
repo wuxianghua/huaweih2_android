@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -63,50 +64,9 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     private Sensor mAccelerometer;
     private Sensor mGyroscope;
     private Sensor mField;
-    //private WifiScanReceiver mWifiScanReceiver;
-    private WifiManager mWifiManager;
-    private List<AccelerometerModel> accelerometerModels;
-    private List<GyroModel> gyroModels;
-    private List<MagnetometerModel> magnetometerModels;
+    private TextView tv;
     private float[] accelerometerValues = new float[3];
     private float[] magneticFieldValues = new float[3];
-    private int count1 = 0;
-    /*Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            count1++;
-            if (accelerometerModels == null) {
-                accelerometerModels = new ArrayList<>();
-            }
-            if (gyroModels == null) {
-                gyroModels = new ArrayList<>();
-            }
-            if (magnetometerModels == null) {
-                magnetometerModels = new ArrayList<>();
-            }
-            magnetometerModels.add(magnetometerModel);
-            gyroModels.add(gyroModel);
-            accelerometerModels.add(accelerometerModel);
-            Message message = Message.obtain();
-            handler.sendMessageDelayed(message,10);
-            if (count1 == 10) {
-                if (gyroModels == null||magnetometerModels == null || accelerometerModels == null|| wifiLocationManager == null) {
-                    return;
-                }
-                SensorModel sensorModel = new SensorModel();
-                sensorModel.gyro = gyroModels;
-                sensorModel.magnetometer = magnetometerModels;
-                sensorModel.accelerometer = accelerometerModels;
-                sensorModel.time = System.currentTimeMillis();
-                getPositionData();
-                wifiLocationManager.setSensorData(gson.toJson(sensorModel));
-                Logger.d("sensorModel"+gson.toJson(sensorModel));
-                magnetometerModels.clear();
-                gyroModels.clear();
-                accelerometerModels.clear();
-                count1 = 0;
-            }
-        }
-    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,9 +82,9 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         this.settings.setJavaScriptEnabled(true);
         this.settings.setDomStorageEnabled(true);
         this.settings.setUseWideViewPort(true);
-        mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.settings.setLoadWithOverviewMode(true);
         findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
+        tv = (TextView) findViewById(R.id.textView);
         positionFeature = new PositionFeature();
         positionGeometry = new PositionGeometry();
         positionProperty = new PositionProperty();
@@ -134,8 +94,9 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         apDatas = new ArrayList<ApData>();
         positionData.features = new ArrayList<>();
         gson = new Gson();
+        registerSensor();
         wifiLocationManager = new WifiLocationManager();
-        LocClient client = new DefaultLocClient(this, "YmVjZjUwY2YtNWU0NC00YWYyLWE0OTAtMmVhMmIxNzcxYmNi", "dHvznqyla4vhZ19zmVKqkH77nQi2skk5hgphkSpCLqg");
+        LocClient client = new DefaultLocClient(this, "YjU5NjFkMjItNDhlZC00OGNjLTk2N2UtMmNlZmE5YTUyMWU2", "QwZzlf4eXvuhNTAUvi5BDaD9E73aAMZE0z8uFMUrhvU");
         client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
             @Override
             public void OnSuccess(int type, Map<String, String> result) {
@@ -145,7 +106,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                 int floor = Integer.parseInt(result.get("floor"));
                 //发送报文时的时间戳
                 long timestamp = Long.parseLong(result.get("timestamp"));
-
+                tv.setText("时间"+(System.currentTimeMillis()-timestamp));
                 switch (type) {
                     case LocClient.TYPE_FLOOR:
                         //楼层切换时的结果
@@ -155,8 +116,8 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                         float x = Float.parseFloat(result.get("x"));
                         float y = Float.parseFloat(result.get("y"));
                         Logger.d("positionData"+"x"+x+""+"y"+y);
-                        x = (float) (12697074.245 + (x*12.3)/100);
-                        y = (float) (2588966.542 - (y*12.3)/100);
+                        x = (float) (12697077.245 + (x*12.3)/100);
+                        y = (float) (2588969.542 - (y*12.3)/100);
                         positionProperty.floor_id = 1261980;
                         positionGeometry.coordinates = new double[]{x, y};
                         positionFeature.geometry = positionGeometry;
@@ -164,7 +125,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                         positionData.features.clear();
                         positionData.features.add(positionFeature);
                         String s = gson.toJson(positionData);
-                        Logger.d("positionData"+s);
                         findCarWebView.loadUrl("javascript: locatePoint('" + s + "')");
                         break;
                 }
@@ -174,105 +134,22 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
             public void OnFailed(String code, String message) {
                 Logger.d("positionFail"+message);
                 Log.e(TAG,message);
-                //定位出错的返回
-                //code 错误码
-                //message 错误消息
             }
         });
         client.start();
-        /*Message msg = Message.obtain();
-        handler.sendMessageDelayed(msg,200);*/
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        doStart();
-    }
-
-    private void doStart() {
-        mWifiScanReceiver = new WifiScanReceiver();
-        registerReceiver(mWifiScanReceiver, new IntentFilter("android.net.wifi.SCAN_RESULTS"));
-        mWifiManager.startScan();
-    }*/
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void registerSensor() {
         mSensorManager.registerListener(this, mAccelerometer, 0);
         mSensorManager.registerListener(this, mGyroscope, 0);
         mSensorManager.registerListener(this, mField, 0);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mSensorManager.unregisterListener(this);
-    }
-
-    /*@Override
-    protected void onStop() {
-        super.onStop();
-        if (mWifiScanReceiver != null) {
-            unregisterReceiver(mWifiScanReceiver);
-            mWifiScanReceiver = null;
-        }
-    }*/
-
-    /*class WifiScanReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            List<ScanResult> scanResults = mWifiManager.getScanResults();
-            sendPositionDataToJS(scanResults);
-            mWifiManager.startScan();
-        }
-
-    }*/
-    /*public void sendPositionDataToJS(List<ScanResult> list) {
-        apDatas.clear();
-        for (int i = 0; i < list.size(); i++) {
-            apData = new ApData();
-            apData.mac = list.get(i).BSSID;
-            apData.rssi = list.get(i).level;
-            apData.ssid = "Huawei-Employee";
-            apDatas.add(apData);
-        }
-        mWifiData.time = System.currentTimeMillis();
-        mWifiData.arr = apDatas;
-        mWifiPositonData.building_name = null;
-        mWifiPositonData.time = System.currentTimeMillis();
-        mWifiPositonData.wifi_data = mWifiData;
-        wifiLocationManager.setWifiData(gson.toJson(mWifiPositonData));
-        Log.e(TAG,gson.toJson(mWifiPositonData));
-    }*/
-
-    /*private void getPositionData() {
-        Logger.d("wifi data finish");
-        pos=wifiLocationManager.getPos();
-        Logger.d("get data wifi"+pos);
-        try {
-            currentPosition = gson.fromJson(pos, CurrentPositionData.class);
-            positionProperty.floor_id = 1261980;
-            positionGeometry.coordinates = new double[]{currentPosition.current_position.x, currentPosition.current_position.y};
-            positionFeature.geometry = positionGeometry;
-            positionFeature.properties = positionProperty;
-            positionData.features.clear();
-            positionData.features.add(positionFeature);
-            String s = gson.toJson(positionData);
-            Logger.d("positionData"+currentPosition.current_position.x+currentPosition.current_position.y);
-            findCarWebView.loadUrl("javascript: locatePoint('" + s + "')");
-        }catch (Exception e) {
-            e.printStackTrace();
-            Logger.d("error"+e);
-        }
-    }*/
-
-    /*@Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-    }*/
+        mSensorManager.unregisterListener(this);
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
