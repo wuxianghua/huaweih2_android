@@ -113,11 +113,11 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                         break;
                     case LocClient.TYPE_LOC:
                         //定位成功返回的结果
-                        float x = Float.parseFloat(result.get("x"));
-                        float y = Float.parseFloat(result.get("y"));
+                        double x = Float.parseFloat(result.get("x"));
+                        double y = Float.parseFloat(result.get("y"));
                         Logger.d("positionData"+"x"+x+""+"y"+y);
-                        x = (float) (12697077.245 + (x*12.3)/100);
-                        y = (float) (2588969.542 - (y*12.3)/100);
+                        x =  (12697074.245 + (x/7.850));
+                        y =  (2588966.542 - (y/7.850));
                         positionProperty.floor_id = 1261980;
                         positionGeometry.coordinates = new double[]{x, y};
                         positionFeature.geometry = positionGeometry;
@@ -133,6 +133,19 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
             @Override
             public void OnFailed(String code, String message) {
                 Logger.d("positionFail"+message);
+                double x = 783.267333984375;
+                double y = 282.28619384765625;
+                Logger.d("positionData"+"x"+x+""+"y"+y);
+                x =  (12697074.245 + (x/7.850));
+                y =  (2588966.542 - (y/7.850));
+                positionProperty.floor_id = 1261980;
+                positionGeometry.coordinates = new double[]{x, y};
+                positionFeature.geometry = positionGeometry;
+                positionFeature.properties = positionProperty;
+                positionData.features.clear();
+                positionData.features.add(positionFeature);
+                String s = gson.toJson(positionData);
+                findCarWebView.loadUrl("javascript: locatePoint('" + s + "')");
                 Log.e(TAG,message);
             }
         });
