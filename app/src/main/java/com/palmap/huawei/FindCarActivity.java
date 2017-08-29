@@ -1,19 +1,11 @@
 package com.palmap.huawei;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -21,16 +13,12 @@ import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.BaseActivity;
 import com.palmap.demo.huaweih2.R;
-import com.palmap.demo.huaweih2.model.AccelerometerModel;
 import com.palmap.demo.huaweih2.model.ApData;
 import com.palmap.demo.huaweih2.model.CurrentPositionData;
-import com.palmap.demo.huaweih2.model.GyroModel;
-import com.palmap.demo.huaweih2.model.MagnetometerModel;
 import com.palmap.demo.huaweih2.model.PositionData;
 import com.palmap.demo.huaweih2.model.PositionFeature;
 import com.palmap.demo.huaweih2.model.PositionGeometry;
 import com.palmap.demo.huaweih2.model.PositionProperty;
-import com.palmap.demo.huaweih2.model.SensorModel;
 import com.palmap.demo.huaweih2.model.WifiData;
 import com.palmap.demo.huaweih2.model.WifiPositionData;
 import com.tencent.smtt.sdk.WebSettings;
