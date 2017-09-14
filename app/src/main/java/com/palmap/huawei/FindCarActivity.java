@@ -7,7 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -52,7 +51,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     private Sensor mAccelerometer;
     private Sensor mGyroscope;
     private Sensor mField;
-    private TextView tv;
     private float[] accelerometerValues = new float[3];
     private float[] magneticFieldValues = new float[3];
 
@@ -72,7 +70,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         this.settings.setUseWideViewPort(true);
         this.settings.setLoadWithOverviewMode(true);
         findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
-        tv = (TextView) findViewById(R.id.textView);
         positionFeature = new PositionFeature();
         positionGeometry = new PositionGeometry();
         positionProperty = new PositionProperty();
@@ -94,7 +91,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                 int floor = Integer.parseInt(result.get("floor"));
                 //发送报文时的时间戳
                 long timestamp = Long.parseLong(result.get("timestamp"));
-                tv.setText("时间"+(System.currentTimeMillis()-timestamp));
                 switch (type) {
                     case LocClient.TYPE_FLOOR:
                         //楼层切换时的结果
