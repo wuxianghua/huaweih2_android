@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.palmap.demo.huaweih2.functionActivity.ShakeActivity">
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="时间"
-        android:textSize="40dp"
-        />
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/find_car_web_view"
         android:layout_width="fill_parent"
