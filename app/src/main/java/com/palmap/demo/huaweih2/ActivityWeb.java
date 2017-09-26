@@ -3,11 +3,12 @@ package com.palmap.demo.huaweih2;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.Window;
 
 import com.palmap.demo.huaweih2.view.TitleBar;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 public class ActivityWeb extends BaseActivity {
   public static final String TITLE = "title";
