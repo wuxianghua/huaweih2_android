@@ -43,9 +43,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
     private PositionGeometry positionGeometry;
     private PositionProperty positionProperty;
     private PositionData positionData;
-    private String pos;
-    private CurrentPositionData currentPosition;
-    private WifiLocationManager wifiLocationManager;
     private Gson gson;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -80,7 +77,6 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
         positionData.features = new ArrayList<>();
         gson = new Gson();
         registerSensor();
-        wifiLocationManager = new WifiLocationManager();
         LocClient client = new DefaultLocClient(this, "YjU5NjFkMjItNDhlZC00OGNjLTk2N2UtMmNlZmE5YTUyMWU2", "QwZzlf4eXvuhNTAUvi5BDaD9E73aAMZE0z8uFMUrhvU");
         client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
             @Override
