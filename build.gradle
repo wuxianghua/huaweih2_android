@@ -2,12 +2,13 @@
 apply from: 'buildsystem/dependencies.gradle'
 
 buildscript {
+    ext.kotlin_version = '1.1.4-2'
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.2'
-
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         //**bugtags**
         //classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
         // NOTE: Do not place your application dependencies here; they belong

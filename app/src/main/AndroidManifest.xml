@@ -28,27 +28,7 @@
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <!--用于申请调用A-GPS模块-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-
-    <!-- 允许程序打开网络sockets -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- 允许应用写（非读）用户的外部存储器 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- 允许应用读（非读）用户的外部存储器 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!-- 允许获取位置信息 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- 允许程序访问有关的网络信息 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 蓝牙相关权限 -->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature
@@ -66,8 +46,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="icon"
-        android:hardwareAccelerated="true"
-        >
+        android:hardwareAccelerated="true">
         <service android:name="com.amap.api.location.APSService"/>
 
         <service android:name=".LampSiteLocationService" android:enabled="true"
@@ -90,18 +69,23 @@
             android:name="com.palmap.demo.huaweih2.H2MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name="com.palmap.demo.huaweih2.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppStartLoadTranslucent"
             android:windowSoftInputMode="adjustResize|stateHidden">
+
+        </activity>
+
+
+        <activity android:name="com.palmap.huawei.F2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
 
 
         <activity
@@ -224,7 +208,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-
 
     </application>
 
