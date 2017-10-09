@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.palmap.core.IndoorMapView;
 import com.palmap.core.MapEngine;
 import com.palmap.core.data.PlanarGraph;
@@ -106,6 +106,16 @@ public class MapBoxMapViewController implements IMapViewController {
                 return overLayer.getFloorId();
             }
         });
+    }
+
+    @Override
+    public void setLocationMarkIcon(int resource,int w , int h) {
+        indoorMapView.setLocationMarkIcon(resource,w ,h);
+    }
+
+    @Override
+    public void addLocationMark(double x, double y) {
+        indoorMapView.addLocationMark(new LatLng(x,y));
     }
 
     @Override

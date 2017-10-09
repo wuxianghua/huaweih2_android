@@ -1,7 +1,9 @@
 package com.palmap.core
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,11 +28,13 @@ import com.mapbox.mapboxsdk.style.sources.Source
 import com.mapbox.services.commons.geojson.Feature
 import com.mapbox.services.commons.geojson.FeatureCollection
 import com.mapbox.services.commons.geojson.GeoJSON
+import com.mapbox.services.commons.models.Position
 import com.palmap.core.data.PlanarGraph
 import com.palmap.core.overLayer.PulseMarkerViewAdapter
 import com.palmap.core.overLayer.PulseMarkerViewOptions
 import com.palmap.core.style.FeatureRendererImpl
 import com.palmap.core.style.renderable.Renderable
+import com.palmap.mapboxlibrary.R
 import com.palmap.nagrand.support.task.Task
 import com.palmap.nagrand.support.task.TaskManager
 import java.lang.ref.WeakReference
@@ -55,6 +59,10 @@ class IndoorMapView private constructor(
         private val TAG = "IndoorMapView"
 
         private val styleUrl = "mapbox://styles/mapbox/outdoors-v10"
+
+        private val layerID_Location = "layer_location"
+        private val sourceID_location = "source_location"
+        private val IMAGE_LOCATION = "image_location"
 
         private class LoadMapTask(indoorMapView: IndoorMapView,
                                   private val planarGraph: PlanarGraph
@@ -326,11 +334,37 @@ class IndoorMapView private constructor(
 
     fun addOverLayer(overLayer: OverLayer) {
         val l = LatLng(overLayer.getCoordinate()[0], overLayer.getCoordinate()[1])
-        val m = mapBoxMap.addMarker(
+        mapBoxMap.addMarker(
                 PulseMarkerViewOptions().icon(IconFactory.getInstance(context).fromResource(overLayer.getResource()))
                         .position(l)
         )
-        println(1)
+    }
+
+    fun setLocationMarkIcon(sourceId: Int , width : Int = 30 , height : Int = 30){
+        mapBoxMap.addImage(IMAGE_LOCATION, decodeSampledbitmapFromResource(
+                context.resources,
+                sourceId,
+                width,
+                height
+        ))
+    }
+
+    fun addLocationMark(position: LatLng) {
+        if (mapBoxMap.getLayer(layerID_Location) == null) {
+            val source = GeoJsonSource(
+                    sourceID_location,
+                    com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude))
+            )
+            mapBoxMap.addSource(source)
+            val layer = SymbolLayer(layerID_Location, sourceID_location)
+            layer.setProperties(
+                    PropertyFactory.iconImage(IMAGE_LOCATION)
+            )
+            mapBoxMap.addLayer(layer)
+        } else {
+            val source = mapBoxMap.getSourceAs<GeoJsonSource>(sourceID_location)
+            source!!.setGeoJson(com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude)))
+        }
     }
 
     //////////////////////////////////////API end///////////////////////////////////////////////////
@@ -367,6 +401,7 @@ class IndoorMapView private constructor(
     }
 
     private val mainHandler = Handler(Looper.getMainLooper())
+
     private fun loadIcon(url: String, layerName: String) {
         val r = Runnable {
             Glide.with(context)
@@ -396,6 +431,34 @@ class IndoorMapView private constructor(
 
     private fun addLayer(layer: Layer) {
         mapBoxMap.addLayer(layer)
+    }
+
+
+    private fun decodeSampledbitmapFromResource(resources: Resources, resID: Int, reqWidth: Int, reqHeight: Int): Bitmap {
+        val option = BitmapFactory.Options()
+        //设置inJustDecodeBounds为：ture，预先加载Bitmap的宽高参数
+        option.inJustDecodeBounds = true
+        BitmapFactory.decodeResource(resources, resID, option)
+        //计算图片的采样率
+        option.inSampleSize = calcuteInSapmleSize(option, reqWidth, reqHeight)
+        //根据图片采样率加载图片
+        option.inJustDecodeBounds = false
+
+        return BitmapFactory.decodeResource(resources, resID, option)
+    }
+
+    private fun calcuteInSapmleSize(option: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val height = option.outHeight
+        val width = option.outWidth
+        var inSample = 1
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            while (halfHeight / inSample >= reqHeight && halfWidth / inSample >= reqWidth) {
+                inSample *= 2
+            }
+        }
+        return inSample
     }
 
     //////////////////////////////////////private end///////////////////////////////////////////////////

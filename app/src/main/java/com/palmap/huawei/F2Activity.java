@@ -9,9 +9,7 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.indoor.IMapViewController;
 import com.palmap.indoor.MapViewControllerFactory;
-import com.palmap.indoor.OverLayer;
 import com.palmap.indoor.navigate.impl.MapBoxNavigateManager;
-import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * Created by wtm on 2017/9/30.
@@ -31,10 +29,12 @@ public class F2Activity extends Activity {
             public void onAction() {
                 iMapViewController.drawPlanarGraph(HuaWeiH2Application.parkData);
                 //iMapViewController.drawPlanarGraph("h2Data.json");
+                iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711,30,30);
+
                 iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
                     @Override
                     public void onAction(final double x,final double y) {
-                        iMapViewController.addOverLayer(new OverLayer() {
+                        /*iMapViewController.addOverLayer(new OverLayer() {
                             @Override
                             public Coordinate getCoordinate() {
                                 return new Coordinate(x,y);
@@ -49,7 +49,8 @@ public class F2Activity extends Activity {
                             public int getResource() {
                                 return R.drawable.bianlidian711;
                             }
-                        });
+                        });*/
+                        iMapViewController.addLocationMark(x,y);
                     }
                 });
             }

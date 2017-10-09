@@ -35,6 +35,10 @@ public interface IMapViewController {
 
     void addOverLayer(OverLayer overLayer);
 
+    void setLocationMarkIcon(int resource,int width,int height);
+
+    void addLocationMark(double x,double y);
+
     void onStart();
 
     void onStop();
