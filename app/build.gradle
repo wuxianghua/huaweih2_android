@@ -57,6 +57,7 @@ android {
     }
     lintOptions {
         abortOnError false
+        disable 'MissingTranslation', 'ExtraTranslation'
     }
     repositories {
         flatDir{
@@ -74,12 +75,12 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':pullToRefresh')
 
-//    compile(project(':astar')) {
-//        exclude group: 'com.vividsolutions'
-//    }
     compile project(':lib-astar')
+  //  compile(project(':lib-astar')){
+  //      exclude group: 'com.vividsolutions.jts'
+  //  }
     compile (project(':mapboxlibrary')){
-        exclude group: 'com.google.gson'
+        exclude group: 'com.google.code.gson'
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
@@ -87,7 +88,6 @@ dependencies {
     compile files('libs/fastjson-1.2.4.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/open_sdk_r5756_lite.jar')
-//    compile files('libs/universal-image-loader-1.9.3.jar')
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile files('libs/httpmime-4.2.5.jar')
@@ -108,7 +108,9 @@ dependencies {
     def dependencies = rootProject.ext.libDependencies
     compile dependencies.rxJava
     compile dependencies.rxAndroid
-    compile dependencies.retrofit
+    compile(dependencies.retrofit){
+        exclude group: 'com.google.code.gson'
+    }
     compile dependencies.retrofitRx
     compile files('libs/x5_webkit.jar')
 }
