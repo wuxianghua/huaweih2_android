@@ -75,18 +75,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppStartLoadTranslucent"
             android:windowSoftInputMode="adjustResize|stateHidden">
-
-        </activity>
-
-
-        <activity android:name="com.palmap.huawei.F2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name="com.palmap.huawei.F2Activity"
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name="com.palmap.demo.huaweih2.MainActivity"

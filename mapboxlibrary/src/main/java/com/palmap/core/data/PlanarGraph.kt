@@ -1,5 +1,6 @@
 package com.palmap.core.data
 
+import android.util.Log
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.services.commons.geojson.BaseFeatureCollection
 import com.mapbox.services.commons.geojson.FeatureCollection
@@ -40,6 +41,7 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
      * 解析数据 建议放在子现场 避免耗时
      */
     fun resolveData(){
+        val oldTime = System.currentTimeMillis();
         if(isResolve.get()){
             return
         }
@@ -62,6 +64,8 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
                 }
             }
             dataCorrect = true
+
+            Log.e("PlanarGraph","time: " + (System.currentTimeMillis()-oldTime))
         } catch (e: Exception) {
             e.printStackTrace()
         }

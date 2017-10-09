@@ -10,14 +10,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.CsvFormatStrategy;
 import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.palmap.demo.huaweih2.adapter.ICSListViewAdapter;
 import com.palmap.demo.huaweih2.functionActivity.CommentActivity;
-import com.palmap.huawei.FindCarActivity;
 import com.palmap.demo.huaweih2.functionActivity.FootPrintActivity;
 import com.palmap.demo.huaweih2.functionActivity.PeripheryActivity;
 import com.palmap.demo.huaweih2.functionActivity.ShakeActivity;
@@ -26,6 +24,7 @@ import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
+import com.palmap.huawei.F2Activity;
 
 import org.xq.com.xiaoqian.util.HUtil;
 
@@ -198,7 +197,8 @@ public class H2MainActivity extends BaseActivity {
                 startActivity(new Intent(this, ShakeActivity.class));
                 break;
             case R.id.layout_car:
-                startActivity(new Intent(this, FindCarActivity.class));
+                //startActivity(new Intent(this, FindCarActivity.class));
+                startActivity(new Intent(this, F2Activity.class));
                 break;
             case R.id.layout_foot:
                 startActivity(new Intent(this, FootPrintActivity.class));

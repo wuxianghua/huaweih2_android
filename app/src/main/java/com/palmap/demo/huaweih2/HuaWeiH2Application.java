@@ -6,6 +6,9 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.palmap.core.MapEngine;
+import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
@@ -27,10 +30,13 @@ public class HuaWeiH2Application extends XiaoqianApplication {
   //public static PlanarGraph planarGraphF1 = null;//缓存楼层数据
   //public static PlanarGraph planarGraphB1= null;
 
+  public static PlanarGraph parkData = null;
+
   @Override
   public void onCreate() {
     super.onCreate();
     instance = this;
+    MapEngine.INSTANCE.start(this,"pk.eyJ1IjoiY2FtbWFjZSIsImEiOiJjaW9vbGtydnQwMDAwdmRrcWlpdDVoM3pjIn0.Oy_gHelWnV12kJxHQWV7XQ");
     copyPalmapFile();
     //Bugly.init(getApplicationContext(), "5319dd5ea7", false);
     CrashReport.initCrashReport(getApplicationContext(), "5319dd5ea7", true);

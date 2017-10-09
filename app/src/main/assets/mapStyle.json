@@ -8,9 +8,9 @@
       "renderer": {
         "type": "simple",
         "default": {
-          "fillColor": "#00ff00",
+          "fillColor": "#fff",
           // 填充色
-          "fillOpacity": 0.5,
+          "fillOpacity": 0.6,
           //填充透明度
           "outline": {
             //外边框配置, 会自动添加一个 FrameLine 的 layer

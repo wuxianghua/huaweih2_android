@@ -13,5 +13,4 @@ public final class MapViewControllerFactory {
     public static IMapViewController createByMapBox(Context context){
         return new MapBoxMapViewController(context);
     }
-
 }

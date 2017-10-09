@@ -4,10 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.palmap.core.IndoorMapView;
 import com.palmap.core.MapEngine;
 import com.palmap.core.data.PlanarGraph;
 import com.palmap.indoor.IMapViewController;
+import com.palmap.indoor.OverLayer;
+
+import org.jetbrains.annotations.NotNull;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -41,9 +45,19 @@ public class MapBoxMapViewController implements IMapViewController {
     }
 
     @Override
+    public long getFloorId() {
+        return indoorMapView.getFloorId();
+    }
+
+    @Override
     public void drawPlanarGraph(String mapDataPath) {
         PlanarGraph planarGraph = new PlanarGraph(loadFromAsset(context,mapDataPath),15);
         indoorMapView.drawPlanarGraph(planarGraph);
+    }
+
+    @Override
+    public void drawPlanarGraph(PlanarGraph p) {
+        indoorMapView.drawPlanarGraph(p);
     }
 
     @Override
@@ -63,6 +77,33 @@ public class MapBoxMapViewController implements IMapViewController {
             public Unit invoke(Double aDouble, Double aDouble2) {
                 l.onAction(aDouble,aDouble2);
                 return null;
+            }
+        });
+    }
+
+    @Override
+    public void addOverLayer(final OverLayer overLayer) {
+        if (overLayer==null){
+            return;
+        }
+        indoorMapView.addOverLayer(new com.palmap.core.OverLayer() {
+            @Override
+            public int getResource() {
+                return overLayer.getResource();
+            }
+
+            @NotNull
+            @Override
+            public double[] getCoordinate() {
+                return new double[]{
+                        overLayer.getCoordinate().x,
+                        overLayer.getCoordinate().y,
+                };
+            }
+
+            @Override
+            public long getFloorId() {
+                return overLayer.getFloorId();
             }
         });
     }

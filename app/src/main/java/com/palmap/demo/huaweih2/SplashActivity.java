@@ -6,8 +6,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.palmap.core.MapEngine;
+import com.palmap.core.data.PlanarGraph;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.palmap.core.util.UtilsKt.loadFromAsset;
 
 public class SplashActivity extends Activity {
 
@@ -17,10 +23,16 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         TextView tvVersionName = (TextView) findViewById(R.id.tvVersionName);
         tvVersionName.setText(getAppInfo());
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
 //        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                HuaWeiH2Application.parkData = new PlanarGraph(loadFromAsset(SplashActivity.this,"h2Data.json"),15);
+                HuaWeiH2Application.parkData.resolveData();
+                HuaWeiH2Application.parkData.loadStyle(
+                        MapEngine.INSTANCE.getRenderableByName("default").getRenderer()
+                );
                 Intent intent = new Intent(SplashActivity.this, H2MainActivity.class);
                 startActivity(intent);
 

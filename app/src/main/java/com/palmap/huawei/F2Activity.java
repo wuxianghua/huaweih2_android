@@ -5,14 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 
+import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.indoor.IMapViewController;
 import com.palmap.indoor.MapViewControllerFactory;
+import com.palmap.indoor.OverLayer;
+import com.palmap.indoor.navigate.impl.MapBoxNavigateManager;
+import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * Created by wtm on 2017/9/30.
  */
-
 public class F2Activity extends Activity {
 
     IMapViewController iMapViewController;
@@ -26,9 +29,32 @@ public class F2Activity extends Activity {
         iMapViewController.attachMap(viewGroup, savedInstanceState, new IMapViewController.Action() {
             @Override
             public void onAction() {
-                iMapViewController.drawPlanarGraph("h2Data.json");
+                iMapViewController.drawPlanarGraph(HuaWeiH2Application.parkData);
+                //iMapViewController.drawPlanarGraph("h2Data.json");
+                iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
+                    @Override
+                    public void onAction(final double x,final double y) {
+                        iMapViewController.addOverLayer(new OverLayer() {
+                            @Override
+                            public Coordinate getCoordinate() {
+                                return new Coordinate(x,y);
+                            }
+
+                            @Override
+                            public long getFloorId() {
+                                return iMapViewController.getFloorId();
+                            }
+
+                            @Override
+                            public int getResource() {
+                                return R.drawable.bianlidian711;
+                            }
+                        });
+                    }
+                });
             }
         });
+        MapBoxNavigateManager navigateManager = new MapBoxNavigateManager(this,"path.json");
     }
 
     @Override
