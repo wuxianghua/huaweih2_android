@@ -111,8 +111,8 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
             Point endPoint = (Point) toVertex.getVertex().getShape();
             double[] endPosition = DataConvertUtils.INSTANCE.webMercator2LatLng(endPoint.getX(), endPoint.getY());
             List<Position> positionList = new ArrayList<>();
-            positionList.add(Position.fromCoordinates(startPosition[0],startPosition[1]));
-            positionList.add(Position.fromCoordinates(endPosition[0],endPosition[1]));
+            positionList.add(Position.fromCoordinates(startPosition[1],startPosition[0]));
+            positionList.add(Position.fromCoordinates(endPosition[1],endPosition[0]));
             LineString lineString = LineString.fromCoordinates(positionList);
             features.add(Feature.fromGeometry(lineString));
         }

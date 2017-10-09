@@ -221,7 +221,8 @@ class IndoorMapView private constructor(
         }
     }
     private var mapView: MapView = MapView(context, MapboxMapOptions().styleUrl(styleUrl))
-    private lateinit var mapBoxMap: MapboxMap
+    lateinit var mapBoxMap: MapboxMap
+        private set
     private var mapReady = false
     private val taskManager: TaskManager = TaskManager()
     private var canLoadMap: Boolean = true
@@ -432,8 +433,6 @@ class IndoorMapView private constructor(
     private fun addLayer(layer: Layer) {
         mapBoxMap.addLayer(layer)
     }
-
-
     private fun decodeSampledbitmapFromResource(resources: Resources, resID: Int, reqWidth: Int, reqHeight: Int): Bitmap {
         val option = BitmapFactory.Options()
         //设置inJustDecodeBounds为：ture，预先加载Bitmap的宽高参数

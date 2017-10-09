@@ -1,10 +1,17 @@
 package com.palmap.indoor.impl;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.palmap.core.IndoorMapView;
 import com.palmap.core.MapEngine;
 import com.palmap.core.data.PlanarGraph;
@@ -152,4 +159,26 @@ public class MapBoxMapViewController implements IMapViewController {
     public void onLowMemory() {
         indoorMapView.onLowMemory();
     }
+
+    public MapboxMap getMapBox(){
+        return indoorMapView.getMapBoxMap();
+    }
+
+    public void showRoute(FeatureCollection route) {
+        MapboxMap mapboxMap = getMapBox();
+        if (mapboxMap.getSourceAs("RouteSB") == null) {
+            GeoJsonSource geoJsonSource = new GeoJsonSource("RouteSB", route);
+            mapboxMap.addSource(geoJsonSource);
+            Layer layer = new LineLayer("layerRoute", "RouteSB");
+            layer.setProperties(
+                    PropertyFactory.lineColor(Color.GREEN),
+                    PropertyFactory.lineWidth(3.0f)
+            );
+            mapboxMap.addLayer(layer);
+        } else {
+            GeoJsonSource source = mapboxMap.getSourceAs("RouteSB");
+            source.setGeoJson(route);
+        }
+    }
+
 }
