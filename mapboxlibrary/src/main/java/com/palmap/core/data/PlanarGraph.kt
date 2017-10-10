@@ -33,9 +33,7 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
     /**
      * 数据是否解析过
      */
-    fun isResolve(): Boolean{
-        return isResolve.get()
-    }
+    fun isResolve(): Boolean = isResolve.get()
 
     /**
      * 解析数据 建议放在子现场 避免耗时

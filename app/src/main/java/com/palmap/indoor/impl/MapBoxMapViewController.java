@@ -9,6 +9,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.commons.geojson.FeatureCollection;
@@ -171,8 +172,11 @@ public class MapBoxMapViewController implements IMapViewController {
             mapboxMap.addSource(geoJsonSource);
             Layer layer = new LineLayer("layerRoute", "RouteSB");
             layer.setProperties(
-                    PropertyFactory.lineColor(Color.GREEN),
-                    PropertyFactory.lineWidth(3.0f)
+                    PropertyFactory.lineDasharray(new Float[]{0.03f, 2f}),
+                    PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
+                    PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
+                    PropertyFactory.lineWidth(3.5f),
+                    PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
             );
             mapboxMap.addLayer(layer);
         } else {

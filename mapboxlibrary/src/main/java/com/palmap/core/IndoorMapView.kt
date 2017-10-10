@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions
 import com.mapbox.mapboxsdk.style.functions.Function
 import com.mapbox.mapboxsdk.style.functions.stops.IdentityStops
 import com.mapbox.mapboxsdk.style.layers.*
+import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.mapbox.mapboxsdk.style.sources.Source
 import com.mapbox.services.commons.geojson.Feature
@@ -145,8 +146,8 @@ class IndoorMapView private constructor(
         }
 
         private class LoadMapTaskH2(indoorMapView: IndoorMapView,
-                                  private val layerName: String,
-                                  private val featureCollection:FeatureCollection
+                                    private val layerName: String,
+                                    private val featureCollection: FeatureCollection
         ) : Task<Unit>() {
 
             private val mActivity: WeakReference<IndoorMapView> = WeakReference(indoorMapView)
@@ -220,6 +221,7 @@ class IndoorMapView private constructor(
             }
         }
     }
+
     private var mapView: MapView = MapView(context, MapboxMapOptions().styleUrl(styleUrl))
     lateinit var mapBoxMap: MapboxMap
         private set
@@ -283,7 +285,7 @@ class IndoorMapView private constructor(
             ))
             //taskManager.execTask(LoadMapTask(this@IndoorMapView, planarGraph))
             planarGraph.dataMap.forEach { e ->
-                taskManager.execTask(LoadMapTaskH2(this@IndoorMapView,e.key,e.value))
+                taskManager.execTask(LoadMapTaskH2(this@IndoorMapView, e.key, e.value))
             }
         }
         canLoadMap = false
@@ -341,7 +343,7 @@ class IndoorMapView private constructor(
         )
     }
 
-    fun setLocationMarkIcon(sourceId: Int , width : Int = 30 , height : Int = 30){
+    fun setLocationMarkIcon(sourceId: Int, width: Int = 30, height: Int = 30) {
         mapBoxMap.addImage(IMAGE_LOCATION, decodeSampledbitmapFromResource(
                 context.resources,
                 sourceId,
@@ -417,9 +419,9 @@ class IndoorMapView private constructor(
                         }
                     })
         }
-        if(Thread.currentThread() == Looper.getMainLooper().thread){
+        if (Thread.currentThread() == Looper.getMainLooper().thread) {
             r.run()
-        }else{
+        } else {
             mainHandler.post(r)
         }
     }
@@ -433,6 +435,7 @@ class IndoorMapView private constructor(
     private fun addLayer(layer: Layer) {
         mapBoxMap.addLayer(layer)
     }
+
     private fun decodeSampledbitmapFromResource(resources: Resources, resID: Int, reqWidth: Int, reqHeight: Int): Bitmap {
         val option = BitmapFactory.Options()
         //设置inJustDecodeBounds为：ture，预先加载Bitmap的宽高参数

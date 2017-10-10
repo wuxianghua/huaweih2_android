@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
 
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.palmap.core.MapEngine;
 import com.palmap.core.data.PlanarGraph;
 

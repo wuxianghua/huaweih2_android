@@ -82,7 +82,6 @@ class UniqueFeatureRenderer(
             val value = feature.properties[key] ?: return@keys
             var styleKey :String? = null
             styleMap.keys.forEach{ styleMapKey->
-                //Log.e("UniqueFeatureRenderer" , "styleMapKey ==>" + styleMapKey)
                 if(Pattern.matches(styleMapKey, value.toString())){
                     styleKey = styleMapKey
                     return@forEach
@@ -91,8 +90,6 @@ class UniqueFeatureRenderer(
             if (styleKey == null){
                 return feature
             }
-            //Log.e("UniqueFeatureRenderer" , "styleKey22222 ==>" + styleKey)
-
             val otherStyle = styleMap[styleKey!!]
             otherStyle?.forEach { entry2 ->
                 val floatVal2 = entry2.value.toFloatOrNull()
