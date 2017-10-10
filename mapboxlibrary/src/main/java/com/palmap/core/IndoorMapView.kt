@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -28,17 +27,16 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.mapbox.mapboxsdk.style.sources.Source
 import com.mapbox.services.commons.geojson.Feature
 import com.mapbox.services.commons.geojson.FeatureCollection
-import com.mapbox.services.commons.geojson.GeoJSON
 import com.mapbox.services.commons.models.Position
 import com.palmap.core.data.PlanarGraph
 import com.palmap.core.overLayer.PulseMarkerViewAdapter
 import com.palmap.core.overLayer.PulseMarkerViewOptions
 import com.palmap.core.style.FeatureRendererImpl
 import com.palmap.core.style.renderable.Renderable
-import com.palmap.mapboxlibrary.R
 import com.palmap.nagrand.support.task.Task
 import com.palmap.nagrand.support.task.TaskManager
 import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  * Created by wtm on 2017/8/30.
@@ -170,12 +168,21 @@ class IndoorMapView private constructor(
                 if (indoorMapView == null) {
                     return
                 }
-                val render = indoorMapView!!.renderable!!.renderer[layerName] ?: return
-                val sourceId = layerName + indoorMapView!!.floorId
-                //indoorMapView!!.addSource(sourceId, featureCollection)
+                val render = indoorMapView.renderable!!.renderer[layerName] ?: return
+                val sourceId = layerName + indoorMapView.floorId
                 //添加主layer
                 val layer = render.createLayer(layerName, sourceId)
-                indoorMapView!!.addLayer(layer)
+                indoorMapView.addLayer(layer)
+
+                //todo h2 车位覆盖层
+                var hoverRender = indoorMapView.renderable!!.renderer[layerName + "_hover"]
+                if (hoverRender != null) {
+                    val areaHoverFeatures = ArrayList<Feature>()
+                    indoorMapView.addSource(sourceId + "_hover", FeatureCollection.fromFeatures(areaHoverFeatures))
+                    val areaHoverLayer = hoverRender.createLayer(layerName + "_hover", sourceId + "_hover")
+                    indoorMapView.addLayer(areaHoverLayer)
+                }
+
                 //是否添加outLine
                 if (render.isHaveOutLineLayer()) {
                     val outLineLayer = LineLayer(layerName + "_outLine", sourceId)
@@ -183,7 +190,7 @@ class IndoorMapView private constructor(
                                     PropertyFactory.lineColor(Function.property("lineColor", IdentityStops<String>())),
                                     PropertyFactory.lineOpacity(Function.property("lineOpacity", IdentityStops<Float>()))
                             )
-                    indoorMapView!!.addLayer(outLineLayer)
+                    indoorMapView.addLayer(outLineLayer)
                 }
                 fun loadIconFromUrl(layerName: String, name: String? = null) {
                     featureCollection.features.forEach { f2 ->
@@ -368,6 +375,30 @@ class IndoorMapView private constructor(
             val source = mapBoxMap.getSourceAs<GeoJsonSource>(sourceID_location)
             source!!.setGeoJson(com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude)))
         }
+    }
+
+    fun setHoverData(layerName: String,featureCollection: FeatureCollection?){
+        if(renderable!!.renderer[layerName + "_hover"] == null){
+            return
+        }
+        val hoverSourceId = layerName + floorId + "_hover"
+        if(featureCollection == null){
+            mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(FeatureCollection.fromFeatures(Collections.emptyList()))
+            return
+        }
+        taskManager.execTask(object : Task<Unit>(){
+            override fun doInBackground() {
+                val render = renderable!!.renderer[layerName + "_hover"]!!
+                featureCollection.features.forEach {
+                    feature->
+                    render.renderer(feature)
+                }
+            }
+            override fun onSuccess(t: Unit) {
+                super.onSuccess(t)
+                mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(featureCollection)
+            }
+        })
     }
 
     //////////////////////////////////////API end///////////////////////////////////////////////////

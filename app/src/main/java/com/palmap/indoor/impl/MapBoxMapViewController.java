@@ -185,4 +185,8 @@ public class MapBoxMapViewController implements IMapViewController {
         }
     }
 
+    public void showCarHover(FeatureCollection featureCollection){
+        indoorMapView.setHoverData("Area",featureCollection);
+    }
+
 }

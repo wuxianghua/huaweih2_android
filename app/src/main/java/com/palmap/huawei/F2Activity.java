@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.indoor.IMapViewController;
@@ -96,6 +98,27 @@ public class F2Activity extends Activity {
 
     private void showRoute(FeatureCollection route) {
         ((MapBoxMapViewController) iMapViewController).showRoute(route);
+    }
+
+    private boolean isSB = false;
+    public void showAreaHover(View v){
+        if (isSB){
+            ((MapBoxMapViewController) iMapViewController).showCarHover(null);
+            isSB = false;
+            return;
+        }
+        PlanarGraph planarGraph = HuaWeiH2Application.parkData;
+        if (planarGraph == null){
+            return;
+        }
+        FeatureCollection featureCollection = planarGraph.getDataMap().get("Area");
+
+        if (featureCollection == null){
+            return;
+        }
+        FeatureCollection testFeatureCollection = FeatureCollection.fromFeatures(featureCollection.getFeatures().subList(10,600));
+        ((MapBoxMapViewController) iMapViewController).showCarHover(testFeatureCollection);
+        isSB = true;
     }
 
     @Override
