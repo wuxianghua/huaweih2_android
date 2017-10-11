@@ -394,9 +394,9 @@ class IndoorMapView private constructor(
         mapBoxMap.trackingSettings.setDismissAllTrackingOnGesture(dismissAllTrackingOnGesture)
         //跟随模式
         if (isFollow) {
-            mapBoxMap.trackingSettings.myLocationTrackingMode = MyLocationTracking.TRACKING_NONE
-        } else {
             mapBoxMap.trackingSettings.myLocationTrackingMode = MyLocationTracking.TRACKING_FOLLOW
+        } else {
+            mapBoxMap.trackingSettings.myLocationTrackingMode = MyLocationTracking.TRACKING_NONE
         }
         mapBoxMap.trackingSettings.myBearingTrackingMode = MyBearingTracking.COMPASS
     }

@@ -55,63 +55,7 @@ public class F2Activity extends Activity {
 
                 //iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711, 30, 30);
 
-                ((MapBoxMapViewController)iMapViewController).setMapBoxLocationMark(R.drawable.bianlidian711);
 
-                ((MapBoxMapViewController)iMapViewController).openMapBoxLocation(new LocationEngine() {
-
-                    private void testLocation(){
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(locationLatlng == null){
-                                    testLocation();
-                                    return;
-                                }
-                                for(LocationEngineListener l :locationListeners){
-                                    l.onLocationChanged(getLastLocation());
-                                }
-                                testLocation();
-                            }
-                        },1000);
-                    }
-
-                    @Override
-                    public void activate() {
-                        testLocation();
-                    }
-
-                    @Override
-                    public void deactivate() {
-
-                    }
-
-                    @Override
-                    public boolean isConnected() {
-                        return true;
-                    }
-
-                    @Override
-                    public Location getLastLocation() {
-                        if (locationLatlng == null){
-                            return null;
-                        }
-                        Location location = new Location("");
-                        location.reset();
-                        location.setLatitude(locationLatlng.getLatitude());
-                        location.setLongitude(locationLatlng.getLongitude());
-                        return location;
-                    }
-
-                    @Override
-                    public void requestLocationUpdates() {
-
-                    }
-
-                    @Override
-                    public void removeLocationUpdates() {
-
-                    }
-                },true);
 
                 iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
                     @Override
@@ -135,9 +79,9 @@ public class F2Activity extends Activity {
 
                         //iMapViewController.addLocationMark(x, y);
 
+                        openLocation();
+
                         locationLatlng = new LatLng(x,y);
-
-
 
                         if (start == null) {
                             double xy[] = DataConvertUtils.INSTANCE.latlng2WebMercator(x, y);
@@ -168,6 +112,71 @@ public class F2Activity extends Activity {
                 }
             }
         });
+    }
+
+    private boolean isOpenLocation = false;
+    private void openLocation(){
+
+        if (isOpenLocation) return;
+
+        isOpenLocation = true;
+
+        ((MapBoxMapViewController)iMapViewController).setMapBoxLocationMark(R.drawable.bianlidian711);
+        ((MapBoxMapViewController)iMapViewController).openMapBoxLocation(new LocationEngine() {
+            private void testLocation(){
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(locationLatlng == null){
+                            testLocation();
+                            return;
+                        }
+                        for(LocationEngineListener l :locationListeners){
+                            l.onLocationChanged(getLastLocation());
+                        }
+                        testLocation();
+                    }
+                },1000);
+            }
+
+            @Override
+            public void activate() {
+                testLocation();
+            }
+
+            @Override
+            public void deactivate() {
+
+            }
+
+            @Override
+            public boolean isConnected() {
+                return true;
+            }
+
+            @Override
+            public Location getLastLocation() {
+                if (locationLatlng == null){
+                    return null;
+                }
+                Location location = new Location("");
+                location.reset();
+                location.setLatitude(locationLatlng.getLatitude());
+                location.setLongitude(locationLatlng.getLongitude());
+                return location;
+            }
+
+            @Override
+            public void requestLocationUpdates() {
+
+            }
+
+            @Override
+            public void removeLocationUpdates() {
+
+            }
+            //是否使用跟随模式
+        },false);
     }
 
     private void showRoute(FeatureCollection route) {
