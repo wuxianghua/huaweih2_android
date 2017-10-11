@@ -12,6 +12,7 @@ import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.palmap.core.IndoorMapView;
 import com.palmap.core.MapEngine;
@@ -124,6 +125,23 @@ public class MapBoxMapViewController implements IMapViewController {
     @Override
     public void addLocationMark(double x, double y) {
         indoorMapView.addLocationMark(new LatLng(x,y));
+    }
+
+    /**
+     * 设置定位样式
+     * @param resource
+     */
+    public void setMapBoxLocationMark(int resource){
+        indoorMapView.setMapBoxLocationDrawable(context.getResources().getDrawable(resource));
+    }
+
+    /**
+     * 开启maobox定位
+     * @param locationEngine
+     * @param isFollow 是否使用跟随模式
+     */
+    public void openMapBoxLocation(LocationEngine locationEngine,boolean isFollow){
+        indoorMapView.openMapBoxLocation(locationEngine,isFollow,false);
     }
 
     @Override

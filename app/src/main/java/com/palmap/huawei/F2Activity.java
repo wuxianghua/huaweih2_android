@@ -1,12 +1,18 @@
 package com.palmap.huawei;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
@@ -32,6 +38,10 @@ public class F2Activity extends Activity {
 
     private MapBoxNavigateManager navigateManager;
 
+    private LatLng locationLatlng = null;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +52,66 @@ public class F2Activity extends Activity {
             @Override
             public void onAction() {
                 iMapViewController.drawPlanarGraph(HuaWeiH2Application.parkData);
-                //iMapViewController.drawPlanarGraph("h2Data.json");
-                iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711, 30, 30);
+
+                //iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711, 30, 30);
+
+                ((MapBoxMapViewController)iMapViewController).setMapBoxLocationMark(R.drawable.bianlidian711);
+
+                ((MapBoxMapViewController)iMapViewController).openMapBoxLocation(new LocationEngine() {
+
+                    private void testLocation(){
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(locationLatlng == null){
+                                    testLocation();
+                                    return;
+                                }
+                                for(LocationEngineListener l :locationListeners){
+                                    l.onLocationChanged(getLastLocation());
+                                }
+                                testLocation();
+                            }
+                        },1000);
+                    }
+
+                    @Override
+                    public void activate() {
+                        testLocation();
+                    }
+
+                    @Override
+                    public void deactivate() {
+
+                    }
+
+                    @Override
+                    public boolean isConnected() {
+                        return true;
+                    }
+
+                    @Override
+                    public Location getLastLocation() {
+                        if (locationLatlng == null){
+                            return null;
+                        }
+                        Location location = new Location("");
+                        location.reset();
+                        location.setLatitude(locationLatlng.getLatitude());
+                        location.setLongitude(locationLatlng.getLongitude());
+                        return location;
+                    }
+
+                    @Override
+                    public void requestLocationUpdates() {
+
+                    }
+
+                    @Override
+                    public void removeLocationUpdates() {
+
+                    }
+                },true);
 
                 iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
                     @Override
@@ -64,7 +132,13 @@ public class F2Activity extends Activity {
                                 return R.drawable.bianlidian711;
                             }
                         });*/
-                        iMapViewController.addLocationMark(x, y);
+
+                        //iMapViewController.addLocationMark(x, y);
+
+                        locationLatlng = new LatLng(x,y);
+
+
+
                         if (start == null) {
                             double xy[] = DataConvertUtils.INSTANCE.latlng2WebMercator(x, y);
                             start = new Coordinate(xy[0], xy[1]);
@@ -164,6 +238,9 @@ public class F2Activity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (handler!= null){
+            handler.removeCallbacksAndMessages(null);
+        }
         if (iMapViewController != null) {
             iMapViewController.onDestroy();
         }

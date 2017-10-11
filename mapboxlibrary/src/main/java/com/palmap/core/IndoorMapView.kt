@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,6 +16,8 @@ import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.constants.MyBearingTracking
+import com.mapbox.mapboxsdk.constants.MyLocationTracking
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
@@ -25,6 +28,7 @@ import com.mapbox.mapboxsdk.style.layers.*
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.mapbox.mapboxsdk.style.sources.Source
+import com.mapbox.services.android.telemetry.location.LocationEngine
 import com.mapbox.services.commons.geojson.Feature
 import com.mapbox.services.commons.geojson.FeatureCollection
 import com.mapbox.services.commons.models.Position
@@ -33,6 +37,7 @@ import com.palmap.core.overLayer.PulseMarkerViewAdapter
 import com.palmap.core.overLayer.PulseMarkerViewOptions
 import com.palmap.core.style.FeatureRendererImpl
 import com.palmap.core.style.renderable.Renderable
+import com.palmap.mapboxlibrary.R
 import com.palmap.nagrand.support.task.Task
 import com.palmap.nagrand.support.task.TaskManager
 import java.lang.ref.WeakReference
@@ -350,6 +355,7 @@ class IndoorMapView private constructor(
         )
     }
 
+    @Deprecated("placle use setMapBoxLocationDrawable")
     fun setLocationMarkIcon(sourceId: Int, width: Int = 30, height: Int = 30) {
         mapBoxMap.addImage(IMAGE_LOCATION, decodeSampledbitmapFromResource(
                 context.resources,
@@ -359,6 +365,7 @@ class IndoorMapView private constructor(
         ))
     }
 
+    @Deprecated("Deprecated !!!")
     fun addLocationMark(position: LatLng) {
         if (mapBoxMap.getLayer(layerID_Location) == null) {
             val source = GeoJsonSource(
@@ -377,23 +384,40 @@ class IndoorMapView private constructor(
         }
     }
 
-    fun setHoverData(layerName: String,featureCollection: FeatureCollection?){
-        if(renderable!!.renderer[layerName + "_hover"] == null){
+    fun setMapBoxLocationDrawable(drawable: Drawable) {
+        mapBoxMap.myLocationViewSettings.setForegroundDrawable(drawable, null)
+    }
+
+    fun openMapBoxLocation(locationEngine: LocationEngine, isFollow: Boolean = true, dismissAllTrackingOnGesture: Boolean = false) {
+        mapBoxMap.setLocationSource(locationEngine)
+        mapBoxMap.isMyLocationEnabled = true
+        mapBoxMap.trackingSettings.setDismissAllTrackingOnGesture(dismissAllTrackingOnGesture)
+        //跟随模式
+        if (isFollow) {
+            mapBoxMap.trackingSettings.myLocationTrackingMode = MyLocationTracking.TRACKING_NONE
+        } else {
+            mapBoxMap.trackingSettings.myLocationTrackingMode = MyLocationTracking.TRACKING_FOLLOW
+        }
+        mapBoxMap.trackingSettings.myBearingTrackingMode = MyBearingTracking.COMPASS
+    }
+
+    fun setHoverData(layerName: String, featureCollection: FeatureCollection?) {
+        if (renderable!!.renderer[layerName + "_hover"] == null) {
             return
         }
         val hoverSourceId = layerName + floorId + "_hover"
-        if(featureCollection == null){
+        if (featureCollection == null) {
             mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(FeatureCollection.fromFeatures(Collections.emptyList()))
             return
         }
-        taskManager.execTask(object : Task<Unit>(){
+        taskManager.execTask(object : Task<Unit>() {
             override fun doInBackground() {
                 val render = renderable!!.renderer[layerName + "_hover"]!!
-                featureCollection.features.forEach {
-                    feature->
+                featureCollection.features.forEach { feature ->
                     render.renderer(feature)
                 }
             }
+
             override fun onSuccess(t: Unit) {
                 super.onSuccess(t)
                 mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(featureCollection)
