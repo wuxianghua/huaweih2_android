@@ -1,6 +1,7 @@
 package com.palmap.huawei;
 
 import android.app.Activity;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,19 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.indoor.IMapViewController;
 import com.palmap.indoor.MapViewControllerFactory;
+import com.palmap.indoor.Utils;
 import com.palmap.indoor.impl.MapBoxMapViewController;
 import com.palmap.indoor.navigate.INavigateManager;
 import com.palmap.indoor.navigate.impl.MapBoxNavigateManager;
-import com.palmap.nagrand.support.util.DataConvertUtils;
 import com.vividsolutions.jts.geom.Coordinate;
+
+import java.util.List;
 
 /**
  * Created by wtm on 2017/9/30.
@@ -53,10 +58,7 @@ public class F2Activity extends Activity {
             public void onAction() {
                 iMapViewController.drawPlanarGraph(HuaWeiH2Application.parkData);
 
-                //iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711, 30, 30);
-
-
-
+                iMapViewController.setLocationMarkIcon(R.drawable.bianlidian711, 30, 30);
                 iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
                     @Override
                     public void onAction(final double x, final double y) {
@@ -79,7 +81,7 @@ public class F2Activity extends Activity {
 
                         //iMapViewController.addLocationMark(x, y);
 
-                        openLocation();
+                       /* openLocation();
 
                         locationLatlng = new LatLng(x,y);
 
@@ -97,6 +99,17 @@ public class F2Activity extends Activity {
                                     end.y,
                                     iMapViewController.getFloorId()
                             );
+                        }*/
+                        MapboxMap mapboxMap = ((MapBoxMapViewController) iMapViewController).getMapBox();
+                        PointF pointF = mapboxMap.getProjection().toScreenLocation(new LatLng(x,y));
+                        List<Feature> features  = mapboxMap.queryRenderedFeatures(pointF, "Area");
+                        if (features.size() > 0){
+                            try {
+                                LatLng latLng = Utils.getFeatureCentroid(features.get(0));
+                                iMapViewController.addLocationMark(latLng.getLatitude(),latLng.getLongitude());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
@@ -115,28 +128,29 @@ public class F2Activity extends Activity {
     }
 
     private boolean isOpenLocation = false;
-    private void openLocation(){
+
+    private void openLocation() {
 
         if (isOpenLocation) return;
 
         isOpenLocation = true;
 
-        ((MapBoxMapViewController)iMapViewController).setMapBoxLocationMark(R.drawable.bianlidian711);
-        ((MapBoxMapViewController)iMapViewController).openMapBoxLocation(new LocationEngine() {
-            private void testLocation(){
+        ((MapBoxMapViewController) iMapViewController).setMapBoxLocationMark(R.drawable.bianlidian711);
+        ((MapBoxMapViewController) iMapViewController).openMapBoxLocation(new LocationEngine() {
+            private void testLocation() {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(locationLatlng == null){
+                        if (locationLatlng == null) {
                             testLocation();
                             return;
                         }
-                        for(LocationEngineListener l :locationListeners){
+                        for (LocationEngineListener l : locationListeners) {
                             l.onLocationChanged(getLastLocation());
                         }
                         testLocation();
                     }
-                },1000);
+                }, 1000);
             }
 
             @Override
@@ -156,7 +170,7 @@ public class F2Activity extends Activity {
 
             @Override
             public Location getLastLocation() {
-                if (locationLatlng == null){
+                if (locationLatlng == null) {
                     return null;
                 }
                 Location location = new Location("");
@@ -176,7 +190,7 @@ public class F2Activity extends Activity {
 
             }
             //是否使用跟随模式
-        },false);
+        }, false);
     }
 
     private void showRoute(FeatureCollection route) {
@@ -184,22 +198,23 @@ public class F2Activity extends Activity {
     }
 
     private boolean isSB = false;
-    public void showAreaHover(View v){
-        if (isSB){
+
+    public void showAreaHover(View v) {
+        if (isSB) {
             ((MapBoxMapViewController) iMapViewController).showCarHover(null);
             isSB = false;
             return;
         }
         PlanarGraph planarGraph = HuaWeiH2Application.parkData;
-        if (planarGraph == null){
+        if (planarGraph == null) {
             return;
         }
         FeatureCollection featureCollection = planarGraph.getDataMap().get("Area");
 
-        if (featureCollection == null){
+        if (featureCollection == null) {
             return;
         }
-        FeatureCollection testFeatureCollection = FeatureCollection.fromFeatures(featureCollection.getFeatures().subList(10,600));
+        FeatureCollection testFeatureCollection = FeatureCollection.fromFeatures(featureCollection.getFeatures().subList(10, 600));
         ((MapBoxMapViewController) iMapViewController).showCarHover(testFeatureCollection);
         isSB = true;
     }
@@ -247,11 +262,14 @@ public class F2Activity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (handler!= null){
+        if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
         if (iMapViewController != null) {
             iMapViewController.onDestroy();
+        }
+        if (navigateManager != null) {
+            navigateManager.destructor();
         }
     }
 

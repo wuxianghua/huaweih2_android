@@ -197,12 +197,22 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
 
     @Override
     public void destructor() {
-        routeHandler.removeCallbacksAndMessages(null);
-        routeHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                handlerThread.quit();
-            }
-        });
+        if (routeHandler!=null && handlerThread!=null){
+            routeHandler.removeCallbacksAndMessages(null);
+            routeHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    handlerThread.quit();
+                    routeHandler = null;
+                    handlerThread = null;
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        destructor();
     }
 }
