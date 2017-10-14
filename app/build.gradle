@@ -31,7 +31,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 13
-        versionName "2.5.9"
+        versionName "2.5.9(M5)"
         multiDexEnabled = true;
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -113,4 +113,6 @@ dependencies {
     }
     compile dependencies.retrofitRx
     compile files('libs/x5_webkit.jar')
+    compile 'io.reactivex.rxjava2:rxjava:2.1.5'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 }

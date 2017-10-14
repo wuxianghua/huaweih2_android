@@ -25,6 +25,9 @@ import com.palmap.demo.huaweih2.util.GpsUtils;
 import com.palmap.demo.huaweih2.util.QQShareUtils;
 import com.palmap.demo.huaweih2.util.WXShareUtils;
 import com.palmap.huawei.F2Activity;
+import com.palmap.huawei.FindCarActivity;
+import com.palmap.huawei.presenter.FindCarNativePresenter;
+import com.palmap.huawei.view.FindCarNativeActivity;
 
 import org.xq.com.xiaoqian.util.HUtil;
 
@@ -198,7 +201,8 @@ public class H2MainActivity extends BaseActivity {
                 break;
             case R.id.layout_car:
                 //startActivity(new Intent(this, FindCarActivity.class));
-                startActivity(new Intent(this, F2Activity.class));
+                //startActivity(new Intent(this, F2Activity.class));
+                startActivity(new Intent(this, FindCarNativeActivity.class));
                 break;
             case R.id.layout_foot:
                 startActivity(new Intent(this, FootPrintActivity.class));

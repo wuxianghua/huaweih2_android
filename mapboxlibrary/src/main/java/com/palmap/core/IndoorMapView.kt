@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.mapbox.mapboxsdk.annotations.IconFactory
+import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.constants.MyBearingTracking
 import com.mapbox.mapboxsdk.constants.MyLocationTracking
@@ -31,6 +32,7 @@ import com.mapbox.mapboxsdk.style.sources.Source
 import com.mapbox.services.android.telemetry.location.LocationEngine
 import com.mapbox.services.commons.geojson.Feature
 import com.mapbox.services.commons.geojson.FeatureCollection
+import com.mapbox.services.commons.geojson.Geometry
 import com.mapbox.services.commons.models.Position
 import com.palmap.core.data.PlanarGraph
 import com.palmap.core.overLayer.PulseMarkerViewAdapter
@@ -73,7 +75,6 @@ class IndoorMapView private constructor(
         ) : Task<Unit>() {
 
             private val mActivity: WeakReference<IndoorMapView> = WeakReference(indoorMapView)
-
             override fun doInBackground() {
                 if (mActivity.get() == null) {
                     return
@@ -240,6 +241,7 @@ class IndoorMapView private constructor(
     private var mapReady = false
     private val taskManager: TaskManager = TaskManager()
     private var canLoadMap: Boolean = true
+    lateinit var planarGraph:PlanarGraph
     var floorId: Long = 0
 
     private var renderable: Renderable? = null
@@ -282,6 +284,7 @@ class IndoorMapView private constructor(
             Log.w(TAG, "current can't load Map! an mapData loading ...")
             return
         }
+        this.planarGraph = planarGraph
         fun realLoad() {
             if (!planarGraph.dataCorrect && planarGraph.floorId != 0L) {
                 Log.w(TAG, "planarGraph dataCorrect !!!")
@@ -290,14 +293,16 @@ class IndoorMapView private constructor(
             resetNorth()
             removeAllLayer()
             floorId = planarGraph.floorId
-            mapBoxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    planarGraph.mapCenter,
-                    planarGraph.zoomLevel
-                    //15.0
-            ))
+            val position = CameraPosition.Builder()
+                    .target(planarGraph.mapCenter)
+                    .zoom(16.4)
+                    .bearing(0.0) // Rotate the camera
+                    .tilt(45.0)
+                    .build()
+            mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
             //taskManager.execTask(LoadMapTask(this@IndoorMapView, planarGraph))
             planarGraph.dataMap.forEach { e ->
-                taskManager.execTask(LoadMapTaskH2(this@IndoorMapView, e.key, e.value))
+                taskManager.execTask(  LoadMapTaskH2(this@IndoorMapView, e.key, e.value))
             }
         }
         canLoadMap = false
@@ -347,6 +352,16 @@ class IndoorMapView private constructor(
         }
     }
 
+    fun selectFeature(name: String) : Feature? {
+        for (feature in planarGraph.dataMap.get("Area")!!.features) {
+            if(feature.properties==null||feature.getProperties().get("name")==null) continue
+            if(name.equals(feature.getProperties().get("name").asString)) {
+                return feature
+            }
+        }
+        return null
+    }
+
     fun addOverLayer(overLayer: OverLayer) {
         val l = LatLng(overLayer.getCoordinate()[0], overLayer.getCoordinate()[1])
         mapBoxMap.addMarker(
@@ -366,12 +381,22 @@ class IndoorMapView private constructor(
     }
 
     @Deprecated("Deprecated !!!")
-    fun addLocationMark(position: LatLng) {
+    fun addLocationMark(position: LatLng?) {
         if (mapBoxMap.getLayer(layerID_Location) == null) {
-            val source = GeoJsonSource(
-                    sourceID_location,
-                    com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude))
-            )
+            var source :GeoJsonSource
+            if(position == null){
+                val sb = FeatureCollection.fromFeatures(Collections.emptyList())
+                source = GeoJsonSource(
+                        sourceID_location,
+                        sb
+                )
+            }else{
+                source = GeoJsonSource(
+                        sourceID_location,
+                        com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude))
+                )
+            }
+
             mapBoxMap.addSource(source)
             val layer = SymbolLayer(layerID_Location, sourceID_location)
             layer.setProperties(
@@ -380,7 +405,12 @@ class IndoorMapView private constructor(
             mapBoxMap.addLayer(layer)
         } else {
             val source = mapBoxMap.getSourceAs<GeoJsonSource>(sourceID_location)
-            source!!.setGeoJson(com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude)))
+            if(position == null){
+                val sb = FeatureCollection.fromFeatures(Collections.emptyList())
+                source!!.setGeoJson(sb)
+            }else{
+                source!!.setGeoJson(com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude)))
+            }
         }
     }
 

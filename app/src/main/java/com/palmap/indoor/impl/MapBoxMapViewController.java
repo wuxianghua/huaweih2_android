@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
+import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.layers.Layer;
@@ -13,6 +14,7 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.palmap.core.IndoorMapView;
 import com.palmap.core.MapEngine;
@@ -60,12 +62,13 @@ public class MapBoxMapViewController implements IMapViewController {
 
     @Override
     public void drawPlanarGraph(String mapDataPath) {
-        PlanarGraph planarGraph = new PlanarGraph(loadFromAsset(context,mapDataPath),15);
+        PlanarGraph planarGraph = new PlanarGraph(loadFromAsset(context,mapDataPath),16);
         indoorMapView.drawPlanarGraph(planarGraph);
     }
 
     @Override
     public void drawPlanarGraph(PlanarGraph p) {
+        if (p == null) return;
         indoorMapView.drawPlanarGraph(p);
     }
 
@@ -75,8 +78,13 @@ public class MapBoxMapViewController implements IMapViewController {
     }
 
     @Override
-    public void selectFeature(double x, double y) {
-        indoorMapView.selectFeature(x,y);
+    public Feature selectFeature(double x, double y) {
+        return indoorMapView.selectFeature(x,y);
+    }
+
+    @Override
+    public Feature selectFeature(String name) {
+        return indoorMapView.selectFeature(name);
     }
 
     @Override
@@ -124,7 +132,11 @@ public class MapBoxMapViewController implements IMapViewController {
 
     @Override
     public void addLocationMark(double x, double y) {
-        indoorMapView.addLocationMark(new LatLng(x,y));
+        if (x == 0 || y == 0) {
+            indoorMapView.addLocationMark(null);
+        }else {
+            indoorMapView.addLocationMark(new LatLng(x,y));
+        }
     }
 
     /**
@@ -179,6 +191,11 @@ public class MapBoxMapViewController implements IMapViewController {
         indoorMapView.onLowMemory();
     }
 
+    @Override
+    public void initMapView() {
+
+    }
+
     public MapboxMap getMapBox(){
         return indoorMapView.getMapBoxMap();
     }
@@ -190,14 +207,18 @@ public class MapBoxMapViewController implements IMapViewController {
             mapboxMap.addSource(geoJsonSource);
             Layer layer = new LineLayer("layerRoute", "RouteSB");
             layer.setProperties(
-                    PropertyFactory.lineDasharray(new Float[]{0.03f, 2f}),
+                    //PropertyFactory.lineDasharray(new Float[]{0.03f, 2f}),
+                    //PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
+                    //PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
                     PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
-                    PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
-                    PropertyFactory.lineWidth(3.5f),
-                    PropertyFactory.lineColor(Color.parseColor("#e55e5e"))
+                    PropertyFactory.lineWidth(8f),
+                    PropertyFactory.lineColor(Color.parseColor("#4fb5f5"))
             );
             mapboxMap.addLayer(layer);
         } else {
+            if(route == null){
+                route = FeatureCollection.fromFeatures(new Feature[]{});
+            }
             GeoJsonSource source = mapboxMap.getSourceAs("RouteSB");
             source.setGeoJson(route);
         }

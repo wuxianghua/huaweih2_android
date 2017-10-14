@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Created by wtm on 2017/9/7.
  * 地图渲染数据
  */
-class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
+class PlanarGraph(private val mapData: String,val zoomLevel : Double = 16.0) {
 
     val dataMap: LinkedHashMap<String, FeatureCollection> = LinkedHashMap()
 
@@ -24,7 +24,7 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
     var floorId: Long = 0
         private set
 
-    var mapCenter: LatLng = LatLng(.0, .0)
+    var mapCenter: LatLng = LatLng(22.64314843987482, 114.06082880782026)
 
     private var isResolve:AtomicBoolean = AtomicBoolean(false)
 
@@ -55,7 +55,7 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 15.0) {
                         val feature = featureCollection.features[0]
                         floorId = feature.properties["planar_graph"].asLong
                         val position = (feature.geometry as Polygon).coordinates[0][0]
-                        mapCenter = LatLng(position.latitude, position.longitude)
+                        mapCenter = LatLng(22.64384843987482, 114.06052880782026)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

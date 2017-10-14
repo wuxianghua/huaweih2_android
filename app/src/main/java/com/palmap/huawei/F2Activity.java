@@ -17,6 +17,7 @@ import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.palmap.astar.navi.AStarPath;
 import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
@@ -118,7 +119,7 @@ public class F2Activity extends Activity {
         navigateManager = new MapBoxNavigateManager(this, "path.json");
         navigateManager.setNavigateListener(new INavigateManager.Listener<FeatureCollection>() {
             @Override
-            public void OnNavigateComplete(INavigateManager.NavigateState state, FeatureCollection route) {
+            public void OnNavigateComplete(INavigateManager.NavigateState state, List<AStarPath> routes, FeatureCollection route) {
                 Log.e(TAG, "OnNavigateComplete: " + state);
                 if (state == INavigateManager.NavigateState.OK) {
                     showRoute(route);

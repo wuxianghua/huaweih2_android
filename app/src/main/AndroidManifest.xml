@@ -85,6 +85,15 @@
             android:name="com.palmap.huawei.F2Activity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.palmap.huawei.view.FindCarNativeActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name="com.palmap.huawei.view.SearchResultActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name="com.palmap.demo.huaweih2.MainActivity"

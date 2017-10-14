@@ -3,6 +3,7 @@ package com.palmap.indoor;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
+import com.mapbox.services.commons.geojson.Feature;
 import com.palmap.core.data.PlanarGraph;
 
 /**
@@ -29,7 +30,9 @@ public interface IMapViewController {
 
     void resetNorth(long animTime);
 
-    void selectFeature(double x,double y);
+    Feature selectFeature(double x, double y);
+
+    Feature selectFeature(String name);
 
     void setOnSingTapListener(onSingTapListener l);
 
@@ -52,5 +55,7 @@ public interface IMapViewController {
     void onDestroy();
 
     void onLowMemory();
+
+    void initMapView();
 
 }

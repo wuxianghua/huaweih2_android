@@ -61,4 +61,28 @@
         <!-- 自动轮播区域距离 BGABanner 底部的距离，用于使指示器区域与自动轮播区域不重叠 -->
         <attr name="banner_contentBottomMargin" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="CompassView">
+        <attr name="rotateAngle" format="float" />
+        <attr name="bitMapRes" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="Scale">
+        <attr name="LineWidth" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="ShadowLayout">
+        <attr name="offset" format="dimension"/>
+        <attr name="dx" format="dimension"/>
+        <attr name="dy" format="dimension"/>
+        <attr name="rx" format="dimension"/>
+        <attr name="ry" format="dimension"/>
+        <attr name="shadowRadius" format="dimension"/>
+        <attr name="fillColor" format="color"/>
+        <attr name="shadowColor" format="color"/>
+        <attr name="hole" format="boolean"/>
+        <attr name="type" format="enum">
+            <enum name="roundRect" value="0" />
+            <enum name="circle" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

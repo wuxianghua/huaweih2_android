@@ -61,7 +61,7 @@
             }
           },
           "24091000": {
-            "fillExtrusionColor": "#67947b",
+            "fillExtrusionColor": "#c5c8e7",
             "fillExtrusionHeight": 1.52,
             "fillExtrusionOpacity": 0.7,
             "outline": {
@@ -77,7 +77,7 @@
             "fillExtrusionOpacity": 0.5
           },
           "24097000": {
-            "fillExtrusionColor": "#67947b",
+            "fillExtrusionColor": "#c5c8e7",
             "fillExtrusionHeight": 1.5,
             "outline": {
               "lineColor": "#ffffff"
@@ -107,7 +107,7 @@
           },
           "22001000|22002000|22003000|22004000": {
             "fillExtrusionHeight": 0.16,
-            "fillExtrusionColor": "#dfc27d",
+            "fillExtrusionColor": "#38bc7c",
             "outline": {
               "lineColor": "#ffffff"
             }
@@ -208,7 +208,7 @@
           },
           "22001000|22002000|22003000|22004000": {
             "fillExtrusionHeight": 0.16,
-            "fillExtrusionColor": "#ff0000",
+            "fillExtrusionColor": "#ef6c60",
             "outline": {
               "lineColor": "#ffffff"
             }

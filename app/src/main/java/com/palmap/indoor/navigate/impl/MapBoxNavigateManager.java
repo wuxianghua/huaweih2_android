@@ -3,7 +3,9 @@ package com.palmap.indoor.navigate.impl;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.LineString;
@@ -48,7 +50,7 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
 
     private static Listener<FeatureCollection> DEFAULT_LISTENER = new Listener<FeatureCollection>() {
         @Override
-        public void OnNavigateComplete(NavigateState state,FeatureCollection route) {
+        public void OnNavigateComplete(NavigateState state, List<AStarPath> routes, FeatureCollection route) {
 
         }
     };
@@ -99,7 +101,7 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
                 toPlanargraph
         );
         if (routes == null || routes.size() == 0) {
-            this.listener.OnNavigateComplete(NavigateState.NAVIGATE_REQUEST_ERROR, null);
+            this.listener.OnNavigateComplete(NavigateState.NAVIGATE_REQUEST_ERROR, null,null);
             return;
         }
         List<Feature> features = new ArrayList<>();
@@ -117,7 +119,7 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
             features.add(Feature.fromGeometry(lineString));
         }
         FeatureCollection routeFeatureCollection = FeatureCollection.fromFeatures(features);
-        this.listener.OnNavigateComplete(NavigateState.OK, routeFeatureCollection);
+        this.listener.OnNavigateComplete(NavigateState.OK,routes,routeFeatureCollection);
     }
 
     @Override
@@ -129,7 +131,7 @@ public class MapBoxNavigateManager implements INavigateManager<FeatureCollection
 
     private boolean precondition(){
         if (aStar == null){
-            this.listener.OnNavigateComplete(NavigateState.NAVIGATE_REQUEST_ERROR,null);
+            this.listener.OnNavigateComplete(NavigateState.NAVIGATE_REQUEST_ERROR,null,null);
             return false;
         }
         return true;

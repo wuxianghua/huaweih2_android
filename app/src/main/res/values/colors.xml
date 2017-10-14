@@ -36,8 +36,15 @@
     <color name="map_bg">#00000000</color>
     <color name="bg">#f2f7f9</color>
     <color name="cg">#565c60</color>
+    <color name="color_66cc00">#66cc00</color>
+    <color name="color_ef6c60">#ef6c60</color>
+    <color name="color_219acf">#219acf</color>
+    <color name="color_475266">#475266</color>
+    <color name="color_38bc7c">#38bc7c</color>
+    <color name="ngr_separate_line">#98c4c6cc</color>
     <color name="blue1">#1fafe7</color>
     <color name="name_color">#565c60</color>
+    <color name="color_666666">#666666</color>
     <color name="name_color_bg">#f8fbff</color>;
     <!--<color name="foot_room">#b6d7a8</color>-->
 </resources>

@@ -14,6 +14,10 @@
     <dimen name="t_xs">13sp</dimen>
     <dimen name="t_xxs">12sp</dimen>
     <dimen name="t_xxxs">11sp</dimen>
+    <dimen name="ngr_uiSize">40dp</dimen>
+    <dimen name="ngr_large">16dp</dimen>
+    <dimen name="ngr_width_shadow">0.5dp</dimen>
+
 
     <!--间距大小-->
     <dimen name="margin_small">5dp</dimen>
@@ -24,7 +28,7 @@
     <dimen name="action_bar_height">48dp</dimen>
 
 
-
+    <dimen name="padding_bottom">90dp</dimen>
     <dimen name="main_height">50dp</dimen>
     <dimen name="main_imageSize">32dp</dimen>
     <dimen name="main_textSize">14dp</dimen>
