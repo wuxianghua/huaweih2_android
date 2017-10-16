@@ -380,8 +380,8 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                         x =  (12697074.245 + (x/7.850));
                         y =  (2588966.542 - (y/7.850));
                         double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
-                        latLng.setLatitude(doubles[0]);
-                        latLng.setLongitude(doubles[1]);
+                        latLng.setLatitude(doubles[1]);
+                        latLng.setLongitude(doubles[0]);
                         double distance = testCalcDistance(latLng);
                         if (distance < nearLength) {
                             latLng = getMinLatLng(latLng);
@@ -389,9 +389,9 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                             Toast.makeText(mContext,"距离导航线最近距离为:" + distance + "米",Toast.LENGTH_SHORT).show();
                         }
                         Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
-                        mFindCarNativeView.showLocationIcon(latLng.getLongitude(),latLng.getLatitude(),x,y);
+                        mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
                         if (isStartNavi == true) {
-                            startNaviEngine(latLng.getLongitude(),latLng.getLatitude());
+                            startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
                         }
                         break;
                 }
@@ -399,17 +399,26 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
 
             @Override
             public void OnFailed(String code, String message) {
-                double x = 783.267333984375;
+                /*double x = 783.267333984375;
                 double y = 282.28619384765625;
                 Logger.d("positionData"+"x"+x+""+"y"+y);
                 x =  (12697084.245 + (x/7.850));
                 y =  (2588956.542 - (y/7.850));
                 double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
                 Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
-                mFindCarNativeView.showLocationIcon(doubles[1],doubles[0],x,y);
-                if (isStartNavi) {
-                    startNaviEngine(doubles[1],doubles[0]);
+                latLng.setLatitude(doubles[1]);
+                latLng.setLongitude(doubles[0]);
+                double distance = testCalcDistance(latLng);
+                if (distance < nearLength) {
+                    latLng = getMinLatLng(latLng);
+                } else {
+                    Toast.makeText(mContext,"距离导航线最近距离为:" + distance + "米",Toast.LENGTH_SHORT).show();
                 }
+                Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
+                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+                if (isStartNavi == true) {
+                    startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+                }*/
             }
         });
         client.start();
@@ -447,7 +456,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         }
         return minDistance;
     }
-
     private LatLng getMinLatLng(LatLng latLng) {
         if (routes == null || routes.size() == 0 || null == latLng) {
             return latLng;
@@ -505,6 +513,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         Log.e(TAG,"destationDistance"+destationDistance);
         if (!routeFinished||destationDistance>500) {
             double angle = computeHeading(oldLatLng, newLatLng);
+            Logger.d("草泥马的地图旋转角度"+angle);
+            if (160< angle || angle < 200) {
+                angle = 0;
+            }
             CameraPosition position = new CameraPosition.Builder()
                     .target(newLatLng)
                     .zoom(20)

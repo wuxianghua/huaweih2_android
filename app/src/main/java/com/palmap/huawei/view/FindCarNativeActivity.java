@@ -192,7 +192,9 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         startNavi.setVisibility(View.GONE);
         routePlanInfo.setVisibility(View.GONE);
         isHaveSetEnd = false;
-        ((MapBoxMapViewController) iMapViewController).showRoute(null);
+        if (routeFeatureCollection != null) {
+            ((MapBoxMapViewController) iMapViewController).showRoute(null);
+        }
         findCar.setVisibility(View.VISIBLE);
         stopCar.setVisibility(View.VISIBLE);
     }
