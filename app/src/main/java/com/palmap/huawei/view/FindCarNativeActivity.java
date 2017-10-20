@@ -2,11 +2,16 @@ package com.palmap.huawei.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,6 +30,7 @@ import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
 import com.palmap.huawei.presenter.FindCarNativePresenter;
 import com.palmap.huawei.presenter.FindCarNativePresenterImpl;
+import com.palmap.huawei.utils.SharedPreferenceUtil;
 import com.palmap.indoor.IMapViewController;
 import com.palmap.indoor.MapViewControllerFactory;
 import com.palmap.indoor.Utils;
@@ -35,13 +41,15 @@ import com.palmap.nagrand.support.util.DataConvertUtils;
 import com.palmaplus.nagrand.geos.Coordinate;
 import com.vividsolutions.jts.io.ParseException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/10/10/010.
  */
 
-public class FindCarNativeActivity extends Activity implements FindCarNativeView{
+public class FindCarNativeActivity extends Activity implements FindCarNativeView,SensorEventListener {
     String TAG = FindCarNativeActivity.class.getSimpleName();
     //地图容器
     private LinearLayout mapViewLayout;
@@ -97,19 +105,45 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     private LinearLayout routePlanInfo;
     //终点信息
     private TextView mDestationInfo;
-    //是否是实际导航
+    //是否是模拟导航
     private boolean isMovcNavi;
     //起点和终点Mark
     private MarkerView startMark;
     private MarkerView endMark;
+    //定位按钮图标
+    private ImageView mLocationButton;
+    //传感器数据
+    private float[] accelerometerValues = new float[3];
+    private float[] magneticFieldValues = new float[3];
+    //加速度传感器
+    private Sensor mAccelerometer;
+    //磁力计传感器
+    private Sensor mField;
+    //传感器管理器
+    private SensorManager mSensorManager;
+    //定位图标是否已经显示
+    private boolean isShown;
+    //是否已经开始模拟导航
+    private boolean isStartMovcNavi;
+    //2d和3d模式切换
+    private TextView mapStyleChange;
+    //导航结束提示
+    private LinearLayout mHintEndNavi;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_findcar_native);
         initView();
+        registerSensor();
         initMapView(savedInstanceState);
         mFindCarNativePresenter.attachView(this,this);
         mFindCarNativePresenter.onCreate();
+    }
+
+    //注册传感器
+    private void registerSensor() {
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mField, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     //初始化地图界面
@@ -119,13 +153,25 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             @Override
             public void onAction() {
                 iMapViewController.drawPlanarGraph(HuaWeiH2Application.parkData);
-                iMapViewController.setLocationMarkIcon(R.mipmap.ico_map_location,60,60);
+                iMapViewController.setLocationMarkIcon(R.mipmap.ico_map_location,130,130);
                 isCanShowLocationIcon = true;
+                ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
+                        .position(selectMainParkingPos("H3大堂"))
+                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.ico_map_footprint_bg_one))
+                );
+                ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
+                        .position(selectMainParkingPos("H2大堂"))
+                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.ico_map_footprint_bg_two))
+                );
+                ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
+                        .position(selectMainParkingPos("H1大堂"))
+                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.ico_map_footprint_bg_three))
+                );
                 touchMapView();
 
             }
         });
-        navigateManager = new MapBoxNavigateManager(this, "path.json");
+        navigateManager = new MapBoxNavigateManager(this, "roadNet.json");
         navigateManager.setNavigateListener(new INavigateManager.Listener<FeatureCollection>() {
             @Override
             public void OnNavigateComplete(INavigateManager.NavigateState state, List<AStarPath> routes, FeatureCollection route) {
@@ -136,10 +182,27 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             }
         });
     }
+
+    private LatLng selectMainParkingPos(String carName) {
+        feature = iMapViewController.selectFeature(carName);
+        if (feature == null) {
+            Toast.makeText(FindCarNativeActivity.this,"你搜索的车位不存在",Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        LatLng featureCentroid = null;
+        try {
+            featureCentroid = Utils.getFeatureCentroid(feature);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return featureCentroid;
+    }
     //开始模拟导航
     public void startMovcNavi(View view) {
         isHaveSetEnd = false;
         isMovcNavi = true;
+        isStartMovcNavi = true;
+        iMapViewController.updateLocationOrientation(0);
         startMovcNavi.setVisibility(View.GONE);
         startNavi.setVisibility(View.GONE);
         routePlanInfo.setVisibility(View.GONE);
@@ -192,6 +255,12 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         startNavi.setVisibility(View.GONE);
         routePlanInfo.setVisibility(View.GONE);
         isHaveSetEnd = false;
+        if (startMark != null) {
+            ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(startMark);
+        }
+        if (endMark != null) {
+            ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(endMark);
+        }
         if (routeFeatureCollection != null) {
             ((MapBoxMapViewController) iMapViewController).showRoute(null);
         }
@@ -218,13 +287,37 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                 Toast.makeText(FindCarNativeActivity.this,"你搜索的车位不存在",Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (endMark != null) {
+                ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(endMark);
+            }
+            LatLng featureCentroid = null;
             try {
-                if (endMark != null) {
-                    ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(endMark);
+                featureCentroid = Utils.getFeatureCentroid(feature);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            double[] doubles = DataConvertUtils.INSTANCE.latlng2WebMercator(featureCentroid.getLatitude(), featureCentroid.getLongitude());
+            end = new Coordinate(doubles[0], doubles[1]);
+            boolean onKey = data.getBooleanExtra("onKey",false);
+            if (onKey) {
+                if (mLocation.getX() == 0 || mLocation.getY() == 0) {
+                    showSelectStart.setVisibility(View.VISIBLE);
+                    return;
                 }
-                LatLng featureCentroid = Utils.getFeatureCentroid(feature);
-                double[] doubles = DataConvertUtils.INSTANCE.latlng2WebMercator(featureCentroid.getLatitude(), featureCentroid.getLongitude());
-                end = new Coordinate(doubles[0], doubles[1]);
+                start = mLocation;
+                endMark = ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
+                        .position(featureCentroid)
+                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.parkcaricon))
+                );
+                navigateManager.navigation(
+                        mLocation.getX(),
+                        mLocation.getY(),
+                        iMapViewController.getFloorId(),
+                        end.x,
+                        end.y,
+                        iMapViewController.getFloorId()
+                );
+            }else {
                 findCarBack.setVisibility(View.VISIBLE);
                 findCarEnsure.setVisibility(View.VISIBLE);
                 findCar.setVisibility(View.GONE);
@@ -234,10 +327,8 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                 mFindCarNativePresenter.showSearchPark(featureCentroid);
                 endMark = ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
                         .position(featureCentroid)
-                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.ico_marker_end))
+                        .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.parkcaricon))
                 );
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -275,15 +366,14 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                 return;
             }else {
                 feature = iMapViewController.selectFeature(x, y);
-                Log.e(TAG,"X"+x+"Y"+y);
                 if (feature == null) return;
                 category = feature.getNumberProperty("category").intValue();
-                poiId = feature.getNumberProperty("id").intValue();
-                if (!mFindCarNativePresenter.canParkCar(poiId)) {
-                    Toast.makeText(FindCarNativeActivity.this,"请点击绿色车位",Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if(category == 22001000||category == 22002000||category == 22003000||category ==22004000) {
+                    poiId = feature.getNumberProperty("id").intValue();
+                    if (!mFindCarNativePresenter.canParkCar(poiId)) {
+                        Toast.makeText(FindCarNativeActivity.this,"请点击绿色车位",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if (endMark != null) {
                         ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(endMark);
                     }
@@ -291,7 +381,7 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                     findCar.setVisibility(View.GONE);
                     stopCar.setVisibility(View.GONE);
                     showCarInfo.setVisibility(View.VISIBLE);
-                    carName = feature.getStringProperty("name");
+                    carName = feature.getProperties().get("name").getAsString();
                     showCarName.setText(carName);
                     findCarBack.setVisibility(View.VISIBLE);
                     findCarEnsure.setVisibility(View.VISIBLE);
@@ -300,7 +390,7 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                     end = new Coordinate(xy2[0], xy2[1]);
                     endMark = ((MapBoxMapViewController) iMapViewController).getMapBox().addMarker(new PulseMarkerViewOptions()
                             .position(new LatLng(x, y))
-                            .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.ico_marker_end))
+                            .icon(IconFactory.getInstance(FindCarNativeActivity.this).fromResource(R.mipmap.parkcaricon))
                     );
                 }
             }
@@ -330,6 +420,12 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mShowNaviInfo = (LinearLayout) findViewById(R.id.show_navi_info);
         routePlanInfo = (LinearLayout) findViewById(R.id.plan_route_info);
         mDestationInfo = (TextView) findViewById(R.id.destation_name);
+        mLocationButton = (ImageView) findViewById(R.id.map_location);
+        mapStyleChange = (TextView) findViewById(R.id.map_style_change);
+        mHintEndNavi = (LinearLayout) findViewById(R.id.show_hint_end_navi);
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mLocation = new Coordinate();
         mLocationLatLng = new LatLng();
     }
@@ -377,6 +473,9 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             mLocationLatLng.setLatitude(var1);
             mLocationLatLng.setLongitude(var2);
             iMapViewController.addLocationMark(var1,var2);
+            if (isShown == false) {
+                isShown = true;
+            }
         }
     }
 
@@ -388,7 +487,15 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
 
     @Override
     public void clearRoute() {
+        CameraPosition position = new CameraPosition.Builder()
+                .tilt(0)
+                .build();
+        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position));
+        mHintEndNavi.setVisibility(View.VISIBLE);
         ((MapBoxMapViewController) iMapViewController).showRoute(null);
+        if (isStartMovcNavi) {
+            isStartMovcNavi = false;
+        }
     }
 
     @Override
@@ -409,11 +516,52 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             ((MapBoxMapViewController) iMapViewController).getMapBox().removeMarker(startMark);
         }
     }
+
+    @Override
+    public void setLocationSuccess(boolean isLocation) {
+        mLocationButton.setSelected(isLocation);
+    }
+
+    @Override
+    public void rePlanRoute(double x, double y) {
+        navigateManager.navigation(
+                x,
+                y,
+                iMapViewController.getFloorId(),
+                end.x,
+                end.y,
+                iMapViewController.getFloorId()
+        );
+    }
+    SimpleDateFormat df;
+    String parkTime;
+    @Override
+    public void saveParkingInfo() {
+        if (df == null) {
+            df = new SimpleDateFormat("MM-dd HH:mm");
+        }
+        parkTime = df.format(new Date());
+        SharedPreferenceUtil.putValue(this,"parkinfo","parkName",carName);
+        SharedPreferenceUtil.putValue(this,"parkinfo","parkTime",parkTime);
+    }
+
     //选择起点
     public void selectStart(View view) {
         findCarEnsure.setVisibility(View.GONE);
         setStartNormal.setVisibility(View.VISIBLE);
         showSelectStart.setVisibility(View.GONE);
+        if(findCar.getVisibility() == View.VISIBLE) {
+            findCar.setVisibility(View.GONE);
+        }
+        if(stopCar.getVisibility() == View.VISIBLE) {
+            stopCar.setVisibility(View.GONE);
+        }
+        if (showCarInfo.getVisibility() == View.GONE) {
+            showCarInfo.setVisibility(View.VISIBLE);
+        }
+        if (findCarBack.getVisibility() == View.GONE) {
+            findCarBack.setVisibility(View.VISIBLE);
+        }
         isHaveSetEnd = true;
     }
     //取消
@@ -455,6 +603,9 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         if (isMovcNavi) {
             mFindCarNativePresenter.stopMovcNavi();
             iMapViewController.addLocationMark(0,0);
+            if (isStartMovcNavi) {
+                isStartMovcNavi = false;
+            }
         }else {
             mFindCarNativePresenter.stopNavi();
         }
@@ -471,6 +622,84 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     }
     //定位
     public void location(View view) {
+        Log.e(TAG,"我被点击了");
+        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newLatLng(mLocationLatLng),2000);
         mFindCarNativePresenter.getLocation();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerometerValues = event.values;
+        }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+        }else {
+            magneticFieldValues = event.values;
+        }
+        calculateOrientation();
+    }
+
+    float degree;
+    float oldDegree;
+    long currentTime;
+    long oldTime;
+    private void calculateOrientation() {
+        float[] values = new float[3];
+        float[] R = new float[9];
+        SensorManager.getRotationMatrix(R, null, accelerometerValues,
+                magneticFieldValues);
+        SensorManager.getOrientation(R, values);
+        values[0] = (float) Math.toDegrees(values[0]);
+        values[0] = values[0] < 0 ? 360+values[0]:values[0];
+        currentTime = System.currentTimeMillis();
+        degree =  values[0];
+        if (isShown && !isStartMovcNavi) {
+            if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
+                iMapViewController.updateLocationOrientation(degree);
+                oldTime = currentTime;
+            }
+            oldDegree = degree;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+    //放大
+    public void mapZoomInClick(View view) {
+        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.zoomIn());
+    }
+    //缩小
+    public void mapZoomOutClick(View view) {
+        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.zoomOut());
+    }
+    //2d和3d模式切换
+    private boolean is2DMode;
+    public void changeMapMode(View view) {
+        if (is2DMode) {
+            is2DMode = false;
+            mapStyleChange.setText("3D");
+            CameraPosition position = new CameraPosition.Builder()
+                    .tilt(60)
+                    .build();
+            ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position));
+        }else {
+            is2DMode = true;
+            mapStyleChange.setText("2D");
+            CameraPosition position = new CameraPosition.Builder()
+                    .tilt(0)
+                    .build();
+            ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position));
+        }
+    }
+    //确认导航结束
+    public void ensureStopNavi(View view) {
+        mHintEndNavi.setVisibility(View.GONE);
     }
 }

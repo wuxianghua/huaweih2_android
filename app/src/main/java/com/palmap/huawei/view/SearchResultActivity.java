@@ -10,15 +10,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.palmap.astar.navi.G;
 import com.palmap.core.util.UtilsKt;
 import com.palmap.demo.huaweih2.R;
-import com.palmap.demo.huaweih2.model.ParkInfo;
-import com.palmap.demo.huaweih2.model.ParkInfoList;
 import com.palmap.huawei.mode.CarParkingInfos;
+import com.palmap.huawei.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,9 @@ public class SearchResultActivity extends Activity {
     //车位名称
     private List<String> parkList;
     private Gson gson;
-
+    //展示一键寻车信息
+    private LinearLayout showSaveParkInfo;
+    private TextView showParkInfo;
     ArrayAdapter<String> arrayAdapter;
 
     @Override
@@ -49,13 +52,21 @@ public class SearchResultActivity extends Activity {
         initView();
         initData();
     }
+
+    String parkName;
+    String parkTime;
     //初始化数据
     private void initData() {
         gson = new Gson();
         parkList = new ArrayList<>();
         parkData = UtilsKt.loadFromAsset(this, "parkData.json");
         carParkingInfos = gson.fromJson(parkData, CarParkingInfos.class);
-
+        parkName = SharedPreferenceUtil.getValue(this,"parkinfo","parkName","");
+        parkTime = SharedPreferenceUtil.getValue(this,"parkinfo","parkTime","");
+        if (parkName == null || parkTime == null) {
+            showSaveParkInfo.setVisibility(View.GONE);
+        }
+        showParkInfo.setText(parkTime+" 停于 "+ parkName);
         arrayAdapter = new ArrayAdapter<>(this,R.layout.simple_list_item_1,parkList);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,8 +94,10 @@ public class SearchResultActivity extends Activity {
             public void afterTextChanged(Editable editable) {
                 if (editable.length() == 0) {
                     listView.setVisibility(View.GONE);
+                    showSaveParkInfo.setVisibility(View.VISIBLE);
                 }else {
                     listView.setVisibility(View.VISIBLE);
+                    showSaveParkInfo.setVisibility(View.GONE);
                     String searchContent = lookForCar.getText().toString();
                     if (parkList.size() != 0) {
                         parkList.clear();
@@ -108,12 +121,22 @@ public class SearchResultActivity extends Activity {
     private void initView() {
         lookForCar = (EditText) findViewById(R.id.edt_look_car);
         listView = (ListView) findViewById(R.id.show_search_result);
+        showSaveParkInfo = (LinearLayout) findViewById(R.id.show_save_park_info);
+        showParkInfo = (TextView) findViewById(R.id.show_park_info);
     }
 
     public void lookForCar(View view) {
         String carNum = lookForCar.getText().toString().trim();
         Intent intent = new Intent();
         intent.putExtra("carNum",carNum);
+        setResult(RESULT_OK,intent);
+        finish();
+    }
+    //一键寻车
+    public void onKeyFindCar(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("carNum",parkName);
+        intent.putExtra("onKey",true);
         setResult(RESULT_OK,intent);
         finish();
     }

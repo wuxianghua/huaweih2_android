@@ -58,4 +58,5 @@ public interface IMapViewController {
 
     void initMapView();
 
+    void updateLocationOrientation(float degree);
 }

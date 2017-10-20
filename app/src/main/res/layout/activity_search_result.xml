@@ -47,6 +47,38 @@
         </LinearLayout>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/show_save_park_info"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="70dp"
+        android:layout_margin="20dp"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_cir_back">
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/history"/>
+        <TextView
+            android:id="@+id/show_park_info"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/name_color"
+            android:text="10-11 15:02 停于 H3-211"/>
+        <Button
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="一键寻车"
+            android:textSize="7pt"
+            android:onClick="onKeyFindCar"
+            android:background="@drawable/bg_cir_ensure"/>
+    </LinearLayout>
    <ListView
         android:id="@+id/show_search_result"
         android:layout_width="match_parent"

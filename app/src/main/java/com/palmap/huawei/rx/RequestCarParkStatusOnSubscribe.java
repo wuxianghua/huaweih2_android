@@ -12,10 +12,13 @@ import com.palmap.huawei.mode.CarParkingInfos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +31,6 @@ public class RequestCarParkStatusOnSubscribe implements ObservableOnSubscribe<Li
 
     private static final String TAG = RequestCarParkStatusOnSubscribe.class.getSimpleName();
     private GetCarParkingInfoService mGetCarParkingInfoService;
-
     public RequestCarParkStatusOnSubscribe(GetCarParkingInfoService getCarParkingInfoService) {
         mGetCarParkingInfoService = getCarParkingInfoService;
     }
@@ -36,20 +38,7 @@ public class RequestCarParkStatusOnSubscribe implements ObservableOnSubscribe<Li
 
     @Override
     public void subscribe(@NonNull final ObservableEmitter<List<CarParkingInfo>> e) throws Exception {
-        Call<CarParkingInfos> carParkingStatus = mGetCarParkingInfoService.getCarParkingStatus(Constant.appkey, Constant.mapId, Constant.floorId);
-        carParkingStatus.enqueue(new Callback<CarParkingInfos>() {
-            @Override
-            public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
-                List<CarParkingInfo> carportInfos = response.body().carportInfos;
-                if (carportInfos == null || carportInfos.size() == 0) return;
-                e.onNext(carportInfos);
-                e.onComplete();
-            }
-
-            @Override
-            public void onFailure(Call<CarParkingInfos> call, Throwable t) {
-                Log.e(TAG,"数据获取失败");
-            }
-        });
+        e.onNext(null);
+        e.onComplete();
     }
 }

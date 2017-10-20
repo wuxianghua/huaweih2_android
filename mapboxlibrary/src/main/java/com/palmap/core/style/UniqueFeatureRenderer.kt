@@ -54,7 +54,7 @@ class UniqueFeatureRenderer(
                                 PropertyFactory.iconSize(Function.property(iconSize, IdentityStops<Float>())),
                                 PropertyFactory.textAnchor(Property.TEXT_JUSTIFY_LEFT),
                                 //PropertyFactory.iconOffset(),
-                                PropertyFactory.iconOffset(arrayOf(-8f, 0f)),
+                                //PropertyFactory.iconOffset(arrayOf(-8f, 0f)),
                                 PropertyFactory.iconImage(Function.property("logo", IdentityStops<String>()))
                         )
             }

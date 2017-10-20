@@ -1,7 +1,7 @@
 {
   "default": {
-    "backgroundColor": "#fff",
-    "backgroundOpacity": 0.6,
+    "backgroundColor": "#EBFBFF",
+    "backgroundOpacity": 1,
     "Frame": {
       "layerType": "fillLayer",
       // layer类型
@@ -61,7 +61,7 @@
             }
           },
           "24091000": {
-            "fillExtrusionColor": "#c5c8e7",
+            "fillExtrusionColor": "#7fb3f4",
             "fillExtrusionHeight": 1.52,
             "fillExtrusionOpacity": 0.7,
             "outline": {
@@ -77,7 +77,7 @@
             "fillExtrusionOpacity": 0.5
           },
           "24097000": {
-            "fillExtrusionColor": "#c5c8e7",
+            "fillExtrusionColor": "#7fb3f4",
             "fillExtrusionHeight": 1.5,
             "outline": {
               "lineColor": "#ffffff"
@@ -92,22 +92,29 @@
             }
           },
           "37000000": {
-            "fillExtrusionColor": "#f0e0c7",
+            "fillExtrusionColor": "#756f71",
             "fillExtrusionHeight": 0.15,
             "outline": {
-              "lineColor": "#f0e0c7"
+              "lineColor": "#756f71"
             }
           },
           "37001000": {
-            "fillExtrusionColor": "#f0e0c7",
+            "fillExtrusionColor": "#ffffff",
             "fillExtrusionHeight": 0.15,
             "outline": {
-              "lineColor": "#f0e0c7"
+              "lineColor": "#ffffff"
             }
           },
           "22001000|22002000|22003000|22004000": {
             "fillExtrusionHeight": 0.16,
-            "fillExtrusionColor": "#38bc7c",
+            "fillExtrusionColor": "#dfc27d",
+            "outline": {
+              "lineColor": "#ffffff"
+            }
+          },
+          "25001010": {
+            "fillExtrusionHeight": 0.16,
+            "fillExtrusionColor": "#dfc27d",
             "outline": {
               "lineColor": "#ffffff"
             }
@@ -161,8 +168,22 @@
               "lineColor": "#bababa"
             }
           },
+          "25999000": {
+            "fillExtrusionHeight": 0.16,
+            "fillExtrusionColor": "#38bc7c",
+            "outline": {
+              "lineColor": "#ffffff"
+            }
+          },
+          "26999000": {
+            "fillExtrusionHeight": 0.16,
+            "fillExtrusionColor": "#ef6c60",
+            "outline": {
+              "lineColor": "#ffffff"
+            }
+          },
           "24091000": {
-            "fillExtrusionColor": "#67947b",
+            "fillExtrusionColor": "#7fb3f4",
             "fillExtrusionHeight": 1.52,
             "fillExtrusionOpacity": 0.7,
             "outline": {
@@ -178,7 +199,7 @@
             "fillExtrusionOpacity": 0.5
           },
           "24097000": {
-            "fillExtrusionColor": "#67947b",
+            "fillExtrusionColor": "#7fb3f4",
             "fillExtrusionHeight": 1.5,
             "outline": {
               "lineColor": "#ffffff"
@@ -193,22 +214,30 @@
             }
           },
           "37000000": {
-            "fillExtrusionColor": "#f0e0c7",
+            "fillExtrusionColor": "#756f71",
             "fillExtrusionHeight": 0.15,
             "outline": {
-              "lineColor": "#f0e0c7"
+              "lineColor": "#756f71"
             }
           },
           "37001000": {
-            "fillExtrusionColor": "#f0e0c7",
+            "fillExtrusionColor": "#ffffff",
             "fillExtrusionHeight": 0.15,
             "outline": {
-              "lineColor": "#f0e0c7"
+              "lineColor": "#ffffff"
             }
           },
           "22001000|22002000|22003000|22004000": {
             "fillExtrusionHeight": 0.16,
-            "fillExtrusionColor": "#ef6c60",
+            "fillExtrusionColor": "#38bc7c",
+            "outline": {
+              "lineColor": "#ffffff"
+            }
+
+          },
+          "25001010": {
+            "fillExtrusionHeight": 0.16,
+            "fillExtrusionColor": "#dfc27d",
             "outline": {
               "lineColor": "#ffffff"
             }

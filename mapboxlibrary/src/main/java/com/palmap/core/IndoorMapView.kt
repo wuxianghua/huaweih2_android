@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -234,8 +235,10 @@ class IndoorMapView private constructor(
             }
         }
     }
-
-    private var mapView: MapView = MapView(context, MapboxMapOptions().styleUrl(styleUrl))
+    val margins = intArrayOf(12, 45, 0, 0)
+    private var mapView: MapView = MapView(context, MapboxMapOptions().styleUrl(styleUrl).compassFadesWhenFacingNorth(false)
+            .compassGravity(Gravity.LEFT)
+            .compassMargins(margins))
     lateinit var mapBoxMap: MapboxMap
         private set
     private var mapReady = false
@@ -295,9 +298,8 @@ class IndoorMapView private constructor(
             floorId = planarGraph.floorId
             val position = CameraPosition.Builder()
                     .target(planarGraph.mapCenter)
-                    .zoom(16.4)
+                    .zoom(16.0)
                     .bearing(0.0) // Rotate the camera
-                    .tilt(45.0)
                     .build()
             mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
             //taskManager.execTask(LoadMapTask(this@IndoorMapView, planarGraph))
@@ -412,6 +414,16 @@ class IndoorMapView private constructor(
                 source!!.setGeoJson(com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude)))
             }
         }
+    }
+
+    fun updateOrientation(degree:Float){
+        if (mapBoxMap.getLayer(layerID_Location) == null) {
+            return
+        }
+
+        val layer = mapBoxMap.getLayer(layerID_Location)
+
+        layer!!.setProperties(PropertyFactory.iconRotate(degree))
     }
 
     fun setMapBoxLocationDrawable(drawable: Drawable) {

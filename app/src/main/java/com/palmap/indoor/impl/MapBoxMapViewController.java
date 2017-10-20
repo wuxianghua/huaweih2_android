@@ -130,6 +130,8 @@ public class MapBoxMapViewController implements IMapViewController {
         indoorMapView.setLocationMarkIcon(resource,w ,h);
     }
 
+
+
     @Override
     public void addLocationMark(double x, double y) {
         if (x == 0 || y == 0) {
@@ -196,6 +198,11 @@ public class MapBoxMapViewController implements IMapViewController {
 
     }
 
+    @Override
+    public void updateLocationOrientation(float degree) {
+        indoorMapView.updateOrientation(degree);
+    }
+
     public MapboxMap getMapBox(){
         return indoorMapView.getMapBoxMap();
     }
@@ -211,10 +218,10 @@ public class MapBoxMapViewController implements IMapViewController {
                     //PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
                     //PropertyFactory.lineJoin(Property.LINE_JOIN_ROUND),
                     PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
-                    PropertyFactory.lineWidth(8f),
+                    PropertyFactory.lineWidth(6f),
                     PropertyFactory.lineColor(Color.parseColor("#4fb5f5"))
             );
-            mapboxMap.addLayer(layer);
+            mapboxMap.addLayerBelow(layer,"layer_location");
         } else {
             if(route == null){
                 route = FeatureCollection.fromFeatures(new Feature[]{});

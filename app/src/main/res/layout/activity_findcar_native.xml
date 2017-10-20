@@ -23,14 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="65dp"
+            android:layout_marginRight="65dp"
             android:background="@drawable/bg_cir_car_number">
             <LinearLayout
                 android:paddingLeft="20dp"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center">
@@ -38,17 +38,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="空余车位"
-                    android:textSize="7pt"
+                    android:textSize="8pt"
                     android:textColor="@color/color_38bc7c"
                     />
                 <TextView
                     android:id="@+id/tv_nocar_num"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_38bc7c"
                     android:textStyle="bold"
-                    android:textSize="10pt"
+                    android:textSize="12pt"
                     android:text="---"/>
             </LinearLayout>
             <TextView
@@ -57,6 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="B1"
+                android:textSize="11pt"
                 android:textStyle="italic"
                 android:textColor="@color/color_666666"
                 android:layout_height="match_parent"
@@ -64,7 +65,7 @@
             <LinearLayout
                 android:paddingRight="20dp"
                 android:layout_width="0dp"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -73,21 +74,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="占用车位"
-                    android:textSize="7pt"
+                    android:textSize="8pt"
                     android:textColor="@color/color_ef6c60"
                     />
                 <TextView
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="2dp"
                     android:id="@+id/tv_car_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_ef6c60"
                     android:textStyle="bold"
-                    android:textSize="10pt"
+                    android:textSize="12pt"
                     android:text="---"/>
             </LinearLayout>
         </LinearLayout>
-        <!--<TextView
+        <TextView
             android:id="@+id/map_style_change"
             android:background="@drawable/bg_cir_style_change"
             android:layout_marginRight="12dp"
@@ -95,12 +96,12 @@
             android:layout_width="40dp"
             android:gravity="center"
             android:text="2D"
-            android:visibility="gone"
-            android:layout_marginLeft="10dp"
+            android:onClick="changeMapMode"
+            android:layout_alignParentRight="true"
             android:textColor="@color/color_475266"
             android:textSize="17dp"
             android:layout_height="40dp" />
-        <Button
+        <!--<Button
             android:layout_below="@+id/map_style_change"
             android:id="@+id/map_facilities"
             android:text="公共设施"
@@ -144,21 +145,26 @@
                 android:layout_height="40dp"
                 />
         </LinearLayout>-->
-        <!--<com.palmap.huawei.widget.ShadowLayout
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/logo"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <com.palmap.huawei.widget.ShadowLayout
             android:id="@+id/layout_zoom"
             android:layout_above="@+id/layout_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="12dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             app:hole="true"
             app:offset="2dp"
             app:shadowRadius="0.5dp"
-            app:type="roundRect"
-            android:visibility="gone">
+            app:type="roundRect">
 
             <ImageView
                 android:layout_width="40dp"
@@ -179,7 +185,8 @@
                 android:onClick="mapZoomOutClick"
                 android:src="@mipmap/ngr_ic_map_zoomout"/>
 
-        </com.palmap.huawei.widget.ShadowLayout>-->
+        </com.palmap.huawei.widget.ShadowLayout>
+
         <!--定位-->
         <com.palmap.huawei.widget.ShadowLayout
             android:id="@+id/layout_location"
@@ -190,7 +197,6 @@
             android:layout_marginLeft="@dimen/ngr_large"
             android:orientation="vertical"
             app:hole="true"
-            android:onClick="location"
             app:offset="@dimen/ngr_width_shadow"
             app:shadowRadius="0.5dp"
             app:type="roundRect">
@@ -199,6 +205,7 @@
                 android:id="@+id/map_location"
                 android:layout_width="@dimen/ngr_uiSize"
                 android:layout_height="@dimen/ngr_uiSize"
+                android:onClick="location"
                 android:clickable="true"
                 android:src="@drawable/ngr_bg_location_btn"/>
 
@@ -483,4 +490,42 @@
             android:layout_alignParentRight="true"
             android:text="选择起点"/>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/show_hint_end_navi"
+        android:layout_width="300dp"
+        android:visibility="gone"
+        android:background="#fff"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_height="150dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#555"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:text="结束导航"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#777"
+            android:textStyle="bold"
+            android:text="你已到达车位附近"
+            android:textSize="18sp"/>
+        <TextView
+            android:layout_marginTop="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="right"
+            android:textColor="#777"
+            android:textSize="18sp"
+            android:onClick="ensureStopNavi"
+            android:textStyle="bold"
+            android:text="确定"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.palmap.huawei.config;
 
+import android.os.Environment;
+
 /**
  * Created by Administrator on 2017/10/10/010.
  */

@@ -21,20 +21,17 @@ import com.palmap.astar.navi.AStarVertex;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.util.CoordinateUtils;
 
+import com.palmap.huawei.config.Constant;
 import com.palmap.huawei.http.CarServiceFactory;
 import com.palmap.huawei.http.GetCarParkingInfoService;
 import com.palmap.huawei.mode.CarParkingInfo;
-import com.palmap.huawei.rx.RxCarParkStatus;
+import com.palmap.huawei.mode.CarParkingInfos;
 import com.palmap.huawei.view.FindCarNativeView;
 import com.palmap.huawei.widget.LatLngEvaluator;
 import com.palmap.nagrand.support.util.DataConvertUtils;
-import com.palmaplus.nagrand.geos.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
-
-import org.intellij.lang.annotations.Language;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +40,10 @@ import java.util.concurrent.TimeUnit;
 import cn.bupt.sse309.locsdk.DefaultLocClient;
 import cn.bupt.sse309.locsdk.LocClient;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/10/10/010.
@@ -75,16 +73,22 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private LatLng endPoint;
     //距离终点的距离
     private double destationDistance;
+    //所有的车位
+    private List<Feature> allCarFeature;
     //所有停车的车位
     private List<Integer> parkingCars;
     //没有停车的车位
     private List<Integer> noParkingCars;
-    //有停车位的FeatureCollection
-    private FeatureCollection carFeatureCollection;
+    //无效的停车位
+    private List<Integer> invalidParkingCars;
+    //上次网络请求没有停车的车位
+    private List<Integer> oldNoParkingCars;
     //没有停车位的FeatureCollection
     private FeatureCollection noCarFeatureCollection;
     //有停车位的Features
     private List<Feature> carFeature;
+    //有停车位的Features
+    private List<Feature> invalidCarFeature;
     //没有停车位的Features
     private List<Feature> noCarFeatures;
     //路线数据
@@ -93,6 +97,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private LatLng latLng;
     //导航吸附距离
     private final int nearLength = 10;
+    //缩放级别
+    private double scale;
+    Call<CarParkingInfos> carParkingStatus;
+    List<CarParkingInfo> carportInfos;
     //构造方法
     public FindCarNativePresenterImpl() {
 
@@ -110,52 +118,74 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (mGetCarParkingInfoService == null) {
             mGetCarParkingInfoService = CarServiceFactory.getInstance().createService(GetCarParkingInfoService.class);
         }
-        Observable.interval(2000,60000,TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
+        Observable.interval(2000,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
-                RxCarParkStatus.requestCarParkStatus(mGetCarParkingInfoService).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                        .subscribe(new Consumer<List<CarParkingInfo>>() {
-                            @Override
-                            public void accept(List<CarParkingInfo> carParkingInfos) throws Exception {
-                                resolutionParkingData(carParkingInfos);
-                            }
-                        });
+                carParkingStatus = mGetCarParkingInfoService.getCarParkingStatus(Constant.appkey, Constant.mapId, Constant.floorId);
+                carParkingStatus.enqueue(new Callback<CarParkingInfos>() {
+                    @Override
+                    public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
+                        carportInfos = response.body().carportInfos;
+                        if (carportInfos == null || carportInfos.size() == 0) return;
+                        resolutionParkingData(carportInfos);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CarParkingInfos> call, Throwable t) {
+                    }
+                });
             }
         });
         getLocation();
     }
     //初始化数据
-    private void initData() {
+    private void
+
+    initData() {
         parkingCars = new ArrayList<>();
         noParkingCars = new ArrayList<>();
         carFeature = new ArrayList<>();
         noCarFeatures = new ArrayList<>();
+        oldNoParkingCars = new ArrayList<>();
+        invalidParkingCars = new ArrayList<>();
+        invalidCarFeature = new ArrayList<>();
+        allCarFeature = new ArrayList<>();
         latLng = new LatLng();
     }
 
     //解析停车位数据,放在子线程进行处理
     public void resolutionParkingData(List<CarParkingInfo> carParkingInfos) {
+        parkingCars.clear();
+        noParkingCars.clear();
         for (CarParkingInfo carParkingInfo : carParkingInfos) {
             if (carParkingInfo.occupied == 1) {
                 parkingCars.add(carParkingInfo.poiId);
-            }else {
+            }else if (carParkingInfo.occupied == 0){
                 noParkingCars.add(carParkingInfo.poiId);
             }
         }
+        if (noParkingCars.size() == oldNoParkingCars.size()) {
+            return;
+        }
+        oldNoParkingCars.clear();
+        oldNoParkingCars.addAll(noParkingCars);
         if (HuaWeiH2Application.parkData == null || HuaWeiH2Application.parkData.getDataMap() == null ||HuaWeiH2Application.parkData.getDataMap().get("Area")==null) return;
         for (Feature feature : HuaWeiH2Application.parkData.getDataMap().get("Area").getFeatures()) {
             int featureId = Integer.parseInt(feature.getProperty("id").toString());
             if (featureId == 1284122||featureId ==1261981||featureId ==2037840||featureId ==2037841||featureId ==2037842) continue;
             if (parkingCars.contains(featureId)) {
+                feature.addNumberProperty("category",26999000);
                 carFeature.add(feature);
-            }else {
+            }else if (noParkingCars.contains(featureId)){
+                feature.addNumberProperty("category",25999000);
                 noCarFeatures.add(feature);
             }
         }
-        carFeatureCollection = FeatureCollection.fromFeatures(carFeature);
-
-        noCarFeatureCollection = FeatureCollection.fromFeatures(noCarFeatures);
-        mFindCarNativeView.addParkingCarLayer(carFeatureCollection);
+        allCarFeature.addAll(carFeature);
+        allCarFeature.addAll(noCarFeatures);
+        allCarFeature.addAll(invalidCarFeature);
+        noCarFeatureCollection = FeatureCollection.fromFeatures(allCarFeature);
+        mFindCarNativeView.addParkingCarLayer(noCarFeatureCollection);
         mFindCarNativeView.changeCarParkingNum(parkingCars.size(),noParkingCars.size());
     }
 
@@ -206,9 +236,11 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     @Override
     public void stopNavi() {
         isStartNavi = false;
+        routes = null;
+        scale = 18;
         CameraPosition position = new CameraPosition.Builder()
                 .target(newLatLng)
-                .zoom(18)
+                .zoom(scale)
                 .bearing(0) // Rotate the camera
                 .tilt(45)
                 .build();
@@ -220,9 +252,11 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     public void stopMovcNavi() {
         handler.removeCallbacksAndMessages(null);
         markerAnimator.cancel();
+        routes = null;
+        scale = 18;
         CameraPosition position = new CameraPosition.Builder()
                 .target(newLatLng)
-                .zoom(18)
+                .zoom(scale)
                 .bearing(0) // Rotate the camera
                 .tilt(45)
                 .build();
@@ -231,9 +265,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
 
     @Override
     public void showSearchPark(LatLng latLng) {
+        scale = 18;
         CameraPosition position = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(18)
+                .zoom(scale)
                 .bearing(0) // Rotate the camera
                 .tilt(45)
                 .build();
@@ -245,7 +280,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         isStartNavi = true;
         routeFinished = false;
         routePoints.clear();
-        oldLatLng = coordinate;
         List<Feature> features = featureCollection.getFeatures();
         for (int i = 0; i < features.size(); i++) {
             LineString lineString = (LineString) features.get(i).getGeometry();
@@ -276,9 +310,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 if (!routeFinished && (routePoints.size() - 1) >= count) {
                     final LatLng endLatLng = routePoints.get(count);
                     double angle = computeHeading(locationLatLng, endLatLng);
+                    scale = 20;
                     CameraPosition position = new CameraPosition.Builder()
                             .target(routePoints.get(count))
-                            .zoom(20)
+                            .zoom(scale)
                             .bearing(angle) // Rotate the camera
                             .tilt(45)
                             .build();
@@ -289,8 +324,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 } else {
                     routeFinished = true;
                     Toast.makeText(mContext, "导航完成 !", Toast.LENGTH_SHORT).show();
+                    routes = null;
                     mFindCarNativeView.clearRoute();
                     mFindCarNativeView.resetBeforeNavi();
+                    mFindCarNativeView.saveParkingInfo();
                 }
             }
         };
@@ -356,9 +393,12 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     }
 
     //获取定位的位置
+    LocClient client;
     @Override
     public void getLocation() {
-        LocClient client = new DefaultLocClient(mContext, "YjU5NjFkMjItNDhlZC00OGNjLTk2N2UtMmNlZmE5YTUyMWU2", "QwZzlf4eXvuhNTAUvi5BDaD9E73aAMZE0z8uFMUrhvU");
+        if(client == null) {
+            client = new DefaultLocClient(mContext, "NDdlMDMyZGEtZDhmMi00NmQyLWEyZTEtM2E1MTljMGM3ZjFi", "sTWxGxyfXG5RZebbUryCEvhDjVCMi6YvIiPUg7+YwKI");
+        }
         client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
             @Override
             public void OnSuccess(int type, Map<String, String> result) {
@@ -376,49 +416,30 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                         //定位成功返回的结果
                         double x = Float.parseFloat(result.get("x"));
                         double y = Float.parseFloat(result.get("y"));
-                        Logger.d("positionData"+"x"+x+""+"y"+y);
                         x =  (12697074.245 + (x/7.850));
                         y =  (2588966.542 - (y/7.850));
                         double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
                         latLng.setLatitude(doubles[1]);
                         latLng.setLongitude(doubles[0]);
-                        double distance = testCalcDistance(latLng);
-                        if (distance < nearLength) {
-                            latLng = getMinLatLng(latLng);
-                        } else {
-                            Toast.makeText(mContext,"距离导航线最近距离为:" + distance + "米",Toast.LENGTH_SHORT).show();
-                        }
-                        Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
-                        mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
                         if (isStartNavi == true) {
+                            double distance = testCalcDistance(latLng);
+                            if (distance < nearLength) {
+                                latLng = getMinLatLng(latLng);
+                            } else {
+                                mFindCarNativeView.rePlanRoute(x,y);
+                            }
+                            mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
                             startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+                        }else {
+                            mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
                         }
+                        mFindCarNativeView.setLocationSuccess(true);
                         break;
                 }
             }
 
             @Override
             public void OnFailed(String code, String message) {
-                /*double x = 783.267333984375;
-                double y = 282.28619384765625;
-                Logger.d("positionData"+"x"+x+""+"y"+y);
-                x =  (12697084.245 + (x/7.850));
-                y =  (2588956.542 - (y/7.850));
-                double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
-                Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
-                latLng.setLatitude(doubles[1]);
-                latLng.setLongitude(doubles[0]);
-                double distance = testCalcDistance(latLng);
-                if (distance < nearLength) {
-                    latLng = getMinLatLng(latLng);
-                } else {
-                    Toast.makeText(mContext,"距离导航线最近距离为:" + distance + "米",Toast.LENGTH_SHORT).show();
-                }
-                Log.e(TAG,"正在定位double[0]"+doubles[0]+"double[1]"+doubles[1]);
-                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
-                if (isStartNavi == true) {
-                    startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
-                }*/
             }
         });
         client.start();
@@ -448,7 +469,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                     });
 
             double d = line.distance(point);
-            Log.e(TAG, "计算出: " + d);
+            Log.e(TAG, "计算出HEHEH: " + d);
             if (d < minDistance) {
                 minDistance = d;
                 //lineString = line;
@@ -479,7 +500,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                     });
 
             double d = line.distance(point);
-            Log.e(TAG, "计算出: " + d);
+            Log.e(TAG, "计算出HAAH: " + d);
             if (d < minDistance) {
                 minDistance = d;
                 lineString = line;
@@ -505,39 +526,25 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         this.routes = routes;
     }
 
-    private LatLng oldLatLng;
     private LatLng newLatLng;
     private void startNaviEngine(double x,double y) {
-        destationDistance = distHaversineRAD(x,y,endPoint.getLatitude(),endPoint.getLongitude());
         newLatLng = new LatLng(x,y);
-        Log.e(TAG,"destationDistance"+destationDistance);
-        if (!routeFinished||destationDistance>500) {
-            double angle = computeHeading(oldLatLng, newLatLng);
-            Logger.d("草泥马的地图旋转角度"+angle);
-            if (160< angle || angle < 200) {
-                angle = 0;
-            }
+        destationDistance = newLatLng.distanceTo(endPoint);
+        if (!routeFinished && destationDistance>6) {
             CameraPosition position = new CameraPosition.Builder()
                     .target(newLatLng)
                     .zoom(20)
-                    .bearing(angle) // Rotate the camera
+                    .bearing(0) // Rotate the camera
                     .tilt(45)
                     .build();
             mFindCarNativeView.updateMapCamera(position);
-            oldLatLng = newLatLng;
         }else {
             routeFinished = true;
-            Toast.makeText(mContext, "导航完成 !", Toast.LENGTH_SHORT).show();
+            routes = null;
+            isStartNavi = false;
             mFindCarNativeView.clearRoute();
             mFindCarNativeView.resetBeforeNavi();
+            mFindCarNativeView.saveParkingInfo();
         }
-    }
-
-    public static double distHaversineRAD(double lat1, double lon1, double lat2, double lon2) {
-        double hsinX = Math.sin((lon1 - lon2) * 0.5);
-        double hsinY = Math.sin((lat1 - lat2) * 0.5);
-        double h = hsinY * hsinY +
-                (Math.cos(lat1) * Math.cos(lat2) * hsinX * hsinX);
-        return 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h)) * 6367000;
     }
 }

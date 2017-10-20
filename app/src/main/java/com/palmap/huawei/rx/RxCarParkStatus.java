@@ -13,10 +13,15 @@ import io.reactivex.Observable;
  */
 
 public class RxCarParkStatus {
+
+    private static RequestCarParkStatusOnSubscribe requestCarParkStatusOnSubscribe;
     /**
      * 请求停车数据
      */
     public static Observable<List<CarParkingInfo>> requestCarParkStatus(GetCarParkingInfoService getCarParkingInfoService) {
-        return Observable.create(new RequestCarParkStatusOnSubscribe(getCarParkingInfoService));
+        if (requestCarParkStatusOnSubscribe == null) {
+            requestCarParkStatusOnSubscribe = new RequestCarParkStatusOnSubscribe(getCarParkingInfoService);
+        }
+        return Observable.create(requestCarParkStatusOnSubscribe);
     }
 }
