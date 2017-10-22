@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@mipmap/bg_grid">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     //地图容器
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +20,7 @@
             android:id="@+id/show_car_number_info"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
             android:layout_marginTop="12dp"
             android:layout_marginLeft="65dp"
             android:layout_marginRight="65dp"
@@ -38,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="空余车位"
-                    android:textSize="8pt"
+                    android:textSize="7pt"
                     android:textColor="@color/color_38bc7c"
                     />
                 <TextView
@@ -47,9 +46,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_38bc7c"
-                    android:textStyle="bold"
-                    android:textSize="12pt"
-                    android:text="---"/>
+                    android:textSize="10pt"
+                    android:text="000"/>
             </LinearLayout>
             <TextView
                 android:gravity="center"
@@ -57,8 +55,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="B1"
-                android:textSize="11pt"
-                android:textStyle="italic"
+                android:textSize="10pt"
+                android:textStyle="italic|bold"
                 android:textColor="@color/color_666666"
                 android:layout_height="match_parent"
                 android:background="@mipmap/bg_xie"/>
@@ -74,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="占用车位"
-                    android:textSize="8pt"
+                    android:textSize="7pt"
                     android:textColor="@color/color_ef6c60"
                     />
                 <TextView
@@ -83,9 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_ef6c60"
-                    android:textStyle="bold"
-                    android:textSize="12pt"
-                    android:text="---"/>
+                    android:textSize="10pt"
+                    android:text="000"/>
             </LinearLayout>
         </LinearLayout>
         <TextView
@@ -96,55 +93,28 @@
             android:layout_width="40dp"
             android:gravity="center"
             android:text="2D"
+            android:textStyle="bold"
             android:onClick="changeMapMode"
             android:layout_alignParentRight="true"
             android:textColor="@color/color_475266"
             android:textSize="17dp"
             android:layout_height="40dp" />
-        <!--<Button
+        <Button
             android:layout_below="@+id/map_style_change"
-            android:id="@+id/map_facilities"
-            android:text="公共设施"
+            android:id="@+id/map_location_change"
+            android:text="H1"
+            android:textStyle="bold"
             android:background="@drawable/bg_cir_style_change"
             android:layout_marginRight="12dp"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:layout_width="40dp"
-            android:visibility="gone"
             android:gravity="center"
+            android:onClick="moveMap"
             android:textColor="@color/color_475266"
             android:textSize="15dp"
-            android:layout_height="40dp" />-->
-
-        <!--//公共设施
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_below="@+id/map_facilities"
-            android:background="@drawable/bg_cir_style_change"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="45dp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_height="90dp" >
-            <ImageView
-                android:id="@+id/people_passway"
-                android:src="@mipmap/people_passway"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                />
-            <View
-                android:background="@color/hint_color_2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"/>
-            <ImageView
-                android:id="@+id/car_passway"
-                android:src="@mipmap/car_passway"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                />
-        </LinearLayout>-->
+            android:layout_height="40dp" />
+        //公共设施
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -283,30 +253,34 @@
             android:textColor="@color/text_t3"
             android:background="@drawable/bg_cir_back"/>
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/show_navi_info"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:padding="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="15dp"
+            android:visibility="gone"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:background="@drawable/bg_cir_back"
-            android:layout_height="100dp">
+            android:layout_height="60dp">
             <TextView
+                android:layout_marginTop="10dp"
                 android:id="@+id/show_destination_info"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="终点 H3-001"
-                android:textSize="10pt"
+                android:textSize="9pt"
                 android:textColor="@color/text_t3"/>
             <Button
-                android:layout_width="80dp"
+                android:layout_width="70dp"
                 android:background="@drawable/bg_cir_ensure"
                 android:layout_gravity="center_vertical"
                 android:text="结束"
-                android:textSize="12pt"
+                android:textSize="10pt"
                 android:onClick="endNavi"
-                android:layout_height="wrap_content" />
+                android:layout_height="35dp" />
         </LinearLayout>
         <Button
             android:visibility="gone"
