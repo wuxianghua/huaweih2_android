@@ -190,6 +190,15 @@ class IndoorMapView private constructor(
                     indoorMapView.addLayer(areaHoverLayer)
                 }
 
+                //todo h2 车位覆盖层
+                var parkRender = indoorMapView.renderable!!.renderer[layerName + "_park"]
+                if (parkRender != null) {
+                    val areaParkFeatures = ArrayList<Feature>()
+                    indoorMapView.addSource(sourceId + "_park", FeatureCollection.fromFeatures(areaParkFeatures))
+                    val areaParkLayer = parkRender.createLayer(layerName + "_park", sourceId + "_park")
+                    indoorMapView.addLayer(areaParkLayer)
+                }
+
                 //是否添加outLine
                 if (render.isHaveOutLineLayer()) {
                     val outLineLayer = LineLayer(layerName + "_outLine", sourceId)
@@ -455,6 +464,30 @@ class IndoorMapView private constructor(
         taskManager.execTask(object : Task<Unit>() {
             override fun doInBackground() {
                 val render = renderable!!.renderer[layerName + "_hover"]!!
+                featureCollection.features.forEach { feature ->
+                    render.renderer(feature)
+                }
+            }
+
+            override fun onSuccess(t: Unit) {
+                super.onSuccess(t)
+                mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(featureCollection)
+            }
+        })
+    }
+
+    fun setParkData(layerName: String, featureCollection: FeatureCollection?) {
+        if (renderable!!.renderer[layerName + "_park"] == null) {
+            return
+        }
+        val hoverSourceId = layerName + floorId + "_park"
+        if (featureCollection == null) {
+            mapBoxMap.getSourceAs<GeoJsonSource>(hoverSourceId)?.setGeoJson(FeatureCollection.fromFeatures(Collections.emptyList()))
+            return
+        }
+        taskManager.execTask(object : Task<Unit>() {
+            override fun doInBackground() {
+                val render = renderable!!.renderer[layerName + "_park"]!!
                 featureCollection.features.forEach { feature ->
                     render.renderer(feature)
                 }

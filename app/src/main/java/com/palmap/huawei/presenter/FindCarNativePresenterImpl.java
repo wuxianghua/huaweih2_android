@@ -26,6 +26,7 @@ import com.palmap.huawei.http.CarServiceFactory;
 import com.palmap.huawei.http.GetCarParkingInfoService;
 import com.palmap.huawei.mode.CarParkingInfo;
 import com.palmap.huawei.mode.CarParkingInfos;
+import com.palmap.huawei.utils.ThreadManager;
 import com.palmap.huawei.view.FindCarNativeView;
 import com.palmap.huawei.widget.LatLngEvaluator;
 import com.palmap.nagrand.support.util.DataConvertUtils;
@@ -85,6 +86,8 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private List<Integer> oldNoParkingCars;
     //没有停车位的FeatureCollection
     private FeatureCollection noCarFeatureCollection;
+    //无效停车位的FeatureCollection
+    private FeatureCollection invalidCarFeatureCollection;
     //有停车位的Features
     private List<Feature> carFeature;
     //有停车位的Features
@@ -127,7 +130,12 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                     public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
                         carportInfos = response.body().carportInfos;
                         if (carportInfos == null || carportInfos.size() == 0) return;
-                        resolutionParkingData(carportInfos);
+                        ThreadManager.getNormalPool().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                resolutionParkingData(carportInfos);
+                            }
+                        });
                     }
 
                     @Override
@@ -157,11 +165,14 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     public void resolutionParkingData(List<CarParkingInfo> carParkingInfos) {
         parkingCars.clear();
         noParkingCars.clear();
+        invalidParkingCars.clear();
         for (CarParkingInfo carParkingInfo : carParkingInfos) {
             if (carParkingInfo.occupied == 1) {
                 parkingCars.add(carParkingInfo.poiId);
             }else if (carParkingInfo.occupied == 0){
                 noParkingCars.add(carParkingInfo.poiId);
+            }else if (carParkingInfo.occupied == -1) {
+                invalidParkingCars.add(carParkingInfo.poiId);
             }
         }
         if (noParkingCars.size() == oldNoParkingCars.size()) {
@@ -174,18 +185,21 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
             int featureId = Integer.parseInt(feature.getProperty("id").toString());
             if (featureId == 1284122||featureId ==1261981||featureId ==2037840||featureId ==2037841||featureId ==2037842) continue;
             if (parkingCars.contains(featureId)) {
-                feature.addNumberProperty("category",26999000);
                 carFeature.add(feature);
             }else if (noParkingCars.contains(featureId)){
-                feature.addNumberProperty("category",25999000);
                 noCarFeatures.add(feature);
+            }else if (invalidParkingCars.contains(featureId)) {
+                invalidCarFeature.add(feature);
             }
         }
-        allCarFeature.addAll(carFeature);
-        allCarFeature.addAll(noCarFeatures);
-        allCarFeature.addAll(invalidCarFeature);
-        noCarFeatureCollection = FeatureCollection.fromFeatures(allCarFeature);
-        mFindCarNativeView.addParkingCarLayer(noCarFeatureCollection);
+        if (noCarFeatures.size() != 0) {
+            noCarFeatureCollection = FeatureCollection.fromFeatures(noCarFeatures);
+            mFindCarNativeView.addParkingCarLayer(noCarFeatureCollection);
+        }
+        if (invalidCarFeature.size() != 0) {
+            invalidCarFeatureCollection = FeatureCollection.fromFeatures(invalidCarFeature);
+            mFindCarNativeView.addInvalidParkingCarLayer(invalidCarFeatureCollection);
+        }
         mFindCarNativeView.changeCarParkingNum(parkingCars.size(),noParkingCars.size());
     }
 
@@ -425,7 +439,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                             double distance = testCalcDistance(latLng);
                             if (distance < nearLength) {
                                 latLng = getMinLatLng(latLng);
-                            } else {
+                            } else if (distance > 15){
                                 mFindCarNativeView.rePlanRoute(x,y);
                             }
                             mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
@@ -533,7 +547,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (!routeFinished && destationDistance>6) {
             CameraPosition position = new CameraPosition.Builder()
                     .target(newLatLng)
-                    .zoom(20)
                     .bearing(0) // Rotate the camera
                     .tilt(45)
                     .build();

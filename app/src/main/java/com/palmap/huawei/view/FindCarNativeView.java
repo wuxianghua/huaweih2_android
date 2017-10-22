@@ -13,6 +13,9 @@ public interface FindCarNativeView {
     //添加有车位图层
     void addParkingCarLayer(FeatureCollection featureCollection);
 
+    //添加有车位图层
+    void addInvalidParkingCarLayer(FeatureCollection featureCollection);
+
     void changeCarParkingNum(int carNum,int noCarNum);
 
     //展示定位图标

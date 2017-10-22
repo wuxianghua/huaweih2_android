@@ -202,7 +202,7 @@ public class F2Activity extends Activity {
 
     public void showAreaHover(View v) {
         if (isSB) {
-            ((MapBoxMapViewController) iMapViewController).showCarHover(null);
+            //((MapBoxMapViewController) iMapViewController).showCarHover(null);
             isSB = false;
             return;
         }
@@ -216,7 +216,7 @@ public class F2Activity extends Activity {
             return;
         }
         FeatureCollection testFeatureCollection = FeatureCollection.fromFeatures(featureCollection.getFeatures().subList(10, 600));
-        ((MapBoxMapViewController) iMapViewController).showCarHover(testFeatureCollection);
+        //((MapBoxMapViewController) iMapViewController).showCarHover(testFeatureCollection);
         isSB = true;
     }
 

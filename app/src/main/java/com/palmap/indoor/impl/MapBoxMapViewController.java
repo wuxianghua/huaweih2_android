@@ -234,4 +234,8 @@ public class MapBoxMapViewController implements IMapViewController {
     public void showCarHover(FeatureCollection featureCollection){
         indoorMapView.setHoverData("Area",featureCollection);
     }
+
+    public void showCarPark(FeatureCollection featureCollection){
+        indoorMapView.setParkData("Area",featureCollection);
+    }
 }
