@@ -58,7 +58,7 @@ import java.util.List;
  * Created by Administrator on 2017/10/10/010.
  */
 
-public class FindCarNativeActivity extends Activity implements FindCarNativeView,SensorEventListener {
+public class FindCarNativeActivity extends Activity implements FindCarNativeView {
     String TAG = FindCarNativeActivity.class.getSimpleName();
     //地图容器
     private LinearLayout mapViewLayout;
@@ -121,15 +121,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     private MarkerView endMark;
     //定位按钮图标
     private ImageView mLocationButton;
-    //传感器数据
-    private float[] accelerometerValues = new float[3];
-    private float[] magneticFieldValues = new float[3];
-    //加速度传感器
-    private Sensor mAccelerometer;
-    //磁力计传感器
-    private Sensor mField;
-    //传感器管理器
-    private SensorManager mSensorManager;
     //定位图标是否已经显示
     private boolean isShown;
     //是否已经开始模拟导航
@@ -147,16 +138,9 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_findcar_native);
         initView();
-        registerSensor();
         initMapView(savedInstanceState);
         mFindCarNativePresenter.attachView(this,this);
         mFindCarNativePresenter.onCreate();
-    }
-
-    //注册传感器
-    private void registerSensor() {
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mField, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     //初始化地图界面
@@ -438,9 +422,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mapStyleChange = (TextView) findViewById(R.id.map_style_change);
         mHintEndNavi = (LinearLayout) findViewById(R.id.show_hint_end_navi);
         moveMapLocation = (Button) findViewById(R.id.map_location_change);
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mLocation = new Coordinate();
         mLocationLatLng = new LatLng();
     }
@@ -512,9 +493,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             bundle.putParcelable("mLocationLatLng",mLocationLatLng);
             message.setData(bundle);
             handler.sendMessage(message);
-            if (isShown == false) {
-                isShown = true;
-            }
         }
     }
 
@@ -591,6 +569,21 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         parkTime = df.format(new Date());
         SharedPreferenceUtil.putValue(this,"parkinfo","parkName",carName);
         SharedPreferenceUtil.putValue(this,"parkinfo","parkTime",parkTime);
+    }
+
+    float oldDegree;
+    long currentTime;
+    long oldTime;
+    @Override
+    public void setDegree(float degree) {
+        currentTime = System.currentTimeMillis();
+        if (isShown && !isStartMovcNavi) {
+            if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
+                iMapViewController.updateLocationOrientation(degree);
+                oldTime = currentTime;
+            }
+            oldDegree = degree;
+        }
     }
 
     //选择起点
@@ -678,49 +671,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mFindCarNativePresenter.getLocation();
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelerometerValues = event.values;
-        }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-        }else {
-            magneticFieldValues = event.values;
-        }
-        ThreadManager.getNormalPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                calculateOrientation();
-            }
-        });
-    }
-
-    float degree;
-    float oldDegree;
-    long currentTime;
-    long oldTime;
-    private void calculateOrientation() {
-        float[] values = new float[3];
-        float[] R = new float[9];
-        SensorManager.getRotationMatrix(R, null, accelerometerValues,
-                magneticFieldValues);
-        SensorManager.getOrientation(R, values);
-        values[0] = (float) Math.toDegrees(values[0]);
-        values[0] = values[0] < 0 ? 360+values[0]:values[0];
-        currentTime = System.currentTimeMillis();
-        degree =  values[0];
-        if (isShown && !isStartMovcNavi) {
-            if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        iMapViewController.updateLocationOrientation(degree);
-                    }
-                });
-                oldTime = currentTime;
-            }
-            oldDegree = degree;
-        }
-    }
     double x;
     double y;
     CameraPosition position;
@@ -743,6 +693,9 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             }else if (msg.what == 2) {
                 locationLatLng = msg.getData().getParcelable("mLocationLatLng");
                 iMapViewController.addLocationMark(locationLatLng.getLatitude(),locationLatLng.getLongitude());
+                if (isShown == false) {
+                    isShown = true;
+                }
             }else if (msg.what == 3) {
                 position = msg.getData().getParcelable("position");
                 ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory
@@ -772,13 +725,8 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSensorManager.unregisterListener(this);
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
     //放大
     public void mapZoomInClick(View view) {
         ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.zoomIn());

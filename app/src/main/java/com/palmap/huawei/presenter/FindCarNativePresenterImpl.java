@@ -120,14 +120,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private double scale;
     Call<CarParkingInfos> carParkingStatus;
     List<CarParkingInfo> carportInfos;
-    private ApData apData;
-    private WifiData mWifiData;
-    private WifiPositionData mWifiPositonData;
-    private List<ApData> apDatas;
-    private PositionFeature positionFeature;
-    private PositionGeometry positionGeometry;
-    private PositionProperty positionProperty;
-    private PositionData positionData;
     private String pos;
     private CurrentPositionData currentPosition;
     private WifiLocationManager wifiLocationManager;
@@ -499,8 +491,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         );
     }
 
-    //获取定位的位置
-    LocClient client;
     @Override
     public void getLocation() {
         if (instance == null) {
@@ -517,6 +507,12 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
             }
         });
         instance.start();
+        instance.setOrientationChangeListener(new CollectProvider.OrientationChangeListener() {
+            @Override
+            public void orientationChanger(float degree) {
+                mFindCarNativeView.setDegree(degree);
+            }
+        });
         /*if(client == null) {
             client = new DefaultLocClient(mContext, "NDdlMDMyZGEtZDhmMi00NmQyLWEyZTEtM2E1MTljMGM3ZjFi", "sTWxGxyfXG5RZebbUryCEvhDjVCMi6YvIiPUg7+YwKI");
         }
@@ -599,16 +595,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     double y;
     private void getPositionData() {
         pos=wifiLocationManager.getPos();
-        Log.e(TAG,"WOBEIDIAOYONGLE11111");
         try {
-            Log.e(TAG,"WOBEIDIAOYONGLE");
             currentPosition = gson.fromJson(pos, CurrentPositionData.class);
-            Log.e(TAG,"WOBEIDIAOYONGLE22");
             x = currentPosition.current_position.x;
-            Log.e(TAG,"WOBEIDIAOYONGLE333");
             y = currentPosition.current_position.y;
-            Log.e(TAG,"WOBEIDIAOYONGLE444");
-            Log.e(TAG,"X"+x+"Y"+y);
             double[] doubles = CoordinateUtils.mercator2Lonlat(x,y);
             latLng.setLatitude(doubles[1]);
             latLng.setLongitude(doubles[0]);
@@ -627,7 +617,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
             mFindCarNativeView.setLocationSuccess(true);
 
         }catch (Exception e) {
-            Log.e(TAG,"WOBEIDIAOYONGLE44455"+e.toString());
             e.printStackTrace();
         }
     }

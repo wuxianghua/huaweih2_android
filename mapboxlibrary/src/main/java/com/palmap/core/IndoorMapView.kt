@@ -310,6 +310,7 @@ class IndoorMapView private constructor(
                     .bearing(0.0) // Rotate the camera
                     .build()
             mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+            mapBoxMap.setLatLngBoundsForCameraTarget(planarGraph.AUSTRALIA_BOUNDS)
             //taskManager.execTask(LoadMapTask(this@IndoorMapView, planarGraph))
             planarGraph.dataMap.forEach { e ->
                 taskManager.execTask(LoadMapTaskH2(this@IndoorMapView, e.key, e.value))

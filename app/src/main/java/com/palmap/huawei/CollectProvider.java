@@ -23,11 +23,19 @@ public class CollectProvider extends Handler {
     private static CollectProvider m_self = null;
     private final int MSG_TYPE_SWEEP_DATA = 1001;
     private final  int SENSOR_DATA_SWEEP_DELAY = 100;
-
+    private static OrientationChangeListener mOrientationChangeListener;
     private CollectProvider(Context ctx, HandlerThread handler_thread) {
         super(handler_thread.getLooper());
         m_ctx = ctx;
         m_collect_thread = handler_thread;
+    }
+
+    public interface OrientationChangeListener {
+        void orientationChanger(float degree);
+    }
+
+    public void setOrientationChangeListener(OrientationChangeListener orientationChangeListener) {
+        mOrientationChangeListener = orientationChangeListener;
     }
 
     public static CollectProvider getInstance(Context ctx) {
@@ -77,13 +85,16 @@ public class CollectProvider extends Handler {
     }
 
     public boolean start() {
-        //Register for broadcasts on wifi
         if(SensorDataProvider.getIntance(m_ctx) != null){
             SensorDataProvider.getIntance(m_ctx).start();
+            SensorDataProvider.getIntance(m_ctx).setOrientationChangeListener(new SensorDataProvider.OrientationChangeListener() {
+                @Override
+                public void orientationChanger(float degree) {
+                    mOrientationChangeListener.orientationChanger(degree);
+                }
+            });
             sendEmptyMessageDelayed(MSG_TYPE_SWEEP_DATA, SENSOR_DATA_SWEEP_DELAY);
-            Log.i("liguoliangy", "time: " + System.currentTimeMillis());
         }
-
         return true;
     }
 

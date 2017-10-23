@@ -41,4 +41,6 @@ public interface FindCarNativeView {
 
     //保存车位信息
     void saveParkingInfo();
+
+    void setDegree(float degree);
 }

@@ -66,12 +66,12 @@ public class HuaWeiH2Application extends XiaoqianApplication {
     };
     //x5内核初始化接口
     QbSdk.initX5Environment(getApplicationContext(),  cb);
-    if (LeakCanary.isInAnalyzerProcess(this)) {
+    /*if (LeakCanary.isInAnalyzerProcess(this)) {
       // This process is dedicated to LeakCanary for heap analysis.
       // You should not init your app in this process.
       return;
     }
-    LeakCanary.install(this);
+    LeakCanary.install(this);*/
   }
 
   @Override

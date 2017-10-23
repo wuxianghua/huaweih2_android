@@ -31,7 +31,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 13
-        versionName "2.4.9(M1)"
+        versionName "2.5.9(M10)VDR"
         multiDexEnabled = true;
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

@@ -28,8 +28,8 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 16.0) {
     var mapCenter: LatLng = LatLng(22.64314843987482, 114.06082880782026)
 
     val AUSTRALIA_BOUNDS = LatLngBounds.Builder()
-            .include(LatLng(22.64314843987482 - 0.005, 109.372126 + 0.005))
-            .include(LatLng(-44.640488 + 0.005, 158.590484 - 0.005))
+            .include(LatLng(22.64314843987482 - 0.0015, 114.06082880782026 + 0.002))
+            .include(LatLng(22.64314843987482 + 0.0025, 114.06082880782026 - 0.002))
             .build()
 
     private var isResolve:AtomicBoolean = AtomicBoolean(false)

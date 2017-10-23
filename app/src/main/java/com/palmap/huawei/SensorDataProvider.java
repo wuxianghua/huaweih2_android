@@ -27,6 +27,7 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
     Sensor m_sensor_acc = null;
     Sensor m_sensor_gyro = null;
     Sensor m_sensor_magn = null;
+    private OrientationChangeListener mOrientationChangeListener;
 
     private static final int MSG_TYPE_SENSOR = 1;
     private static final int SENSOR_SAMPLING_PERIOD = 10;
@@ -37,6 +38,10 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
     private SensorDataProvider(Context ctx, HandlerThread handler_thread) {
         super(handler_thread.getLooper());
         init(ctx, handler_thread);
+    }
+
+    public void setOrientationChangeListener(OrientationChangeListener orientationChangeListener) {
+        mOrientationChangeListener = orientationChangeListener;
     }
 
     public static SensorDataProvider getIntance(Context ctx) {
@@ -111,7 +116,7 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
         }
     }
 
-    int degree;
+    float degree;
     private void calculateOrientation() {
         float[] values = new float[3];
         float[] R = new float[9];
@@ -120,7 +125,12 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
         SensorManager.getOrientation(R, values);
         values[0] = (float) Math.toDegrees(values[0]);
         values[0] = values[0] < 0 ? 360+values[0]:values[0];
-        degree = (int) values[0];
+        degree = values[0];
+        mOrientationChangeListener.orientationChanger(degree);
+    }
+
+    interface OrientationChangeListener {
+        void orientationChanger(float degree);
     }
 
     Buffer m_this_buf = new Buffer();
