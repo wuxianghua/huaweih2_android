@@ -27,7 +27,9 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
 //        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                HuaWeiH2Application.parkData = new PlanarGraph(loadFromAsset(SplashActivity.this,"h2Date.json"),16);
+                if (HuaWeiH2Application.parkData == null) {
+                    HuaWeiH2Application.parkData = new PlanarGraph(loadFromAsset(SplashActivity.this,"h2Date.json"),16);
+                }
                 HuaWeiH2Application.parkData.resolveData();
                 HuaWeiH2Application.parkData.loadStyle(
                         MapEngine.INSTANCE.getRenderableByName("default").getRenderer()

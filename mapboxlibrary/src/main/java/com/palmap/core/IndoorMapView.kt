@@ -45,6 +45,7 @@ import com.palmap.nagrand.support.task.Task
 import com.palmap.nagrand.support.task.TaskManager
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.logging.Logger
 
 /**
  * Created by wtm on 2017/8/30.
@@ -253,7 +254,6 @@ class IndoorMapView private constructor(
     private var mapReady = false
     private val taskManager: TaskManager = TaskManager()
     private var canLoadMap: Boolean = true
-    lateinit var planarGraph:PlanarGraph
     var floorId: Long = 0
 
     private var renderable: Renderable? = null
@@ -296,7 +296,6 @@ class IndoorMapView private constructor(
             Log.w(TAG, "current can't load Map! an mapData loading ...")
             return
         }
-        this.planarGraph = planarGraph
         fun realLoad() {
             if (!planarGraph.dataCorrect && planarGraph.floorId != 0L) {
                 Log.w(TAG, "planarGraph dataCorrect !!!")
@@ -313,7 +312,7 @@ class IndoorMapView private constructor(
             mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
             //taskManager.execTask(LoadMapTask(this@IndoorMapView, planarGraph))
             planarGraph.dataMap.forEach { e ->
-                taskManager.execTask(  LoadMapTaskH2(this@IndoorMapView, e.key, e.value))
+                taskManager.execTask(LoadMapTaskH2(this@IndoorMapView, e.key, e.value))
             }
         }
         canLoadMap = false
@@ -363,16 +362,6 @@ class IndoorMapView private constructor(
         }
     }
 
-    fun selectFeature(name: String) : Feature? {
-        for (feature in planarGraph.dataMap.get("Area")!!.features) {
-            if(feature.properties==null||feature.getProperties().get("name")==null) continue
-            if(name.equals(feature.getProperties().get("name").asString)) {
-                return feature
-            }
-        }
-        return null
-    }
-
     fun addOverLayer(overLayer: OverLayer) {
         val l = LatLng(overLayer.getCoordinate()[0], overLayer.getCoordinate()[1])
         mapBoxMap.addMarker(
@@ -407,13 +396,17 @@ class IndoorMapView private constructor(
                         com.mapbox.services.commons.geojson.Point.fromCoordinates(Position.fromCoordinates(position.longitude, position.latitude))
                 )
             }
-
+            if (mapBoxMap.getSource(sourceID_location) != null ) {
+                mapBoxMap.removeSource(sourceID_location)
+            }
             mapBoxMap.addSource(source)
             val layer = SymbolLayer(layerID_Location, sourceID_location)
             layer.setProperties(
                     PropertyFactory.iconImage(IMAGE_LOCATION)
             )
-            mapBoxMap.addLayer(layer)
+            if (mapBoxMap.getLayer("Area_hover") != null) {
+                mapBoxMap.addLayerAbove(layer,"Area_hover")
+            }
         } else {
             val source = mapBoxMap.getSourceAs<GeoJsonSource>(sourceID_location)
             if(position == null){
@@ -564,6 +557,10 @@ class IndoorMapView private constructor(
 
     private fun addLayer(layer: Layer) {
         mapBoxMap.addLayer(layer)
+    }
+
+    private fun addLayerBelow(layer: Layer) {
+        mapBoxMap.addLayerBelow(layer,layerID_Location)
     }
 
     private fun decodeSampledbitmapFromResource(resources: Resources, resID: Int, reqWidth: Int, reqHeight: Int): Bitmap {

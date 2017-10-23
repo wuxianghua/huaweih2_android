@@ -112,7 +112,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
 
             @Override
             public void OnFailed(String code, String message) {
-                Logger.d("positionFail"+message);
+                /*Logger.d("positionFail"+message);
                 double x = 783.267333984375;
                 double y = 282.28619384765625;
                 Logger.d("positionData"+"x"+x+""+"y"+y);
@@ -126,7 +126,7 @@ public class FindCarActivity extends BaseActivity implements SensorEventListener
                 positionData.features.add(positionFeature);
                 String s = gson.toJson(positionData);
                 findCarWebView.loadUrl("javascript: locatePoint('" + s + "')");
-                Log.e(TAG,message);
+                Log.e(TAG,message);*/
             }
         });
         client.start();

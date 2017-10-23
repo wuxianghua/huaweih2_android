@@ -12,6 +12,7 @@ import com.palmap.core.data.PlanarGraph;
 import com.palmap.demo.huaweih2.other.Constant;
 import com.palmap.demo.huaweih2.util.FileUtils;
 import com.palmaplus.nagrand.core.Engine;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
 
@@ -65,6 +66,12 @@ public class HuaWeiH2Application extends XiaoqianApplication {
     };
     //x5内核初始化接口
     QbSdk.initX5Environment(getApplicationContext(),  cb);
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
+    LeakCanary.install(this);
   }
 
   @Override
@@ -80,7 +87,7 @@ public class HuaWeiH2Application extends XiaoqianApplication {
     // copy字体文件和lur配置文件
 //    if (FileUtils.checkoutSDCard()) {
       FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, "lua");
-    FileUtils.copyDirToSDCardFromAsserts(this, Constant.H, "H");
+      FileUtils.copyDirToSDCardFromAsserts(this, Constant.H, "H");
 //      FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, "font");
 //      FileUtils.copyDirToSDCardFromAsserts(this, Constant.LUR_NAME, Constant.LUR_NAME);
 //    } else {

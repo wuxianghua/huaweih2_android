@@ -74,8 +74,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private LatLng endPoint;
     //距离终点的距离
     private double destationDistance;
-    //所有的车位
-    private List<Feature> allCarFeature;
     //所有停车的车位
     private List<Integer> parkingCars;
     //没有停车的车位
@@ -129,6 +127,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                     @Override
                     public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
                         carportInfos = response.body().carportInfos;
+                        Log.e(TAG,"没有获取到数据"+carportInfos.size());
                         if (carportInfos == null || carportInfos.size() == 0) return;
                         ThreadManager.getNormalPool().execute(new Runnable() {
                             @Override
@@ -140,6 +139,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
 
                     @Override
                     public void onFailure(Call<CarParkingInfos> call, Throwable t) {
+                        Log.e(TAG,"执行失败");
                     }
                 });
             }
@@ -157,7 +157,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         oldNoParkingCars = new ArrayList<>();
         invalidParkingCars = new ArrayList<>();
         invalidCarFeature = new ArrayList<>();
-        allCarFeature = new ArrayList<>();
         latLng = new LatLng();
     }
 
@@ -225,7 +224,53 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
 
     @Override
     public void onDestroy() {
-
+        if (carportInfos != null) {
+            carportInfos.clear();
+            carportInfos = null;
+        }
+        if (routes != null) {
+            routes.clear();
+            routes = null;
+        }
+        if (noCarFeatures != null) {
+            noCarFeatures.clear();
+            noCarFeatures = null;
+        }
+        if (invalidCarFeature != null) {
+            invalidCarFeature.clear();
+            invalidCarFeature = null;
+        }
+        if (carFeature != null) {
+            carFeature.clear();
+            carFeature = null;
+        }
+        if (routePoints != null) {
+            routePoints.clear();
+            routePoints = null;
+        }
+        if (invalidCarFeatureCollection != null) {
+            invalidCarFeatureCollection = null;
+        }
+        if (noCarFeatureCollection != null) {
+            noCarFeatureCollection = null;
+        }
+        if (oldNoParkingCars != null) {
+            oldNoParkingCars.clear();
+            oldNoParkingCars = null;
+        }
+        if (invalidParkingCars != null) {
+            invalidParkingCars.clear();
+            invalidParkingCars = null;
+        }
+        if (parkingCars != null) {
+            parkingCars.clear();
+            parkingCars = null;
+        }
+        if (evaluator != null) {
+            evaluator = null;
+        }
+        carParkingStatus = null;
+        latLng = null;
     }
 
     @Override
@@ -415,7 +460,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         }
         client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
             @Override
-            public void OnSuccess(int type, Map<String, String> result) {
+            public void OnSuccess(int type, final Map<String, String> result) {
                 //楼宇ID
                 String buildingId = result.get("building_id");
                 //楼层
@@ -428,8 +473,42 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                         break;
                     case LocClient.TYPE_LOC:
                         //定位成功返回的结果
-                        double x = Float.parseFloat(result.get("x"));
-                        double y = Float.parseFloat(result.get("y"));
+                        ThreadManager.getNormalPool().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                double x = Float.parseFloat(result.get("x"));
+                                double y = Float.parseFloat(result.get("y"));
+                                x =  (12697074.245 + (x/7.850));
+                                y =  (2588966.542 - (y/7.850));
+                                double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
+                                latLng.setLatitude(doubles[1]);
+                                latLng.setLongitude(doubles[0]);
+                                if (isStartNavi == true) {
+                                    double distance = testCalcDistance(latLng);
+                                    if (distance < nearLength) {
+                                        latLng = getMinLatLng(latLng);
+                                    } else if (distance > 15){
+                                        mFindCarNativeView.rePlanRoute(x,y);
+                                    }
+                                    mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+                                    startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+                                }else {
+                                    mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+                                }
+                                mFindCarNativeView.setLocationSuccess(true);
+                            }
+                        });
+                        break;
+                }
+            }
+
+            @Override
+            public void OnFailed(String code, String message) {
+                ThreadManager.getNormalPool().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        double x = 783.267333984375;
+                        double y = 282.28619384765625;
                         x =  (12697074.245 + (x/7.850));
                         y =  (2588966.542 - (y/7.850));
                         double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
@@ -448,12 +527,8 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                             mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
                         }
                         mFindCarNativeView.setLocationSuccess(true);
-                        break;
-                }
-            }
-
-            @Override
-            public void OnFailed(String code, String message) {
+                    }
+                });
             }
         });
         client.start();

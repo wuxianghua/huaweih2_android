@@ -83,8 +83,14 @@ public class MapBoxMapViewController implements IMapViewController {
     }
 
     @Override
-    public Feature selectFeature(String name) {
-        return indoorMapView.selectFeature(name);
+    public Feature selectFeature(String name,PlanarGraph planarGraph) {
+        for (Feature feature : planarGraph.getDataMap().get("Area").getFeatures()) {
+            if(feature.getProperties() == null|| feature.getProperties().get("name")==null) continue;
+            if (name.equals(feature.getProperties().get("name").getAsString())) {
+                return feature;
+            }
+        }
+        return null;
     }
 
     @Override

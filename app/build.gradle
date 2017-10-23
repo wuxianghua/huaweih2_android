@@ -27,11 +27,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.palmap.demo.huaweih3"
+        applicationId "com.palmap.demo.huaweih2"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 13
-        versionName "2.5.9(M8)"
+        versionName "2.5.9(M9)"
         multiDexEnabled = true;
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -105,6 +105,8 @@ dependencies {
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.android.support:multidex:1.0.0'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     def dependencies = rootProject.ext.libDependencies
     compile dependencies.rxJava
     compile dependencies.rxAndroid

@@ -32,7 +32,7 @@ public interface IMapViewController {
 
     Feature selectFeature(double x, double y);
 
-    Feature selectFeature(String name);
+    Feature selectFeature(String name, PlanarGraph planarGraph);
 
     void setOnSingTapListener(onSingTapListener l);
 
