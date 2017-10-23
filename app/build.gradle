@@ -27,11 +27,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.palmap.demo.huaweih2"
+        applicationId "com.palmap.demo.huaweih4"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 13
-        versionName "2.5.9(M9)"
+        versionName "2.4.9(M1)"
         multiDexEnabled = true;
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

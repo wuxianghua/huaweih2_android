@@ -2,6 +2,7 @@ package com.palmap.core.data
 
 import android.util.Log
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.services.commons.geojson.BaseFeatureCollection
 import com.mapbox.services.commons.geojson.FeatureCollection
 import com.mapbox.services.commons.geojson.Polygon
@@ -25,6 +26,11 @@ class PlanarGraph(private val mapData: String,val zoomLevel : Double = 16.0) {
         private set
 
     var mapCenter: LatLng = LatLng(22.64314843987482, 114.06082880782026)
+
+    val AUSTRALIA_BOUNDS = LatLngBounds.Builder()
+            .include(LatLng(22.64314843987482 - 0.005, 109.372126 + 0.005))
+            .include(LatLng(-44.640488 + 0.005, 158.590484 - 0.005))
+            .build()
 
     private var isResolve:AtomicBoolean = AtomicBoolean(false)
 

@@ -2,12 +2,18 @@ package com.palmap.huawei.presenter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
@@ -19,14 +25,26 @@ import com.orhanobut.logger.Logger;
 import com.palmap.astar.navi.AStarPath;
 import com.palmap.astar.navi.AStarVertex;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
+import com.palmap.demo.huaweih2.model.ApData;
+import com.palmap.demo.huaweih2.model.CurrentPositionData;
+import com.palmap.demo.huaweih2.model.PositionData;
+import com.palmap.demo.huaweih2.model.PositionFeature;
+import com.palmap.demo.huaweih2.model.PositionGeometry;
+import com.palmap.demo.huaweih2.model.PositionProperty;
+import com.palmap.demo.huaweih2.model.WifiData;
+import com.palmap.demo.huaweih2.model.WifiPositionData;
 import com.palmap.demo.huaweih2.util.CoordinateUtils;
 
+import com.palmap.huawei.CollectProvider;
+import com.palmap.huawei.FindCarActivity;
+import com.palmap.huawei.WifiLocationManager;
 import com.palmap.huawei.config.Constant;
 import com.palmap.huawei.http.CarServiceFactory;
 import com.palmap.huawei.http.GetCarParkingInfoService;
 import com.palmap.huawei.mode.CarParkingInfo;
 import com.palmap.huawei.mode.CarParkingInfos;
 import com.palmap.huawei.utils.ThreadManager;
+import com.palmap.huawei.utils.WifiScanReceiver;
 import com.palmap.huawei.view.FindCarNativeView;
 import com.palmap.huawei.widget.LatLngEvaluator;
 import com.palmap.nagrand.support.util.DataConvertUtils;
@@ -102,6 +120,21 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private double scale;
     Call<CarParkingInfos> carParkingStatus;
     List<CarParkingInfo> carportInfos;
+    private ApData apData;
+    private WifiData mWifiData;
+    private WifiPositionData mWifiPositonData;
+    private List<ApData> apDatas;
+    private PositionFeature positionFeature;
+    private PositionGeometry positionGeometry;
+    private PositionProperty positionProperty;
+    private PositionData positionData;
+    private String pos;
+    private CurrentPositionData currentPosition;
+    private WifiLocationManager wifiLocationManager;
+    private Gson gson;
+    private WifiScanReceiver mWifiScanReceiver;
+    private CollectProvider instance;
+    private WifiManager mWifiManager;
     //构造方法
     public FindCarNativePresenterImpl() {
 
@@ -119,6 +152,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (mGetCarParkingInfoService == null) {
             mGetCarParkingInfoService = CarServiceFactory.getInstance().createService(GetCarParkingInfoService.class);
         }
+        mWifiManager = (WifiManager)mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Observable.interval(2000,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
@@ -144,8 +178,16 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 });
             }
         });
+        doStart();
         getLocation();
     }
+
+    private void doStart() {
+        mWifiScanReceiver = new WifiScanReceiver(mWifiManager);
+        mContext.registerReceiver(mWifiScanReceiver, new IntentFilter("android.net.wifi.SCAN_RESULTS"));
+        mWifiManager.startScan();
+    }
+
     //初始化数据
     private void
 
@@ -158,6 +200,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         invalidParkingCars = new ArrayList<>();
         invalidCarFeature = new ArrayList<>();
         latLng = new LatLng();
+        gson = new Gson();
     }
 
     //解析停车位数据,放在子线程进行处理
@@ -269,6 +312,11 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (evaluator != null) {
             evaluator = null;
         }
+        if (mWifiScanReceiver != null) {
+            mContext.unregisterReceiver(mWifiScanReceiver);
+            mWifiScanReceiver = null;
+        }
+        instance.stop();
         carParkingStatus = null;
         latLng = null;
     }
@@ -455,7 +503,21 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     LocClient client;
     @Override
     public void getLocation() {
-        if(client == null) {
+        if (instance == null) {
+            instance = CollectProvider.getInstance(mContext);
+        }
+        if (wifiLocationManager == null) {
+            wifiLocationManager = new WifiLocationManager();
+        }
+        instance.setSensorDataCollectionListener(new CollectProvider.SensorDataCollectionListener() {
+            @Override
+            public void collectionSensorData(final String data) {
+                getPositionData();
+                wifiLocationManager.setSensorData(data);
+            }
+        });
+        instance.start();
+        /*if(client == null) {
             client = new DefaultLocClient(mContext, "NDdlMDMyZGEtZDhmMi00NmQyLWEyZTEtM2E1MTljMGM3ZjFi", "sTWxGxyfXG5RZebbUryCEvhDjVCMi6YvIiPUg7+YwKI");
         }
         client.setOnLocResultReceivedListener(new LocClient.OnLocResultReceivedListener() {
@@ -531,7 +593,43 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 });
             }
         });
-        client.start();
+        client.start();*/
+    }
+    double x;
+    double y;
+    private void getPositionData() {
+        pos=wifiLocationManager.getPos();
+        Log.e(TAG,"WOBEIDIAOYONGLE11111");
+        try {
+            Log.e(TAG,"WOBEIDIAOYONGLE");
+            currentPosition = gson.fromJson(pos, CurrentPositionData.class);
+            Log.e(TAG,"WOBEIDIAOYONGLE22");
+            x = currentPosition.current_position.x;
+            Log.e(TAG,"WOBEIDIAOYONGLE333");
+            y = currentPosition.current_position.y;
+            Log.e(TAG,"WOBEIDIAOYONGLE444");
+            Log.e(TAG,"X"+x+"Y"+y);
+            double[] doubles = CoordinateUtils.mercator2Lonlat(x,y);
+            latLng.setLatitude(doubles[1]);
+            latLng.setLongitude(doubles[0]);
+            if (isStartNavi == true) {
+                double distance = testCalcDistance(latLng);
+                if (distance < nearLength) {
+                    latLng = getMinLatLng(latLng);
+                } else if (distance > 15){
+                    mFindCarNativeView.rePlanRoute(x,y);
+                }
+                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+                startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+            }else {
+                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+            }
+            mFindCarNativeView.setLocationSuccess(true);
+
+        }catch (Exception e) {
+            Log.e(TAG,"WOBEIDIAOYONGLE44455"+e.toString());
+            e.printStackTrace();
+        }
     }
 
     private double testCalcDistance(LatLng latLng) {
