@@ -576,14 +576,14 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     long oldTime;
     @Override
     public void setDegree(float degree) {
-        currentTime = System.currentTimeMillis();
+        /*currentTime = System.currentTimeMillis();
         if (isShown && !isStartMovcNavi) {
             if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
                 iMapViewController.updateLocationOrientation(degree);
                 oldTime = currentTime;
             }
             oldDegree = degree;
-        }
+        }*/
     }
 
     //选择起点

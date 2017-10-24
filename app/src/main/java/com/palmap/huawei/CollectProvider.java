@@ -86,13 +86,13 @@ public class CollectProvider extends Handler {
 
     public boolean start() {
         if(SensorDataProvider.getIntance(m_ctx) != null){
-            SensorDataProvider.getIntance(m_ctx).start();
             SensorDataProvider.getIntance(m_ctx).setOrientationChangeListener(new SensorDataProvider.OrientationChangeListener() {
                 @Override
                 public void orientationChanger(float degree) {
                     mOrientationChangeListener.orientationChanger(degree);
                 }
             });
+            SensorDataProvider.getIntance(m_ctx).start();
             sendEmptyMessageDelayed(MSG_TYPE_SWEEP_DATA, SENSOR_DATA_SWEEP_DELAY);
         }
         return true;
