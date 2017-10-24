@@ -41,14 +41,9 @@ public class WifiScanReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ThreadManager.getNormalPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<ScanResult> scanResults = mWifiManager.getScanResults();
-                sendPositionDataToJS(scanResults);
-                mWifiManager.startScan();
-            }
-        });
+        List<ScanResult> scanResults = mWifiManager.getScanResults();
+        sendPositionDataToJS(scanResults);
+        mWifiManager.startScan();
     }
 
     public  void sendPositionDataToJS(List<ScanResult> list) {
