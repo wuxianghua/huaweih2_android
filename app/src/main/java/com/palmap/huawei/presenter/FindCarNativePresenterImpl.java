@@ -194,7 +194,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 invalidParkingCars.add(carParkingInfo.poiId);
             }
         }
-        if (noParkingCars.size() == oldNoParkingCars.size()) {
+        if (noParkingCars.size() == oldNoParkingCars.size()&&oldInvalidParkCars.size() == invalidParkingCars.size()) {
             return;
         }
         if (noParkingCars.size() != 0) {
