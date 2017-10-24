@@ -2,11 +2,8 @@ package com.palmap.huawei.presenter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.util.Log;
@@ -21,22 +18,13 @@ import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
-import com.orhanobut.logger.Logger;
 import com.palmap.astar.navi.AStarPath;
 import com.palmap.astar.navi.AStarVertex;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
-import com.palmap.demo.huaweih2.model.ApData;
 import com.palmap.demo.huaweih2.model.CurrentPositionData;
-import com.palmap.demo.huaweih2.model.PositionData;
-import com.palmap.demo.huaweih2.model.PositionFeature;
-import com.palmap.demo.huaweih2.model.PositionGeometry;
-import com.palmap.demo.huaweih2.model.PositionProperty;
-import com.palmap.demo.huaweih2.model.WifiData;
-import com.palmap.demo.huaweih2.model.WifiPositionData;
 import com.palmap.demo.huaweih2.util.CoordinateUtils;
 
 import com.palmap.huawei.CollectProvider;
-import com.palmap.huawei.FindCarActivity;
 import com.palmap.huawei.WifiLocationManager;
 import com.palmap.huawei.config.Constant;
 import com.palmap.huawei.http.CarServiceFactory;
@@ -53,11 +41,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import cn.bupt.sse309.locsdk.DefaultLocClient;
-import cn.bupt.sse309.locsdk.LocClient;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import retrofit2.Call;
@@ -154,7 +138,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                     @Override
                     public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
                         carportInfos = response.body().carportInfos;
-                        Log.e(TAG,"没有获取到数据"+carportInfos.size());
                         if (carportInfos == null || carportInfos.size() == 0) return;
                         ThreadManager.getNormalPool().execute(new Runnable() {
                             @Override
