@@ -80,6 +80,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private List<Integer> noParkingCars;
     //无效的停车位
     private List<Integer> invalidParkingCars;
+    private List<Integer> oldInvalidParkCars;
     //上次网络请求没有停车的车位
     private List<Integer> oldNoParkingCars;
     //没有停车位的FeatureCollection
@@ -157,6 +158,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         oldNoParkingCars = new ArrayList<>();
         invalidParkingCars = new ArrayList<>();
         invalidCarFeature = new ArrayList<>();
+        oldInvalidParkCars = new ArrayList<>();
         latLng = new LatLng();
     }
 
@@ -174,11 +176,17 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
                 invalidParkingCars.add(carParkingInfo.poiId);
             }
         }
-        if (noParkingCars.size() == oldNoParkingCars.size()) {
+        if (noParkingCars.size() == oldNoParkingCars.size()&&oldInvalidParkCars.size() == invalidParkingCars.size()) {
             return;
         }
-        oldNoParkingCars.clear();
-        oldNoParkingCars.addAll(noParkingCars);
+        if (noParkingCars.size() != 0) {
+            oldNoParkingCars.clear();
+            oldNoParkingCars.addAll(noParkingCars);
+        }
+        if (invalidParkingCars.size() != 0) {
+            oldInvalidParkCars.clear();
+            oldInvalidParkCars.addAll(invalidParkingCars);
+        }
         if (HuaWeiH2Application.parkData == null || HuaWeiH2Application.parkData.getDataMap() == null ||HuaWeiH2Application.parkData.getDataMap().get("Area")==null) return;
         for (Feature feature : HuaWeiH2Application.parkData.getDataMap().get("Area").getFeatures()) {
             int featureId = Integer.parseInt(feature.getProperty("id").toString());
