@@ -61,7 +61,7 @@ public class FindCarActivity extends BaseActivity{
         this.settings.setUseWideViewPort(true);
         mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.settings.setLoadWithOverviewMode(true);
-        findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
+        findCarWebView.loadUrl("");
         instance = CollectProvider.getInstance(getApplicationContext());
         positionFeature = new PositionFeature();
         positionGeometry = new PositionGeometry();
@@ -116,7 +116,6 @@ public class FindCarActivity extends BaseActivity{
         mWifiPositonData.time = System.currentTimeMillis();
         mWifiPositonData.wifi_data = mWifiData;
         String wifiData = gson.toJson(mWifiPositonData);
-        Logger.e("WifiLog"+ wifiData);
         wifiLocationManager.setWifiData(wifiData);
     }
 

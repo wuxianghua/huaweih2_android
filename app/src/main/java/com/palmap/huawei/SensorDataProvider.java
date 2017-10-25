@@ -11,6 +11,9 @@ import android.os.Message;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.palmap.huawei.utils.ThreadManager;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,7 +115,12 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
                 default:
                     break;
             }
-            calculateOrientation();
+            ThreadManager.getDownloadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    calculateOrientation();
+                }
+            });
         }
     }
 
@@ -126,7 +134,9 @@ public class SensorDataProvider extends Handler implements SensorEventListener {
         values[0] = (float) Math.toDegrees(values[0]);
         values[0] = values[0] < 0 ? 360+values[0]:values[0];
         degree = values[0];
-        mOrientationChangeListener.orientationChanger(degree);
+        if (mOrientationChangeListener != null) {
+            mOrientationChangeListener.orientationChanger(degree);
+        }
     }
 
     interface OrientationChangeListener {

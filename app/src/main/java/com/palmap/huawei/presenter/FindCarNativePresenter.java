@@ -32,5 +32,7 @@ public interface FindCarNativePresenter {
     void showSearchPark(LatLng latLng);
     void getLocation();
     boolean canParkCar(int poiId);
-    void setRouteLineData(List<AStarPath> routes);
+    void startNaviEngine(double x,double y);
+    /*void setRouteLineData(List<AStarPath> routes);
+    void setLatLng(LatLng latLng,double x,double y);*/
 }

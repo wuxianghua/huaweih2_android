@@ -3,14 +3,11 @@ package com.palmap.huawei.presenter;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
@@ -18,21 +15,18 @@ import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
+import com.orhanobut.logger.Logger;
 import com.palmap.astar.navi.AStarPath;
 import com.palmap.astar.navi.AStarVertex;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
-import com.palmap.demo.huaweih2.model.CurrentPositionData;
 import com.palmap.demo.huaweih2.util.CoordinateUtils;
 
-import com.palmap.huawei.CollectProvider;
-import com.palmap.huawei.WifiLocationManager;
 import com.palmap.huawei.config.Constant;
 import com.palmap.huawei.http.CarServiceFactory;
 import com.palmap.huawei.http.GetCarParkingInfoService;
 import com.palmap.huawei.mode.CarParkingInfo;
 import com.palmap.huawei.mode.CarParkingInfos;
 import com.palmap.huawei.utils.ThreadManager;
-import com.palmap.huawei.utils.WifiScanReceiver;
 import com.palmap.huawei.view.FindCarNativeView;
 import com.palmap.huawei.widget.LatLngEvaluator;
 import com.palmap.nagrand.support.util.DataConvertUtils;
@@ -41,7 +35,11 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import cn.bupt.sse309.locsdk.DefaultLocClient;
+import cn.bupt.sse309.locsdk.LocClient;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import retrofit2.Call;
@@ -83,7 +81,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     //无效的停车位
     private List<Integer> invalidParkingCars;
     private List<Integer> oldInvalidParkCars;
-    //上次网络请求没有停车的车位
+    //上次网络请求停车的车位
     private List<Integer> oldNoParkingCars;
     //没有停车位的FeatureCollection
     private FeatureCollection noCarFeatureCollection;
@@ -105,13 +103,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
     private double scale;
     Call<CarParkingInfos> carParkingStatus;
     List<CarParkingInfo> carportInfos;
-    private String pos;
-    private CurrentPositionData currentPosition;
-    private WifiLocationManager wifiLocationManager;
-    private Gson gson;
-    private WifiScanReceiver mWifiScanReceiver;
-    private CollectProvider instance;
-    private WifiManager mWifiManager;
     //构造方法
     public FindCarNativePresenterImpl() {
 
@@ -129,39 +120,42 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (mGetCarParkingInfoService == null) {
             mGetCarParkingInfoService = CarServiceFactory.getInstance().createService(GetCarParkingInfoService.class);
         }
-        mWifiManager = (WifiManager)mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        Observable.interval(2000,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
+        Observable.interval(1300,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
-                carParkingStatus = mGetCarParkingInfoService.getCarParkingStatus(Constant.appkey, Constant.mapId, Constant.floorId);
-                carParkingStatus.enqueue(new Callback<CarParkingInfos>() {
-                    @Override
-                    public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
-                        carportInfos = response.body().carportInfos;
-                        if (carportInfos == null || carportInfos.size() == 0) return;
-                        ThreadManager.getNormalPool().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                resolutionParkingData(carportInfos);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Call<CarParkingInfos> call, Throwable t) {
-                        Log.e(TAG,"执行失败");
-                    }
-                });
+                requestParkCarData();
             }
         });
-        doStart();
         getLocation();
     }
 
-    private void doStart() {
-        mWifiScanReceiver = new WifiScanReceiver(mWifiManager);
-        mContext.registerReceiver(mWifiScanReceiver, new IntentFilter("android.net.wifi.SCAN_RESULTS"));
-        mWifiManager.startScan();
+    private void requestParkCarData() {
+        carParkingStatus = mGetCarParkingInfoService.getCarParkingStatus(Constant.appkey, Constant.mapId, Constant.floorId);
+        carParkingStatus.enqueue(new Callback<CarParkingInfos>() {
+            @Override
+            public void onResponse(Call<CarParkingInfos> call, Response<CarParkingInfos> response) {
+                if (response.body() == null) {
+                    requestParkCarData();
+                    return;
+                }
+                carportInfos = response.body().carportInfos;
+                if (carportInfos == null || carportInfos.size() == 0) {
+                    requestParkCarData();
+                    return;
+                }
+                ThreadManager.getDownloadPool().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        resolutionParkingData(carportInfos);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<CarParkingInfos> call, Throwable t) {
+                requestParkCarData();
+            }
+        });
     }
 
     //初始化数据
@@ -177,7 +171,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         invalidCarFeature = new ArrayList<>();
         oldInvalidParkCars = new ArrayList<>();
         latLng = new LatLng();
-        gson = new Gson();
     }
 
     //解析停车位数据,放在子线程进行处理
@@ -197,14 +190,8 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (noParkingCars.size() == oldNoParkingCars.size()&&oldInvalidParkCars.size() == invalidParkingCars.size()) {
             return;
         }
-        if (noParkingCars.size() != 0) {
-            oldNoParkingCars.clear();
-            oldNoParkingCars.addAll(noParkingCars);
-        }
-        if (invalidParkingCars.size() != 0) {
-            oldInvalidParkCars.clear();
-            oldInvalidParkCars.addAll(invalidParkingCars);
-        }
+        oldNoParkingCars.clear();
+        oldNoParkingCars.addAll(noParkingCars);
         if (HuaWeiH2Application.parkData == null || HuaWeiH2Application.parkData.getDataMap() == null ||HuaWeiH2Application.parkData.getDataMap().get("Area")==null) return;
         for (Feature feature : HuaWeiH2Application.parkData.getDataMap().get("Area").getFeatures()) {
             int featureId = Integer.parseInt(feature.getProperty("id").toString());
@@ -295,11 +282,6 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (evaluator != null) {
             evaluator = null;
         }
-        if (mWifiScanReceiver != null) {
-            mContext.unregisterReceiver(mWifiScanReceiver);
-            mWifiScanReceiver = null;
-        }
-        instance.stop();
         carParkingStatus = null;
         latLng = null;
     }
@@ -482,33 +464,10 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         );
     }
 
+    //获取定位的位置
+    LocClient client;
     @Override
     public void getLocation() {
-        if (instance == null) {
-            instance = CollectProvider.getInstance(mContext);
-        }
-        if (wifiLocationManager == null) {
-            wifiLocationManager = new WifiLocationManager();
-        }
-        instance.setSensorDataCollectionListener(new CollectProvider.SensorDataCollectionListener() {
-            @Override
-            public void collectionSensorData(final String data) {
-                ThreadManager.getNormalPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        getPositionData();
-                        wifiLocationManager.setSensorData(data);
-                    }
-                });
-            }
-        });
-        instance.start();
-        instance.setOrientationChangeListener(new CollectProvider.OrientationChangeListener() {
-            @Override
-            public void orientationChanger(float degree) {
-                mFindCarNativeView.setDegree(degree);
-            }
-        });
         /*if(client == null) {
             client = new DefaultLocClient(mContext, "NDdlMDMyZGEtZDhmMi00NmQyLWEyZTEtM2E1MTljMGM3ZjFi", "sTWxGxyfXG5RZebbUryCEvhDjVCMi6YvIiPUg7+YwKI");
         }
@@ -587,37 +546,8 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         });
         client.start();*/
     }
-    double x;
-    double y;
-    private void getPositionData() {
-        pos=wifiLocationManager.getPos();
-        try {
-            currentPosition = gson.fromJson(pos, CurrentPositionData.class);
-            x = currentPosition.current_position.x;
-            y = currentPosition.current_position.y;
-            double[] doubles = CoordinateUtils.mercator2Lonlat(x,y);
-            latLng.setLatitude(doubles[1]);
-            latLng.setLongitude(doubles[0]);
-            if (isStartNavi == true) {
-                double distance = testCalcDistance(latLng);
-                if (distance < nearLength) {
-                    latLng = getMinLatLng(latLng);
-                } else if (distance > 15){
-                    mFindCarNativeView.rePlanRoute(x,y);
-                }
-                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
-                startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
-            }else {
-                mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
-            }
-            mFindCarNativeView.setLocationSuccess(true);
 
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private double testCalcDistance(LatLng latLng) {
+    /*private double testCalcDistance(LatLng latLng) {
         if (routes == null || routes.size() == 0 || null == latLng) {
             //toast("testCalcDistance错误 ！ ！ ！");
             return 0;
@@ -648,58 +578,38 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
             }
         }
         return minDistance;
-    }
-    private LatLng getMinLatLng(LatLng latLng) {
-        if (routes == null || routes.size() == 0 || null == latLng) {
-            return latLng;
-        }
-        double[] ps = DataConvertUtils.INSTANCE.latlng2WebMercator(latLng.getLatitude(), latLng.getLongitude());
-
-        double minDistance = Double.MAX_VALUE;
-
-        GeometryFactory factory = new GeometryFactory();
-
-        Point point = factory.createPoint(new com.vividsolutions.jts.geom.Coordinate(ps[0], ps[1]));
-        com.vividsolutions.jts.geom.LineString lineString = null;
-
-        for (AStarPath aStarPath : routes) {
-            AStarVertex from = aStarPath.getFrom();
-            AStarVertex to = aStarPath.getTo();
-            com.vividsolutions.jts.geom.LineString line =
-                    factory.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{
-                            new com.vividsolutions.jts.geom.Coordinate(((Point) from.getVertex().getShape()).getX(), ((Point) from.getVertex().getShape()).getY()),
-                            new com.vividsolutions.jts.geom.Coordinate(((Point) to.getVertex().getShape()).getX(), ((Point) to.getVertex().getShape()).getY())
-                    });
-
-            double d = line.distance(point);
-            Log.e(TAG, "计算出HAAH: " + d);
-            if (d < minDistance) {
-                minDistance = d;
-                lineString = line;
-            }
-        }
-        DistanceOp d = new DistanceOp(point, lineString);
-        double[] result = null;
-        com.vividsolutions.jts.geom.Coordinate[] nearestPoints = d.nearestPoints();
-        if (nearestPoints != null && nearestPoints.length > 1) {
-            com.vividsolutions.jts.geom.Coordinate p = nearestPoints[1];
-            result = DataConvertUtils.INSTANCE.webMercator2LatLng(p.x, p.y);
-        }
-        return new LatLng(result[0],result[1]);
-    }
+    }*/
 
     @Override
     public boolean canParkCar(int poiId) {
         return noParkingCars.contains(poiId);
     }
 
-    @Override
+    /*@Override
     public void setRouteLineData(List<AStarPath> routes) {
         this.routes = routes;
-    }
+    }*/
+
+    /*@Override
+    public void setLatLng(LatLng latLng,double x,double y) {
+        if (isStartNavi == true) {
+            double distance = testCalcDistance(latLng);
+            if (distance < nearLength) {
+                latLng = getMinLatLng(latLng);
+            } else if (distance > 15){
+                mFindCarNativeView.rePlanRoute(x,y);
+            }
+            mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+            startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+        }else {
+            mFindCarNativeView.showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+        }
+        mFindCarNativeView.setLocationSuccess(true);
+    }*/
 
     private LatLng newLatLng;
-    private void startNaviEngine(double x,double y) {
+    @Override
+    public void startNaviEngine(double x,double y) {
         newLatLng = new LatLng(x,y);
         destationDistance = newLatLng.distanceTo(endPoint);
         if (!routeFinished && destationDistance>6) {

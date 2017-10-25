@@ -1,17 +1,16 @@
 package com.palmap.huawei.view;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.view.menu.MenuWrapperFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -31,15 +31,28 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.orhanobut.logger.Logger;
 import com.palmap.astar.navi.AStarPath;
+import com.palmap.astar.navi.AStarVertex;
 import com.palmap.core.overLayer.PulseMarkerViewOptions;
 import com.palmap.demo.huaweih2.HuaWeiH2Application;
 import com.palmap.demo.huaweih2.R;
+import com.palmap.demo.huaweih2.model.ApData;
+import com.palmap.demo.huaweih2.model.CurrentPositionData;
+import com.palmap.demo.huaweih2.model.PositionData;
+import com.palmap.demo.huaweih2.model.PositionFeature;
+import com.palmap.demo.huaweih2.model.PositionGeometry;
+import com.palmap.demo.huaweih2.model.PositionProperty;
+import com.palmap.demo.huaweih2.model.WifiData;
+import com.palmap.demo.huaweih2.model.WifiPositionData;
+import com.palmap.demo.huaweih2.util.CoordinateUtils;
+import com.palmap.huawei.CollectProvider;
+import com.palmap.huawei.FindCarActivity;
+import com.palmap.huawei.WifiLocationManager;
 import com.palmap.huawei.presenter.FindCarNativePresenter;
 import com.palmap.huawei.presenter.FindCarNativePresenterImpl;
 import com.palmap.huawei.utils.SharedPreferenceUtil;
 import com.palmap.huawei.utils.ThreadManager;
-import com.palmap.huawei.utils.ViewUtils;
 import com.palmap.indoor.IMapViewController;
 import com.palmap.indoor.MapViewControllerFactory;
 import com.palmap.indoor.Utils;
@@ -48,9 +61,13 @@ import com.palmap.indoor.navigate.INavigateManager;
 import com.palmap.indoor.navigate.impl.MapBoxNavigateManager;
 import com.palmap.nagrand.support.util.DataConvertUtils;
 import com.palmaplus.nagrand.geos.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,8 +75,7 @@ import java.util.List;
  * Created by Administrator on 2017/10/10/010.
  */
 
-public class FindCarNativeActivity extends Activity implements FindCarNativeView {
-    String TAG = FindCarNativeActivity.class.getSimpleName();
+public class FindCarNativeActivity extends Activity implements FindCarNativeView{
     //地图容器
     private LinearLayout mapViewLayout;
     //显示占用车位
@@ -121,6 +137,15 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     private MarkerView endMark;
     //定位按钮图标
     private ImageView mLocationButton;
+    /*//传感器数据
+    private float[] accelerometerValues = new float[3];
+    private float[] magneticFieldValues = new float[3];*/
+    /*//加速度传感器
+    private Sensor mAccelerometer;
+    //磁力计传感器
+    private Sensor mField;
+    //传感器管理器
+    private SensorManager mSensorManager;*/
     //定位图标是否已经显示
     private boolean isShown;
     //是否已经开始模拟导航
@@ -133,16 +158,40 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     private boolean isStartNavi;
     //移动地图
     private Button moveMapLocation;
+    private static final String TAG = FindCarActivity.class.getSimpleName();
+    private ApData apData;
+    private WifiData mWifiData;
+    private WifiPositionData mWifiPositonData;
+    private List<ApData> apDatas;
+    private PositionFeature positionFeature;
+    private PositionGeometry positionGeometry;
+    private PositionProperty positionProperty;
+    private PositionData positionData;
+    private String pos;
+    private CurrentPositionData currentPosition;
+    private WifiLocationManager wifiLocationManager;
+    private Gson gson;
+    private WifiScanReceiver mWifiScanReceiver;
+    private WifiManager mWifiManager;
+    private CollectProvider instance;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_findcar_native);
         initView();
+        //registerSensor();
         initMapView(savedInstanceState);
         mFindCarNativePresenter.attachView(this,this);
         mFindCarNativePresenter.onCreate();
     }
 
+    /*//注册传感器
+    private void registerSensor() {
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mField, SensorManager.SENSOR_DELAY_NORMAL);
+    }*/
+
+    List<AStarPath> routes;
     //初始化地图界面
     private void initMapView(@Nullable Bundle savedInstanceState) {
         iMapViewController = MapViewControllerFactory.createByMapBox(this);
@@ -169,13 +218,115 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         navigateManager = new MapBoxNavigateManager(this, "roadNet.json");
         navigateManager.setNavigateListener(new INavigateManager.Listener<FeatureCollection>() {
             @Override
-            public void OnNavigateComplete(INavigateManager.NavigateState state, List<AStarPath> routes, FeatureCollection route) {
+            public void OnNavigateComplete(INavigateManager.NavigateState state, List<AStarPath> mroutes, FeatureCollection route) {
                 if (state == INavigateManager.NavigateState.OK) {
-                    mFindCarNativePresenter.setRouteLineData(routes);
+                    routes = mroutes;
+                    //mFindCarNativePresenter.setRouteLineData(routes);
                     showRoute(route);
                 }
             }
         });
+    }
+
+    private void doStart() {
+        mWifiScanReceiver = new WifiScanReceiver();
+        registerReceiver(mWifiScanReceiver, new IntentFilter("android.net.wifi.SCAN_RESULTS"));
+        mWifiManager.startScan();
+    }
+
+    class WifiScanReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            List<ScanResult> scanResults = mWifiManager.getScanResults();
+            sendPositionDataToJS(scanResults);
+            mWifiManager.startScan();
+        }
+
+    }
+
+    public void sendPositionDataToJS(List<ScanResult> list) {
+        apDatas.clear();
+        for (int i = 0; i < list.size(); i++) {
+            apData = new ApData();
+            apData.mac = list.get(i).BSSID;
+            apData.rssi = list.get(i).level;
+            apData.ssid = "Huawei-Employee";
+            apDatas.add(apData);
+        }
+        mWifiData.time = System.currentTimeMillis();
+        mWifiData.arr = apDatas;
+        mWifiPositonData.building_name = null;
+        mWifiPositonData.time = System.currentTimeMillis();
+        mWifiPositonData.wifi_data = mWifiData;
+        String wifiData = gson.toJson(mWifiPositonData);
+        Logger.e("WifiLog"+ wifiData);
+        wifiLocationManager.setWifiData(wifiData);
+    }
+
+    //定位经纬度
+    int nearLength = 5;
+    private LatLng latLng;
+    private void getPositionData() {
+        if (latLng == null) {
+            latLng = new LatLng();
+        }
+        pos=wifiLocationManager.getPos();
+        try {
+            currentPosition = gson.fromJson(pos, CurrentPositionData.class);
+            positionProperty.floor_id = 1261980;
+            double x = currentPosition.current_position.x;
+            double y = currentPosition.current_position.y;
+            double[] doubles = CoordinateUtils.mercator2Lonlat(x, y);
+            latLng.setLatitude(doubles[1]);
+            latLng.setLongitude(doubles[0]);
+            if (isStartNavi) {
+                double distance = testCalcDistance(latLng);
+                if (distance < nearLength) {
+                    latLng = getMinLatLng(latLng);
+                } else if (distance > 10){
+                    rePlanRoute(x,y);
+                }
+                showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+                mFindCarNativePresenter.startNaviEngine(latLng.getLatitude(),latLng.getLongitude());
+            }else {
+                showLocationIcon(latLng.getLatitude(),latLng.getLongitude(),x,y);
+            }
+            setLocationSuccess(true);
+            //mFindCarNativePresenter.setLatLng(latLng,x,y);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private double testCalcDistance(LatLng latLng) {
+        if (routes == null || routes.size() == 0 || null == latLng) {
+            //toast("testCalcDistance错误 ！ ！ ！");
+            return 0;
+        }
+        double[] ps = DataConvertUtils.INSTANCE.latlng2WebMercator(latLng.getLatitude(), latLng.getLongitude());
+
+        double minDistance = Double.MAX_VALUE;
+
+        GeometryFactory factory = new GeometryFactory();
+
+        Point point = factory.createPoint(new com.vividsolutions.jts.geom.Coordinate(ps[0], ps[1]));
+
+        for (AStarPath aStarPath : routes) {
+            AStarVertex from = aStarPath.getFrom();
+            AStarVertex to = aStarPath.getTo();
+            com.vividsolutions.jts.geom.LineString line =
+                    factory.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{
+                            new com.vividsolutions.jts.geom.Coordinate(((Point) from.getVertex().getShape()).getX(), ((Point) from.getVertex().getShape()).getY()),
+                            new com.vividsolutions.jts.geom.Coordinate(((Point) to.getVertex().getShape()).getX(), ((Point) to.getVertex().getShape()).getY())
+                    });
+
+            double d = line.distance(point);
+            Log.e(TAG, "计算出HEHEH: " + d);
+            if (d < minDistance) {
+                minDistance = d;
+            }
+        }
+        return minDistance;
     }
 
     private LatLng selectMainParkingPos(String carName) {
@@ -345,6 +496,10 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     Feature feature; //点击处的feature
     int category; //点击处的feature的category
     int poiId;   //点击处的feature的poiId
+    float degree;
+    float oldDegree;
+    long currentTime;
+    long oldTime;
     private void touchMapView() {
         iMapViewController.setOnSingTapListener(new IMapViewController.onSingTapListener() {
             @Override
@@ -422,8 +577,57 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mapStyleChange = (TextView) findViewById(R.id.map_style_change);
         mHintEndNavi = (LinearLayout) findViewById(R.id.show_hint_end_navi);
         moveMapLocation = (Button) findViewById(R.id.map_location_change);
+        /*mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);*/
         mLocation = new Coordinate();
         mLocationLatLng = new LatLng();
+        mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        instance = CollectProvider.getInstance(getApplicationContext());
+        positionFeature = new PositionFeature();
+        positionGeometry = new PositionGeometry();
+        positionProperty = new PositionProperty();
+        positionData = new PositionData();
+        mWifiData = new WifiData();
+        mWifiPositonData = new WifiPositionData();
+        apDatas = new ArrayList<>();
+        positionData.features = new ArrayList<>();
+        gson = new Gson();
+        wifiLocationManager = new WifiLocationManager();
+        doStart();
+        instance.setOrientationChangeListener(new CollectProvider.OrientationChangeListener() {
+            @Override
+            public void orientationChanger(final float degree) {
+                currentTime = System.currentTimeMillis();
+                if (isShown && !isStartMovcNavi) {
+                    if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                iMapViewController.updateLocationOrientation(degree);
+                            }
+                        });
+                        oldTime = currentTime;
+                    }
+                    oldDegree = degree;
+                }
+
+
+            }
+        });
+        instance.setSensorDataCollectionListener(new CollectProvider.SensorDataCollectionListener() {
+            @Override
+            public void collectionSensorData(final String data) {
+                ThreadManager.getDownloadPool().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        getPositionData();
+                    }
+                });
+                wifiLocationManager.setSensorData(data);
+            }
+        });
+        instance.start();
     }
 
     //停这里
@@ -493,7 +697,50 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             bundle.putParcelable("mLocationLatLng",mLocationLatLng);
             message.setData(bundle);
             handler.sendMessage(message);
+            //iMapViewController.addLocationMark(var1,var2);
+            if (isShown == false) {
+                isShown = true;
+            }
         }
+    }
+
+    private LatLng getMinLatLng(LatLng latLng) {
+        if (routes == null || routes.size() == 0 || null == latLng) {
+            return latLng;
+        }
+        double[] ps = DataConvertUtils.INSTANCE.latlng2WebMercator(latLng.getLatitude(), latLng.getLongitude());
+
+        double minDistance = Double.MAX_VALUE;
+
+        GeometryFactory factory = new GeometryFactory();
+
+        Point point = factory.createPoint(new com.vividsolutions.jts.geom.Coordinate(ps[0], ps[1]));
+        com.vividsolutions.jts.geom.LineString lineString = null;
+
+        for (AStarPath aStarPath : routes) {
+            AStarVertex from = aStarPath.getFrom();
+            AStarVertex to = aStarPath.getTo();
+            com.vividsolutions.jts.geom.LineString line =
+                    factory.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{
+                            new com.vividsolutions.jts.geom.Coordinate(((Point) from.getVertex().getShape()).getX(), ((Point) from.getVertex().getShape()).getY()),
+                            new com.vividsolutions.jts.geom.Coordinate(((Point) to.getVertex().getShape()).getX(), ((Point) to.getVertex().getShape()).getY())
+                    });
+
+            double d = line.distance(point);
+            Log.e(TAG, "计算出HAAH: " + d);
+            if (d < minDistance) {
+                minDistance = d;
+                lineString = line;
+            }
+        }
+        DistanceOp d = new DistanceOp(point, lineString);
+        double[] result = null;
+        com.vividsolutions.jts.geom.Coordinate[] nearestPoints = d.nearestPoints();
+        if (nearestPoints != null && nearestPoints.length > 1) {
+            com.vividsolutions.jts.geom.Coordinate p = nearestPoints[1];
+            result = DataConvertUtils.INSTANCE.webMercator2LatLng(p.x, p.y);
+        }
+        return new LatLng(result[0],result[1]);
     }
 
     @Override
@@ -569,21 +816,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         parkTime = df.format(new Date());
         SharedPreferenceUtil.putValue(this,"parkinfo","parkName",carName);
         SharedPreferenceUtil.putValue(this,"parkinfo","parkTime",parkTime);
-    }
-
-    float oldDegree;
-    long currentTime;
-    long oldTime;
-    @Override
-    public void setDegree(float degree) {
-        /*currentTime = System.currentTimeMillis();
-        if (isShown && !isStartMovcNavi) {
-            if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
-                iMapViewController.updateLocationOrientation(degree);
-                oldTime = currentTime;
-            }
-            oldDegree = degree;
-        }*/
     }
 
     //选择起点
@@ -671,6 +903,49 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mFindCarNativePresenter.getLocation();
     }
 
+    /*@Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerometerValues = event.values;
+        }else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+        }else {
+            magneticFieldValues = event.values;
+        }
+        ThreadManager.getNormalPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                calculateOrientation();
+            }
+        });
+    }
+
+    float degree;
+    float oldDegree;
+    long currentTime;
+    long oldTime;
+    private void calculateOrientation() {
+        float[] values = new float[3];
+        float[] R = new float[9];
+        SensorManager.getRotationMatrix(R, null, accelerometerValues,
+                magneticFieldValues);
+        SensorManager.getOrientation(R, values);
+        values[0] = (float) Math.toDegrees(values[0]);
+        values[0] = values[0] < 0 ? 360+values[0]:values[0];
+        currentTime = System.currentTimeMillis();
+        degree =  values[0];
+        if (isShown && !isStartMovcNavi) {
+            if (Math.abs(degree - oldDegree) > 1 && currentTime - oldTime > 100)  {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        iMapViewController.updateLocationOrientation(degree);
+                    }
+                });
+                oldTime = currentTime;
+            }
+            oldDegree = degree;
+        }
+    }*/
     double x;
     double y;
     CameraPosition position;
@@ -693,9 +968,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
             }else if (msg.what == 2) {
                 locationLatLng = msg.getData().getParcelable("mLocationLatLng");
                 iMapViewController.addLocationMark(locationLatLng.getLatitude(),locationLatLng.getLongitude());
-                if (isShown == false) {
-                    isShown = true;
-                }
             }else if (msg.what == 3) {
                 position = msg.getData().getParcelable("position");
                 ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory
@@ -725,8 +997,18 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //mSensorManager.unregisterListener(this);
+        if (mWifiScanReceiver != null) {
+            unregisterReceiver(mWifiScanReceiver);
+            mWifiScanReceiver = null;
+        }
+        instance.stop();
     }
 
+    /*@Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }*/
     //放大
     public void mapZoomInClick(View view) {
         ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.zoomIn());

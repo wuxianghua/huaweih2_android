@@ -17,8 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.facebook.stetho.common.LogUtil;
 import com.palmap.demo.huaweih2.fragment.FragmentAround;
 import com.palmap.demo.huaweih2.fragment.FragmentFootPrint;
 import com.palmap.demo.huaweih2.fragment.FragmentMap;
@@ -159,7 +157,6 @@ public class MainActivity extends BaseActivity {
                     fragmentMap.addLocationMark(currentLocationInfoModel.getX(), currentLocationInfoModel.getY());
                 }
             } else {
-                LogUtil.e("定位错误");
             }
         }
     }

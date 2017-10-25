@@ -4,8 +4,6 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-
-import com.facebook.stetho.common.LogUtil;
 import com.palmap.demo.huaweih2.factory.LocationService;
 import com.palmap.demo.huaweih2.factory.ServiceFactory;
 import com.palmap.demo.huaweih2.model.LocationInfoModel;
@@ -67,7 +65,6 @@ public class LocationRepoImpl implements LocationRepo {
     }
 
     private void sendApi() {
-        LogUtil.e("ip:" + IpUtils.getIpAddress());
         apiSubscription =
                 requestLocation()
                        /* .zipWith(requestSignalInfo(), new Func2<LocationInfoModel, SvaLocationRsrpModel, LocationInfoModel>() {
@@ -162,7 +159,6 @@ public class LocationRepoImpl implements LocationRepo {
     public synchronized void stopLocation() {
         locationInfoModel = null;
         if (timeCallBack != null) {
-            LogUtil.e("停止stopLocation");
             callBackHandler.removeCallbacks(timeCallBack);
             timeCallBack = null;
         }

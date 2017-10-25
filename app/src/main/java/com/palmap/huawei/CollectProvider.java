@@ -89,7 +89,9 @@ public class CollectProvider extends Handler {
             SensorDataProvider.getIntance(m_ctx).setOrientationChangeListener(new SensorDataProvider.OrientationChangeListener() {
                 @Override
                 public void orientationChanger(float degree) {
-                    mOrientationChangeListener.orientationChanger(degree);
+                    if (mOrientationChangeListener != null) {
+                        mOrientationChangeListener.orientationChanger(degree);
+                    }
                 }
             });
             SensorDataProvider.getIntance(m_ctx).start();

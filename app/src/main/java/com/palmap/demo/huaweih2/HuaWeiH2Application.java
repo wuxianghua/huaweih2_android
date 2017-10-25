@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.util.Log;
-
-import com.facebook.stetho.Stetho;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.palmap.core.MapEngine;
 import com.palmap.core.data.PlanarGraph;
@@ -42,14 +40,6 @@ public class HuaWeiH2Application extends XiaoqianApplication {
     //Bugly.init(getApplicationContext(), "5319dd5ea7", false);
     CrashReport.initCrashReport(getApplicationContext(), "5319dd5ea7", true);
     Engine.getInstance();
-    if (BuildConfig.DEBUG) {
-      Stetho.initialize(
-              Stetho.newInitializerBuilder(this)
-                      .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                      .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                      .build());
-    }
-
     QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
 
       @Override
