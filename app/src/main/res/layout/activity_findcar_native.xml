@@ -111,10 +111,60 @@
             android:layout_width="40dp"
             android:gravity="center"
             android:onClick="moveMap"
+            android:visibility="gone"
             android:textColor="@color/color_475266"
             android:textSize="15dp"
             android:layout_height="40dp" />
-        //公共设施
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/content_map_location"
+            android:layout_below="@+id/map_style_change"
+            android:background="@drawable/bg_cir_style_change"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="40dp"
+            android:gravity="center"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:gravity="center"
+                android:id="@+id/park_car_h1"
+                android:text="H1"
+                android:onClick="moveToH1"
+                android:textColor="@color/color_475266"
+                android:textSize="17dp"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                />
+            <View
+                android:background="@color/hint_color_2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+            <TextView
+                android:id="@+id/park_car_h2"
+                android:gravity="center"
+                android:text="H2"
+                android:onClick="moveToH2"
+                android:textColor="@color/color_475266"
+                android:textSize="17dp"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                />
+            <View
+                android:background="@color/hint_color_2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+            <TextView
+                android:id="@+id/park_car_h3"
+                android:gravity="center"
+                android:text="H3"
+                android:onClick="moveToH3"
+                android:textColor="@color/color_475266"
+                android:textSize="17dp"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                />
+        </LinearLayout>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -61,7 +61,7 @@ public class FindCarActivity extends BaseActivity{
         this.settings.setUseWideViewPort(true);
         mWifiManager = (WifiManager)getApplication().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.settings.setLoadWithOverviewMode(true);
-        findCarWebView.loadUrl("");
+        findCarWebView.loadUrl("http://misc.ipalmap.com/hwpk/");
         instance = CollectProvider.getInstance(getApplicationContext());
         positionFeature = new PositionFeature();
         positionGeometry = new PositionGeometry();

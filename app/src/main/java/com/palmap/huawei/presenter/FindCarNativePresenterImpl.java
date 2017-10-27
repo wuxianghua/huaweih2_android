@@ -120,7 +120,7 @@ public class FindCarNativePresenterImpl implements FindCarNativePresenter{
         if (mGetCarParkingInfoService == null) {
             mGetCarParkingInfoService = CarServiceFactory.getInstance().createService(GetCarParkingInfoService.class);
         }
-        Observable.interval(1300,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
+        Observable.interval(2000,60000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
                 requestParkCarData();

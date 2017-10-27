@@ -234,6 +234,16 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         mWifiManager.startScan();
     }
 
+    public void moveToH3(View view) {
+        position = new CameraPosition.Builder()
+                .target(selectMainParkingPos("H3大堂"))
+                .zoom(17.5)
+                .build();
+        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position),1000);
+        /*popWnd.dismiss();
+        moveMapLocation.setText("H3");*/
+    }
+
     class WifiScanReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
@@ -321,7 +331,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
                     });
 
             double d = line.distance(point);
-            Log.e(TAG, "计算出HEHEH: " + d);
             if (d < minDistance) {
                 minDistance = d;
             }
@@ -496,7 +505,6 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     Feature feature; //点击处的feature
     int category; //点击处的feature的category
     int poiId;   //点击处的feature的poiId
-    float degree;
     float oldDegree;
     long currentTime;
     long oldTime;
@@ -618,12 +626,7 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
         instance.setSensorDataCollectionListener(new CollectProvider.SensorDataCollectionListener() {
             @Override
             public void collectionSensorData(final String data) {
-                ThreadManager.getDownloadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        getPositionData();
-                    }
-                });
+                getPositionData();
                 wifiLocationManager.setSensorData(data);
             }
         });
@@ -1020,15 +1023,15 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     //2d和3d模式切换
     private boolean is2DMode;
     public void changeMapMode(View view) {
-        if (is2DMode) {
-            is2DMode = false;
+        if (!is2DMode) {
+            is2DMode = true;
             mapStyleChange.setText("3D");
             CameraPosition position = new CameraPosition.Builder()
                     .tilt(60)
                     .build();
             ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position));
         }else {
-            is2DMode = true;
+            is2DMode = false;
             mapStyleChange.setText("2D");
             CameraPosition position = new CameraPosition.Builder()
                     .tilt(0)
@@ -1044,32 +1047,24 @@ public class FindCarNativeActivity extends Activity implements FindCarNativeView
     public void moveToH1(View view) {
         position = new CameraPosition.Builder()
                 .target(selectMainParkingPos("H1大堂"))
-                .zoom(18)
+                .zoom(17.5)
                 .build();
         ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position),1000);
-        popWnd.dismiss();
-        moveMapLocation.setText("H1");
+        /*popWnd.dismiss();
+        moveMapLocation.setText("H1");*/
     }
 
     public void moveToH2(View view) {
        position = new CameraPosition.Builder()
                 .target(selectMainParkingPos("H2大堂"))
-                .zoom(18)
+                .zoom(17.5)
                 .build();
         ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position),1000);
-        popWnd.dismiss();
-        moveMapLocation.setText("H2");
+        /*popWnd.dismiss();
+        moveMapLocation.setText("H2");*/
     }
 
-    public void moveToH3(View view) {
-        position = new CameraPosition.Builder()
-                .target(selectMainParkingPos("H3大堂"))
-                .zoom(18)
-                .build();
-        ((MapBoxMapViewController) iMapViewController).getMapBox().animateCamera(CameraUpdateFactory.newCameraPosition(position),1000);
-        popWnd.dismiss();
-        moveMapLocation.setText("H3");
-    }
+
     View contentView;
     PopupWindow popWnd;
     public void moveMap(View view) {
